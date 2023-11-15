@@ -18,7 +18,7 @@ schema.collections = [
     schema: directusCollectionSchema(),
     meta: {
       icon: "dashboard",
-      sort: 10,
+      sort: 520,
       archive_field: "status",
       archive_value: "archived",
       sort_field: "sort",

@@ -1,4 +1,4 @@
-const migration = createMigration("collectivo", "0.0.2", up, down);
+const migration = createMigration("collectivo", "0.0.3", up, down);
 export default migration;
 
 async function up() {
@@ -18,7 +18,7 @@ schema.collections = [
     schema: directusCollectionSchema(),
     meta: {
       icon: "sell",
-      sort: 20,
+      sort: 510,
       archive_field: "status",
       archive_value: "archived",
       unarchive_value: "published",

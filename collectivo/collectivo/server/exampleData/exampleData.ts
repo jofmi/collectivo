@@ -70,32 +70,22 @@ export default async function createExampleData() {
     }
     users.push(u);
   }
-
   for (const user of users) {
-    try {
-      const usersDB = await directus.request(
-        readUsers({
-          filter: { email: { _eq: user.email } },
-        })
-      );
-      var userID;
-      if (usersDB.length > 0) {
-        userID = usersDB[0].id;
-        await directus.request(updateUser(userID, user));
-      } else {
-        const us = await directus.request(createUser(user));
-        userID = us.id;
-      }
-      directus.request(
-        createItem("collectivo_users", {
-          first_name: user.first_name,
-          last_name: user.last_name,
-          email: user.email,
-          user: userID,
-        })
-      );
-    } catch (error) {
-      console.log(error);
+    const usersDB = await directus.request(
+      readUsers({
+        filter: { email: { _eq: user.email } },
+      })
+    );
+    var userID;
+    if (usersDB.length > 0) {
+      userID = usersDB[0].id;
+      console.log("Updating user " + user.email + " with ID " + userID);
+      await directus.request(updateUser(userID, user));
+      console.log("Updated good");
+    } else {
+      console.log("Creating user " + user.email);
+      const us = await directus.request(createUser(user));
+      userID = us.id;
     }
   }
 

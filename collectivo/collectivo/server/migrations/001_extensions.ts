@@ -31,14 +31,33 @@ schema.roles = [
 
 schema.collections = [
   {
-    collection: "collectivo_extensions",
-    schema: {
-      schema: "schema",
-      name: "schema",
-      comment: null,
+    collection: "collectivo_settings",
+    meta: {
+      icon: "settings",
+      sort: 1000,
+      singleton: true,
+      translations: [
+        {
+          language: "en-US",
+          translation: "Settings",
+          singular: "Settings",
+          plural: "Settings",
+        },
+        {
+          language: "de-DE",
+          translation: "Einstellungen",
+          singular: "Einstellungen",
+          plural: "Einstellungen",
+        },
+      ],
     },
+  },
+  {
+    collection: "collectivo_extensions",
+    schema: { name: "schema", comment: null },
     meta: {
       sort: 90,
+      group: "collectivo_settings",
       icon: "extension",
       translations: [
         {

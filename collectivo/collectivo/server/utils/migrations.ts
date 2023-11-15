@@ -1,6 +1,5 @@
 import { createItem, readItems, updateItem } from "@directus/sdk";
 import ExtensionBaseMigration from "../migrations/001_extensions";
-import { compareVersions } from "compare-versions";
 import { ExtensionConfig } from "./extensions";
 
 // Type definition for a dependency of a migration
@@ -62,9 +61,7 @@ export async function migrateExtension(
 ) {
   const extsDb = await getExtensionsFromDb();
   await runMigrations(ext, extsDb, to);
-  console.log("createExampleData", createExampleData);
   if (createExampleData) {
-    console.log("createExampleData2", createExampleData);
     if (ext.exampleDataFn) {
       await ext.exampleDataFn();
     }

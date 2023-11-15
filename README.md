@@ -74,12 +74,12 @@ Requests must be authorized with the `NUXT_API_TOKEN` from `.env`.
 
 The following optional parameters can be passed:
 
-- all (boolean) - Apply migrations of all extensions
-- exampleData (boolean) - Apply example data after migrations
-- extension (string) - Apply migrations of a specific extension
-  - version (string) - Apply migrations up or down towards specified version
-  - force (boolean) - Apply only the migration up of the specified version
-    - down (boolean) - Apply the forced migration down instead of up
+- all (boolean) - Apply migrations of all extensions to latest.
+- exampleData (boolean) - Apply example data after migrations.
+- extension (string) - Apply migrations of a specific extension.
+  - version (string) - Apply migrations up or down towards specified version. If not given, migrations will be applied to latest.
+  - force (boolean) - Apply only the migration up of the specified version.
+    - down (boolean) - Apply the forced migration down instead of up.
 
 Example to prepare a new system for local development:
 

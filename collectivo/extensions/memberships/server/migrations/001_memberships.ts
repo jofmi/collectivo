@@ -20,7 +20,7 @@ schema.collections = [
       comment: null,
     },
     meta: {
-      sort: 10,
+      sort: 100,
       icon: "switch_account",
       archive_field: "status",
       archive_value: "ended",
@@ -57,15 +57,15 @@ schema.collections = [
       translations: [
         {
           language: "en-US",
-          translation: "Membership types",
-          singular: "Membership types",
-          plural: "Membership types",
+          translation: "Member types",
+          singular: "Member type",
+          plural: "Member types",
         },
         {
           language: "de-DE",
-          translation: "Mitgliedschaftsarten",
-          singular: "Mitgliedschaftsart",
-          plural: "Mitgliedschaftsarten",
+          translation: "Mitgliedsarten",
+          singular: "Mitgliedsart",
+          plural: "Mitgliedsarten",
         },
       ],
     },

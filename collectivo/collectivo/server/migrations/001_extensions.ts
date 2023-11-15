@@ -39,6 +39,7 @@ schema.collections = [
     },
     meta: {
       sort: 90,
+      group: "collectivo_settings",
       icon: "extension",
       translations: [
         {

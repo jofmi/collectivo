@@ -104,9 +104,27 @@ To perform migrations, we recommend using a http client like postman or thunder 
 - Udate dependencies `pnpm update -r -L`
 - Publish all packages (remove --dry-run) `pnpm publish -r --access=public --dry-run`
 
-## Creating a new extension
+## Developing extensions
 
-- Create a new [Nuxt Layer](https://nuxt.com/docs/guide/going-further/layers)
-- Register the extension in `my-extension/server/plugins/registerExtension.ts`
-- Add the extension to `package.json` and `nuxt.config.ts` of your app
-- All collections and fields should start with `extensionName_` to avoid name conflicts.
+Setup:
+
+- Create a fork of this repository
+- Create a new extension in `collectivo/extensions/my-extension/`.
+  - Copy the example from `collectivo/extensions/example/`.
+  - Create a new [Nuxt Layer](https://nuxt.com/docs/guide/going-further/layers).
+- Adapt the name and configuration in `collectivo/extensions/my-extension/package.json`. This will be used by package managers. We recommend to start the package name with `collectivo-` to make it easier for others to find collectivo extensions, e.g. `collectivo-my-extension`.
+- Add the name of your package to `collectivo/app/package.json` and `collectivo/app/nuxt.config.ts`.
+- Adapt the name and configuration in `my-extension/server/plugins/registerExtension.ts`. This will be used by collectivo. The name should not include dashes or underscores, e.g. `myExtension`.
+- Run `pnpm i` to install the extension as a workspace package.
+- Run `pnpm dev` to run a development system that includes your extension.
+
+Tipps and recommendations:
+
+- Regularly [sync your fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork) with the upstream repository.
+- Migrations can be created with `createMigration()` and registered in `my-extension/server/plugins/registerExtension.ts`.
+  - Utility functions can be found in `collectivo/collectivo/server/utils`.
+  - All collections and fields should start with `myExtension_` to avoid name conflicts with other extensions.
+- Frontend components and pages can be defined under `my-extension/components` and ``my-extension/pages`. To avoid name conflicts with other extensions, they should also be prefixed with the extension name.
+- Adding `"@collectivo/collectivo": "workspace:*"` to your dependencies in `package.json` gives you access to the types and functions of collectivo.
+- To publish your extension, run `pnpm publish collectivo/extensions/my-extension -r --access=public --dry-run` (remove --dry-run after checking that everything is correct)
+- The example extension is licensed under [public domain](https://de.wikipedia.org/wiki/Unlicense). You can choose your own license for your extension, it does not have to be the same as collectivo.

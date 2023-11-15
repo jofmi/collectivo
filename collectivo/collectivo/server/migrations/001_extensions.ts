@@ -194,3 +194,17 @@ directusM2ARelation(
     },
   }
 );
+
+for (const action of ["read"]) {
+  for (const collection of [
+    "collectivo_project_settings",
+    "collectivo_extensions",
+  ]) {
+    schema.permissions.push({
+      collection: collection,
+      roleName: "collectivo_editor",
+      action: action,
+      fields: "*",
+    });
+  }
+}

@@ -271,8 +271,10 @@ export async function createOrUpdateDirectusPermission(
   }
   if (roles.length == 0) {
     await directus.request(createPermission(permission));
+    console.log("Created permission " + permission.roleName);
   } else {
     await directus.request(updatePermission(roles[0].id, permission));
+    console.log("Updated permission " + permission.roleName);
   }
 }
 

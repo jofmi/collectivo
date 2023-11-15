@@ -69,3 +69,12 @@ schema.fields = [
     },
   },
 ];
+
+for (const action of ["read", "update"]) {
+  schema.permissions.push({
+    collection: "collectivo_project_settings",
+    roleName: "collectivo_editor",
+    action: action,
+    fields: "*",
+  });
+}

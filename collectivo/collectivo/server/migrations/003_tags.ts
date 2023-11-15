@@ -75,3 +75,17 @@ directusM2MRelation(schema, "collectivo_tags", "directus_users", {
     },
   },
 });
+
+for (const action of ["read", "update", "create", "delete"]) {
+  for (const collection of [
+    "collectivo_tags",
+    "collectivo_tags_directus_users",
+  ]) {
+    schema.permissions.push({
+      collection: collection,
+      roleName: "collectivo_editor",
+      action: action,
+      fields: "*",
+    });
+  }
+}

@@ -203,7 +203,10 @@ async function runMigrations(ext: ExtensionConfig, extsDb: any[], to?: string) {
     (f) => f.version === migrationTarget
   );
 
-  if (migrationState === migrationTarget) return;
+  if (migrationState === migrationTarget) {
+    logger.info(`Skipping migrations for ${ext.name} (already up to date)`);
+    return;
+  }
 
   logger.info(
     `Migrating ${ext.name} from ${migrationState} to ${migrationTarget}`

@@ -87,3 +87,12 @@ schema.permissions = [
     validation: {},
   },
 ];
+
+for (const action of ["read", "update", "create", "delete"]) {
+  schema.permissions.push({
+    collection: collection,
+    roleName: "collectivo_editor",
+    action: action,
+    fields: "*",
+  });
+}

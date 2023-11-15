@@ -1,0 +1,24 @@
+{
+  "name": "collectivo-example",
+  "description": "An example for an extension of collectivo.",
+  "version": "0.0.1",
+  "type": "module",
+  "license": "Unlicense",
+  "main": "./nuxt.config.ts",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev --p 3002",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@collectivo/collectivo": "workspace:*"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "latest",
+    "@nuxt/test-utils": "^3.7.1",
+    "nuxt": "^3.7.0",
+    "vitest": "^0.34.3"
+  }
+}

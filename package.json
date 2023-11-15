@@ -1,0 +1,12 @@
+{
+  "name": "collectivo-monorepo",
+  "private": true,
+  "description": "Collectivo packages & development environment.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm run -r --parallel dev",
+    "test": "pnpm run -r --parallel test"
+  },
+  "author": "Joël Foramitti",
+  "license": "AGPL-3.0"
+}

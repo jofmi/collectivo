@@ -1,0 +1,33 @@
+{
+  "name": "@collectivo/collectivo",
+  "version": "0.1.0",
+  "description": "Collectivo is a module system for community plattforms.",
+  "type": "module",
+  "license": "AGPL-3.0",
+  "author": "Joël Foramitti",
+  "homepage": "https://collectivo.io",
+  "main": "./nuxt.config.ts",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev --p 3001",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@directus/sdk": "^13.0.1",
+    "@headlessui/vue": "^1.7.16",
+    "@heroicons/vue": "^2.0.18",
+    "compare-versions": "^6.1.0",
+    "marked": "^9.1.0",
+    "winston": "^3.10.0"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "latest",
+    "@nuxt/test-utils": "^3.7.1",
+    "@nuxtjs/i18n": "8.0.0-rc.4",
+    "@nuxtjs/tailwindcss": "^6.8.0",
+    "nuxt": "^3.7.0",
+    "vitest": "^0.34.3"
+  }
+}

@@ -1,0 +1,35 @@
+# Local work folders
+archive/
+uploads/
+workbench/
+
+# Directus
+directus/database/
+directus/uploads/*
+keycloak/export
+keycloak/imported/imported.flag
+
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+
+# Node dependencies
+node_modules
+
+# Logs
+logs
+*.log
+
+# Misc
+.DS_Store
+.fleet
+.idea
+
+# Local env files
+.env
+.env.*
+!.env.example

@@ -1,0 +1,20 @@
+{
+  "name": "@collectivo/app",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev --dotenv ../../.env",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@collectivo/collectivo": "workspace:*",
+    "@collectivo/memberships": "workspace:*",
+    "collectivo_mila": "workspace:*"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "latest",
+    "nuxt": "^3.7.0"
+  }
+}

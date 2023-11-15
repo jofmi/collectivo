@@ -1,4 +1,4 @@
-const migration = createMigration("collectivo", "0.0.2", up, down);
+const migration = createMigration("collectivo", "0.0.3", up, down);
 export default migration;
 
 async function up() {

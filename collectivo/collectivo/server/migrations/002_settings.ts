@@ -1,4 +1,4 @@
-const migration = createMigration("collectivo", "0.0.3", up, down);
+const migration = createMigration("collectivo", "0.0.2", up, down);
 export default migration;
 
 async function up() {
@@ -13,34 +13,8 @@ const schema = initSchema();
 
 schema.collections = [
   {
-    collection: "collectivo_settings",
-    meta: {
-      icon: "settings",
-      sort: 1000,
-      singleton: true,
-      translations: [
-        {
-          language: "en-US",
-          translation: "Settings",
-          singular: "Settings",
-          plural: "Settings",
-        },
-        {
-          language: "de-DE",
-          translation: "Einstellungen",
-          singular: "Einstellungen",
-          plural: "Einstellungen",
-        },
-      ],
-    },
-  },
-  {
-    collection: "collectivo_settings_general",
-    schema: {
-      schema: "schema",
-      name: "schema",
-      comment: null,
-    },
+    collection: "collectivo_project_settings",
+    schema: { name: "schema", comment: null },
     meta: {
       icon: "settings",
       sort: 1,
@@ -67,7 +41,7 @@ schema.collections = [
 schema.fields = [
   {
     field: "collectivo_project_name",
-    collection: "collectivo_settings",
+    collection: "collectivo_project_settings",
     type: "string",
     meta: {
       sort: 2,
@@ -83,7 +57,7 @@ schema.fields = [
   },
   {
     field: "collectivo_project_description",
-    collection: "collectivo_settings",
+    collection: "collectivo_project_settings",
     type: "string",
     meta: {
       sort: 3,

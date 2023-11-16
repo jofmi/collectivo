@@ -203,8 +203,8 @@ schema.fields = [
       interface: "datetime",
       width: "half",
       translations: [
-        { language: "de-DE", translation: "Datum Austieg" },
-        { language: "en-US", translation: "Date Cancellation" },
+        { language: "de-DE", translation: "Datum Ausgestiegen" },
+        { language: "en-US", translation: "Date Cancelled" },
       ],
     },
   },
@@ -217,8 +217,8 @@ schema.fields = [
       interface: "datetime",
       width: "half",
       translations: [
-        { language: "de-DE", translation: "Datum Ausschluss" },
-        { language: "en-US", translation: "Date Exclusion" },
+        { language: "de-DE", translation: "Datum Ausgeschlossen" },
+        { language: "en-US", translation: "Date Excluded" },
       ],
     },
   },
@@ -232,7 +232,7 @@ schema.fields = [
       width: "half",
       translations: [
         { language: "de-DE", translation: "Datum Beendet" },
-        { language: "en-US", translation: "Date ended" },
+        { language: "en-US", translation: "Date Ended" },
       ],
     },
   },
@@ -303,5 +303,26 @@ schema.relations = [
     related_collection: "memberships_types",
     meta: { sort_field: null },
     schema: { on_delete: "NO ACTION" },
+  },
+];
+
+schema.permissions = [
+  {
+    collection: "memberships",
+    roleName: "collectivo_editor",
+    action: "read",
+    fields: "*",
+  },
+  {
+    collection: "memberships",
+    roleName: "collectivo_editor",
+    action: "update",
+    fields: "*",
+  },
+  {
+    collection: "memberships_types",
+    roleName: "collectivo_editor",
+    action: "read",
+    fields: "*",
   },
 ];

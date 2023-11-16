@@ -196,8 +196,9 @@ schema.createM2ARelation(
 
 for (const action of ["read"]) {
   for (const collection of [
-    "collectivo_project_settings",
+    "collectivo_settings",
     "collectivo_extensions",
+    "collectivo_extensions_items",
   ]) {
     schema.permissions.push({
       collection: collection,

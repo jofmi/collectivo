@@ -47,7 +47,7 @@ schema.fields = [
         // @ts-ignore
         {
           name: "Hide if not organization",
-          rule: { _and: [{ memberships_is_organisation: { _eq: false } }] },
+          rule: { _and: [{ memberships_is_organization: { _eq: false } }] },
           hidden: true,
         },
       ],
@@ -136,7 +136,7 @@ schema.fields = [
   },
   {
     collection: "directus_users",
-    field: "memberships_is_organisation",
+    field: "memberships_is_organization",
     type: "boolean",
     schema: { default_value: false, is_nullable: false },
     meta: {
@@ -312,28 +312,40 @@ schema.fields = [
 schema.relations = [];
 
 const editor_fields = [
+  "first_name",
+  "last_name",
+  "email",
+  "title",
+  "description",
+
+  "admin_divider",
+  "role",
+  "status",
+  "id",
+
+  "collectivo_tags_divider",
+  "collectivo_tags",
+
+  "memberships_profile_group",
+  "memberships_occupation",
+  "memberships_gender",
   "memberships_birthday",
+  "memberships_phone",
+  "memberships_is_organization",
+
+  "memberships_organization_group",
+  "memberships_organization_name",
+  "memberships_organization_id",
+  "memberships_organization_type",
+
+  "memberships_address_group",
+  "memberships_street",
   "memberships_number",
-  "memberships_address_divider",
   "memberships_stair",
   "memberships_door",
   "memberships_postcode",
   "memberships_city",
-  "preferences_divider",
-  "language",
   "memberships_country",
-  "description",
-  "first_name",
-  "collectivo_tags",
-  "last_name",
-  "memberships_street",
-  "divider-p49cum",
-  "email",
-  "memberships_occupation",
-  "memberships_gender",
-  "role",
-  "admin_divider",
-  "id",
 ];
 
 schema.permissions = [

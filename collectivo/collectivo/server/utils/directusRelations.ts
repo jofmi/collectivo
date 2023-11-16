@@ -22,96 +22,100 @@ export async function directusO2MRelation(
   });
 }
 
-interface M2MSettings {
-  Collection1IsUUID?: boolean;
-  Collection2IsUUID?: boolean;
-  createField2?: boolean; // default true
+// Settings to create M2M relations
+// Field 2 is optional, but if it exists, it will be created in Collection 2
+// M2M Field type is "integer" by default, but some collections are "uuid"
+interface directusM2MSettings {
   field1?: NestedPartial<DirectusField<any>>;
-  field2?: NestedPartial<DirectusField<any>>;
+  field2?: NestedPartial<DirectusField<any>> | boolean;
+  m2mFieldType1?: string;
+  m2mFieldType2?: string;
 }
 
 export async function directusM2MRelation(
   schema: ExtensionSchema,
-  Collection1: string,
-  Collection2: string,
-  settings?: M2MSettings
+  collection1: string,
+  collection2: string,
+  settings?: directusM2MSettings
 ) {
-  const m2mCollection = `${Collection1}_${Collection2}`;
-
-  const aliasFieldName1 = settings?.field1?.field || Collection2;
-  const aliasFieldName2 =
-    settings?.createField2 !== false
-      ? settings?.field2?.field || Collection1
-      : null;
+  // Prepare inputs
+  const field1 = settings?.field1 || {};
+  const field2 =
+    settings?.field2 && typeof settings?.field2 !== "boolean"
+      ? settings?.field2
+      : {};
+  const field1Name = settings?.field1?.field || collection2;
+  const field2Name = field2 ? field2.field || collection1 : null;
+  const m2mCollectionName = `${collection1}_${collection2}`;
 
   // Create alias field in Collection 1
   schema.fields.push({
-    collection: Collection1,
-    field: aliasFieldName1,
+    collection: collection1,
+    field: field1Name,
     type: "alias",
-    ...settings?.field1,
+    ...field1,
     meta: {
       interface: "list-m2m",
       special: ["m2m"],
-      ...settings?.field1?.meta,
+      ...field1?.meta,
     },
   });
 
-  // Optional: Create alias field in Collection2
-  if (aliasFieldName2) {
+  // Optional: Create alias field in collection2
+  if (field2Name) {
     schema.fields.push({
-      collection: Collection2,
-      field: aliasFieldName2,
+      collection: collection2,
+      field: field2Name,
       type: "alias",
-      ...settings?.field2,
+      ...field2,
       meta: {
         interface: "list-m2m",
         special: ["m2m"],
-        ...settings?.field2?.meta,
+        ...field2.meta,
       },
     });
   }
 
   schema.collections.push({
-    collection: m2mCollection,
+    collection: m2mCollectionName,
     meta: { hidden: true, icon: "import_export" },
     schema: directusCollectionSchema(),
   });
   schema.fields.push({
-    collection: m2mCollection,
-    field: `${Collection1}_id`, // tags
-    type: settings?.Collection1IsUUID === true ? "uuid" : "integer",
+    collection: m2mCollectionName,
+    field: `${collection1}_id`,
+    type: settings?.m2mFieldType1 ? settings?.m2mFieldType1 : "integer",
     meta: { hidden: true },
   });
   schema.fields.push({
-    collection: m2mCollection,
-    field: `${Collection2}_id`, // members
-    type: settings?.Collection2IsUUID === true ? "uuid" : "integer",
+    collection: m2mCollectionName,
+    field: `${collection2}_id`,
+    type: settings?.m2mFieldType2 ? settings?.m2mFieldType2 : "integer",
     schema: {},
     meta: { hidden: true },
   });
 
   schema.relations.push({
-    collection: m2mCollection,
-    field: `${Collection1}_id`,
-    related_collection: Collection1,
+    collection: m2mCollectionName,
+    field: `${collection1}_id`,
+    related_collection: collection1,
     meta: {
-      one_field: aliasFieldName1,
+      one_field: field1Name,
       sort_field: null,
       one_deselect_action: "nullify",
-      junction_field: `${Collection2}_id`,
+      junction_field: `${collection2}_id`,
     },
     schema: { on_delete: "SET NULL" },
   });
   schema.relations.push({
-    collection: m2mCollection,
-    field: `${Collection2}_id`,
-    related_collection: Collection2,
+    collection: m2mCollectionName,
+    field: `${collection2}_id`,
+    related_collection: collection2,
     meta: {
-      one_field: aliasFieldName2,
+      one_field: field2Name,
       sort_field: null,
       one_deselect_action: "nullify",
-      junction_field: `${Collection1}_id`,
+      junction_field: `${collection1}_id`,
     },
     schema: { on_delete: "SET NULL" },
   });

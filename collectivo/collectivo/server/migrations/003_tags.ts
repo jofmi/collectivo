@@ -55,7 +55,7 @@ schema.fields = [
 ];
 
 directusM2MRelation(schema, "collectivo_tags", "directus_users", {
-  Collection2IsUUID: true,
+  m2mFieldType2: "uuid",
   field1: {
     field: "directus_users",
     type: "alias",
@@ -74,6 +74,7 @@ directusM2MRelation(schema, "collectivo_tags", "directus_users", {
       },
     },
   },
+  field2: {},
 });
 
 for (const action of ["read", "update", "create", "delete"]) {

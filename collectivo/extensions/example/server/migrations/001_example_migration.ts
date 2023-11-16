@@ -1,11 +1,16 @@
 // Create a migration for version 0.0.1 of the example extension
-const migration = createMigration("example", "0.0.1", up, down);
+const extension = "example";
+const migration = createMigration(extension, "0.0.1", up, down);
 export default migration;
+
+// This function creates an empty schema
+// A schema can be used to declaratively define the structure of the database
+const schema = initSchema(extension);
 
 // This function will be called when the migration is applied
 async function up() {
-  // This function applies a schema to the database
-  await applySchema(schema);
+  // This function applies the schema to the database
+  await schema.apply();
 
   // Alternatively, you can also use the directus client directly
   // const directus = await useDirectus()
@@ -13,14 +18,9 @@ async function up() {
 }
 
 // This function will be called when the migration is rolled back
-// Note: The function unapplySchema is still in development
 async function down() {
-  // unapplySchema(schema);
+  await schema.rollBack();
 }
-
-// This function creates an empty schema
-// A schema can be used to declaratively define the structure of the database
-const schema = initSchema();
 
 // Here you can define collections for your database
 // See https://docs.directus.io/reference/system/collections.html
@@ -54,3 +54,8 @@ schema.fields = [
 schema.translations = [
   { language: "de-DE", key: "example", value: "Beispiel" },
 ];
+
+// To create relations, you can use the following helper functions
+// schema.createM2ORelation();
+// schema.createM2MRelation();
+// schema.createM2ARelation();

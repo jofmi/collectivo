@@ -1,7 +1,7 @@
 {
   "name": "@collectivo/memberships",
   "description": "Manage memberships of an organization.",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
   "license": "AGPL-3.0",
   "author": "Joël Foramitti",

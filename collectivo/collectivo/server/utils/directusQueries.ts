@@ -244,9 +244,11 @@ export async function createOrUpdateDirectusTranslation(
 
 export async function createOrUpdateDirectusPermission(
   permission: NestedPartial<DirectusPermission<any>>,
-  extension?: string
+  extension: string
 ) {
   const directus = await useDirectus();
+
+  // Add role id to permission based on RoleName
   if (permission.roleName) {
     const role = await getDirectusRoleByName(permission.roleName);
     permission.role = role.id;
@@ -254,8 +256,8 @@ export async function createOrUpdateDirectusPermission(
     throw new Error("role or roleName is required");
   }
 
-  // Try to get role
-  const roles = await directus.request(
+  // Try to get permission
+  const permissionsDB = await directus.request(
     readPermissions({
       filter: {
         role: { _eq: permission.role },
@@ -264,15 +266,36 @@ export async function createOrUpdateDirectusPermission(
       },
     })
   );
-  if (roles.length > 1) {
+
+  if (permissionsDB.length > 1) {
     logger.warn(
       `Found multiple permissions for role "${permission.roleName}" with action "${permission.action}" on collection "${permission.collection}"`
     );
   }
-  if (roles.length == 0) {
+  if (permissionsDB.length == 0) {
     await directus.request(createPermission(permission));
+    console.log("Created permission " + permission.roleName);
   } else {
-    await directus.request(updatePermission(roles[0].id, permission));
+    const permissionDB = permissionsDB[0];
+
+    // Merge fields
+    // @ts-ignore
+    if (permission.override) {
+    } else if (permissionDB.fields == "*") {
+      permission.fields = "*";
+    } else if (
+      permission.fields != "*" &&
+      // @ts-ignore
+      permissionDB.fields != ["*"]
+    ) {
+      if (typeof permission.fields == "string") {
+        // @ts-ignore
+        permission.fields = [permission.fields];
+      }
+      // @ts-ignore
+      permission.fields = [...permissionDB.fields, ...permission.fields];
+    }
+    await directus.request(updatePermission(permissionDB.id, permission));
   }
 }
 

@@ -1,15 +1,15 @@
-const migration = createMigration("collectivo", "0.0.1", up, down);
+const extension = "collectivo";
+const schema = initSchema(extension);
+const migration = createMigration(extension, "0.0.1", up, down);
 export default migration;
 
 async function up() {
-  await applySchema(schema);
+  await schema.apply();
 }
 
 async function down() {
-  // unapplySchema(schema);
+  await schema.rollBack();
 }
-
-const schema = initSchema();
 
 schema.roles = [
   {
@@ -165,17 +165,20 @@ schema.fields = [
   },
 ];
 
-directusM2ARelation(
-  schema,
+schema.createM2ARelation(
   "items",
   "collectivo_extensions",
-  ["directus_fields", "directus_collections"],
+  [
+    "directus_fields",
+    "directus_collections",
+    "directus_permissions",
+    "directus_translations",
+  ],
   {
     collection: "collectivo_extensions",
     field: "items",
     type: "alias",
     meta: {
-      id: 13,
       collection: "collectivo_extensions",
       field: "items",
       special: ["m2a"],
@@ -192,5 +195,54 @@ directusM2ARelation(
         { language: "de-DE", translation: "Einträge" },
       ],
     },
+  }
+);
+
+for (const action of ["read"]) {
+  for (const collection of [
+    // "collectivo_settings",
+    "collectivo_extensions",
+    "collectivo_extensions_items",
+    "directus_roles",
+  ]) {
+    schema.permissions.push({
+      collection: collection,
+      roleName: "collectivo_editor",
+      action: action,
+      fields: "*",
+    });
+  }
+}
+
+const editor_fields = [
+  "first_name",
+  "last_name",
+  "email",
+  "title",
+  "description",
+
+  "admin_divider",
+  "role",
+  "status",
+  "id",
+];
+
+schema.permissions.push(
+  {
+    collection: "directus_users",
+    roleName: "collectivo_editor",
+    action: "read",
+    // @ts-ignore
+    fields: editor_fields,
+    override: true,
+  },
+  {
+    collection: "directus_users",
+    roleName: "collectivo_editor",
+    action: "update",
+    // @ts-ignore
+    fields: editor_fields,
+    permissions: {},
+    override: true,
   }
 );

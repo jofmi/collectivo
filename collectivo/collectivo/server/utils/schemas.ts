@@ -271,21 +271,18 @@ export async function createM2ARelation(
     collection: m2aCollection,
     field: m2aCollectionIdFieldName,
     type: "integer",
-    meta: { hidden: true },
   });
   schema.fields.push({
     collection: m2aCollection,
     field: "item",
     type: "string",
     schema: {},
-    meta: { hidden: true },
   });
   schema.fields.push({
     collection: m2aCollection,
     field: "collection",
     type: "string",
     schema: {},
-    meta: { hidden: true },
   });
   schema.relations.push({
     collection: m2aCollection,

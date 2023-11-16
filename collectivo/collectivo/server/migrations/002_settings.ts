@@ -4,7 +4,7 @@ const migration = createMigration(extension, "0.0.2", up, down);
 export default migration;
 
 async function up() {
-  await applySchema(schema);
+  await schema.apply();
 }
 
 async function down() {

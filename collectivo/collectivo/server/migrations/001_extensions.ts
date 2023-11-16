@@ -168,13 +168,17 @@ schema.fields = [
 schema.createM2ARelation(
   "items",
   "collectivo_extensions",
-  ["directus_fields", "directus_collections"],
+  [
+    "directus_fields",
+    "directus_collections",
+    "directus_permissions",
+    "directus_translations",
+  ],
   {
     collection: "collectivo_extensions",
     field: "items",
     type: "alias",
     meta: {
-      id: 13,
       collection: "collectivo_extensions",
       field: "items",
       special: ["m2a"],
@@ -196,9 +200,10 @@ schema.createM2ARelation(
 
 for (const action of ["read"]) {
   for (const collection of [
-    "collectivo_settings",
+    // "collectivo_settings",
     "collectivo_extensions",
     "collectivo_extensions_items",
+    "directus_roles",
   ]) {
     schema.permissions.push({
       collection: collection,
@@ -208,3 +213,36 @@ for (const action of ["read"]) {
     });
   }
 }
+
+const editor_fields = [
+  "first_name",
+  "last_name",
+  "email",
+  "title",
+  "description",
+
+  "admin_divider",
+  "role",
+  "status",
+  "id",
+];
+
+schema.permissions.push(
+  {
+    collection: "directus_users",
+    roleName: "collectivo_editor",
+    action: "read",
+    // @ts-ignore
+    fields: editor_fields,
+    override: true,
+  },
+  {
+    collection: "directus_users",
+    roleName: "collectivo_editor",
+    action: "update",
+    // @ts-ignore
+    fields: editor_fields,
+    permissions: {},
+    override: true,
+  }
+);

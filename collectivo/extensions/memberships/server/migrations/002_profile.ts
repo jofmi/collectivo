@@ -68,6 +68,21 @@ schema.fields = [
       ],
     },
   },
+  {
+    collection: "directus_users",
+    field: "memberships_address_group",
+    type: "alias",
+    meta: {
+      order: 400,
+      interface: "group-detail",
+      special: ["alias", "no-data", "group"],
+      options: { title: "$t:address", headerIcon: "house" },
+      translations: [
+        { language: "de-DE", translation: "Adresse" },
+        { language: "en-US", translation: "Address" },
+      ],
+    },
+  },
 
   // Profile fields
   {
@@ -312,17 +327,6 @@ schema.fields = [
 schema.relations = [];
 
 const editor_fields = [
-  "first_name",
-  "last_name",
-  "email",
-  "title",
-  "description",
-
-  "admin_divider",
-  "role",
-  "status",
-  "id",
-
   "collectivo_tags_divider",
   "collectivo_tags",
 

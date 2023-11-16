@@ -101,16 +101,17 @@ export default async function createExampleData() {
   }
 
   // Add some members to some tags
-  console.log("Creating tag-member relations");
-  for (var i = 0; i < 3; i++) {
-    tags[i].collectivo_users = {
-      create: [
-        { collectivo_tags_id: "+", collectivo_users_id: { id: 1 } },
-        { collectivo_tags_id: "+", collectivo_users_id: { id: 2 } },
-        { collectivo_tags_id: "+", collectivo_users_id: { id: 3 } },
-      ],
-    };
-  }
+  // TODO: This is not working
+  // console.log("Creating tag-member relations");
+  // for (var i = 0; i < 3; i++) {
+  //   tags[i].directus_users = {
+  //     create: [
+  //       { collectivo_tags_id: "+", directus_users_id: { id: 1 } },
+  //       { collectivo_tags_id: "+", directus_users_id: { id: 2 } },
+  //       { collectivo_tags_id: "+", directus_users_id: { id: 3 } },
+  //     ],
+  //   };
+  // }
 
   try {
     await directus.request(createItems("collectivo_tags", tags));

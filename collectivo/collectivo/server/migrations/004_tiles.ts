@@ -1,15 +1,16 @@
+const extension = "collectivo";
+const schema = initSchema(extension);
 const migration = createMigration("collectivo", "0.0.4", up, down);
 export default migration;
 
 async function up() {
-  await applySchema(schema);
+  await schema.apply();
 }
 
 async function down() {
-  // unapplySchema(schema);
+  await schema.rollBack();
 }
 
-const schema = initSchema();
 const collection = "collectivo_tiles";
 
 schema.collections = [

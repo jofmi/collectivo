@@ -135,6 +135,7 @@ export async function createOrUpdateDirectusField(
     const fieldDB = await directus.request(
       createField(field.collection, field)
     );
+
     if (extension) {
       await addItemtoExtension(extension, "directus_fields", fieldDB.id);
     }

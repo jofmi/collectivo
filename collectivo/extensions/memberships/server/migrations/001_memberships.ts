@@ -1,15 +1,15 @@
-const migration = createMigration("memberships", "0.0.1", up, down);
+const extension = "memberships";
+const schema = initSchema(extension);
+const migration = createMigration(extension, "0.0.1", up, down);
 export default migration;
 
 async function up() {
-  await applySchema(schema);
+  await schema.apply();
 }
 
 async function down() {
-  // unapplySchema(schema);
+  await schema.rollBack();
 }
-
-const schema = initSchema();
 
 schema.collections = [
   {

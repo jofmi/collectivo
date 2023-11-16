@@ -1,4 +1,6 @@
-const migration = createMigration("collectivo", "0.0.2", up, down);
+const extension = "collectivo";
+const schema = initSchema(extension);
+const migration = createMigration(extension, "0.0.2", up, down);
 export default migration;
 
 async function up() {
@@ -6,10 +8,8 @@ async function up() {
 }
 
 async function down() {
-  // unapplySchema(schema);
+  await schema.rollBack();
 }
-
-const schema = initSchema();
 
 schema.collections = [
   {

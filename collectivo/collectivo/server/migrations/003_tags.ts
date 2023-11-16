@@ -1,15 +1,17 @@
-const migration = createMigration("collectivo", "0.0.3", up, down);
+const extension = "collectivo";
+const schema = initSchema(extension);
+const migration = createMigration(extension, "0.0.3", up, down);
+
 export default migration;
 
 async function up() {
-  await applySchema(schema);
+  await schema.apply();
 }
 
 async function down() {
-  // unapplySchema(schema);
+  await schema.rollBack();
 }
 
-const schema = initSchema();
 const collection = "collectivo_tags";
 
 schema.collections = [
@@ -52,9 +54,20 @@ schema.fields = [
     schema: {},
     meta: { interface: "input-multiline", sort: 20 },
   },
+  {
+    collection: "directus_users",
+    field: "collectivo_tags_divider",
+    type: "alias",
+    meta: {
+      interface: "presentation-divider",
+      sort: 100,
+      special: ["alias", "no-data"],
+      options: { title: "Tags", icon: "sell" },
+    },
+  },
 ];
 
-directusM2MRelation(schema, "collectivo_tags", "directus_users", {
+schema.createM2MRelation("collectivo_tags", "directus_users", {
   m2mFieldType2: "uuid",
   field1: {
     field: "directus_users",
@@ -74,7 +87,11 @@ directusM2MRelation(schema, "collectivo_tags", "directus_users", {
       },
     },
   },
-  field2: {},
+  field2: {
+    meta: {
+      sort: 101,
+    },
+  },
 });
 
 for (const action of ["read", "update", "create", "delete"]) {

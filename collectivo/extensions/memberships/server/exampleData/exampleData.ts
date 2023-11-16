@@ -44,7 +44,7 @@ export default async function createExampleData() {
     ["Alice", [type_ids[0]], "applied"],
     ["Bob", [type_ids[1]], "approved"],
     ["Charlie", type_ids, "approved"],
-    ["Dave", type_ids, "cancelled"],
+    ["Dave", type_ids, "in-cancellation"],
   ];
   for (const user of users) {
     // Get user id

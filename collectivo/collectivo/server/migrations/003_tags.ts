@@ -1,15 +1,17 @@
-const migration = createMigration("collectivo", "0.0.2", up, down);
+const extension = "collectivo";
+const schema = initSchema(extension);
+const migration = createMigration(extension, "0.0.3", up, down);
+
 export default migration;
 
 async function up() {
-  await applySchema(schema);
+  await schema.apply();
 }
 
 async function down() {
-  // unapplySchema(schema);
+  await schema.rollBack();
 }
 
-const schema = initSchema();
 const collection = "collectivo_tags";
 
 schema.collections = [
@@ -18,7 +20,7 @@ schema.collections = [
     schema: directusCollectionSchema(),
     meta: {
       icon: "sell",
-      sort: 20,
+      sort: 510,
       archive_field: "status",
       archive_value: "archived",
       unarchive_value: "published",
@@ -52,10 +54,21 @@ schema.fields = [
     schema: {},
     meta: { interface: "input-multiline", sort: 20 },
   },
+  {
+    collection: "directus_users",
+    field: "collectivo_tags_divider",
+    type: "alias",
+    meta: {
+      interface: "presentation-divider",
+      sort: 100,
+      special: ["alias", "no-data"],
+      options: { title: "Tags", icon: "sell" },
+    },
+  },
 ];
 
-directusM2MRelation(schema, "collectivo_tags", "directus_users", {
-  Collection2IsUUID: true,
+schema.createM2MRelation("collectivo_tags", "directus_users", {
+  m2mFieldType2: "uuid",
   field1: {
     field: "directus_users",
     type: "alias",
@@ -74,4 +87,23 @@ directusM2MRelation(schema, "collectivo_tags", "directus_users", {
       },
     },
   },
+  field2: {
+    meta: {
+      sort: 101,
+    },
+  },
 });
+
+for (const action of ["read", "update", "create", "delete"]) {
+  for (const collection of [
+    "collectivo_tags",
+    "collectivo_tags_directus_users",
+  ]) {
+    schema.permissions.push({
+      collection: collection,
+      roleName: "collectivo_editor",
+      action: action,
+      fields: "*",
+    });
+  }
+}

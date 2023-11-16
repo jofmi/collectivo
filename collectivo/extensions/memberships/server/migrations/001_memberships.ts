@@ -1,15 +1,15 @@
-const migration = createMigration("memberships", "0.0.1", up, down);
+const extension = "memberships";
+const schema = initSchema(extension);
+const migration = createMigration(extension, "0.0.1", up, down);
 export default migration;
 
 async function up() {
-  await applySchema(schema);
+  await schema.apply();
 }
 
 async function down() {
-  // unapplySchema(schema);
+  await schema.rollBack();
 }
-
-const schema = initSchema();
 
 schema.collections = [
   {
@@ -20,7 +20,7 @@ schema.collections = [
       comment: null,
     },
     meta: {
-      sort: 10,
+      sort: 100,
       icon: "switch_account",
       archive_field: "status",
       archive_value: "ended",
@@ -57,15 +57,15 @@ schema.collections = [
       translations: [
         {
           language: "en-US",
-          translation: "Membership types",
-          singular: "Membership types",
-          plural: "Membership types",
+          translation: "Member types",
+          singular: "Member type",
+          plural: "Member types",
         },
         {
           language: "de-DE",
-          translation: "Mitgliedschaftsarten",
-          singular: "Mitgliedschaftsart",
-          plural: "Mitgliedschaftsarten",
+          translation: "Mitgliedsarten",
+          singular: "Mitgliedsart",
+          plural: "Mitgliedsarten",
         },
       ],
     },
@@ -134,14 +134,14 @@ schema.fields = [
             background: "#aa4abc",
           },
           {
-            text: "$t:cancellation-applied",
-            value: "cancellation-applied",
+            text: "$t:in-cancellation",
+            value: "in-cancellation",
             foreground: "#FFFFFF",
             background: "#d94c4c",
           },
           {
-            text: "$t:exclusion-applied",
-            value: "exclusion-applied",
+            text: "$t:in-exclusion",
+            value: "in-exclusion",
             foreground: "#FFFFFF",
             background: "#d94c4c",
           },
@@ -160,8 +160,8 @@ schema.fields = [
           { text: "$t:draft", value: "draft" },
           { text: "$t:applied", value: "applied" },
           { text: "$t:approved", value: "approved" },
-          { text: "$t:cancellation-applied", value: "cancellation-applied" },
-          { text: "$t:exclusion-applied", value: "exclusion-applied" },
+          { text: "$t:in-cancellation", value: "in-cancellation" },
+          { text: "$t:in-exclusion", value: "in-exclusion" },
           { text: "$t:ended", value: "ended" },
         ],
       },
@@ -203,8 +203,8 @@ schema.fields = [
       interface: "datetime",
       width: "half",
       translations: [
-        { language: "de-DE", translation: "Datum Austieg beantragt" },
-        { language: "en-US", translation: "Date cancellation applied" },
+        { language: "de-DE", translation: "Datum Ausgestiegen" },
+        { language: "en-US", translation: "Date Cancelled" },
       ],
     },
   },
@@ -217,8 +217,8 @@ schema.fields = [
       interface: "datetime",
       width: "half",
       translations: [
-        { language: "de-DE", translation: "Datum Ausschluss beantragt" },
-        { language: "en-US", translation: "Date exclusion applied" },
+        { language: "de-DE", translation: "Datum Ausgeschlossen" },
+        { language: "en-US", translation: "Date Excluded" },
       ],
     },
   },
@@ -232,7 +232,7 @@ schema.fields = [
       width: "half",
       translations: [
         { language: "de-DE", translation: "Datum Beendet" },
-        { language: "en-US", translation: "Date ended" },
+        { language: "en-US", translation: "Date Ended" },
       ],
     },
   },
@@ -251,13 +251,13 @@ schema.translations = [
   { language: "de-DE", key: "approved", value: "Aufgenommen" },
   {
     language: "de-DE",
-    key: "cancellation-applied",
-    value: "Ausstieg beaantragt",
+    key: "in-cancellation",
+    value: "Im Ausstieg",
   },
   {
     language: "de-DE",
-    key: "exclusion-applied",
-    value: "Ausschluss beantragt",
+    key: "in-exclusion",
+    value: "Im Ausschluss",
   },
   { language: "de-DE", key: "ended", value: "Beendet" },
 
@@ -265,13 +265,13 @@ schema.translations = [
   { language: "en-US", key: "approved", value: "Approved" },
   {
     language: "en-US",
-    key: "cancellation-applied",
-    value: "Cancellation applied",
+    key: "in-cancellation",
+    value: "In cancellation",
   },
   {
     language: "en-US",
-    key: "exclusion-applied",
-    value: "Exclusion applied",
+    key: "in-exclusion",
+    value: "In exclusion",
   },
   { language: "en-US", key: "ended", value: "Ended" },
 
@@ -303,5 +303,26 @@ schema.relations = [
     related_collection: "memberships_types",
     meta: { sort_field: null },
     schema: { on_delete: "NO ACTION" },
+  },
+];
+
+schema.permissions = [
+  {
+    collection: "memberships",
+    roleName: "collectivo_editor",
+    action: "read",
+    fields: "*",
+  },
+  {
+    collection: "memberships",
+    roleName: "collectivo_editor",
+    action: "update",
+    fields: "*",
+  },
+  {
+    collection: "memberships_types",
+    roleName: "collectivo_editor",
+    action: "read",
+    fields: "*",
   },
 ];

@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "pnpm run -r --parallel dev",
-    "test": "pnpm run -r --parallel test"
+    "test": "pnpm run -r --parallel test",
+    "seed": "curl --header \"Authorization:badToken\" --request POST \"http://localhost:3000/api/migrate/?all=true&exampleData=true\""
   },
   "author": "Joël Foramitti",
   "license": "AGPL-3.0"

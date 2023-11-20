@@ -57,8 +57,10 @@ Apply migrations & create example data as follows:
 curl \
   --header "Authorization: badToken" \
   --request POST \
-  http://localhost:3000/api/migrate/?all=true?exampleData=true
+  http://localhost:3000/api/migrate/?all=true&exampleData=true
 ```
+
+Check the nuxt logs for success or error messages
 
 You can now log in with the following example users:
 
@@ -87,8 +89,10 @@ Example to prepare a new system for local development:
 curl \
   --header "Authorization: badToken" \
   --request POST \
-  http://localhost:3000/api/migrate/?all=true?exampleData=true
+  http://localhost:3000/api/migrate/?all=true&exampleData=true
 ```
+
+Migration success and error messages can be found in the nuxt logs.
 
 To perform migrations, we recommend using a http client like postman or thunder client.
 

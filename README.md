@@ -54,10 +54,8 @@ The following services should now be available:
 Apply migrations & create example data as follows:
 
 ```
-curl \
-  --header "Authorization: badToken" \
-  --request POST \
-  http://localhost:3000/api/migrate/?all=true&exampleData=true
+curl --location --request POST 'http://localhost:3000/api/migrate/?all=true&exampleData=true' \
+--header 'authorization: badToken'
 ```
 
 Check the nuxt logs for success or error messages
@@ -86,10 +84,8 @@ The following optional parameters can be passed:
 Example to prepare a new system for local development:
 
 ```
-curl \
-  --header "Authorization: badToken" \
-  --request POST \
-  http://localhost:3000/api/migrate/?all=true&exampleData=true
+curl --location --request POST 'http://localhost:3000/api/migrate/?all=true&exampleData=true' \
+--header 'authorization: badToken'
 ```
 
 Migration success and error messages can be found in the nuxt logs.

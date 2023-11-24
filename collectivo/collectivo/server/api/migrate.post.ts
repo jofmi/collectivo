@@ -19,8 +19,13 @@ export default defineEventHandler(async (event) => {
   // Case 1: Migrate all extensions
   if (migrateAllParam) {
     migrateAll(exts, exampleData);
+    var response = "Running migrations for all extensions";
+    if (exampleData) {
+      response += " and creating example data";
+    }
+    response += ". Please check the nuxt logs for details.";
     return {
-      detail: "Running migrations for all extensions",
+      detail: response,
     };
   }
 

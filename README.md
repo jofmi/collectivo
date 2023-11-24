@@ -24,7 +24,7 @@ Install the following requirements:
 - [Docker](https://docs.docker.com/get-docker/)
 - [pnpm](https://pnpm.io/installation)
 
-Add the following to your `etc/hosts` file:
+Add the following to your [`etc/hosts`](https://www.howtogeek.com/27350/beginner-geek-how-to-edit-your-hosts-file/) file:
 
 ```
 127.0.0.1 keycloak
@@ -32,7 +32,7 @@ Add the following to your `etc/hosts` file:
 
 Prepare the environment:
 
-```
+```sh
 cp .env.example .env
 docker compose up -d keycloak
 pnpm install
@@ -40,27 +40,26 @@ pnpm install
 
 Wait for keycloak to be ready, then run:
 
-```
+```sh
 docker compose up -d
 pnpm dev
 ```
 
+In a separate terminal, run the following to apply migrations and example data:
+
+```sh
+pnpm seed
+```
+
+If you go back to the previous terminal (from `pnpm dev`), you will see the migration logs.
+
 The following services should now be available:
 
-- Collectivo/Nuxt: http://localhost:3000/
-- Directus: http://localhost:8055/
-- Keycloak: http://localhost:8080/
+- Collectivo/Nuxt (user app): http://localhost:3000/
+- Directus (admin app): http://localhost:8055/
+- Keycloak (access control): http://localhost:8080/admin/master/console/
 
-Apply migrations & create example data as follows:
-
-```
-curl \
-  --header "Authorization: badToken" \
-  --request POST \
-  http://localhost:3000/api/migrate/?all=true?exampleData=true
-```
-
-You can now log in with the following example users:
+You can now log in with the following example users on both the user and admin app:
 
 - Admin: admin@example.com / admin
 - Editor: editor@example.com / editor
@@ -68,29 +67,30 @@ You can now log in with the following example users:
 
 ## Migrations
 
+Extensions can define migrations for each version. E.g. a migration can be for version `0.0.1` of the core extension `collectivo`.
+
 Migrations can be run via the Nuxt API endpoint `/api/migrate/`.
 
 Requests must be authorized with the `NUXT_API_TOKEN` from `.env`.
 
 The following optional parameters can be passed:
 
-- all (boolean) - Apply migrations of all extensions to latest.
-- exampleData (boolean) - Apply example data after migrations.
-- extension (string) - Apply migrations of a specific extension.
-  - version (string) - Apply migrations up or down towards specified version. If not given, migrations will be applied to latest.
-  - force (boolean) - Apply only the migration up of the specified version.
-    - down (boolean) - Apply the forced migration down instead of up.
+- `all` (boolean) - Apply migrations of all extensions to latest.
+- `exampleData` (boolean) - Apply example data after migrations.
+- `extension` (string) - Apply migrations of a specific extension.
+  - `version` (string) - Apply migrations up or down towards specified version. If not given, migrations will be applied to latest.
+  - `force` (boolean) - Apply only the migration up of the specified version.
+    - `down` (boolean) - Apply the forced migration down instead of up.
 
-Example to prepare a new system for local development:
+Here is an example to prepare a new system for local development (the same code is run by `pnpm seed`):
 
-```
-curl \
-  --header "Authorization: badToken" \
-  --request POST \
-  http://localhost:3000/api/migrate/?all=true?exampleData=true
+```sh
+curl --header "Authorization: badToken" --request POST "http://localhost:3000/api/migrate/?all=true&exampleData=true"
 ```
 
-To perform migrations, we recommend using a http client like postman or thunder client.
+This cURL command can also imported in an HTTP client like [Postman](https://www.postman.com/).
+
+Migration logs can be found in the nuxt terminal.
 
 ## Unit testing
 
@@ -118,13 +118,14 @@ Setup:
 - Run `pnpm i` to install the extension as a workspace package.
 - Run `pnpm dev` to run a development system that includes your extension.
 
-Tipps and recommendations:
+Infos & recommendations:
 
 - Regularly [sync your fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork) with the upstream repository.
 - Migrations can be created with `createMigration()` and registered in `my-extension/server/plugins/registerExtension.ts`.
+  - For an example, see `collectivo/extensions/example/server/migrations`.
   - Utility functions can be found in `collectivo/collectivo/server/utils`.
   - All collections and fields should start with `myExtension_` to avoid name conflicts with other extensions.
-- Frontend components and pages can be defined under `my-extension/components` and ``my-extension/pages`. To avoid name conflicts with other extensions, they should also be prefixed with the extension name.
+- Frontend components and pages can be defined under `my-extension/components` and `my-extension/pages`. To avoid name conflicts with other extensions, they should also be prefixed with the extension name.
 - Adding `"@collectivo/collectivo": "workspace:*"` to your dependencies in `package.json` gives you access to the types and functions of collectivo.
 - To publish your extension, run `pnpm publish collectivo/extensions/my-extension -r --access=public --dry-run` (remove --dry-run after checking that everything is correct)
 - The example extension is licensed under [public domain](https://de.wikipedia.org/wiki/Unlicense). You can choose your own license for your extension, it does not have to be the same as collectivo.

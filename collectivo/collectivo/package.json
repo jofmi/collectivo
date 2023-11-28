@@ -40,6 +40,7 @@
     "@nuxtjs/i18n": "8.0.0-rc.4",
     "@nuxtjs/tailwindcss": "^6.8.0",
     "nuxt": "^3.7.0",
+    "sass": "^1.69.5",
     "vitest": "^0.34.3",
     "@iconify/vue": "^4.1.1"
   }

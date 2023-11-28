@@ -1,0 +1,17 @@
+.error-input {
+    & input {
+        @apply ring-1 ring-inset ring-cv-red focus:ring-cv-red focus:outline-none;
+    }
+    & p {
+        @apply text-cv-red text-sm font-medium tracking-[0.28px] mt-[6px];
+    }
+}
+
+.success-input {
+    & input {
+        @apply ring-1 ring-inset ring-cv-cyan focus:ring-cv-cyan focus:outline-none;
+    }
+    & p {
+        @apply text-cv-cyan  text-sm font-medium tracking-[0.28px] mt-[6px];
+    }
+}

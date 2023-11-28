@@ -19,12 +19,7 @@ export default defineNuxtPlugin({
       directus = createDirectus<CollectivoSchema>(
         runtimeConfig.public.directusUrl as string
       )
-        .with(
-          authentication("json", {
-            autoRefresh: false,
-            credentials: "include",
-          })
-        )
+        .with(authentication("cookie", { credentials: "include" }))
         .with(rest({ credentials: "include" }));
     } catch (e) {
       throw new Error("Environment variable NUXT_PUBLIC_DIRECTUS_URL invalid");

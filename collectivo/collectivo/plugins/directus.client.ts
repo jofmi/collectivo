@@ -13,7 +13,6 @@ export default defineNuxtPlugin({
   async setup() {
     const runtimeConfig = useRuntimeConfig();
     var directus;
-    console.log("Setting up directus browser client");
     // Create directus REST client or redirect to offline error page
     try {
       directus = createDirectus<CollectivoSchema>(
@@ -27,22 +26,14 @@ export default defineNuxtPlugin({
 
     // Try to refresh token or redirect to keycloak login page
     try {
-      console.log("Trying to refresh existing token");
       await directus.refresh();
-      console.log("Successfully refreshed token");
     } catch (e: any) {
-      // If error is not related to authentication, redirect to login page
-      console.log("Error while refreshing token", e);
       if ([400, 401, 403].includes(e.response?.status)) {
-        console.log(
-          "Redirecting to keycloak login page because status is ",
-          e.response?.status
+        directus.logout();
+        navigateTo(
+          `${runtimeConfig.public.directusUrl}/auth/login/keycloak?redirect=${runtimeConfig.public.collectivoUrl}`,
+          { external: true }
         );
-        // directus.logout();
-        // navigateTo(
-        //   `${runtimeConfig.public.directusUrl}/auth/login/keycloak?redirect=${runtimeConfig.public.collectivoUrl}`,
-        //   { external: true }
-        // );
       } else {
         throw new Error("Cannot reach backend server (directus)");
       }

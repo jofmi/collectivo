@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "pnpm run -r --parallel dev",
     "test": "pnpm run -r --parallel test",
+    "format": "pnpm run -r --parallel format",
+    "lint": "pnpm run -r --parallel lint",
     "seed": "curl --header \"Authorization:badToken\" --request POST \"http://localhost:3000/api/migrate/?all=true&exampleData=true\""
   },
   "author": "Joël Foramitti",

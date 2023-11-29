@@ -1,6 +1,7 @@
 const extension = "collectivo";
 const schema = initSchema(extension);
 const migration = createMigration(extension, "0.0.1", up, down);
+
 export default migration;
 
 async function up() {
@@ -195,7 +196,7 @@ schema.createM2ARelation(
         { language: "de-DE", translation: "Einträge" },
       ],
     },
-  }
+  },
 );
 
 for (const action of ["read"]) {
@@ -244,5 +245,5 @@ schema.permissions.push(
     fields: editor_fields,
     permissions: {},
     override: true,
-  }
+  },
 );

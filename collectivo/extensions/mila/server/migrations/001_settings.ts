@@ -1,10 +1,4 @@
-import {
-  DirectusCollection,
-  DirectusField,
-  NestedPartial,
-  createTranslation,
-  updateMe,
-} from "@directus/sdk";
+import { updateMe } from "@directus/sdk";
 
 const migration = {
   id: 1,

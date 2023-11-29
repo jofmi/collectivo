@@ -1,19 +1,4 @@
-import {
-  createItem,
-  createItems,
-  createUser,
-  createUsers,
-  deleteItems,
-  deleteUser,
-  deleteUsers,
-  readRoles,
-  readSingleton,
-  readUsers,
-  updateCollection,
-  updateItems,
-  updateUser,
-  updateUsers,
-} from "@directus/sdk";
+import { createItem, deleteItems, readUsers } from "@directus/sdk";
 
 export default async function createExampleData() {
   console.log("Creating example data for memberships");
@@ -28,24 +13,29 @@ export default async function createExampleData() {
   console.log("Creating memberships");
   const types = [["Active"], ["Investing"]];
   const type_ids = [];
+
   for (const type of types) {
     const type_response = await directus.request(
       createItem("memberships_types", {
         name: type[0],
-      })
+      }),
     );
+
     type_ids.push(type_response.id);
   }
+
   console.log("Created membership types", type_ids);
 
   // Create some memberships
   console.log("Creating memberships");
+
   const users = [
     ["Alice", [type_ids[0]], "applied"],
     ["Bob", [type_ids[1]], "approved"],
     ["Charlie", type_ids, "approved"],
     ["Dave", type_ids, "in-cancellation"],
   ];
+
   for (const user of users) {
     // Get user id
     const user_id = (
@@ -59,7 +49,7 @@ export default async function createExampleData() {
           user: user_id,
           type: membership_type,
           status: user[2],
-        })
+        }),
       );
     }
   }

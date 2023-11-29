@@ -19,10 +19,12 @@ export default defineEventHandler(async (event) => {
   // Case 1: Migrate all extensions
   if (migrateAllParam) {
     migrateAll(exts, exampleData);
-    var response = "Running migrations for all extensions";
+    let response = "Running migrations for all extensions";
+
     if (exampleData) {
       response += " and creating example data";
     }
+
     response += ". Please check the nuxt logs for details.";
     return {
       detail: response,
@@ -36,6 +38,7 @@ export default defineEventHandler(async (event) => {
         await ext.exampleDataFn();
       }
     }
+
     return {
       detail: "Creating example data for all extensions",
     };
@@ -43,6 +46,7 @@ export default defineEventHandler(async (event) => {
 
   // Case 2: Migrate a specific extension
   const ext = exts.find((f: any) => f.name === extension);
+
   if (!ext) {
     throw createError({
       statusCode: 400,

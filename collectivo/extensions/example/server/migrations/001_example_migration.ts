@@ -1,6 +1,7 @@
 // Create a migration for version 0.0.1 of the example extension
 const extension = "example";
 const migration = createMigration(extension, "0.0.1", up, down);
+
 export default migration;
 
 // This function creates an empty schema

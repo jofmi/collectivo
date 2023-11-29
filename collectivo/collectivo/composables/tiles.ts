@@ -1,5 +1,3 @@
-import { readItems } from "@directus/sdk";
-
 export const useTiles = () =>
   useState<DataWrapper<CollectivoTile[]>>("collectivo_tiles", initData);
 

@@ -6,7 +6,9 @@ export const useExtensions = () =>
 export const getExtensions = async () => {
   const { $directus } = useNuxtApp();
   const extensions = useExtensions();
+
   extensions.value =
     (await $directus?.request(readItems("collectivo_extensions"))) || null;
+
   return extensions;
 };

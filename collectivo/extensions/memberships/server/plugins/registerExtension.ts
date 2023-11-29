@@ -4,7 +4,7 @@ import m002_profile from "../migrations/002_profile";
 import exampleDataFn from "../exampleData/exampleData";
 
 // Register extension on startup
-export default defineNitroPlugin((nitroApp) => {
+export default defineNitroPlugin(() => {
   registerExtension({
     name: "memberships",
     description: pkg.description,

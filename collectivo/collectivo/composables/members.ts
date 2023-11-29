@@ -1,8 +1,8 @@
-import { readItems, readMe, readUser } from "@directus/sdk";
+import { readItems, readMe } from "@directus/sdk";
 
 export const useMembersMe = () =>
   useState<DataWrapper<CollectivoMember>>("collectivo_members_me", () =>
-    initData()
+    initData(),
   );
 
 export const getMembersMe = async () => {
@@ -11,16 +11,21 @@ export const getMembersMe = async () => {
   const currentUser = useCurrentUser();
   if (currentMember.value.data) return currentMember;
   currentMember.value.loading = true;
+  // tslint:disable-next-line:no-console
   console.log("getting members me");
+
   try {
     if (!currentUser.value.data) {
       currentUser.value.data = await $directus?.request(
         readMe({
           fields: ["id", "first_name", "last_name", "email"],
-        })
+        }),
       );
     }
+
+    // tslint:disable-next-line:no-console
     console.log("currentUser", currentUser.value.data);
+
     const member = await $directus?.request(
       readItems("collectivo_members", {
         fields: ["*"],
@@ -29,8 +34,9 @@ export const getMembersMe = async () => {
             _eq: currentUser.value.data?.id,
           },
         },
-      })
+      }),
     );
+
     if (member) {
       if (member.length == 1) {
         currentMember.value.data = member[0];
@@ -41,6 +47,7 @@ export const getMembersMe = async () => {
   } catch (error) {
     currentMember.value.error = error;
   }
+
   currentMember.value.loading = false;
   return currentMember;
 };

@@ -96,6 +96,16 @@ Migration logs can be found in the nuxt terminal.
 
 - To run unit tests, use: `pnpm test`
 
+## Linting
+
+- To run linting, use: `pnpm lint`
+- To apply linting to all files, use: `pnpm lint:all`
+
+## Formatting
+
+- To run formatting checks, use: `pnpm format`
+- To apply the formatting to all files, use: `pnpm format:all`
+
 ## Troubleshooting
 
 - To reset the database, run

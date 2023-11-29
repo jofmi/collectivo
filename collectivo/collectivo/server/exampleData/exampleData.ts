@@ -1,32 +1,27 @@
 import {
-  createItem,
   createItems,
   createUser,
-  createUsers,
   deleteItems,
-  deleteUser,
-  deleteUsers,
   readRoles,
-  readSingleton,
   readUsers,
-  updateCollection,
-  updateItems,
   updateUser,
-  updateUsers,
 } from "@directus/sdk";
 
 async function getRole(name: string) {
   const directus = await useDirectus();
+
   const membersRoles = await directus.request(
     readRoles({
       filter: {
         name: { _eq: name },
       },
-    })
+    }),
   );
+
   if (membersRoles.length < 1) {
     throw new Error(name + " role not found");
   }
+
   return membersRoles[0].id;
 }
 
@@ -41,6 +36,7 @@ export default async function createExampleData() {
 
   // Create some users
   console.log("Creating users");
+
   const userNames = [
     "Admin",
     "Editor",
@@ -50,9 +46,12 @@ export default async function createExampleData() {
     "Charlie",
     "Dave",
   ];
+
   const users = [];
+
   for (const userName of userNames) {
     const email = `${userName.toLowerCase()}@example.com`;
+
     const u = {
       first_name: userName,
       last_name: "Example",
@@ -62,27 +61,36 @@ export default async function createExampleData() {
       status: "active",
       external_identifier: email,
     };
+
     if (userName == "Admin") {
       u.role = adminRole;
     }
+
     if (userName == "Editor") {
       u.role = editorRole;
     }
+
     users.push(u);
   }
+
   for (const user of users) {
     const usersDB = await directus.request(
       readUsers({
         filter: { email: { _eq: user.email } },
-      })
+      }),
     );
-    var userID;
+
+    let userID;
+
     if (usersDB.length > 0) {
       userID = usersDB[0].id;
+      // tslint:disable-next-line:no-console
       console.log("Updating user " + user.email + " with ID " + userID);
       await directus.request(updateUser(userID, user));
+      // tslint:disable-next-line:no-console
       console.log("Updated good");
     } else {
+      // tslint:disable-next-line:no-console
       console.log("Creating user " + user.email);
       const us = await directus.request(createUser(user));
       userID = us.id;
@@ -94,6 +102,7 @@ export default async function createExampleData() {
   await directus.request(deleteItems("collectivo_tags", { limit: 1000 }));
   const tagNames = ["Has a dog", "Has a cat", "Has a bird", "Has a fish"];
   const tags: any[] = [];
+
   for (const tagName of tagNames) {
     tags.push({
       name: tagName,
@@ -124,12 +133,14 @@ export default async function createExampleData() {
   await directus.request(deleteItems("collectivo_tiles", { limit: 1000 }));
   const tileNames = ["Tile 1", "Tile 2", "Tile 3", "Tile 4"];
   const tiles = [];
+
   for (const tileName of tileNames) {
     tiles.push({
       name: tileName,
       content: "Hello! I am an example tile!",
     });
   }
+
   try {
     await directus.request(createItems("collectivo_tiles", tiles));
   } catch (error) {

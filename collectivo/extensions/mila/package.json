@@ -13,7 +13,9 @@
     "dev": "nuxt dev --p 3009",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "format": "prettier --cache --check .",
+    "lint": "eslint --cache ."
   },
   "dependencies": {
     "@collectivo/collectivo": "workspace:*"
@@ -22,6 +24,12 @@
     "@nuxt/devtools": "latest",
     "@nuxt/test-utils": "^3.7.1",
     "nuxt": "^3.7.0",
-    "vitest": "^0.34.3"
+    "vitest": "^0.34.3",
+    "@typescript-eslint/eslint-plugin": "6.11.0",
+    "@typescript-eslint/parser": "6.11.0",
+    "eslint": "8.54.0",
+    "eslint-config-prettier": "9.0.0",
+    "eslint-plugin-vue": "9.18.1",
+    "prettier": "3.1.0"
   }
 }

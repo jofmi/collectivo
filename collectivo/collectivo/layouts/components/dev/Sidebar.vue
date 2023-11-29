@@ -1,3 +1,21 @@
+<script setup lang="ts">
+import { ArrowLeftOnRectangleIcon } from "@heroicons/vue/24/outline";
+import pkg from "../../../package.json";
+
+const { t, locale } = useI18n();
+const appConfig = useAppConfig();
+const runtimeConfig = useRuntimeConfig();
+const currentUser = useCurrentUser();
+
+const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protocol/openid-connect/logout`;
+
+// Prepare menu items
+const menuItems = useSidebarMenu();
+const sortedMenuItems = Object.values(menuItems.value).sort(
+  (a, b) => (a.order ?? 100) - (b.order ?? 100)
+);
+</script>
+
 <template>
   <div
     class="flex items-center px-4 font-bold h-14 border-b-2 border-slate-500">
@@ -46,20 +64,3 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ArrowLeftOnRectangleIcon } from "@heroicons/vue/24/outline";
-import pkg from "../../package.json";
-
-const { t, locale } = useI18n();
-const appConfig = useAppConfig();
-const runtimeConfig = useRuntimeConfig();
-const currentUser = useCurrentUser();
-
-const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protocol/openid-connect/logout`;
-
-// Prepare menu items
-const menuItems = useSidebarMenu();
-const sortedMenuItems = Object.values(menuItems.value).sort(
-  (a, b) => (a.order ?? 100) - (b.order ?? 100)
-);
-</script>

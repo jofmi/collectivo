@@ -4,9 +4,10 @@ import {
   UserCircleIcon,
 } from "@heroicons/vue/24/outline";
 
-export default defineNuxtPlugin((NuxtApp) => {
+export default defineNuxtPlugin(() => {
   const menu = useSidebarMenu();
   const runtimeConfig = useRuntimeConfig();
+
   const items = <CollectivoMenuItem[]>[
     {
       icon: HomeIcon,
@@ -26,10 +27,11 @@ export default defineNuxtPlugin((NuxtApp) => {
       icon: Square3Stack3DIcon,
       link: runtimeConfig.public.directusUrl,
       order: 99,
-      filter: (item) => {
+      filter: (_item) => {
         return true;
       },
     },
   ];
-  menu.value.push.apply(menu.value, items);
+
+  menu.value = { ...items };
 });

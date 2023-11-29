@@ -12,7 +12,11 @@
     "dev": "nuxt dev --p 3001",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "format": "prettier --cache --check .",
+    "format:all": "prettier --cache --check . --write",
+    "lint": "eslint --cache .",
+    "lint:all": "eslint --cache . --fix"
   },
   "dependencies": {
     "@directus/sdk": "^13.0.1",
@@ -28,6 +32,12 @@
     "@nuxtjs/i18n": "8.0.0-rc.4",
     "@nuxtjs/tailwindcss": "^6.8.0",
     "nuxt": "^3.7.0",
-    "vitest": "^0.34.3"
+    "vitest": "^0.34.3",
+    "@typescript-eslint/eslint-plugin": "6.11.0",
+    "@typescript-eslint/parser": "6.11.0",
+    "eslint": "8.54.0",
+    "eslint-config-prettier": "9.0.0",
+    "eslint-plugin-vue": "9.18.1",
+    "prettier": "3.1.0"
   }
 }

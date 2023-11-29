@@ -19,6 +19,7 @@ export function initSchema(extension: string) {
 
 class ExtensionSchema {
   extension: string;
+  // @ts-ignore
   collections: NestedPartial<DirectusCollection<any>>[];
   fields: NestedPartial<DirectusField<any>>[];
   relations: NestedPartial<DirectusRelation<any>>[];
@@ -45,7 +46,7 @@ class ExtensionSchema {
   createM2MRelation = (
     collection1: string,
     collection2: string,
-    settings?: directusM2MSettings
+    settings?: directusM2MSettings,
   ) => {
     createM2MRelation(this, collection1, collection2, settings);
   };
@@ -54,21 +55,21 @@ class ExtensionSchema {
     aliasFieldName: string,
     MCollection: string,
     ACollections: string[],
-    aliasField?: NestedPartial<DirectusField<any>>
+    aliasField?: NestedPartial<DirectusField<any>>,
   ) => {
     createM2ARelation(
       this,
       aliasFieldName,
       MCollection,
       ACollections,
-      aliasField
+      aliasField,
     );
   };
 
   createO2MRelation = (
     CollectionOne: string,
     CollectionMany: string,
-    ForeignKey: string
+    ForeignKey: string,
   ) => {
     createO2MRelation(this, CollectionOne, CollectionMany, ForeignKey);
   };
@@ -79,24 +80,30 @@ class ExtensionSchema {
         collection,
         [],
         [],
-        this.extension
+        this.extension,
       );
     }
+
     for (const field of this.fields) {
       if (!field.collection) {
         throw new Error("Field collection is required");
       }
+
       await createOrUpdateDirectusField(field, this.extension);
     }
+
     for (const relation of this.relations) {
       await createOrUpdateDirectusRelation(relation, this.extension);
     }
+
     for (const role of this.roles) {
       await createOrUpdateDirectusRole(role, this.extension);
     }
+
     for (const permission of this.permissions) {
       await createOrUpdateDirectusPermission(permission, this.extension);
     }
+
     for (const translation of this.translations) {
       await createOrUpdateDirectusTranslation(translation);
     }
@@ -109,6 +116,7 @@ class ExtensionSchema {
 
 export function combineSchemas(...schemas: ExtensionSchema[]) {
   const combinedSchema = initSchema(schemas[0].extension);
+
   for (const schema of schemas) {
     combinedSchema.collections.push(...schema.collections);
     combinedSchema.fields.push(...schema.fields);
@@ -120,6 +128,7 @@ export function combineSchemas(...schemas: ExtensionSchema[]) {
     combinedSchema.translations.push(...schema.translations);
     combinedSchema.custom.push(...schema.custom);
   }
+
   return combinedSchema;
 }
 
@@ -139,14 +148,16 @@ function createM2MRelation(
   schema: ExtensionSchema,
   collection1: string,
   collection2: string,
-  settings?: directusM2MSettings
+  settings?: directusM2MSettings,
 ) {
   // Prepare inputs
   const field1 = settings?.field1 || {};
+
   const field2 =
     settings?.field2 && typeof settings?.field2 !== "boolean"
       ? settings?.field2
       : {};
+
   const field1Name = settings?.field1?.field || collection2;
   const field2Name = field2 ? field2.field || collection1 : null;
   const m2mCollectionName = `${collection1}_${collection2}`;
@@ -184,12 +195,14 @@ function createM2MRelation(
     meta: { hidden: true, icon: "import_export" },
     schema: directusCollectionSchema(),
   });
+
   schema.fields.push({
     collection: m2mCollectionName,
     field: `${collection1}_id`,
     type: settings?.m2mFieldType1 ? settings?.m2mFieldType1 : "integer",
     meta: { hidden: true },
   });
+
   schema.fields.push({
     collection: m2mCollectionName,
     field: `${collection2}_id`,
@@ -210,6 +223,7 @@ function createM2MRelation(
     },
     schema: { on_delete: "SET NULL" },
   });
+
   schema.relations.push({
     collection: m2mCollectionName,
     field: `${collection2}_id`,
@@ -228,7 +242,7 @@ export async function createO2MRelation(
   schema: ExtensionSchema,
   CollectionOne: string,
   CollectionMany: string,
-  ForeignKey: string
+  ForeignKey: string,
 ) {
   schema.fields.push({
     collection: CollectionOne,
@@ -237,6 +251,7 @@ export async function createO2MRelation(
     schema: {},
     meta: { interface: "select-dropdown-m2o", special: ["m2o"] },
   });
+
   schema.relations.push({
     collection: CollectionOne,
     field: ForeignKey,
@@ -251,39 +266,46 @@ export async function createM2ARelation(
   aliasFieldName: string,
   MCollection: string,
   ACollections: string[],
-  aliasField?: NestedPartial<DirectusField<any>>
+  aliasField?: NestedPartial<DirectusField<any>>,
 ) {
   const m2aCollection = `${MCollection}_${aliasFieldName}`;
   const m2aCollectionIdFieldName = `${MCollection}_id`;
+
   const field = aliasField || {
     field: aliasFieldName,
     type: "alias",
     meta: { interface: "list-m2a", special: ["m2a"] },
     collection: MCollection,
   };
+
   schema.fields.push(field);
+
   schema.collections.push({
     collection: m2aCollection,
     meta: { hidden: true, icon: "import_export" },
     schema: { schema: m2aCollection, name: m2aCollection, comment: null },
   });
+
   schema.fields.push({
     collection: m2aCollection,
     field: m2aCollectionIdFieldName,
     type: "integer",
   });
+
   schema.fields.push({
     collection: m2aCollection,
     field: "item",
     type: "string",
     schema: {},
   });
+
   schema.fields.push({
     collection: m2aCollection,
     field: "collection",
     type: "string",
     schema: {},
   });
+
   schema.relations.push({
     collection: m2aCollection,
     field: "item",
@@ -297,6 +319,7 @@ export async function createM2ARelation(
       junction_field: m2aCollectionIdFieldName,
     },
   });
+
   schema.relations.push({
     collection: m2aCollection,
     field: m2aCollectionIdFieldName,

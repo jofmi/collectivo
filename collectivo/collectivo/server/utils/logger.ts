@@ -7,7 +7,7 @@ logger.add(
     format: winston.format.combine(
       winston.format.errors({ stack: true }),
       winston.format.timestamp(),
-      winston.format.prettyPrint()
+      winston.format.prettyPrint(),
     ),
-  })
+  }),
 );

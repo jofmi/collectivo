@@ -12,7 +12,7 @@ export interface ExtensionConfig {
 }
 
 // Store for loaded extensions
-var registeredExtensions: ExtensionConfig[] = [];
+const registeredExtensions: ExtensionConfig[] = [];
 
 // Public function to get resistered extensions
 export function getRegisteredExtensions() {
@@ -64,7 +64,7 @@ function loadExtension(ext: ExtensionConfig) {
   // Check that extension name does not contain an underscore
   if (ext.name.includes("_")) {
     throw new Error(
-      `Extension name '${ext.name}' should not contain underscores`
+      `Extension name '${ext.name}' should not contain underscores`,
     );
   }
 
@@ -87,9 +87,10 @@ function loadExtension(ext: ExtensionConfig) {
     // Check that no version exists twice
     const versions = ext.migrations.map((m) => m.version);
     const uniqueVersions = [...new Set(versions)];
+
     if (uniqueVersions.length !== versions.length) {
       throw new Error(
-        `Extension ${ext.name} has duplicate versions in migrations`
+        `Extension ${ext.name} has duplicate versions in migrations`,
       );
     }
 
@@ -98,9 +99,10 @@ function loadExtension(ext: ExtensionConfig) {
 
     // Check that latest migration is not above extension version
     const latestMigration = ext.migrations[ext.migrations.length - 1];
+
     if (compareVersions(latestMigration?.version || "0.0.0", ext.version) > 0) {
       throw new Error(
-        `Extension ${ext.name} has migration above extension version`
+        `Extension ${ext.name} has migration above extension version`,
       );
     }
   }

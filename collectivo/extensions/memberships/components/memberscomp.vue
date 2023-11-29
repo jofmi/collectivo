@@ -1,3 +1,5 @@
+<script setup lang="ts"></script>
+
 <template>
   <div>
     <h1>Members</h1>
@@ -5,5 +7,3 @@
     <Corecomp />
   </div>
 </template>
-
-<script setup lang="ts"></script>

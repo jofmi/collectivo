@@ -12,11 +12,12 @@ export default defineNuxtPlugin({
   enforce: "pre",
   async setup() {
     const runtimeConfig = useRuntimeConfig();
-    var directus;
+    let directus;
+
     // Create directus REST client or redirect to offline error page
     try {
       directus = createDirectus<CollectivoSchema>(
-        runtimeConfig.public.directusUrl as string
+        runtimeConfig.public.directusUrl as string,
       )
         .with(authentication("cookie", { credentials: "include" }))
         .with(rest({ credentials: "include" }));
@@ -54,10 +55,11 @@ export default defineNuxtPlugin({
 // Load data of current user to store
 async function getCurrentUser(directus: RestClient<CollectivoSchema>) {
   const user = useCurrentUser();
+
   // @ts-ignore
   user.value.data = await directus.request(
     readMe({
       fields: ["id", "first_name", "last_name", "email"],
-    })
+    }),
   );
 }

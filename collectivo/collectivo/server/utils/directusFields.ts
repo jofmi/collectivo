@@ -10,7 +10,7 @@ export function directusCollectionSchema() {
 
 export function directusNameField(
   collection: string,
-  meta?: any
+  meta?: any,
 ): NestedPartial<DirectusField<any>> {
   return {
     collection: collection,

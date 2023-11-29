@@ -1,4 +1,5 @@
 const migration = createMigration("collectivo", "0.0.5", up, down);
+
 export default migration;
 
 async function up() {
@@ -173,14 +174,14 @@ directusO2MRelation(
   schema,
   "messages_campaigns",
   "messages_templates",
-  "messages_template"
+  "messages_template",
 );
 
 directusO2MRelation(
   schema,
   "messages_records",
   "messages_campaigns",
-  "messages_campaign"
+  "messages_campaign",
 );
 
 directusM2MRelation(schema, "messages_campaigns", "directus_users", {
@@ -188,6 +189,7 @@ directusM2MRelation(schema, "messages_campaigns", "directus_users", {
   createField2: false,
 });
 
+// @ts-ignore
 const operation = {
   id: "???",
   flow: "???",

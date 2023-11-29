@@ -1,10 +1,10 @@
-<script setup>
-</script>
+<script setup></script>
+
 <template>
-    <UCard>
-        <CollectivoSectionTitle title="Breadcrumb" />
-        <CollectivoBreadcrumb />
-    </UCard>
+  <UCard>
+    <CollectivoSectionTitle title="Breadcrumb" />
+    <CollectivoBreadcrumb />
+  </UCard>
 </template>
 
 <style lang="scss" scoped></style>

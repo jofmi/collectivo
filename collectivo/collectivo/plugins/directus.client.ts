@@ -31,9 +31,10 @@ export default defineNuxtPlugin({
     } catch (e: any) {
       if ([400, 401, 403].includes(e.response?.status)) {
         directus.logout();
+
         navigateTo(
           `${runtimeConfig.public.directusUrl}/auth/login/keycloak?redirect=${runtimeConfig.public.collectivoUrl}`,
-          { external: true }
+          { external: true },
         );
       } else {
         throw new Error("Cannot reach backend server (directus)");

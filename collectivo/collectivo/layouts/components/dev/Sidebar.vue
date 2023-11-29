@@ -11,18 +11,20 @@ const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protoc
 
 // Prepare menu items
 const menuItems = useSidebarMenu();
+
 const sortedMenuItems = Object.values(menuItems.value).sort(
-  (a, b) => (a.order ?? 100) - (b.order ?? 100)
+  (a, b) => (a.order ?? 100) - (b.order ?? 100),
 );
 </script>
 
 <template>
   <div
-    class="flex items-center px-4 font-bold h-14 border-b-2 border-slate-500">
+    class="flex items-center px-4 font-bold h-14 border-b-2 border-slate-500"
+  >
     {{ appConfig.projectName }}
   </div>
   <div class="p-4 w-full flex flex-col gap-4">
-    <div v-for="item in sortedMenuItems">
+    <div v-for="(item, i) in sortedMenuItems" :key="i">
       <div v-if="!item.filter || item.filter(item)">
         <div v-if="item.external">
           <a :href="item.link" :target="item.target ?? '_blank'">
@@ -63,4 +65,3 @@ const sortedMenuItems = Object.values(menuItems.value).sort(
     <div>Authenticated as {{ currentUser.data?.email }}</div>
   </div>
 </template>
-

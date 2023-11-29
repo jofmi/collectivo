@@ -1,0 +1,57 @@
+name: setup postgres
+description: Setup and start a postgres database
+inputs:
+  user:
+    description: The postgres user to create
+    required: false
+    default: 'postgres'
+  password:
+    description: The password for the postgres user
+    required: false
+    default: 'postgres'
+  database:
+    description: The database to create
+    required: false
+    default: 'postgres'
+  port:
+    description: The port to run postgres on
+    required: false
+    default: '5432'
+  version:
+    description: The postgres version to use
+    required: false
+    default: '15-3.4-alpine'
+
+runs:
+  using: composite
+  steps:
+    - name: Setup postgres
+      uses: docker://postgis/postgis:${{ inputs.version }}
+      with:
+        env: |
+          POSTGRES_USER=${{ inputs.user }}
+          POSTGRES_PASSWORD=${{ inputs.password }}
+          POSTGRES_DB=${{ inputs.database }}
+        ports: ${{ inputs.port }}:5432
+        healthcheck: |
+          CMD pg_isready -U ${{ inputs.user }}
+        entrypoint: |
+          bash -c '
+            echo "host all all all trust" >> /var/lib/postgresql/data/pg_hba.conf
+            echo "listen_addresses = '*'" >> /var/lib/postgresql/data/postgresql.conf
+            /docker-entrypoint.sh postgres &
+            until pg_isready -U ${{ inputs.user }}; do
+              sleep 1
+            done
+            psql -U ${{ inputs.user }} -c "CREATE DATABASE ${{ inputs.database }};"
+            psql -U ${{ inputs.user }} -c "CREATE USER ${{ inputs.user }} WITH SUPERUSER PASSWORD '"'"'${{ inputs.password }}'"'"';"
+            psql -U ${{ inputs.user }} -c "GRANT ALL PRIVILEGES ON DATABASE ${{ inputs.database }} TO ${{ inputs.user }};"
+            psql -U ${{ inputs.user }} -c "ALTER USER ${{ inputs.user }} WITH PASSWORD '"'"'${{ inputs.password }}'"'"';"
+            psql -U ${{ inputs.user }} -c "ALTER USER ${{ inputs.user }} WITH LOGIN;"
+            psql -U ${{ inputs.user }} -c "ALTER USER ${{ inputs.user }} WITH CREATEDB;"
+            psql -U ${{ inputs.user }} -c "ALTER USER ${{ inputs.user }} WITH CREATEROLE;"
+            psql -U ${{ inputs.user }} -c "ALTER USER ${{ inputs.user }} WITH REPLICATION;"
+            psql -U ${{ inputs.user }} -c "ALTER USER ${{ inputs.user }} WITH BYPASSRLS;"
+            psql -U ${{ inputs.user }} -c "ALTER USER ${{ inputs.user }} WITH CONNECTION LIMIT -1;"
+            psql -U ${{ inputs.user }} -c "ALTER USER ${{ inputs.user }} WITH VALID UNTIL '"'"'infinity'"'"';"
+            psql -U ${{ inputs.user }} -c "ALTER USER ${{ inputs.user }} WITH INHERIT  

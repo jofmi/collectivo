@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Prepare
-        uses: ./.github/utils/prepare
+        uses: ./.github/utils/app
         with:
           build: false
 
@@ -44,7 +44,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Prepare
-        uses: ./.github/utils/prepare
+        uses: ./.github/utils/app
         with:
           build: false
 
@@ -63,7 +63,7 @@ jobs:
           fetch-depth: 0
 
       - name: Prepare
-        uses: ./.github/utils/prepare
+        uses: ./.github/utils/app
 
       - name: Setup directus
         uses: ./.github/utils/setup-directus

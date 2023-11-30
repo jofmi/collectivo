@@ -1,4 +1,4 @@
-name: Prepare
+name: Setup app and extensions
 description: Install dependencies and build the platform
 inputs:
   build:
@@ -23,6 +23,7 @@ runs:
       id: pnpm-install
       with:
         run_install: false
+        version: 8.11.0
 
     - name: Get cache info
       id: cache-info

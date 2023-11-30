@@ -1,7 +1,12 @@
-<script setup>
+<script setup lang="ts">
 import Logo from "./Logo.vue";
 import MenuItem from "./MenuItem.vue";
-import { Icon } from "@iconify/vue";
+import pkg from "../../package.json";
+
+const menuItems = useSidebarMenu();
+const sortedMenuItems = Object.values(menuItems.value).sort(
+  (a, b) => (a.order ?? 100) - (b.order ?? 100)
+);
 </script>
 
 <template>
@@ -11,7 +16,10 @@ import { Icon } from "@iconify/vue";
         <div class="sidebar__inner__list__item">
           <div class="sidebar__inner__list__item__top">
             <Logo />
-            <MenuItem title="Dashboard" path="/">
+            <div v-for="(item, i) in sortedMenuItems" :key="i">
+              <MenuItem :item="item" />
+            </div>
+            <!-- <MenuItem title="Dashboard" path="/">
               <template #icon>
                 <Icon icon="system-uicons:grid" class="link-icon" />
               </template>
@@ -35,21 +43,11 @@ import { Icon } from "@iconify/vue";
               <template #icon>
                 <Icon icon="system-uicons:graph-box" class="link-icon" />
               </template>
-            </MenuItem>
+            </MenuItem> -->
           </div>
           <div class="sidebar__inner__list__item__bottom">
-            <MenuItem title="Settings" path="/settings" class="!-mb-1">
-              <template #icon>
-                <Icon icon="system-uicons:settings" class="link-icon" />
-              </template>
-            </MenuItem>
-            <div class="h-[1px] bg-[#ECF1FD] w-full max-w-[72px] m-auto"></div>
-            <div class="avatar-image-wrapper">
-              <img
-                src="@/assets/images/avatar.png"
-                alt=""
-                class="avatar-image"
-              />
+            <div class="about">
+              <span>Collectivo v{{ pkg.version }}</span>
             </div>
           </div>
         </div>
@@ -59,6 +57,10 @@ import { Icon } from "@iconify/vue";
 </template>
 
 <style lang="scss" scoped>
+.about {
+  @apply flex items-center justify-center text-cv-primary text-xs;
+  letter-spacing: 0.24px;
+}
 .sidebar {
   @apply hidden md:block md:w-[100px] lg:w-[124px] rounded-xl bg-white shadow-sidebar px-3 py-5 fixed h-[calc(100vh-60px)] ml-8 overflow-y-auto;
 

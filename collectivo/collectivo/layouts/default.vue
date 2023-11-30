@@ -42,7 +42,7 @@ import MobileMenu from "./components/MobileMenu.vue";
     <div class="main">
       <router-view />
     </div>
-    <MobileMenu />
+    <!-- <MobileMenu /> -->
   </div>
 </template>
 

@@ -1,15 +1,41 @@
-<script setup>
-defineProps(["title", "path"]);
+<script setup lang="ts">
+defineProps({
+  item: {
+    type: Object as PropType<CollectivoMenuItem>,
+    required: true,
+  },
+});
 </script>
 
 <template>
-  <router-link :to="path" class="item">
+  <!-- <router-link :to="path" class="item">
     <span class="item__icon">
       <slot name="icon"> </slot>
     </span>
-
     <span class="item__title">{{ title }}</span>
-  </router-link>
+  </router-link> -->
+  <div v-if="!item.filter || item.filter(item)">
+    <div v-if="item.external">
+      <a :href="item.path" :target="item.target ?? '_blank'" class="item">
+        <span class="item__icon">
+          <slot name="icon">
+            <UIcon v-if="item.icon" :name="item.icon" class="link-icon" />
+          </slot>
+        </span>
+        <span class="item__title">{{ item.label }}</span>
+      </a>
+    </div>
+    <div v-else>
+      <NuxtLink :to="item.path" class="item">
+        <span class="item__icon">
+          <slot name="icon">
+            <UIcon v-if="item.icon" :name="item.icon" class="link-icon"
+          /></slot>
+        </span>
+        <span class="item__title">{{ item.label }}</span>
+      </NuxtLink>
+    </div>
+  </div>
 </template>
 
 <style lang="scss">
@@ -36,6 +62,10 @@ defineProps(["title", "path"]);
       }
     }
   }
+}
+
+.link-icon {
+  @apply md:h-6 lg:h-[30px] md:w-6 lg:w-[30px] text-cv-primary;
 }
 
 .router-link-exact-active {

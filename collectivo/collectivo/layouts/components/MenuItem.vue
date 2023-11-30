@@ -65,7 +65,7 @@ defineProps({
 }
 
 .link-icon {
-  @apply md:h-6 lg:h-[30px] md:w-6 lg:w-[30px] text-cv-primary;
+  @apply h-7 w-7 md:h-6 lg:h-[30px] md:w-6 lg:w-[30px] text-cv-primary;
 }
 
 .router-link-exact-active {

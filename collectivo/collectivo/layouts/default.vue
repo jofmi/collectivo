@@ -54,12 +54,11 @@ const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protoc
               name="i-system-uicons-exit-left"
               class="main__top__right__icon"
           /></a>
-          <!-- <CollectivoNotification /> -->
         </div>
       </div>
       <router-view />
     </div>
-    <!-- <MobileMenu /> -->
+    <MobileMenu />
   </div>
 </template>
 

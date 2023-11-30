@@ -19,31 +19,6 @@ const sortedMenuItems = Object.values(menuItems.value).sort(
             <div v-for="(item, i) in sortedMenuItems" :key="i">
               <MenuItem :item="item" />
             </div>
-            <!-- <MenuItem title="Dashboard" path="/">
-              <template #icon>
-                <Icon icon="system-uicons:grid" class="link-icon" />
-              </template>
-            </MenuItem>
-            <MenuItem title="Projects" path="/projects">
-              <template #icon>
-                <Icon icon="system-uicons:folder-minus" class="link-icon" />
-              </template>
-            </MenuItem>
-            <MenuItem title="Files" path="/files">
-              <template #icon>
-                <Icon icon="system-uicons:document-list" class="link-icon" />
-              </template>
-            </MenuItem>
-            <MenuItem title="Calendar" path="/calendar">
-              <template #icon>
-                <Icon icon="system-uicons:calendar-month" class="link-icon" />
-              </template>
-            </MenuItem>
-            <MenuItem title="Statistics" path="/statistics">
-              <template #icon>
-                <Icon icon="system-uicons:graph-box" class="link-icon" />
-              </template>
-            </MenuItem> -->
           </div>
           <div class="sidebar__inner__list__item__bottom">
             <div class="about">
@@ -70,9 +45,6 @@ const sortedMenuItems = Object.values(menuItems.value).sort(
       @apply h-full;
       &__item {
         @apply flex flex-col h-full;
-        .link-icon {
-          @apply md:h-6 lg:h-[30px] md:w-6 lg:w-[30px] text-cv-primary;
-        }
 
         &__top {
           @apply flex-1;
@@ -88,15 +60,6 @@ const sortedMenuItems = Object.values(menuItems.value).sort(
           }
         }
       }
-    }
-  }
-}
-
-.router-link-exact-active {
-  @apply bg-[#ECF1FD] rounded-xl;
-  .item__icon {
-    .link-icon {
-      @apply text-cv-active;
     }
   }
 }

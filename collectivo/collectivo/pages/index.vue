@@ -29,7 +29,7 @@ const yearItems = [
 </script>
 
 <template>
-  <div class="dashboard">
+  <!-- <div class="dashboard">
     <div class="dashboard__top">
       <div class="dashboard__top__left">
         <CollectivoPageTitle title="Dashboard" class="mb-1.5" />
@@ -39,14 +39,14 @@ const yearItems = [
       <div class="dashboard__top__right">
         <CollectivoNotification />
       </div>
-    </div>
-    <div class="dashboard__carousel">
-      <CollectivoDashboardCarousel />
-    </div>
-    <!-- <div class="dashboard__calendar">
+    </div> -->
+  <div class="dashboard__carousel">
+    <CollectivoDashboardCarousel />
+  </div>
+  <!-- <div class="dashboard__calendar">
             <dashboard-calendar />
         </div> -->
-    <!-- <div class="dashboard__table">
+  <!-- <div class="dashboard__table">
             <div class="dashboard__table__top">
                 <section-title title="Customer Details" />
                 <div class="dashboard__table__top__buttons">
@@ -83,7 +83,7 @@ const yearItems = [
             </div>
             <dashboard-table />
         </div> -->
-  </div>
+  <!-- </div> -->
 </template>
 
 <style lang="scss" scoped>

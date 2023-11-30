@@ -2,6 +2,8 @@
 import Sidebar from "./components/Sidebar.vue";
 import MobileHeader from "./components/MobileHeader.vue";
 import MobileMenu from "./components/MobileMenu.vue";
+const runtimeConfig = useRuntimeConfig();
+const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protocol/openid-connect/logout`;
 </script>
 
 <template>
@@ -40,6 +42,21 @@ import MobileMenu from "./components/MobileMenu.vue";
     <Sidebar />
     <MobileHeader />
     <div class="main">
+      <div class="main__top">
+        <div class="main__top__left">
+          <CollectivoPageTitle title="Dashboard" class="mb-1.5" />
+          <CollectivoBreadcrumb />
+        </div>
+
+        <div class="main__top__right">
+          <a :href="logoutPath">
+            <UIcon
+              name="i-system-uicons-exit-left"
+              class="main__top__right__icon"
+          /></a>
+          <!-- <CollectivoNotification /> -->
+        </div>
+      </div>
       <router-view />
     </div>
     <!-- <MobileMenu /> -->
@@ -55,6 +72,36 @@ import MobileMenu from "./components/MobileMenu.vue";
   }
   .main {
     @apply md:pl-[172px] lg:pl-[226px] h-full w-full lg:pr-10 px-[25px] md:px-0;
+  }
+}
+
+.main {
+  @apply mt-3;
+
+  &__top {
+    @apply hidden md:flex justify-between items-center mb-11;
+
+    &__right {
+      &__icon {
+        @apply w-7 h-7 text-cv-primary;
+      }
+    }
+  }
+
+  &__table {
+    @apply mt-10 mb-28 md:mb-0;
+
+    &__top {
+      @apply flex items-center justify-between mb-5;
+
+      &__buttons {
+        @apply hidden md:flex items-center gap-2.5;
+
+        button {
+          @apply pl-[14px] pr-2.5 py-2 h-10 rounded-[10px] gap-0;
+        }
+      }
+    }
   }
 }
 </style>

@@ -29,7 +29,7 @@ const yearItems = [
 </script>
 
 <template>
-  <div class="gap-5 columns-2">
+  <div class="gap-5 columns-1 md:columns-2 lg:columns-3 xl:columns-4">
     <CollectivoCard
       v-for="tile in tiles.data"
       :key="tile.id"

@@ -5,7 +5,7 @@ const logoLabel = appConfig.logoLabel;
 defineProps({
   hideLabel: {
     type: Boolean,
-    default: true,
+    default: false,
   },
 });
 </script>

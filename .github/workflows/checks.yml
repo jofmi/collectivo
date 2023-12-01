@@ -65,6 +65,22 @@ jobs:
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      directus:
+        image: directus/directus:10.7.2
+        env:
+          DB_CLIENT: pg
+          DB_HOST: postgres
+          DB_PORT: postgres
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          DB_DATABASE: postgres
+          LOG_LEVEL: debug
+          KEY: 0fda9121-269d-44bd-91f2-4ff05be14b4b
+          SECRET: 86cb4a76-a4c6-4ce7-8181-b0445d95675c
+          CACHE_ENABLED: false
+        ports:
+          - 8055:8055
+        options: --health-cmd curl --fail http://localhost:8055/health --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -76,24 +92,6 @@ jobs:
       - name: Prepare
         uses: ./.github/utils/app
       
-      - name: Setup directus
-        uses: docker://directus/directus:10.7.2
-        with:
-          env: |
-            DB_CLIENT=pg
-            DB_HOST=postgres
-            DB_PORT=postgres
-            DB_USER=postgres
-            DB_PASSWORD=postgres
-            DB_DATABASE=postgres
-            LOG_LEVEL=debug
-            KEY="0fda9121-269d-44bd-91f2-4ff05be14b4b
-            SECRET="86cb4a76-a4c6-4ce7-8181-b0445d95675c"
-            CACHE_ENABLED=false
-
-      - name: Setup directus
-        uses: ./.github/utils/setup-directus
-
       # todo setup keycloak
 
       - name: Run migrations

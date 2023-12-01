@@ -33,7 +33,7 @@ runs:
         database: ${{ inputs.database }}
         port: ${{ inputs.port }}
     - name: Setup directus
-      uses: docker://directus/directus:${{ inputs.version }}
+      uses: docker://directus/directus:10.7.2
       with:
         env: |
           DB_CLIENT=pg

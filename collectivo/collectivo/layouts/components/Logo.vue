@@ -1,13 +1,15 @@
-<script setup>
-import logo from "@/assets/images/logo.svg";
+<script setup lang="ts">
+const appConfig = useAppConfig();
+const logoPath = appConfig.logoPath;
+const logoLabel = appConfig.logoLabel;
 </script>
 
 <template>
   <div class="logo">
     <router-link to="/" class="logo__image">
-      <img :src="logo" alt="" class="object-cover" />
+      <img :src="logoPath" alt="" class="object-cover" />
     </router-link>
-    <div class="logo__label">COLLECTIVO</div>
+    <div v-if="logoLabel" class="logo__label">{{ logoLabel }}</div>
   </div>
 </template>
 

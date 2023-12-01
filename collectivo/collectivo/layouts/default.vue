@@ -1,5 +1,6 @@
 <script setup>
 import Sidebar from "./components/Sidebar.vue";
+import PageTitle from "./components/PageTitle.vue";
 import MobileHeader from "./components/MobileHeader.vue";
 import MobileMenu from "./components/MobileMenu.vue";
 const runtimeConfig = useRuntimeConfig();
@@ -44,8 +45,7 @@ const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protoc
     <div class="main">
       <div class="main__top">
         <div class="main__top__left">
-          <CollectivoPageTitle class="mb-1.5" />
-          <CollectivoBreadcrumb />
+          <PageTitle class="mb-1.5" />
         </div>
 
         <div class="main__top__right">

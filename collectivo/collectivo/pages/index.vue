@@ -1,8 +1,5 @@
 <script setup lang="ts">
-useHead({
-  title: "Dashboard | Collectivo",
-});
-usePageTitle().value = "Dashboard";
+setPageTitle("Dashboard");
 
 const items = [
   [

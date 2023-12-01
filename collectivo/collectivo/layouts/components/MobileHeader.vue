@@ -5,8 +5,8 @@ import Logo from "./Logo.vue";
 <template>
   <div class="mobile-header">
     <Logo />
-    <CollectivoPageTitle title="Dashboard" />
-    <CollectivoNotification />
+    <!-- <CollectivoPageTitle title="Dashboard" />
+    <CollectivoNotification /> -->
   </div>
 </template>
 

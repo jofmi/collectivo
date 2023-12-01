@@ -11,7 +11,7 @@
     "build": "pnpm run -r --parallel build",
     "preview": "node collectivo/collectivo/.output/server/index.mjs",
     "seed": "curl -f -LI --header \"Authorization:badToken\" --request POST \"http://localhost:3000/api/migrate/?all=true&exampleData=true\"",
-    "test:ci":"concurrently \"pnpm preview\" \"sleep 5 && pnpm seed && pnpm run -r --parallel test\""
+    "test:ci":"concurrently --raw --kill-others \"pnpm preview\" \"sleep 5 && pnpm seed && pnpm run -r --parallel test\""
   },
   "author": "Joël Foramitti",
   "license": "AGPL-3.0",

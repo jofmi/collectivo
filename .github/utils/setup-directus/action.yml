@@ -1,26 +1,5 @@
 name: setup directus
 description: Setup and start a directus instance
-inputs:
-  user:
-    description: The postgres user to use
-    required: false
-    default: 'postgres'
-  password:
-    description: The password for the postgres user
-    required: false
-    default: 'postgres'
-  database:
-    description: The database to use
-    required: false
-    default: 'postgres'
-  port:
-    description: The port to run directus on
-    required: false
-    default: '8055'
-  version:
-    description: The directus version to use
-    required: false
-    default: '10.7.2'
 
 runs:
   using: composite
@@ -28,20 +7,20 @@ runs:
     - name: Setup postgres
       uses: ./.github/utils/setup-postgres
       with:
-        user: ${{ inputs.user }}
-        password: ${{ inputs.password }}
-        database: ${{ inputs.database }}
-        port: ${{ inputs.port }}
+        user: postgres
+        password: postgres
+        database: postgres
+        port: 8055
     - name: Setup directus
       uses: docker://directus/directus:10.7.2
       with:
         env: |
           DB_CLIENT=pg
           DB_HOST=postgres
-          DB_PORT=${{ inputs.port }}
-          DB_USER=${{ inputs.user }}
-          DB_PASSWORD=${{ inputs.password }}
-          DB_DATABASE=${{ inputs.database }}
+          DB_PORT=postgres
+          DB_USER=postgres
+          DB_PASSWORD=postgres
+          DB_DATABASE=postgres
           LOG_LEVEL=debug
           KEY="0fda9121-269d-44bd-91f2-4ff05be14b4b
           SECRET="86cb4a76-a4c6-4ce7-8181-b0445d95675c"

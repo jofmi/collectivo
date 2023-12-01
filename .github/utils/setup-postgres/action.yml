@@ -26,32 +26,32 @@ runs:
   using: composite
   steps:
     - name: Setup postgres
-      uses: docker://postgis/postgis:${{ inputs.version }}
+      uses: docker://postgis/postgis:15-3.4-alpine
       with:
         env: |
-          POSTGRES_USER=${{ inputs.user }}
-          POSTGRES_PASSWORD=${{ inputs.password }}
-          POSTGRES_DB=${{ inputs.database }}
-        ports: ${{ inputs.port }}:5432
+          POSTGRES_USER=postgres
+          POSTGRES_PASSWORD=postgres
+          POSTGRES_DB=postgres
+        ports: 5432:5432
         healthcheck: |
-          CMD pg_isready -U ${{ inputs.user }}
+          CMD pg_isready -U postgres
         entrypoint: |
           bash -c '
             echo "host all all all trust" >> /var/lib/postgresql/data/pg_hba.conf
             echo "listen_addresses = '*'" >> /var/lib/postgresql/data/postgresql.conf
             /docker-entrypoint.sh postgres &
-            until pg_isready -U ${{ inputs.user }}; do
+            until pg_isready -U postgres; do
               sleep 1
             done
-            psql -U ${{ inputs.user }} -c "CREATE DATABASE ${{ inputs.database }};"
-            psql -U ${{ inputs.user }} -c "CREATE USER ${{ inputs.user }} WITH SUPERUSER PASSWORD '"'"'${{ inputs.password }}'"'"';"
-            psql -U ${{ inputs.user }} -c "GRANT ALL PRIVILEGES ON DATABASE ${{ inputs.database }} TO ${{ inputs.user }};"
-            psql -U ${{ inputs.user }} -c "ALTER USER ${{ inputs.user }} WITH PASSWORD '"'"'${{ inputs.password }}'"'"';"
-            psql -U ${{ inputs.user }} -c "ALTER USER ${{ inputs.user }} WITH LOGIN;"
-            psql -U ${{ inputs.user }} -c "ALTER USER ${{ inputs.user }} WITH CREATEDB;"
-            psql -U ${{ inputs.user }} -c "ALTER USER ${{ inputs.user }} WITH CREATEROLE;"
-            psql -U ${{ inputs.user }} -c "ALTER USER ${{ inputs.user }} WITH REPLICATION;"
-            psql -U ${{ inputs.user }} -c "ALTER USER ${{ inputs.user }} WITH BYPASSRLS;"
-            psql -U ${{ inputs.user }} -c "ALTER USER ${{ inputs.user }} WITH CONNECTION LIMIT -1;"
-            psql -U ${{ inputs.user }} -c "ALTER USER ${{ inputs.user }} WITH VALID UNTIL '"'"'infinity'"'"';"
-            psql -U ${{ inputs.user }} -c "ALTER USER ${{ inputs.user }} WITH INHERIT  
+            psql -U postgres -c "CREATE DATABASE postgres;"
+            psql -U postgres -c "CREATE USER postgres WITH SUPERUSER PASSWORD '"'"'postgres'"'"';"
+            psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE postgres TO postgres;"
+            psql -U postgres -c "ALTER USER postgres WITH PASSWORD '"'"'postgres'"'"';"
+            psql -U postgres -c "ALTER USER postgres WITH LOGIN;"
+            psql -U postgres -c "ALTER USER postgres WITH CREATEDB;"
+            psql -U postgres -c "ALTER USER postgres WITH CREATEROLE;"
+            psql -U postgres -c "ALTER USER postgres WITH REPLICATION;"
+            psql -U postgres -c "ALTER USER postgres WITH BYPASSRLS;"
+            psql -U postgres -c "ALTER USER postgres WITH CONNECTION LIMIT -1;"
+            psql -U postgres -c "ALTER USER postgres WITH VALID UNTIL '"'"'infinity'"'"';"
+            psql -U postgres -c "ALTER USER postgres WITH INHERIT  

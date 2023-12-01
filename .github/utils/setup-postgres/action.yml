@@ -1,26 +1,5 @@
 name: setup postgres
 description: Setup and start a postgres database
-inputs:
-  user:
-    description: The postgres user to create
-    required: false
-    default: 'postgres'
-  password:
-    description: The password for the postgres user
-    required: false
-    default: 'postgres'
-  database:
-    description: The database to create
-    required: false
-    default: 'postgres'
-  port:
-    description: The port to run postgres on
-    required: false
-    default: '5432'
-  version:
-    description: The postgres version to use
-    required: false
-    default: '15-3.4-alpine'
 
 runs:
   using: composite
@@ -60,4 +39,5 @@ runs:
             psql -U postgres -c "ALTER USER postgres WITH BYPASSRLS;"
             psql -U postgres -c "ALTER USER postgres WITH CONNECTION LIMIT -1;"
             psql -U postgres -c "ALTER USER postgres WITH VALID UNTIL '"'"'infinity'"'"';"
-            psql -U postgres -c "ALTER USER postgres WITH INHERIT  
+            psql -U postgres -c "ALTER USER postgres WITH INHERIT 
+            '

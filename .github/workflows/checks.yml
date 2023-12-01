@@ -55,6 +55,16 @@ jobs:
   unit:
     name: Unit Tests
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:15-3.4-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -66,37 +76,6 @@ jobs:
       - name: Prepare
         uses: ./.github/utils/app
       
-      - name: Setup postgres
-        uses: docker://postgis/postgis:15-3.4-alpine
-        with:
-          env: |
-            POSTGRES_USER=postgres
-            POSTGRES_PASSWORD=postgres
-            POSTGRES_DB=postgres
-          ports: 5432:5432
-          healthcheck: |
-            CMD pg_isready -U postgres
-          entrypoint: |
-            bash -c '
-              echo "host all all all trust" >> /var/lib/postgresql/data/pg_hba.conf
-              echo "listen_addresses = '*'" >> /var/lib/postgresql/data/postgresql.conf
-              /docker-entrypoint.sh postgres &
-              until pg_isready -U postgres; do
-                sleep 1
-              done
-              psql -U postgres -c "CREATE DATABASE postgres;"
-              psql -U postgres -c "CREATE USER postgres WITH SUPERUSER PASSWORD '"'"'postgres'"'"';"
-              psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE postgres TO postgres;"
-              psql -U postgres -c "ALTER USER postgres WITH PASSWORD '"'"'postgres'"'"';"
-              psql -U postgres -c "ALTER USER postgres WITH LOGIN;"
-              psql -U postgres -c "ALTER USER postgres WITH CREATEDB;"
-              psql -U postgres -c "ALTER USER postgres WITH CREATEROLE;"
-              psql -U postgres -c "ALTER USER postgres WITH REPLICATION;"
-              psql -U postgres -c "ALTER USER postgres WITH BYPASSRLS;"
-              psql -U postgres -c "ALTER USER postgres WITH CONNECTION LIMIT -1;"
-              psql -U postgres -c "ALTER USER postgres WITH VALID UNTIL '"'"'infinity'"'"';"
-              psql -U postgres -c "ALTER USER postgres WITH INHERIT 
-            '
       - name: Setup directus
         uses: docker://directus/directus:10.7.2
         with:

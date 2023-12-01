@@ -6,7 +6,7 @@ const logoLabel = appConfig.logoLabel;
 
 <template>
   <div class="logo">
-    <router-link to="/" class="logo__image">
+    <router-link to="/" class="logo__image" v-if="logoPath">
       <img :src="logoPath" alt="" class="object-cover" />
     </router-link>
     <div v-if="logoLabel" class="logo__label">{{ logoLabel }}</div>
@@ -16,9 +16,6 @@ const logoLabel = appConfig.logoLabel;
 <style lang="scss" scoped>
 .logo {
   @apply lg:w-full flex flex-col justify-center items-center md:mb-10 lg:mb-[52px];
-  &__image {
-    @apply w-10 h-10;
-  }
   &__label {
     @apply md:text-xs lg:text-sm text-cv-primary font-semibold justify-center mt-2;
     letter-spacing: 0.28px;

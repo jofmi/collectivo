@@ -30,7 +30,8 @@ jobs:
           build: false
 
       - name: Run Linter
-        run: pnpm exec eslint ${{ steps.changed-files.outputs.all_changed_files }}
+        # run: pnpm exec eslint ${{ steps.changed-files.outputs.all_changed_files }}
+        run: pnpm lint
 
   format:
     name: Format
@@ -49,8 +50,8 @@ jobs:
           build: false
 
       - name: Run Formatter
-        run: pnpm exec prettier --check --ignore-unknown ${{ steps.changed-files.outputs.all_changed_files }}
-
+        # run: pnpm exec prettier --check --ignore-unknown ${{ steps.changed-files.outputs.all_changed_files }}
+        run: pnpm format
   unit:
     name: Unit Tests
     runs-on: ubuntu-latest

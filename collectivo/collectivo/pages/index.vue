@@ -1,9 +1,8 @@
-<script setup>
-import { Icon } from "@iconify/vue";
-
+<script setup lang="ts">
 useHead({
   title: "Dashboard | Collectivo",
 });
+usePageTitle().value = "Dashboard";
 
 const items = [
   [

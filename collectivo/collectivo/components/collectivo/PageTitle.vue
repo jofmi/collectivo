@@ -1,11 +1,11 @@
 <script setup>
-defineProps(["title"]);
+const pageTitle = usePageTitle();
 </script>
 
 <template>
   <div>
     <h2 class="text-cv-primary font-semibold text-3xl">
-      {{ title }}
+      {{ pageTitle }}
     </h2>
   </div>
 </template>

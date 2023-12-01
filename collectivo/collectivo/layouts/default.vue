@@ -44,7 +44,7 @@ const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protoc
     <div class="main">
       <div class="main__top">
         <div class="main__top__left">
-          <CollectivoPageTitle title="Dashboard" class="mb-1.5" />
+          <CollectivoPageTitle class="mb-1.5" />
           <CollectivoBreadcrumb />
         </div>
 

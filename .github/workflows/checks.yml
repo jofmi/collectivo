@@ -93,8 +93,5 @@ jobs:
       
       # todo setup keycloak
 
-      - name: Run migrations
-        run: pnpm seed
-
       - name: Run Tests
         run: pnpm test:ci

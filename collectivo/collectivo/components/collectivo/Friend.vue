@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import avatar from "@/assets/images/friend-avatar.png";
 </script>
 

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import avatar1 from "@/assets/images/table-avatar-1.png";
 import avatar2 from "@/assets/images/table-avatar-2.png";
 import { Icon } from "@iconify/vue";

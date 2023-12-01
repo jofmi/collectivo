@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 defineProps(["variant", "title"]);
 </script>
 
@@ -10,6 +10,16 @@ defineProps(["variant", "title"]);
     </p>
     <slot name="content"></slot>
   </div>
+
+  <!-- TODO: Button logic -->
+  <!-- <UButton
+        class="mt-6 w-full"
+        variant="solid"
+        color="cyan"
+        size="base"
+      >
+        Hello again!
+      </UButton> -->
 </template>
 
 <style lang="scss" scoped>

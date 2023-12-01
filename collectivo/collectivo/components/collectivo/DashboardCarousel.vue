@@ -1,10 +1,11 @@
-<script setup>
-import { Icon } from "@iconify/vue";
+<script setup lang="ts">
+import { parse } from "marked";
+const tiles = useTiles();
+getTiles();
 
 const carouselOptions = ref({
   itemsToShow: 1.25,
   loop: true,
-  snapAlign: "start",
   breakpoints: {
     // 700px and up
     700: {
@@ -24,23 +25,15 @@ const carouselOptions = ref({
 <template>
   <div class="dashboard-carousel">
     <ClientOnly>
-      <carousel v-bind="carouselOptions">
-        <slide key="1">
-          <CollectivoCard title="Hello world!">
+      <Carousel snapAlign="start" v-bind="carouselOptions">
+        <slide v-for="(tile, i) in tiles.data" :key="i">
+          <CollectivoCard :title="tile.name">
             <template #content>
-              Hello Aaron!
-              <UButton
-                class="mt-6 w-full"
-                variant="solid"
-                color="cyan"
-                size="base"
-              >
-                Hello again!
-              </UButton>
+              <div v-html="parse(tile.content)"></div>
             </template>
           </CollectivoCard>
         </slide>
-      </carousel>
+      </Carousel>
     </ClientOnly>
   </div>
 </template>

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const pageTitle = usePageTitle();
 const { t } = useI18n();
 </script>

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import Sidebar from "./components/Sidebar.vue";
 import PageTitle from "./components/PageTitle.vue";
 import MobileHeader from "./components/MobileHeader.vue";

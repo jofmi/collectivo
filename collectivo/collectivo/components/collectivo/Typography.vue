@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const { variant, title, color, classes } = defineProps([
   "variant",
   "title",

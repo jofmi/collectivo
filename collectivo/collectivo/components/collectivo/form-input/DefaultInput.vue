@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 defineProps(["level", "placeholder"]);
 const value = ref("");
 </script>

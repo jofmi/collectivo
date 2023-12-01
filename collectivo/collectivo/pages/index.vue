@@ -1,5 +1,9 @@
 <script setup lang="ts">
 setPageTitle("Dashboard");
+import { parse } from "marked";
+
+const tiles = useTiles();
+getTiles();
 
 const items = [
   [
@@ -25,61 +29,18 @@ const yearItems = [
 </script>
 
 <template>
-  <!-- <div class="dashboard">
-    <div class="dashboard__top">
-      <div class="dashboard__top__left">
-        <CollectivoPageTitle title="Dashboard" class="mb-1.5" />
-        <CollectivoBreadcrumb />
-      </div>
-
-      <div class="dashboard__top__right">
-        <CollectivoNotification />
-      </div>
-    </div> -->
-  <div class="dashboard__carousel">
-    <CollectivoDashboardCarousel />
+  <div class="gap-5 columns-2">
+    <CollectivoCard
+      v-for="tile in tiles.data"
+      :key="tile.id"
+      class="mb-5"
+      :title="tile.name"
+    >
+      <template #content>
+        <div v-html="parse(tile.content)"></div>
+      </template>
+    </CollectivoCard>
   </div>
-  <!-- <div class="dashboard__calendar">
-            <dashboard-calendar />
-        </div> -->
-  <!-- <div class="dashboard__table">
-            <div class="dashboard__table__top">
-                <section-title title="Customer Details" />
-                <div class="dashboard__table__top__buttons">
-                    <UDropdown :items="items">
-                        <UButton label="Month" color="gray" :padded="false">
-                            <template #trailing>
-                                <Icon
-                                    icon="system-uicons:chevron-down"
-                                    class="text-2xl text-cv-primary ml-3"
-                                />
-                            </template>
-                        </UButton>
-
-                        <template #item="{ item }">
-                            <dropdown-item :title="item.title" />
-                        </template>
-                    </UDropdown>
-
-                    <UDropdown :items="yearItems">
-                        <UButton label="Year" color="gray" :padded="false">
-                            <template #trailing>
-                                <Icon
-                                    icon="system-uicons:chevron-down"
-                                    class="text-2xl text-cv-primary ml-2.5"
-                                />
-                            </template>
-                        </UButton>
-
-                        <template #item="{ item }">
-                            <dropdown-item :title="item.title" />
-                        </template>
-                    </UDropdown>
-                </div>
-            </div>
-            <dashboard-table />
-        </div> -->
-  <!-- </div> -->
 </template>
 
 <style lang="scss" scoped>

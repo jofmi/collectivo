@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import MenuItem from "./MenuItem.vue";
 
 const menuItems = useSidebarMenu();

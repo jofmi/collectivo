@@ -80,7 +80,6 @@ jobs:
           CACHE_ENABLED: false
         ports:
           - 8055:8055
-        options: --health-cmd curl --fail http://localhost:8055/health --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3

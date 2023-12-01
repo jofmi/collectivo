@@ -95,3 +95,18 @@ jobs:
 
       - name: Run Tests
         run: pnpm test:ci
+      
+      - name: Collect docker logs on failure
+        if: failure()
+        uses: jwalton/gh-docker-logs@v1
+        with:
+          dest: "./logs"
+      - name: Tar logs
+        if: failure()
+        run: tar cvzf ./logs.tgz ./logs
+      - name: Upload logs to GitHub
+        if: failure()
+        uses: actions/upload-artifact@master
+        with:
+          name: logs.tgz
+          path: ./logs.tgz

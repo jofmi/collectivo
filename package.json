@@ -9,8 +9,13 @@
     "format": "pnpm run -r --parallel format",
     "lint": "pnpm run -r --parallel lint",
     "build": "pnpm run -r --parallel build",
-    "seed": "curl --header \"Authorization:badToken\" --request POST \"http://localhost:3000/api/migrate/?all=true&exampleData=true\""
+    "preview": "node collectivo/collectivo/.output/server/index.mjs",
+    "seed": "curl -f -LI --header \"Authorization:badToken\" --request POST \"http://localhost:3000/api/migrate/?all=true&exampleData=true\"",
+    "test:ci":"concurrently \"pnpm preview\" \"sleep 5 && pnpm seed && pnpm run -r --parallel test\""
   },
   "author": "Joël Foramitti",
-  "license": "AGPL-3.0"
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
 }

@@ -97,4 +97,4 @@ jobs:
         run: pnpm seed
 
       - name: Run Tests
-        run: pnpm test -- -- --changed origin/${{ github.base_ref }} --passWithNoTests
+        run: pnpm test:ci

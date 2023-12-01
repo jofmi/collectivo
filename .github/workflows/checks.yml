@@ -91,8 +91,9 @@ jobs:
       - name: Prepare
         uses: ./.github/utils/app
       
-      # todo setup keycloak
-
+      - name: Prepare env
+        run: cp .env.example .env
+        
       - name: Run Tests
         run: pnpm test:ci
       

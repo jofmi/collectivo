@@ -2,6 +2,9 @@
 setPageTitle("Profile");
 const { t } = useI18n();
 const profile = useProfile(true);
+const runtimeConfig = useRuntimeConfig();
+const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protocol/openid-connect/logout`;
+
 interface Field {
   label: string;
   key: keyof CollectivoProfile;
@@ -61,7 +64,9 @@ const fields: Field[] = [
       variant="solid"
       color="red"
       size="md"
-      icon="i-system-uicons-exit-left"
+      icon="i-system-uicons-exit-right"
+      :to="logoutPath"
+      target="_blank"
     >
       Logout
     </UButton>

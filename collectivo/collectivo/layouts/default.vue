@@ -3,8 +3,6 @@ import Sidebar from "./components/Sidebar.vue";
 import PageTitle from "./components/PageTitle.vue";
 import MobileHeader from "./components/MobileHeader.vue";
 import MobileMenu from "./components/MobileMenu.vue";
-const runtimeConfig = useRuntimeConfig();
-const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protocol/openid-connect/logout`;
 </script>
 
 <template>
@@ -49,11 +47,11 @@ const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protoc
         </div>
 
         <div class="main__top__right">
-          <a :href="logoutPath">
+          <!-- <a :href="logoutPath">
             <UIcon
               name="i-system-uicons-exit-left"
               class="main__top__right__icon"
-          /></a>
+          /></a> -->
         </div>
       </div>
       <router-view />

@@ -95,7 +95,8 @@ jobs:
         run: cp .env.example .env
         
       - name: Run Tests
-        run: pnpm test:ci
+        # run: pnpm test:ci <- includes the seed and run
+        run: pnpm test
       
       - name: Collect docker logs on failure
         if: failure()

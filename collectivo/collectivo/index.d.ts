@@ -41,7 +41,7 @@ declare global {
     collectivo_admin_role: string;
   }
 
-  interface CollectivoCurrentUser {
+  interface CollectivoProfile {
     id: string;
     first_name: string;
     last_name: string;
@@ -75,7 +75,6 @@ declare global {
 
   interface CollectivoSchema {
     collectivo_extensions: CollectivoExtension[];
-    collectivo_members: CollectivoMember[];
     collectivo_tiles: CollectivoTile[];
     collectivo_tags: CollectivoTag[];
     directus_users: CollectivoUser[];

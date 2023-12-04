@@ -1,17 +1,18 @@
 import { readItems } from "@directus/sdk";
 
-export function initData() {
+export function initData(load?: Function): DataWrapper<any> {
   return {
     data: null,
     error: null,
     loading: false,
+    load: load ?? (async () => null),
   };
 }
 
 export async function getDataFromDirectusItems(
   wrapper: Ref<DataWrapper<any>>,
   name: keyof CollectivoSchema,
-  reload?: boolean,
+  reload?: boolean
 ) {
   if (!reload && wrapper.value.data) return wrapper;
   const { $directus } = useNuxtApp();

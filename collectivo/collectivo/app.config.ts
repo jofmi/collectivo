@@ -36,10 +36,10 @@ export default defineAppConfig({
         "2xs": "px-2 py-1",
         xs: "px-2.5 py-1.5",
         sm: "px-5 py-4",
-        md: "px-3 py-2",
+        md: "px-3.5 py-2.5",
         lg: "px-3.5 py-2.5",
         xl: "px-3.5 py-2.5",
-        base: "px-5 py-4",
+        base: "px-4 py-3",
         pagination: "px-0 py-0",
       },
       square: {
@@ -87,6 +87,18 @@ export default defineAppConfig({
         variant: "solid",
         color: "primary",
         loadingIcon: "i-heroicons-arrow-path-20-solid",
+      },
+      icon: {
+        base: "flex-shrink-0",
+        loading: "animate-spin",
+        size: {
+          "2xs": "h-4 w-4",
+          xs: "h-4 w-4",
+          sm: "h-5 w-5",
+          md: "h-4 w-4",
+          lg: "h-5 w-5",
+          xl: "h-6 w-6",
+        },
       },
     },
     badge: {

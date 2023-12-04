@@ -8,12 +8,6 @@ defineProps({
 </script>
 
 <template>
-  <!-- <router-link :to="path" class="item">
-    <span class="item__icon">
-      <slot name="icon"> </slot>
-    </span>
-    <span class="item__title">{{ title }}</span>
-  </router-link> -->
   <div v-if="!item.filter || item.filter(item)">
     <div v-if="item.external">
       <a :href="item.path" :target="item.target ?? '_blank'" class="item">

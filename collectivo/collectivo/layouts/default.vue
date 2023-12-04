@@ -68,7 +68,7 @@ import MobileMenu from "./components/MobileMenu.vue";
     @apply hidden md:block fixed top-0 left-0 -z-10;
   }
   .main {
-    @apply md:pl-[172px] lg:pl-[226px] h-full w-full lg:pr-10 px-[25px] md:px-0;
+    @apply md:pl-[172px] lg:pl-[226px] h-full w-full lg:pr-10 px-[25px] md:px-0 pb-28 md:pb-0;
   }
 }
 

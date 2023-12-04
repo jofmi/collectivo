@@ -1,57 +1,106 @@
-<script setup>
-import { ref } from "vue";
-import Header from "./components/defaultHeader.vue";
-import Sidebar from "./components/defaultSidebar.vue";
-
-const { t } = useI18n();
-const appConfig = useAppConfig();
-const pageTitle = usePageTitle();
-const getSideBarOpen = ref(false);
-
-function toggleSideBar() {
-  menuStore.setSideBarOpen(getSideBarOpen.value ? false : true);
-}
+<script setup lang="ts">
+import Sidebar from "./components/Sidebar.vue";
+import PageTitle from "./components/PageTitle.vue";
+import MobileHeader from "./components/MobileHeader.vue";
+import MobileMenu from "./components/MobileMenu.vue";
+const runtimeConfig = useRuntimeConfig();
+const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protocol/openid-connect/logout`;
 </script>
 
 <template>
-  <Head>
-    <Title v-if="t(pageTitle) == ''">{{ t(appConfig.projectName) }}</Title>
-    <Title v-else>{{ t(pageTitle) }} - {{ t(appConfig.projectName) }}</Title>
-  </Head>
-  <div id="collectivo-frame" class="flex h-screen bg-mila font-sans">
-    <!-- Backdrop (when sidebar is open) -->
-    <div
-      id="collectivo-backdrop"
-      :class="getSideBarOpen ? 'block' : 'hidden'"
-      class="fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden"
-      @click="toggleSideBar()"
-    ></div>
-
-    <!-- Sidebar -->
-    <div
-      id="collectivo-sidebar"
-      :class="
-        getSideBarOpen ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'
-      "
-      class="fixed inset-y-0 left-0 z-30 w-60 overflow-y-auto scrollbar-hide transition duration-300 transform bg-white lg:translate-x-0 lg:static lg:inset-0 border-r-2 border-slate-500"
-    >
-      <Sidebar />
+  <div class="layout">
+    <div class="layout__bg">
+      <svg
+        width="359"
+        height="269"
+        viewBox="0 0 359 269"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <mask
+          id="mask0_2159_5105"
+          style="mask-type: alpha"
+          maskUnits="userSpaceOnUse"
+          x="0"
+          y="0"
+          width="359"
+          height="269"
+        >
+          <rect width="359" height="269" fill="#D9D9D9" />
+        </mask>
+        <g mask="url(#mask0_2159_5105)">
+          <rect
+            x="-443"
+            y="-264.359"
+            width="753.268"
+            height="753.268"
+            transform="rotate(-45 -443 -264.359)"
+            fill="#FFF7E3"
+          />
+        </g>
+      </svg>
     </div>
-
-    <!-- Main -->
-    <div
-      id="collectivo-main"
-      class="flex-1 flex flex-col overflow-hidden default-layout"
-    >
-      <!-- Header -->
-      <div class="w-full h-14 border-b-2 border-slate-500"><Header /></div>
-
-      <!-- Content -->
-      <main class="flex-1 overflow-x-hidden overflow-y-auto">
-        <div class="mx-auto h-full p-4">
-          <slot> </slot>
+    <Sidebar />
+    <MobileHeader />
+    <div class="main">
+      <div class="main__top">
+        <div class="main__top__left">
+          <PageTitle class="mb-1.5" />
         </div>
-      </main>
+
+        <div class="main__top__right">
+          <a :href="logoutPath">
+            <UIcon
+              name="i-system-uicons-exit-left"
+              class="main__top__right__icon"
+          /></a>
+        </div>
+      </div>
+      <router-view />
     </div>
+    <MobileMenu />
   </div>
 </template>
+
+<style lang="scss" scoped>
+.layout {
+  @apply md:pr-8 md:py-8 h-full;
+
+  &__bg {
+    @apply hidden md:block fixed top-0 left-0 -z-10;
+  }
+  .main {
+    @apply md:pl-[172px] lg:pl-[226px] h-full w-full lg:pr-10 px-[25px] md:px-0;
+  }
+}
+
+.main {
+  @apply mt-3;
+
+  &__top {
+    @apply hidden md:flex justify-between items-center mb-11;
+
+    &__right {
+      &__icon {
+        @apply w-7 h-7 text-cv-primary;
+      }
+    }
+  }
+
+  &__table {
+    @apply mt-10 mb-28 md:mb-0;
+
+    &__top {
+      @apply flex items-center justify-between mb-5;
+
+      &__buttons {
+        @apply hidden md:flex items-center gap-2.5;
+
+        button {
+          @apply pl-[14px] pr-2.5 py-2 h-10 rounded-[10px] gap-0;
+        }
+      }
+    }
+  }
+}
+</style>

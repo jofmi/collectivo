@@ -126,7 +126,7 @@ Setup:
 - Add the name of your package to `collectivo/app/package.json` and `collectivo/app/nuxt.config.ts`.
 - Adapt the name and configuration in `my-extension/server/plugins/registerExtension.ts`. This will be used by collectivo. The name should not include dashes or underscores, e.g. `myExtension`.
 - Run `pnpm i` to install the extension as a workspace package.
-- Run `pnpm dev` to run a development system that includes your extension.
+- Run `pnpm dev:all` to run a development system that includes your extension. This will start a development server for each extension in order to enable hot module reloading.
 
 Infos & recommendations:
 

@@ -17,11 +17,11 @@ declare global {
   // Directus schema types
   interface CollectivoMenuItem {
     label: string;
-    link?: string;
-    icon?: FunctionalComponent;
-    external?: boolean;
-    target?: string;
-    children?: CollectivoMenuItem[];
+    icon?: string;
+    path?: string;
+    external?: boolean; // Defaults to false
+    target?: string; // Defaults to "_self"
+    mobile?: boolean; // Defaults to true
     order?: number; // Defaults to 100
     filter?: (item: CollectivoMenuItem) => boolean;
   }

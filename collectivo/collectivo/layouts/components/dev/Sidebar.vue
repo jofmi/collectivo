@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ArrowLeftOnRectangleIcon } from "@heroicons/vue/24/outline";
-import pkg from "../../package.json";
+import pkg from "../../../package.json";
 
 const { t, locale } = useI18n();
 const appConfig = useAppConfig();
@@ -13,7 +13,7 @@ const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protoc
 const menuItems = useSidebarMenu();
 
 const sortedMenuItems = Object.values(menuItems.value).sort(
-  (a, b) => (a.order ?? 100) - (b.order ?? 100),
+  (a, b) => (a.order ?? 100) - (b.order ?? 100)
 );
 </script>
 
@@ -24,10 +24,10 @@ const sortedMenuItems = Object.values(menuItems.value).sort(
     {{ appConfig.projectName }}
   </div>
   <div class="p-4 w-full flex flex-col gap-4">
-    <div v-for="item in sortedMenuItems" :key="item.id">
+    <div v-for="(item, i) in sortedMenuItems" :key="i">
       <div v-if="!item.filter || item.filter(item)">
         <div v-if="item.external">
-          <a :href="item.link" :target="item.target ?? '_blank'">
+          <a :href="item.path" :target="item.target ?? '_blank'">
             <div class="flex flex-row gap-2">
               <component :is="item.icon" class="h-5 w-5" />
               <div>{{ t(item.label) }}</div>
@@ -35,7 +35,7 @@ const sortedMenuItems = Object.values(menuItems.value).sort(
           </a>
         </div>
         <div v-else>
-          <NuxtLink :to="item.link">
+          <NuxtLink :to="item.path">
             <div class="flex flex-row gap-2">
               <component :is="item.icon" class="h-5 w-5" />
               <div>{{ t(item.label) }}</div>

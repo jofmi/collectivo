@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 setPageTitle("Profile");
 const profile = useMembersMe();
 getMembersMe();

@@ -3,6 +3,10 @@ archive/
 uploads/
 workbench/
 
+# Ignore custom files in app
+collectivo/app/public/*
+collectivo/app/app.config.ts
+
 # Directus
 directus/database/
 directus/uploads/*

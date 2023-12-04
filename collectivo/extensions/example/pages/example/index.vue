@@ -1,6 +1,6 @@
 <!-- This section will be available under /example -->
 
-<script setup>
+<script setup lang="ts">
 setPageTitle("Example");
 </script>
 

@@ -1,31 +1,26 @@
-import {
-  HomeIcon,
-  Square3Stack3DIcon,
-  UserCircleIcon,
-} from "@heroicons/vue/24/outline";
-
 export default defineNuxtPlugin(() => {
   const menu = useSidebarMenu();
   const runtimeConfig = useRuntimeConfig();
 
   const items = <CollectivoMenuItem[]>[
     {
-      icon: HomeIcon,
       label: "Home",
-      link: "/",
+      icon: "i-system-uicons-grid",
+      path: "/",
       order: 0,
     },
     {
-      icon: UserCircleIcon,
       label: "Profile",
-      link: "/profile",
+      icon: "i-system-uicons-user-male-circle",
+      path: "/profile",
       order: 0,
     },
     {
-      label: "Admin App",
+      label: "Database",
+      icon: "i-system-uicons-cube",
+      path: runtimeConfig.public.directusUrl,
       external: true,
-      icon: Square3Stack3DIcon,
-      link: runtimeConfig.public.directusUrl,
+      mobile: false,
       order: 99,
       filter: (_item) => {
         return true;

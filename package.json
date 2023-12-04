@@ -4,14 +4,17 @@
   "description": "Collectivo packages & development environment.",
   "main": "index.js",
   "scripts": {
-    "dev": "pnpm run -r --parallel dev",
+    "dev": "pnpm -F=@collectivo/app run dev",
+    "dev:all": "pnpm run -r --parallel dev",
     "test": "pnpm run -r --parallel test",
+    "test:ci":"concurrently --raw --kill-others \"pnpm preview\" \"sleep 5 && pnpm seed && pnpm run -r --parallel test\"",
     "format": "pnpm run -r --parallel format",
+    "format:all": "pnpm run -r --parallel format:all",
     "lint": "pnpm run -r --parallel lint",
+    "lint:all": "pnpm run -r --parallel lint:all",
     "build": "pnpm run -r --parallel build",
     "preview": "node collectivo/collectivo/.output/server/index.mjs",
-    "seed": "curl -f -LI --header \"Authorization:badToken\" --request POST \"http://localhost:3000/api/migrate/?all=true&exampleData=true\"",
-    "test:ci":"concurrently --raw --kill-others \"pnpm preview\" \"sleep 5 && pnpm seed && pnpm run -r --parallel test\""
+    "seed": "curl -f -LI --header \"Authorization:badToken\" --request POST \"http://localhost:3000/api/migrate/?all=true&exampleData=true\""
   },
   "author": "Joël Foramitti",
   "license": "AGPL-3.0",

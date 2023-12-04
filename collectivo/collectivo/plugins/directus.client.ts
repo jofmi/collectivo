@@ -3,7 +3,7 @@ import {
   authentication,
   rest,
   readMe,
-  RestClient,
+  type RestClient,
 } from "@directus/sdk";
 
 // Set up directus client or redirect to keycloak if not authenticated
@@ -29,16 +29,16 @@ export default defineNuxtPlugin({
     try {
       await directus.refresh();
     } catch (e: any) {
-      if (e.response?.status != 400) {
+      if ([400, 401, 403].includes(e.response?.status)) {
+        directus.logout();
+
+        navigateTo(
+          `${runtimeConfig.public.directusUrl}/auth/login/keycloak?redirect=${runtimeConfig.public.collectivoUrl}`,
+          { external: true },
+        );
+      } else {
         throw new Error("Cannot reach backend server (directus)");
       }
-
-      directus.logout();
-
-      navigateTo(
-        `${runtimeConfig.public.directusUrl}/auth/login/keycloak?redirect=${runtimeConfig.public.collectivoUrl}`,
-        { external: true },
-      );
     }
 
     // Load data of current user to store

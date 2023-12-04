@@ -10,7 +10,7 @@
   "main": "./nuxt.config.ts",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev --p 3009",
+    "dev": "nuxt dev -p 3200",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "test": "vitest run",

@@ -59,7 +59,7 @@ async function saveProfile() {
         variant="solid"
         color="cyan"
         size="md"
-        icon="i-system-uicons-check"
+        icon="i-akar-icons-check"
         @click="saveProfile"
         :loading="profile.saving"
       >
@@ -79,7 +79,7 @@ async function saveProfile() {
       variant="solid"
       color="red"
       size="md"
-      icon="i-system-uicons-exit-right"
+      icon="i-akar-icons-door"
       :to="logoutPath"
       target="_blank"
     >

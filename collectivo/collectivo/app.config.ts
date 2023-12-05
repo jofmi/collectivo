@@ -10,7 +10,7 @@ export default defineAppConfig({
     button: {
       base: "focus:outline-none focus-visible:outline-0 disabled:cursor-not-allowed  flex-shrink-0 items-center justify-center transition-all disabled:bg-cv-gray-light disabled:text-[#6F7680]/50",
       font: "font-semibold",
-      rounded: "rounded-xl",
+      rounded: "rounded-lg",
       size: {
         xs: "text-xs",
         sm: "text-sm",
@@ -324,7 +324,7 @@ export default defineAppConfig({
         },
       },
     },
-    // Global Input Styles => Rakib
+
     input: {
       wrapper: "relative",
       base: "relative block w-full disabled:cursor-default disabled:text-cv-gray tracking-[0.28px] font-medium leading-4",

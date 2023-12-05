@@ -1,26 +1,44 @@
-import { readMe } from "@directus/sdk";
+import { readMe, updateMe } from "@directus/sdk";
 
-export const useProfile = (load: boolean = false, force: boolean = false) => {
-  const state = useState<DataWrapper<CollectivoProfile>>(
+class ProfileStore {
+  data: CollectivoProfile | null;
+  saving: boolean;
+  loading: boolean;
+  error: any;
+
+  constructor() {
+    this.data = null;
+    this.saving = false;
+    this.loading = false;
+    this.error = null;
+  }
+
+  async load(force: boolean = false) {
+    const { $directus } = useNuxtApp();
+    if (!force && this.data) return this;
+    this.loading = true;
+    this.data = (await $directus?.request(
+      readMe({
+        fields: ["id", "first_name", "last_name", "email"],
+      })
+    )) as CollectivoProfile;
+    this.loading = false;
+    return this;
+  }
+
+  async save(data: CollectivoProfile) {
+    const { $directus } = useNuxtApp();
+    this.saving = true;
+    await $directus?.request(updateMe(data));
+    this.data = data;
+    this.saving = false;
+  }
+}
+
+export const useProfile = () => {
+  const state = useState<ProfileStore>(
     "collectivo_profile",
-    () => initData(loadProfile)
+    () => new ProfileStore()
   );
-  if (load) loadProfile(state, force);
   return state;
-};
-
-const loadProfile = async (
-  profile: Ref<DataWrapper<CollectivoProfile>>,
-  force: boolean = false
-) => {
-  const { $directus } = useNuxtApp();
-  if (!force && profile.value.data) return profile;
-  profile.value.loading = true;
-  profile.value.data = (await $directus?.request(
-    readMe({
-      fields: ["id", "first_name", "last_name", "email"],
-    })
-  )) as CollectivoProfile;
-  profile.value.loading = false;
-  return profile;
 };

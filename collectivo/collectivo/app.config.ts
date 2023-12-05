@@ -6,6 +6,7 @@ export default defineAppConfig({
   logoLabel: "COLLECTIVO",
   ui: {
     strategy: "override",
+    primary: "purple",
     button: {
       base: "focus:outline-none focus-visible:outline-0 disabled:cursor-not-allowed  flex-shrink-0 items-center justify-center transition-all disabled:bg-cv-gray-light disabled:text-[#6F7680]/50",
       font: "font-semibold",
@@ -169,6 +170,11 @@ export default defineAppConfig({
         warning: {
           ghost: "bg-cv-orange-light ring-1 ring-cv-orange/30 text-cv-orange",
         },
+      },
+    },
+    notification: {
+      progress: {
+        background: "white",
       },
     },
     // Select config added by Rabiul

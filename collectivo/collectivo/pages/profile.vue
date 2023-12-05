@@ -1,15 +1,45 @@
 <script setup lang="ts">
 setPageTitle("Profile");
+const toast = useToast();
 const { t } = useI18n();
-const profile = useProfile(true);
+const profile = useProfile();
 const runtimeConfig = useRuntimeConfig();
 const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protocol/openid-connect/logout`;
+const temp_data = ref<CollectivoProfile | null>(null);
+
+// Get form data
+async function getProfile() {
+  await profile.value.load();
+  temp_data.value = { ...profile.value.data } as CollectivoProfile;
+}
+getProfile();
+
+// Submit form data
+async function saveProfile() {
+  try {
+    await profile.value.save(temp_data.value!);
+    toast.add({
+      title: t("Profile updated"),
+      icon: "i-heroicons-check-circle",
+      timeout: 10000,
+    });
+  } catch (e) {
+    console.error(e);
+    toast.add({
+      title: t("There was an error"),
+      icon: "i-heroicons-warning-circle",
+      color: "red",
+      timeout: 0,
+    });
+  }
+}
 
 interface Field {
   label: string;
   key: keyof CollectivoProfile;
   placeholder?: string;
 }
+
 const fields: Field[] = [
   {
     label: "First Name",
@@ -24,8 +54,6 @@ const fields: Field[] = [
     key: "email",
   },
 ];
-// profile.data!.first_name
-// const y = profile.value.data!.first_name;
 </script>
 
 <template>
@@ -36,24 +64,26 @@ const fields: Field[] = [
     <div v-if="profile.error">
       {{ profile.error }}
     </div>
-    <div v-if="profile.loading">{{ t("Loading") }}...</div>
-    <div v-else-if="profile.data">
+    <div v-else-if="temp_data">
       <div v-for="field in fields" :key="field.key" class="mb-6">
         <CollectivoInputDefault
           :label="field.label"
-          v-model="profile.data![field.key]"
+          v-model="temp_data[field.key]"
         />
       </div>
+      <UButton
+        class="btn"
+        variant="solid"
+        color="cyan"
+        size="md"
+        icon="i-system-uicons-check"
+        @click="saveProfile"
+        :loading="profile.saving"
+      >
+        {{ t("Save") }}
+      </UButton>
     </div>
-    <UButton
-      class="btn"
-      variant="solid"
-      color="cyan"
-      size="md"
-      icon="i-system-uicons-check"
-    >
-      Save
-    </UButton>
+    <div v-else>{{ t("Loading") }}...</div>
   </div>
   <div class="container">
     <h2 class="text-cv-primary font-semibold text-2xl leading-7 mb-6">
@@ -68,7 +98,7 @@ const fields: Field[] = [
       :to="logoutPath"
       target="_blank"
     >
-      Logout
+      {{ t("Logout") }}
     </UButton>
   </div>
 </template>

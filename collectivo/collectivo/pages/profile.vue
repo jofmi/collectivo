@@ -15,12 +15,14 @@ async function getProfile() {
   await profile.value.load();
   temp_data.value = { ...profile.value.data } as CollectivoProfile;
 }
+
 getProfile();
 
 // Submit form data
 async function saveProfile() {
   try {
     await profile.value.save(temp_data.value!);
+
     toast.add({
       title: t("Profile updated"),
       icon: "i-heroicons-check-circle",
@@ -28,6 +30,7 @@ async function saveProfile() {
     });
   } catch (e) {
     console.error(e);
+
     toast.add({
       title: t("There was an error"),
       icon: "i-heroicons-warning-circle",
@@ -49,9 +52,9 @@ async function saveProfile() {
     <div v-else-if="temp_data">
       <div v-for="field in profile.inputs" :key="field.key" class="mb-6">
         <CollectivoFormsInput
+          v-model="temp_data[field.key]"
           :label="field.label"
           :disabled="field.disabled ?? false"
-          v-model="temp_data[field.key]"
         />
       </div>
       <UButton
@@ -60,8 +63,8 @@ async function saveProfile() {
         color="cyan"
         size="md"
         icon="i-akar-icons-check"
-        @click="saveProfile"
         :loading="profile.saving"
+        @click="saveProfile"
       >
         {{ t("Save") }}
       </UButton>

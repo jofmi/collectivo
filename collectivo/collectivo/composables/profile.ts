@@ -19,11 +19,13 @@ class ProfileStore {
     const { $directus } = useNuxtApp();
     if (!force && this.data) return this;
     this.loading = true;
+
     this.data = (await $directus?.request(
       readMe({
         fields: ["id", "first_name", "last_name", "email"],
-      })
+      }),
     )) as CollectivoProfile;
+
     this.loading = false;
     return this;
   }
@@ -40,7 +42,8 @@ class ProfileStore {
 export const useProfile = () => {
   const state = useState<ProfileStore>(
     "collectivo_profile",
-    () => new ProfileStore()
+    () => new ProfileStore(),
   );
+
   return state;
 };

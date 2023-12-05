@@ -1,11 +1,13 @@
 <script setup lang="ts">
 const { t } = useI18n();
+
 defineProps({
   modelValue: String,
   label: String,
   disabled: Boolean,
   placeholder: String,
 });
+
 defineEmits(["update:modelValue"]);
 </script>
 
@@ -15,10 +17,10 @@ defineEmits(["update:modelValue"]);
       {{ t(label) }}
     </p>
     <UInput
-      :modelValue="modelValue"
+      :model-value="modelValue"
       :disabled="disabled"
-      v-on:update:modelValue="$emit('update:modelValue', $event)"
       :placeholder="placeholder"
+      @update:modelValue="$emit('update:modelValue', $event)"
     />
   </div>
 </template>

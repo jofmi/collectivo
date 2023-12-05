@@ -14,9 +14,9 @@
     "preview": "nuxt preview",
     "test": "vitest run",
     "format": "prettier --cache --check .",
-    "format:all": "prettier --cache --check . --write",
+    "format:fix": "prettier --cache --check . --write",
     "lint": "eslint --cache .",
-    "lint:all": "eslint --cache . --fix"
+    "lint:fix": "eslint --cache . --fix"
   },
   "dependencies": {
     "@directus/sdk": "^13.0.1",

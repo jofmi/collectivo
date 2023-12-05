@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { parse } from "marked";
+
 const tiles = useTiles();
 getTiles();
 
@@ -25,7 +26,7 @@ const carouselOptions = ref({
 <template>
   <div class="dashboard-carousel">
     <ClientOnly>
-      <Carousel snapAlign="start" v-bind="carouselOptions">
+      <Carousel snap-align="start" v-bind="carouselOptions">
         <slide v-for="(tile, i) in tiles.data" :key="i">
           <CollectivoCard :title="tile.name">
             <template #content>

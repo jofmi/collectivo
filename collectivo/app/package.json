@@ -8,7 +8,9 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "format": "prettier --cache --check .",
-    "lint": "eslint --cache ."
+    "format:fix": "prettier --cache --check . --write",
+    "lint": "eslint --cache .",
+    "lint:fix": "eslint --cache . --fix"
   },
   "dependencies": {
     "@collectivo/collectivo": "workspace:*",

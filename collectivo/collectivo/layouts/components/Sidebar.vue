@@ -4,8 +4,9 @@ import MenuItem from "./MenuItem.vue";
 import pkg from "../../package.json";
 
 const menuItems = useSidebarMenu();
+
 const sortedMenuItems = Object.values(menuItems.value).sort(
-  (a, b) => (a.order ?? 100) - (b.order ?? 100)
+  (a, b) => (a.order ?? 100) - (b.order ?? 100),
 );
 </script>
 

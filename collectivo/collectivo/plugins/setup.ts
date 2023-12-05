@@ -17,8 +17,8 @@ export default defineNuxtPlugin(() => {
       order: 0,
     },
     {
-      label: "Database",
-      icon: "i-system-uicons-cube",
+      label: "Studio",
+      icon: "i-system-uicons-cubes",
       to: runtimeConfig.public.directusUrl,
       external: true,
       mobile: false,
@@ -29,7 +29,7 @@ export default defineNuxtPlugin(() => {
     },
   ];
 
-  menu.value = { ...items };
+  menu.value.push(...items);
 
   const profileInputs: CollectivoProfileInput[] = [
     {

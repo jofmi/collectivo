@@ -12,7 +12,6 @@
     "dev": "nuxt dev --p 3001",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "test": "vitest run",
     "format": "prettier --cache --check .",
     "format:fix": "prettier --cache --check . --write",
     "lint": "eslint --cache .",

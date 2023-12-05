@@ -3,6 +3,7 @@ const { t } = useI18n();
 defineProps({
   modelValue: String,
   label: String,
+  disabled: Boolean,
   placeholder: String,
 });
 defineEmits(["update:modelValue"]);
@@ -15,6 +16,7 @@ defineEmits(["update:modelValue"]);
     </p>
     <UInput
       :modelValue="modelValue"
+      :disabled="disabled"
       v-on:update:modelValue="$emit('update:modelValue', $event)"
       :placeholder="placeholder"
     />

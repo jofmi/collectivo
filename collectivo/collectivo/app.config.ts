@@ -172,6 +172,7 @@ export default defineAppConfig({
         },
       },
     },
+
     notification: {
       progress: {
         background: "white",
@@ -326,7 +327,7 @@ export default defineAppConfig({
     // Global Input Styles => Rakib
     input: {
       wrapper: "relative",
-      base: "relative block w-full disabled:cursor-not-allowed tracking-[0.28px] font-medium leading-4",
+      base: "relative block w-full disabled:cursor-default disabled:text-cv-gray tracking-[0.28px] font-medium leading-4",
       size: {
         baseSize: "text-sm leading-[18px]",
         numberInput: "text-sm leading-[18px]",

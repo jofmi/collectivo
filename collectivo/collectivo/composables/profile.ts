@@ -2,12 +2,14 @@ import { readMe, updateMe } from "@directus/sdk";
 
 class ProfileStore {
   data: CollectivoProfile | null;
+  inputs: CollectivoProfileInput[];
   saving: boolean;
   loading: boolean;
   error: any;
 
   constructor() {
     this.data = null;
+    this.inputs = [];
     this.saving = false;
     this.loading = false;
     this.error = null;

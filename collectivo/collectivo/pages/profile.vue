@@ -33,27 +33,6 @@ async function saveProfile() {
     });
   }
 }
-
-interface Field {
-  label: string;
-  key: keyof CollectivoProfile;
-  placeholder?: string;
-}
-
-const fields: Field[] = [
-  {
-    label: "First Name",
-    key: "first_name",
-  },
-  {
-    label: "Last Name",
-    key: "last_name",
-  },
-  {
-    label: "Email",
-    key: "email",
-  },
-];
 </script>
 
 <template>
@@ -65,9 +44,10 @@ const fields: Field[] = [
       {{ profile.error }}
     </div>
     <div v-else-if="temp_data">
-      <div v-for="field in fields" :key="field.key" class="mb-6">
-        <CollectivoInputDefault
+      <div v-for="field in profile.inputs" :key="field.key" class="mb-6">
+        <CollectivoFormsInput
           :label="field.label"
+          :disabled="field.disabled ?? false"
           v-model="temp_data[field.key]"
         />
       </div>

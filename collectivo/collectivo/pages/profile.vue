@@ -66,7 +66,9 @@ async function saveProfile() {
         {{ t("Save") }}
       </UButton>
     </div>
-    <div v-else>{{ t("Loading") }}...</div>
+    <div v-else>
+      <USkeleton class="h-12 w-full" />
+    </div>
   </div>
   <div class="container">
     <h2 class="text-cv-primary font-semibold text-2xl leading-7 mb-6">

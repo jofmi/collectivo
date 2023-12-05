@@ -18,12 +18,28 @@ declare global {
   interface CollectivoMenuItem {
     label: string;
     icon?: string;
-    path?: string;
+    to?: string;
     external?: boolean; // Defaults to false
     target?: string; // Defaults to "_self"
     mobile?: boolean; // Defaults to true
     order?: number; // Defaults to 100
     filter?: (item: CollectivoMenuItem) => boolean;
+  }
+
+  // Profile section
+  interface CollectivoProfile {
+    id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    [key: string]: string | undefined;
+  }
+
+  interface CollectivoProfileInput {
+    label: string;
+    key: string;
+    disabled?: boolean;
+    order?: number;
   }
 
   interface CollectivoExtension {
@@ -39,13 +55,6 @@ declare global {
     collectivo_project_description: string;
     collectivo_members_role: string;
     collectivo_admin_role: string;
-  }
-
-  interface CollectivoCurrentUser {
-    id: string;
-    first_name: string;
-    last_name: string;
-    email: string;
   }
 
   interface CollectivoMember {
@@ -75,7 +84,6 @@ declare global {
 
   interface CollectivoSchema {
     collectivo_extensions: CollectivoExtension[];
-    collectivo_members: CollectivoMember[];
     collectivo_tiles: CollectivoTile[];
     collectivo_tags: CollectivoTag[];
     directus_users: CollectivoUser[];

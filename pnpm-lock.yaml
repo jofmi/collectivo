@@ -99,9 +99,6 @@ importers:
       vue3-carousel-nuxt:
         specifier: ^1.1.0
         version: 1.1.0(vue@3.3.6)
-      vue3-toastify:
-        specifier: ^0.1.14
-        version: 0.1.14(vue@3.3.6)
       winston:
         specifier: ^3.10.0
         version: 3.10.0
@@ -9791,18 +9788,6 @@ packages:
     resolution: {integrity: sha512-86vUkNPBzL2PVuR9w6hUsI90ccFjLp+K8cSFpRTISf+SjUQY3fMHc5CFF5MUL62v1xYYm27zEBmQupO9VQx9Kw==}
     peerDependencies:
       vue: ^3.2.0
-    dependencies:
-      vue: 3.3.6(typescript@5.3.2)
-    dev: false
-
-  /vue3-toastify@0.1.14(vue@3.3.6):
-    resolution: {integrity: sha512-2wyzMhWq8IjTclL25tqKWknDFdFI1vPueMGZpHNlPWf6TBfxBycBANS+2n4W1xD7tHhX4G6HhCe31sle6OpwYQ==}
-    engines: {node: '>=16', npm: '>=7'}
-    peerDependencies:
-      vue: '>=3.2.0'
-    peerDependenciesMeta:
-      vue:
-        optional: true
     dependencies:
       vue: 3.3.6(typescript@5.3.2)
     dev: false

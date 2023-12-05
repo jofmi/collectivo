@@ -353,6 +353,32 @@ const editor_fields = [
   "memberships_country",
 ];
 
+const user_fields = [
+  "collectivo_tags_divider",
+  "collectivo_tags",
+
+  "memberships_profile_group",
+  "memberships_occupation",
+  "memberships_gender",
+  "memberships_birthday",
+  "memberships_phone",
+  "memberships_is_organization",
+
+  "memberships_organization_group",
+  "memberships_organization_name",
+  "memberships_organization_id",
+  "memberships_organization_type",
+
+  "memberships_address_group",
+  "memberships_street",
+  "memberships_number",
+  "memberships_stair",
+  "memberships_door",
+  "memberships_postcode",
+  "memberships_city",
+  "memberships_country",
+];
+
 schema.permissions = [
   {
     collection: "directus_users",

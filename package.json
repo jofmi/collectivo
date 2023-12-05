@@ -7,12 +7,18 @@
     "dev": "pnpm -F=@collectivo/app run dev",
     "dev:all": "pnpm run -r --parallel dev",
     "test": "pnpm run -r --parallel test",
+    "test:ci": "concurrently --raw --kill-others \"pnpm preview\" \"sleep 5 && pnpm seed && pnpm run -r --parallel test\"",
     "format": "pnpm run -r --parallel format",
-    "format:all": "pnpm run -r --parallel format:all",
+    "format:fix": "pnpm run -r --parallel format:fix",
     "lint": "pnpm run -r --parallel lint",
-    "lint:all": "pnpm run -r --parallel lint:all",
-    "seed": "curl --header \"Authorization:badToken\" --request POST \"http://localhost:3000/api/migrate/?all=true&exampleData=true\""
+    "lint:fix": "pnpm run -r --parallel lint:fix",
+    "build": "pnpm run -r --parallel build",
+    "preview": "node collectivo/collectivo/.output/server/index.mjs",
+    "seed": "curl -f -LI --header \"Authorization:badToken\" --request POST \"http://localhost:3000/api/migrate/?all=true&exampleData=true\""
   },
   "author": "Joël Foramitti",
-  "license": "AGPL-3.0"
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
 }

@@ -92,8 +92,9 @@ declare global {
   // Wrappers
   interface DataWrapper<T> {
     data: T | null | undefined;
-    error: any;
+    error: Error | null | undefined | unknown;
     loading: boolean;
+    saving: boolean;
   }
 }
 

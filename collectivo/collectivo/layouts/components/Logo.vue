@@ -2,6 +2,7 @@
 const appConfig = useAppConfig();
 const logoPath = appConfig.logoPath;
 const logoLabel = appConfig.logoLabel;
+
 defineProps({
   hideLabel: {
     type: Boolean,
@@ -12,7 +13,7 @@ defineProps({
 
 <template>
   <div class="logo">
-    <router-link to="/" class="logo__image" v-if="logoPath">
+    <router-link v-if="logoPath" to="/" class="logo__image">
       <img :src="logoPath" alt="" class="object-cover" />
     </router-link>
     <div v-if="!hideLabel && logoLabel" class="logo__label">

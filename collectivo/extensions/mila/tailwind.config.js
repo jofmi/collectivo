@@ -8,8 +8,7 @@ export default {
     "./nuxt.config.{js,ts}",
   ],
   theme: {
-    extend: {
-    },
+    extend: {},
   },
   plugins: [],
 };

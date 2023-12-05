@@ -99,12 +99,12 @@ Migration logs can be found in the nuxt terminal.
 ## Linting
 
 - To run linting, use: `pnpm lint`
-- To apply linting to all files, use: `pnpm lint:all`
+- To apply linting to all files, use: `pnpm lint:fix`
 
 ## Formatting
 
 - To run formatting checks, use: `pnpm format`
-- To apply the formatting to all files, use: `pnpm format:all`
+- To apply the formatting to all files, use: `pnpm format:fix`
 
 ## Troubleshooting
 

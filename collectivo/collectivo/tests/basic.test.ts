@@ -10,7 +10,6 @@ describe("basics", async () => {
 
   it("can reach API", async () => {
     const res = await $fetch("/api/status/");
-    console.log(res);
     expect(res).toStrictEqual({ healthy: true });
   });
 });

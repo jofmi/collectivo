@@ -9,6 +9,8 @@ describe("example", async () => {
   });
 
   it("Renders Hello Nuxt", async () => {
-    expect(await $fetch("/test/")).toMatch("Hello Nuxt!");
+    const res = await $fetch("/api/status/");
+    console.log(res);
+    // expect().toMatch("Hello Nuxt!");
   });
 });

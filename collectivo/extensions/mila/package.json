@@ -1,5 +1,5 @@
 {
-  "name": "@collectivo/collectivo",
+  "name": "collectivo_mila",
   "version": "0.1.0",
   "description": "Collectivo is a module system for community plattforms.",
   "type": "module",

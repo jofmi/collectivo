@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "pnpm -F=@collectivo/app run dev",
     "dev:all": "pnpm run -r --parallel dev",
-    "test": "pnpm run test",
+    "test": "pnpm run -r --parallel test",
     "test:ci": "concurrently --raw --kill-others \"pnpm preview\" \"sleep 5 && pnpm seed && pnpm run -r --parallel test\"",
     "format": "pnpm run -r --parallel format",
     "format:fix": "pnpm run -r --parallel format:fix",

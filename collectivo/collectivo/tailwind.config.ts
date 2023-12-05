@@ -1,5 +1,7 @@
-/** @type {import('tailwindcss').Config} */
-export default {
+import type { Config } from "tailwindcss";
+import defaultTheme from "tailwindcss/defaultTheme";
+
+export default <Partial<Config>>{
   content: [
     "./components/**/*.{js,vue,ts}",
     "./layouts/**/*.vue",
@@ -12,7 +14,7 @@ export default {
       colors: {
         "cv-primary": "#0F1A2B",
         "cv-active": "#4E3095",
-        "cv-purple": "#4E3095",
+        "cv-purple": "#3b2476",
         "cv-gray": "#A1A6AC",
         "cv-cyan": "#2CB3A5",
         "cv-orange": "#D36D29",
@@ -28,6 +30,20 @@ export default {
         "cv-purple-light": "#ECF1FD",
         "cv-blue-light": "#64c7ff1a",
         "cv-gray-light": "#F4F7FE",
+
+        purple: {
+          50: "#3b2476",
+          100: "#3b2476",
+          200: "#3b2476",
+          300: "#3b2476",
+          400: "#3b2476",
+          500: "#3b2476",
+          600: "#3b2476",
+          700: "#3b2476",
+          800: "#3b2476",
+          900: "#3b2476",
+          950: "#3b2476",
+        },
       },
       boxShadow: {
         sidebar: "0px 0px 48px 0px rgba(220, 226, 239, 0.50)",

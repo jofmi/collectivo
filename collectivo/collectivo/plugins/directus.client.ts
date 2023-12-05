@@ -17,7 +17,7 @@ export default defineNuxtPlugin({
     // Create directus REST client or redirect to offline error page
     try {
       directus = createDirectus<CollectivoSchema>(
-        runtimeConfig.public.directusUrl as string,
+        runtimeConfig.public.directusUrl as string
       )
         .with(authentication("cookie", { credentials: "include" }))
         .with(rest({ credentials: "include" }));
@@ -34,15 +34,12 @@ export default defineNuxtPlugin({
 
         navigateTo(
           `${runtimeConfig.public.directusUrl}/auth/login/keycloak?redirect=${runtimeConfig.public.collectivoUrl}`,
-          { external: true },
+          { external: true }
         );
       } else {
         throw new Error("Cannot reach backend server (directus)");
       }
     }
-
-    // Load data of current user to store
-    getCurrentUser(directus);
 
     // Provide directus client to app
     return {
@@ -52,15 +49,3 @@ export default defineNuxtPlugin({
     };
   },
 });
-
-// Load data of current user to store
-async function getCurrentUser(directus: RestClient<CollectivoSchema>) {
-  const user = useCurrentUser();
-
-  // @ts-ignore
-  user.value.data = await directus.request(
-    readMe({
-      fields: ["id", "first_name", "last_name", "email"],
-    }),
-  );
-}

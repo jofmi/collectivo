@@ -6,10 +6,11 @@ export default defineAppConfig({
   logoLabel: "COLLECTIVO",
   ui: {
     strategy: "override",
+    primary: "purple",
     button: {
       base: "focus:outline-none focus-visible:outline-0 disabled:cursor-not-allowed  flex-shrink-0 items-center justify-center transition-all disabled:bg-cv-gray-light disabled:text-[#6F7680]/50",
       font: "font-semibold",
-      rounded: "rounded-xl",
+      rounded: "rounded-lg",
       size: {
         xs: "text-xs",
         sm: "text-sm",
@@ -36,10 +37,10 @@ export default defineAppConfig({
         "2xs": "px-2 py-1",
         xs: "px-2.5 py-1.5",
         sm: "px-5 py-4",
-        md: "px-3 py-2",
+        md: "px-3.5 py-2.5",
         lg: "px-3.5 py-2.5",
         xl: "px-3.5 py-2.5",
-        base: "px-5 py-4",
+        base: "px-4 py-3",
         pagination: "px-0 py-0",
       },
       square: {
@@ -87,6 +88,18 @@ export default defineAppConfig({
         variant: "solid",
         color: "primary",
         loadingIcon: "i-heroicons-arrow-path-20-solid",
+      },
+      icon: {
+        base: "flex-shrink-0",
+        loading: "animate-spin",
+        size: {
+          "2xs": "h-4 w-4",
+          xs: "h-4 w-4",
+          sm: "h-5 w-5",
+          md: "h-4 w-4",
+          lg: "h-5 w-5",
+          xl: "h-6 w-6",
+        },
       },
     },
     badge: {
@@ -157,6 +170,12 @@ export default defineAppConfig({
         warning: {
           ghost: "bg-cv-orange-light ring-1 ring-cv-orange/30 text-cv-orange",
         },
+      },
+    },
+
+    notification: {
+      progress: {
+        background: "white",
       },
     },
     // Select config added by Rabiul
@@ -305,10 +324,10 @@ export default defineAppConfig({
         },
       },
     },
-    // Global Input Styles => Rakib
+
     input: {
       wrapper: "relative",
-      base: "relative block w-full disabled:cursor-not-allowed tracking-[0.28px] font-medium leading-4",
+      base: "relative block w-full disabled:cursor-default disabled:text-cv-gray tracking-[0.28px] font-medium leading-4",
       size: {
         baseSize: "text-sm leading-[18px]",
         numberInput: "text-sm leading-[18px]",

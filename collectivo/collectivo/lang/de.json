@@ -1,5 +1,22 @@
 {
   "Home": "Startseite",
+  "Studio": "Studio",
+
+  "Action": "Aktion",
+  "Actions": "Aktionen",
+
+  "Login": "Anmelden",
+  "Logout": "Abmelden",
+
+  "Save": "Speichern",
+  "Cancel": "Abbrechen",
+  "Delete": "Löschen",
+  "Edit": "Bearbeiten",
+  "Add": "Hinzufügen",
+  "Remove": "Entfernen",
+
+  "There was an error": "Es ist ein Fehler aufgetreten",
+
   "Profile": "Profil",
-  "Admin App": "Admin App"
+  "Profile updated": "Profil aktualisiert"
 }

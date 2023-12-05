@@ -8,15 +8,9 @@ defineProps({
 </script>
 
 <template>
-  <!-- <router-link :to="path" class="item">
-    <span class="item__icon">
-      <slot name="icon"> </slot>
-    </span>
-    <span class="item__title">{{ title }}</span>
-  </router-link> -->
   <div v-if="!item.filter || item.filter(item)">
     <div v-if="item.external">
-      <a :href="item.path" :target="item.target ?? '_blank'" class="item">
+      <a :href="item.to" :target="item.target ?? '_blank'" class="item">
         <span class="item__icon">
           <slot name="icon">
             <UIcon v-if="item.icon" :name="item.icon" class="link-icon" />
@@ -26,7 +20,7 @@ defineProps({
       </a>
     </div>
     <div v-else>
-      <NuxtLink :to="item.path" class="item">
+      <NuxtLink :to="item.to" class="item">
         <span class="item__icon">
           <slot name="icon">
             <UIcon v-if="item.icon" :name="item.icon" class="link-icon"

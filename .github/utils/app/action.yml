@@ -4,7 +4,7 @@ inputs:
   build:
     description: Build the production bundle of the platform
     required: false
-    default: 'true'
+    default: "true"
   registry:
     description: NPM registry to set up for auth
     required: false
@@ -23,7 +23,7 @@ runs:
       id: pnpm-install
       with:
         run_install: false
-        version: 8.11.0
+        version: 8
 
     - name: Get cache info
       id: cache-info
@@ -36,8 +36,7 @@ runs:
       name: Setup pnpm cache
       with:
         path: ${{ steps.cache-info.outputs.pnpm-cache-dir }}
-        key:
-          ${{ runner.os }}-${{ steps.cache-info.outputs.os-release }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        key: ${{ runner.os }}-${{ steps.cache-info.outputs.os-release }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-${{ steps.cache-info.outputs.os-release }}-pnpm-store-
 
@@ -50,5 +49,5 @@ runs:
       shell: bash
       run: pnpm run build
       env:
-        npm_config_workspace_concurrency: '1'
+        npm_config_workspace_concurrency: "1"
         NODE_OPTIONS: --max_old_space_size=6144

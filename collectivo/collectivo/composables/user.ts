@@ -6,7 +6,7 @@ class ProfileStore {
   isAuthenticated: boolean;
   saving: boolean;
   loading: boolean;
-  error: any;
+  error: unknown;
 
   constructor() {
     this.data = null;

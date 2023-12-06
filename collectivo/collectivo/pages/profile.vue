@@ -1,8 +1,12 @@
 <script setup lang="ts">
+definePageMeta({
+  middleware: ["auth"],
+});
+
 setPageTitle("Profile");
 const toast = useToast();
 const { t } = useI18n();
-const profile = useProfile();
+const profile = useUser();
 const runtimeConfig = useRuntimeConfig();
 const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protocol/openid-connect/logout`;
 const temp_data = ref<CollectivoProfile | null>(null);

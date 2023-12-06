@@ -27,9 +27,9 @@ import {
 async function addItemtoExtension(
   extension: string,
   collection: string,
-  item: any,
+  item: any
 ) {
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
   const extsDb = await directus.request(readItems("collectivo_extensions"));
   const extDb = extsDb.find((ext) => ext.name === extension);
 
@@ -42,7 +42,7 @@ async function addItemtoExtension(
       collection: collection,
       item: item,
       collectivo_extensions_id: extDb.id,
-    }),
+    })
   );
 }
 
@@ -50,13 +50,13 @@ export async function createOrUpdateDirectusCollection(
   collection: NestedPartial<DirectusCollection<any>>,
   fields?: NestedPartial<DirectusField<any>>[],
   relations?: NestedPartial<DirectusRelation<any>>[],
-  extension?: string,
+  extension?: string
 ) {
   if (!collection.collection) {
     throw new Error("Collection name is required");
   }
 
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
 
   try {
     await directus.request(createCollection(collection));
@@ -65,7 +65,7 @@ export async function createOrUpdateDirectusCollection(
       await addItemtoExtension(
         extension,
         "directus_collections",
-        collection.collection,
+        collection.collection
       );
     }
 
@@ -73,7 +73,7 @@ export async function createOrUpdateDirectusCollection(
   } catch (e) {
     try {
       await directus.request(
-        updateCollection(collection.collection, collection),
+        updateCollection(collection.collection, collection)
       );
 
       console.log(`Updated collection "${collection.collection}"`);
@@ -98,13 +98,13 @@ export async function createOrUpdateDirectusCollection(
 export async function updateDirectusCollection(
   collection: NestedPartial<DirectusCollection<any>>,
   fields?: NestedPartial<DirectusField<any>>[],
-  relations?: NestedPartial<DirectusRelation<any>>[],
+  relations?: NestedPartial<DirectusRelation<any>>[]
 ) {
   if (!collection.collection) {
     throw new Error("Collection name is required");
   }
 
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
 
   try {
     await directus.request(updateCollection(collection.collection, collection));
@@ -127,7 +127,7 @@ export async function updateDirectusCollection(
 
 export async function createOrUpdateDirectusField(
   field: NestedPartial<DirectusField<any>>,
-  extension?: string,
+  extension?: string
 ) {
   if (!field.field) {
     throw new Error("Field name is required");
@@ -137,11 +137,11 @@ export async function createOrUpdateDirectusField(
     throw new Error("Field collection is required");
   }
 
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
 
   try {
     const fieldDB = await directus.request(
-      createField(field.collection, field),
+      createField(field.collection, field)
     );
 
     if (extension) {
@@ -163,7 +163,7 @@ export async function createOrUpdateDirectusField(
 
 export async function createOrUpdateDirectusRelation(
   relation: NestedPartial<DirectusRelation<any>>,
-  _extension?: string,
+  _extension?: string
 ) {
   if (!relation.collection) {
     throw new Error("Relation collection is required");
@@ -173,7 +173,7 @@ export async function createOrUpdateDirectusRelation(
     throw new Error("Relation name is required");
   }
 
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
 
   try {
     await directus.request(createRelation(relation));
@@ -181,7 +181,7 @@ export async function createOrUpdateDirectusRelation(
   } catch (e) {
     try {
       await directus.request(
-        updateRelation(relation.collection, relation.field, relation),
+        updateRelation(relation.collection, relation.field, relation)
       );
 
       console.log(`Updated relation "${relation.field}"`);
@@ -195,14 +195,14 @@ export async function createOrUpdateDirectusRelation(
 
 // Return first role with given name
 export async function getDirectusRoleByName(name: string) {
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
 
   const roles = await directus.request(
     readRoles({
       filter: {
         name: { _eq: name },
       },
-    }),
+    })
   );
 
   if (roles.length < 1) {
@@ -216,13 +216,13 @@ export async function getDirectusRoleByName(name: string) {
 
 export async function createOrUpdateDirectusRole(
   role: NestedPartial<DirectusRole<any>>,
-  _extension?: string,
+  _extension?: string
 ) {
   if (!role.name) {
     throw new Error("Role name is required");
   }
 
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
   // @ts-ignore
   let roleDb;
 
@@ -242,9 +242,9 @@ export async function createOrUpdateDirectusRole(
 }
 
 export async function createOrUpdateDirectusTranslation(
-  translation: NestedPartial<DirectusTranslation<any>>,
+  translation: NestedPartial<DirectusTranslation<any>>
 ) {
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
 
   const tr = await directus.request(
     readTranslations({
@@ -252,23 +252,23 @@ export async function createOrUpdateDirectusTranslation(
         language: { _eq: translation.language },
         key: { _eq: translation.key },
       },
-    }),
+    })
   );
 
   if (tr.length === 0) {
     await directus.request(createTranslation(translation));
   } else {
     await directus.request(
-      updateTranslation(tr[0].id, { value: translation.value }),
+      updateTranslation(tr[0].id, { value: translation.value })
     );
   }
 }
 
 export async function createOrUpdateDirectusPermission(
   permission: NestedPartial<DirectusPermission<any>>,
-  _extension: string,
+  _extension: string
 ) {
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
 
   // Add role id to permission based on RoleName
   if (permission.roleName) {
@@ -286,12 +286,12 @@ export async function createOrUpdateDirectusPermission(
         action: { _eq: permission.action },
         collection: { _eq: permission.collection },
       },
-    }),
+    })
   );
 
   if (permissionsDB.length > 1) {
     logger.warn(
-      `Found multiple permissions for role "${permission.roleName}" with action "${permission.action}" on collection "${permission.collection}"`,
+      `Found multiple permissions for role "${permission.roleName}" with action "${permission.action}" on collection "${permission.collection}"`
     );
   }
 

@@ -1,23 +1,18 @@
-import {
-  createDirectus,
-  authentication,
-  rest,
-  readMe,
-  type RestClient,
-} from "@directus/sdk";
+import { createDirectus, authentication, rest } from "@directus/sdk";
 
 // Set up directus client or redirect to keycloak if not authenticated
 export default defineNuxtPlugin({
   name: "directus-client",
   enforce: "pre",
   async setup() {
-    const runtimeConfig = useRuntimeConfig();
     let directus;
+    const runtimeConfig = useRuntimeConfig();
+    const user = useUser();
 
     // Create directus REST client or redirect to offline error page
     try {
       directus = createDirectus<CollectivoSchema>(
-        runtimeConfig.public.directusUrl as string,
+        runtimeConfig.public.directusUrl as string
       )
         .with(authentication("cookie", { credentials: "include" }))
         .with(rest({ credentials: "include" }));
@@ -25,18 +20,13 @@ export default defineNuxtPlugin({
       throw new Error("Environment variable NUXT_PUBLIC_DIRECTUS_URL invalid");
     }
 
-    // Try to refresh token or redirect to keycloak login page
+    // Try to refresh token and set user to authenticated if successful
     try {
       await directus.refresh();
+      user.value.isAuthenticated = true;
     } catch (e: any) {
-      if ([400, 401, 403].includes(e.response?.status)) {
-        directus.logout();
-
-        navigateTo(
-          `${runtimeConfig.public.directusUrl}/auth/login/keycloak?redirect=${runtimeConfig.public.collectivoUrl}`,
-          { external: true },
-        );
-      } else {
+      // If error is not auth-related, throw error
+      if (![400, 401, 403].includes(e.response.status)) {
         throw new Error("Cannot reach backend server (directus)");
       }
     }

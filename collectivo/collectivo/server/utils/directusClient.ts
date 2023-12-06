@@ -22,12 +22,12 @@ export async function refreshDirectus() {
   await directus.login(
     config.directusAdminEmail,
     config.directusAdminPassword,
-    {},
+    {}
   );
 }
 
 // Return Directus admin client for server plugins
-export async function useDirectus() {
+export async function useDirectusAdmin() {
   if (directus === undefined) {
     await refreshDirectus();
   }

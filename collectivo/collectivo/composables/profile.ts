@@ -3,6 +3,7 @@ import { readMe, updateMe } from "@directus/sdk";
 class ProfileStore {
   data: CollectivoProfile | null;
   inputs: CollectivoProfileInput[];
+  isAuthenticated: boolean;
   saving: boolean;
   loading: boolean;
   error: any;
@@ -10,6 +11,7 @@ class ProfileStore {
   constructor() {
     this.data = null;
     this.inputs = [];
+    this.isAuthenticated = false;
     this.saving = false;
     this.loading = false;
     this.error = null;
@@ -23,7 +25,7 @@ class ProfileStore {
     this.data = (await $directus?.request(
       readMe({
         fields: ["id", "first_name", "last_name", "email"],
-      }),
+      })
     )) as CollectivoProfile;
 
     this.loading = false;
@@ -39,10 +41,10 @@ class ProfileStore {
   }
 }
 
-export const useProfile = () => {
+export const useUser = () => {
   const state = useState<ProfileStore>(
     "collectivo_profile",
-    () => new ProfileStore(),
+    () => new ProfileStore()
   );
 
   return state;

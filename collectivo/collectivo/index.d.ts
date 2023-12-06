@@ -23,6 +23,7 @@ declare global {
     target?: string; // Defaults to "_self"
     mobile?: boolean; // Defaults to true
     order?: number; // Defaults to 100
+    public?: boolean; // Defaults to false
     filter?: (item: CollectivoMenuItem) => boolean;
   }
 

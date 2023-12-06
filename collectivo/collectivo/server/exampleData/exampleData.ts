@@ -8,14 +8,14 @@ import {
 } from "@directus/sdk";
 
 async function getRole(name: string) {
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
 
   const membersRoles = await directus.request(
     readRoles({
       filter: {
         name: { _eq: name },
       },
-    }),
+    })
   );
 
   if (membersRoles.length < 1) {
@@ -28,7 +28,7 @@ async function getRole(name: string) {
 export default async function createExampleData() {
   console.log("Creating example data for collectivo");
 
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
 
   const userRole = await getRole("collectivo_user");
   const editorRole = await getRole("collectivo_editor");
@@ -77,7 +77,7 @@ export default async function createExampleData() {
     const usersDB = await directus.request(
       readUsers({
         filter: { email: { _eq: user.email } },
-      }),
+      })
     );
 
     let userID;

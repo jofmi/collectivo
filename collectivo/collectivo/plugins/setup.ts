@@ -1,6 +1,6 @@
 export default defineNuxtPlugin(() => {
   const menu = useSidebarMenu();
-  const profile = useProfile();
+  const profile = useUser();
   const runtimeConfig = useRuntimeConfig();
 
   const items: CollectivoMenuItem[] = [

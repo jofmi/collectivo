@@ -14,7 +14,7 @@ async function up() {
   await schema.apply();
 
   // Alternatively, you can also use the directus client directly
-  // const directus = await useDirectus()
+  // const directus = await useDirectusAdmin()
   // await directus.request(createCollection(...))
 }
 

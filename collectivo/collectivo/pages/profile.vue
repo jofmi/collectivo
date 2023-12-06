@@ -46,7 +46,7 @@ async function saveProfile() {
 </script>
 
 <template>
-  <div class="container">
+  <CollectivoContainer>
     <h2 class="text-cv-primary font-semibold text-2xl leading-7 mb-6">
       {{ t("Personal data") }}
     </h2>
@@ -76,8 +76,8 @@ async function saveProfile() {
     <div v-else>
       <USkeleton class="h-12 w-full" />
     </div>
-  </div>
-  <div class="container">
+  </CollectivoContainer>
+  <CollectivoContainer>
     <h2 class="text-cv-primary font-semibold text-2xl leading-7 mb-6">
       {{ t("Actions") }}
     </h2>
@@ -92,12 +92,7 @@ async function saveProfile() {
     >
       {{ t("Logout") }}
     </UButton>
-  </div>
+  </CollectivoContainer>
 </template>
 
-<style scoped lang="scss">
-.container {
-  @apply rounded-xl p-[25px] mb-5 bg-white;
-  box-shadow: 0px 6px 48px 0px rgba(220, 226, 239, 0.5);
-}
-</style>
+<style scoped lang="scss"></style>

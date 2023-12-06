@@ -18,7 +18,7 @@ export default async function createExampleData() {
     const type_response = await directus.request(
       createItem("memberships_types", {
         name: type[0],
-      })
+      }),
     );
 
     type_ids.push(type_response.id);
@@ -49,7 +49,7 @@ export default async function createExampleData() {
           user: user_id,
           type: membership_type,
           status: user[2],
-        })
+        }),
       );
     }
   }

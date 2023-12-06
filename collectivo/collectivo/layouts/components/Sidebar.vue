@@ -7,7 +7,7 @@ const menuItems = useSidebarMenu();
 const user = useUser();
 
 const sortedMenuItems = Object.values(menuItems.value).sort(
-  (a, b) => (a.order ?? 100) - (b.order ?? 100)
+  (a, b) => (a.order ?? 100) - (b.order ?? 100),
 );
 </script>
 

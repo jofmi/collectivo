@@ -24,7 +24,7 @@ export function createMigration(
   version: string,
   up: () => Promise<void>,
   down: () => Promise<void>,
-  dependencies?: CollectivoMigrationDependency[]
+  dependencies?: CollectivoMigrationDependency[],
 ): CollectivoMigration {
   return {
     extension: extension,
@@ -38,7 +38,7 @@ export function createMigration(
 // Run pending migrations for a set of extensions, based on db state
 export async function migrateAll(
   exts: ExtensionConfig[],
-  createExampleData: boolean = false
+  createExampleData: boolean = false,
 ) {
   const extsDb = await getExtensionsFromDb();
 
@@ -59,7 +59,7 @@ export async function migrateAll(
 export async function migrateExtension(
   ext: ExtensionConfig,
   to?: string, // Target migration version. If not specified, to latest.
-  createExampleData: boolean = false
+  createExampleData: boolean = false,
 ) {
   const extsDb = await getExtensionsFromDb();
   await runMigrations(ext, extsDb, to);
@@ -94,7 +94,7 @@ async function getExtensionsFromDb() {
           name: "collectivo",
           version: "0.0.0",
           migration: "0.0.0",
-        })
+        }),
       );
     } catch (e2) {
       logger.log({
@@ -127,12 +127,12 @@ export async function migrateCustom(
   ext: ExtensionConfig,
   version: string,
   down?: boolean,
-  createExampleData: boolean = false
+  createExampleData: boolean = false,
 ) {
   const direction = down ? "down" : "up";
 
   logger.info(
-    `Forced migration ${version} (${direction}) of ${ext.name} starting`
+    `Forced migration ${version} (${direction}) of ${ext.name} starting`,
   );
 
   if (!ext.migrations) {
@@ -153,14 +153,14 @@ export async function migrateCustom(
     }
   } catch (e) {
     logger.error(
-      `Error running forced migration v${version} (${direction}) of extension '${ext.name}'`
+      `Error running forced migration v${version} (${direction}) of extension '${ext.name}'`,
     );
 
     throw e;
   }
 
   logger.info(
-    `Forced migration v${version} (${direction}) of extension '${ext.name}' successful`
+    `Forced migration v${version} (${direction}) of extension '${ext.name}' successful`,
   );
 
   if (createExampleData) {
@@ -186,7 +186,7 @@ async function runMigrations(ext: ExtensionConfig, extsDb: any[], to?: string) {
           name: ext.name,
           version: ext.version,
           migration: "0.0.0",
-        })
+        }),
       );
     } catch (e) {
       logger.error(e);
@@ -199,7 +199,7 @@ async function runMigrations(ext: ExtensionConfig, extsDb: any[], to?: string) {
     await directus.request(
       updateItem("collectivo_extensions", extensionDb.id, {
         version: ext.version,
-      })
+      }),
     );
   }
 
@@ -215,11 +215,11 @@ async function runMigrations(ext: ExtensionConfig, extsDb: any[], to?: string) {
   }
 
   let migrationStateIndex = ext.migrations.findIndex(
-    (f) => f.version === migrationState
+    (f) => f.version === migrationState,
   );
 
   const migrationTargetIndex = ext.migrations.findIndex(
-    (f) => f.version === migrationTarget
+    (f) => f.version === migrationTarget,
   );
 
   if (migrationState === migrationTarget) {
@@ -228,13 +228,13 @@ async function runMigrations(ext: ExtensionConfig, extsDb: any[], to?: string) {
   }
 
   logger.info(
-    `Migrating ${ext.name} from ${migrationState} to ${migrationTarget}`
+    `Migrating ${ext.name} from ${migrationState} to ${migrationTarget}`,
   );
 
   if (migrationStateIndex < migrationTargetIndex) {
     for (const migration of ext.migrations.slice(
       migrationStateIndex + 1,
-      migrationTargetIndex + 1
+      migrationTargetIndex + 1,
     )) {
       try {
         // TODO: checkDependencies(migration, extsDb);
@@ -244,11 +244,11 @@ async function runMigrations(ext: ExtensionConfig, extsDb: any[], to?: string) {
         await directus.request(
           updateItem("collectivo_extensions", extensionDb.id, {
             migration: ext.migrations[migrationStateIndex].version,
-          })
+          }),
         );
       } catch (e) {
         logger.error(
-          `Error running migration ${ext.migrations[migrationStateIndex].version} of ${ext.name}`
+          `Error running migration ${ext.migrations[migrationStateIndex].version} of ${ext.name}`,
         );
 
         throw e;
@@ -265,11 +265,11 @@ async function runMigrations(ext: ExtensionConfig, extsDb: any[], to?: string) {
         await directus.request(
           updateItem("collectivo_extensions", extensionDb.id, {
             migration: ext.migrations[migrationStateIndex].version,
-          })
+          }),
         );
       } catch (e) {
         logger.error(
-          `Error running migration ${ext.migrations[migrationStateIndex].version} of ${ext.name}`
+          `Error running migration ${ext.migrations[migrationStateIndex].version} of ${ext.name}`,
         );
 
         throw e;

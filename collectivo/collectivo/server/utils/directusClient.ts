@@ -22,7 +22,7 @@ export async function refreshDirectus() {
   await directus.login(
     config.directusAdminEmail,
     config.directusAdminPassword,
-    {}
+    {},
   );
 }
 

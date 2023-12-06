@@ -25,7 +25,7 @@ class ProfileStore {
     this.data = (await $directus?.request(
       readMe({
         fields: ["id", "first_name", "last_name", "email"],
-      })
+      }),
     )) as CollectivoProfile;
 
     this.loading = false;
@@ -44,7 +44,7 @@ class ProfileStore {
 export const useUser = () => {
   const state = useState<ProfileStore>(
     "collectivo_profile",
-    () => new ProfileStore()
+    () => new ProfileStore(),
   );
 
   return state;

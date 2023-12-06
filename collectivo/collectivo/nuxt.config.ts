@@ -7,6 +7,7 @@ const currentDir = dirname(fileURLToPath(import.meta.url));
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  ssr: false,
   runtimeConfig: {
     collectivoVersion: pkg.version,
     apiToken: "",
@@ -39,7 +40,6 @@ export default defineNuxtConfig({
       process.env.COLLECTIVO_USE_BROWSER_LOCAL == "true" ?? false,
   },
   css: [
-    join(currentDir, "./assets/css/main.css"),
     join(currentDir, "./assets/fonts/fonts.css"),
     join(currentDir, "./assets/css/calendar.scss"),
     join(currentDir, "./assets/css/group-radio.scss"),
@@ -48,6 +48,6 @@ export default defineNuxtConfig({
   ],
   ui: {
     global: true,
-    icons: "all",
+    icons: ["system-uicons", "mi"],
   },
 });

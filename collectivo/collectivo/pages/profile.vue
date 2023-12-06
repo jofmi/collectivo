@@ -62,7 +62,7 @@ async function saveProfile() {
         variant="solid"
         color="cyan"
         size="md"
-        icon="i-akar-icons-check"
+        icon="i-mi-circle-check"
         :loading="profile.saving"
         @click="saveProfile"
       >
@@ -82,7 +82,7 @@ async function saveProfile() {
       variant="solid"
       color="red"
       size="md"
-      icon="i-akar-icons-door"
+      icon="i-mi-log-out"
       :to="logoutPath"
       target="_blank"
     >

@@ -1,15 +1,21 @@
 <script setup lang="ts">
+import { triggerFlow } from "@directus/sdk";
+
 const route = useRoute();
 const { t } = useI18n();
 
 // Form name is used to load form data
 const formName = route.params.formName;
+const directus = useDirectus();
 
 interface Form {
   slug: string;
   title: string;
   description: string;
   inputs: FormInput[];
+  submitMethod?: "triggerFlow"; // TODO: Add createItem and updateItem
+  submitID?: string;
+  public?: boolean;
 }
 
 const inputTypes = [
@@ -45,6 +51,7 @@ const form: Form = {
   slug: "test",
   title: "Test Form Title",
   description: "Test Form Description",
+  public: true,
   inputs: [
     {
       type: "sectionTitle",
@@ -80,6 +87,19 @@ const form: Form = {
 
 setPageTitle(form.title);
 
+if (!form.public) {
+  requireAuth();
+}
+
+function submitForm() {
+  if (form.submitMethod == "triggerFlow" && form.submitID) {
+    directus.request(triggerFlow("POST", form.submitID, {}));
+  } else {
+    throw new Error("Invalid form configuration");
+  }
+}
+
+// TODO: Do this via CSS
 function getInputClasses(input: FormInput) {
   let classes = "pr-5 ";
 
@@ -130,6 +150,7 @@ function getInputClasses(input: FormInput) {
           size="md"
           icon="i-mi-circle-check"
           :loading="false"
+          @click="submitForm"
         >
           {{ t("Submit") }}
         </UButton>

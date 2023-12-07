@@ -98,46 +98,32 @@ function submitForm() {
     throw new Error("Invalid form configuration");
   }
 }
-
-// TODO: Do this via CSS
-function getInputClasses(input: FormInput) {
-  let classes = "pr-5 ";
-
-  if (
-    input.width == "full" ||
-    ["pageTitle", "sectionTitle", "clear"].includes(input.type)
-  ) {
-    classes += "basis-full";
-  } else {
-    classes += "basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4";
-  }
-
-  return classes;
-}
 </script>
 
 <template>
   <CollectivoContainer>
     <div class="flex flex-wrap w-full">
       <template v-for="input in form.inputs" :key="input.key">
-        <div :class="getInputClasses(input)">
-          <div v-if="input.type === 'clear'"></div>
-          <div v-else class="px-2 py-3 lg:p-4">
-            <div
-              v-if="input.type === 'sectionTitle'"
-              class="text-cv-primary font-semibold text-2xl leading-7"
-            >
-              {{ input.label }}
-            </div>
-            <div v-else-if="input.type === 'text'">
-              <CollectivoFormsInput
-                :label="input.label"
-                :disabled="input.disabled"
-              />
-            </div>
-            <div v-else>
-              {{ input.label }}
-            </div>
+        <div v-if="input.type === 'clear'" class="element-full"></div>
+        <div
+          v-else
+          class="input"
+          :class="input.width === 'full' ? 'element-full' : 'element-split'"
+        >
+          <div
+            v-if="input.type === 'sectionTitle'"
+            class="text-cv-primary font-semibold text-2xl leading-7"
+          >
+            {{ input.label }}
+          </div>
+          <div v-else-if="input.type === 'text'">
+            <CollectivoFormsInput
+              :label="input.label"
+              :disabled="input.disabled"
+            />
+          </div>
+          <div v-else>
+            {{ input.label }}
           </div>
         </div>
       </template>
@@ -159,4 +145,14 @@ function getInputClasses(input: FormInput) {
   </CollectivoContainer>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.input {
+  @apply px-2 py-3 lg:p-4;
+}
+.element-full {
+  @apply basis-full;
+}
+.element-split {
+  @apply basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4;
+}
+</style>

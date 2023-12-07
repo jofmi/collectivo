@@ -13,87 +13,127 @@ interface Form {
   title: string;
   description: string;
   inputs: FormInput[];
-  submitMethod?: "triggerFlow"; // TODO: Add createItem and updateItem
+  submitMethod?: "triggerFlow"; // TODO: Add createItem updateItem APIpost APIput APIpatch
   submitID?: string;
   public?: boolean;
 }
 
-const inputTypes = [
-  // Layout types
-  "pageTitle",
-  "sectionTitle",
-  "description",
-  "clear",
+type FormInput =
+  | (FormElement & FormElementLayout)
+  | (FormElement & FormInputGeneric & FormInputSpecific);
 
-  // Input types
-  "text",
-  "number",
-  "email",
-  "password",
-  "textarea",
-  "select",
-] as const;
+interface FormInputChoice {
+  key: string;
+  value: string | number | boolean;
+}
 
-interface FormInput {
-  type: (typeof inputTypes)[number];
+interface FormElement {
+  width?: "full" | "half" | "third" | "quarter" | "fifth";
+  conditions?: FormCondition[];
+}
+
+interface FormCondition {
+  key: string;
+  value: string | number | boolean;
+  // TODO: Add operator?: "==" | "!=" | ">" | "<" | ">=" | "<=";
+}
+
+interface FormInputGeneric {
   label?: string;
   key?: string;
-  placeholder?: string | number | boolean;
-  value?: string | number | boolean;
   required?: boolean;
   disabled?: boolean;
-  width?: string;
   description?: string;
 }
 
+type FormInputSpecific =
+  | {
+      type: "select";
+      value?: string;
+      choices?: FormInputChoice[];
+    }
+  | {
+      type: "text" | "number" | "email" | "password" | "textarea";
+      value?: string | number;
+      placeholder?: string;
+    };
+
+type FormElementLayout =
+  | {
+      type: "page" | "section" | "description";
+      content: string;
+    }
+  | {
+      type: "clear";
+    };
+
 // Mockup form data to be replaced later
-const form: Form = {
+const form: Ref<Form> = ref({
   slug: "test",
   title: "Test Form Title",
   description: "Test Form Description",
   public: true,
   inputs: [
-    {
-      type: "sectionTitle",
-      label: "This is a section",
-      key: "section_title_1",
-      width: "full",
-    },
-    {
-      type: "text",
-      label: "Text",
-      key: "text",
-    },
+    // {
+    //   type: "sectionTitle",
+    //   label: "This is a section",
+    //   width: "full",
+    // },
     {
       type: "text",
       label: "Text",
       key: "text",
     },
+    // {
+    //   type: "number",
+    //   label: "Number",
+    //   key: "text",
+    // },
     {
-      type: "clear",
-    },
-    {
-      type: "text",
-      label: "Text",
+      type: "select",
+      label: "Select",
       key: "text",
+      choices: [
+        {
+          key: "1",
+          value: "1",
+        },
+        {
+          key: "2",
+          value: "2",
+        },
+        {
+          key: "3",
+          value: "3",
+        },
+      ],
     },
+    // {
+    //   type: "clear",
+    // },
     {
       type: "text",
       label: "Text",
       key: "text",
     },
   ],
-};
+});
 
-setPageTitle(form.title);
+// for (const input of form.inputs) {
+//   if (input.key) {
+//     formData.value[input.key] = "";
+//   }
+// }
 
-if (!form.public) {
+setPageTitle(form.value.title);
+
+if (!form.value.public) {
   requireAuth();
 }
 
 function submitForm() {
-  if (form.submitMethod == "triggerFlow" && form.submitID) {
-    directus.request(triggerFlow("POST", form.submitID, {}));
+  if (form.value.submitMethod == "triggerFlow" && form.value.submitID) {
+    directus.request(triggerFlow("POST", form.value.submitID, {}));
   } else {
     throw new Error("Invalid form configuration");
   }
@@ -111,20 +151,34 @@ function submitForm() {
           :class="input.width === 'full' ? 'element-full' : 'element-split'"
         >
           <div
-            v-if="input.type === 'sectionTitle'"
+            v-if="input.type === 'section'"
             class="text-cv-primary font-semibold text-2xl leading-7"
           >
-            {{ input.label }}
+            {{ input.content }}
           </div>
-          <div v-else-if="input.type === 'text'">
+          <div
+            v-else-if="
+              input.type === 'text' ||
+              input.type === 'number' ||
+              input.type === 'password'
+            "
+          >
             <CollectivoFormsInput
+              v-model="input.value"
+              :type="input.type"
               :label="input.label"
               :disabled="input.disabled"
             />
           </div>
-          <div v-else>
-            {{ input.label }}
+          <div v-else-if="input.type === 'select'">
+            <CollectivoFormsSelect
+              v-model="input.value"
+              :label="input.label"
+              :options="input.choices"
+              :disabled="input.disabled"
+            />
           </div>
+          <div v-else>ERROR: Invalid form element.</div>
         </div>
       </template>
       <div class="basis-full"></div>
@@ -152,7 +206,19 @@ function submitForm() {
 .element-full {
   @apply basis-full;
 }
-.element-split {
+
+.element-half {
+  @apply basis-full md:basis-1/2;
+}
+
+.element-third {
+  @apply basis-full md:basis-1/2 lg:basis-1/3;
+}
+.element-quarter {
   @apply basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4;
+}
+
+.element-fifth {
+  @apply basis-full md:basis-1/3 lg:basis-1/4 xl:basis-1/5;
 }
 </style>

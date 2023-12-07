@@ -19,11 +19,12 @@ declare global {
     label: string;
     icon?: string;
     to?: string;
+    click?: () => void;
     external?: boolean; // Defaults to false
-    target?: string; // Defaults to "_self"
-    mobile?: boolean; // Defaults to true
-    order?: number; // Defaults to 100
-    public?: boolean; // Defaults to false
+    target?: string; // Default "_self"
+    order?: number; // Default 100
+    public?: boolean; // Default to false - public is ONLY shown to logged out users
+    hideOnMobile?: boolean; // Default false
     filter?: (item: CollectivoMenuItem) => boolean;
   }
 

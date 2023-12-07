@@ -1,15 +1,24 @@
 <script setup lang="ts">
 const { t } = useI18n();
 
-defineProps({
-  modelValue: [String, Number],
-  type: String,
+const props = defineProps({
+  modelValue: String,
   label: String,
   disabled: Boolean,
   placeholder: String,
+  options: Array as PropType<
+    {
+      key: string;
+      value: string | number | boolean;
+    }[]
+  >,
 });
 
-defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue"]);
+
+if (props.modelValue === undefined) {
+  emit("update:modelValue", "");
+}
 </script>
 
 <template>
@@ -17,10 +26,10 @@ defineEmits(["update:modelValue"]);
     <p class="label-text">
       {{ t(label!) }}
     </p>
-    <UInput
+    <URadioGroup
       :model-value="modelValue"
       :disabled="disabled"
-      :placeholder="placeholder"
+      :options="options"
       @update:model-value="$emit('update:modelValue', $event)"
     />
   </div>

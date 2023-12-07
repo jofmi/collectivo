@@ -21,8 +21,28 @@ export default defineNuxtPlugin(() => {
       icon: "i-system-uicons-cubes",
       to: runtimeConfig.public.directusUrl,
       external: true,
-      mobile: false,
+      hideOnMobile: true,
       order: 99,
+      filter: (_item) => {
+        return true;
+      },
+    },
+    {
+      label: "Register",
+      icon: "i-system-uicons-document-stack",
+      to: "/forms/registration",
+      public: true,
+      order: 1,
+      filter: (_item) => {
+        return true;
+      },
+    },
+    {
+      label: "Login",
+      icon: "i-system-uicons-enter",
+      click: requireAuth,
+      public: true,
+      order: 2,
       filter: (_item) => {
         return true;
       },

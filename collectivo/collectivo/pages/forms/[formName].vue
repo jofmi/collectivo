@@ -74,21 +74,20 @@ const form: Ref<Form> = ref({
   description: "Test Form Description",
   public: true,
   inputs: [
-    // {
-    //   type: "sectionTitle",
-    //   label: "This is a section",
-    //   width: "full",
-    // },
+    {
+      type: "section",
+      content: "This is a section",
+    },
     {
       type: "text",
       label: "Text",
       key: "text",
     },
-    // {
-    //   type: "number",
-    //   label: "Number",
-    //   key: "text",
-    // },
+    {
+      type: "number",
+      label: "Number",
+      key: "text",
+    },
     {
       type: "select",
       label: "Select",
@@ -108,9 +107,9 @@ const form: Ref<Form> = ref({
         },
       ],
     },
-    // {
-    //   type: "clear",
-    // },
+    {
+      type: "clear",
+    },
     {
       type: "text",
       label: "Text",
@@ -118,12 +117,6 @@ const form: Ref<Form> = ref({
     },
   ],
 });
-
-// for (const input of form.inputs) {
-//   if (input.key) {
-//     formData.value[input.key] = "";
-//   }
-// }
 
 setPageTitle(form.value.title);
 
@@ -146,18 +139,18 @@ function submitForm() {
       <template v-for="input in form.inputs" :key="input.key">
         <div v-if="input.type === 'clear'" class="element-full"></div>
         <div
+          v-else-if="input.type === 'section'"
+          class="text-cv-primary font-semibold text-2xl leading-7 element-full input"
+        >
+          {{ input.content }}
+        </div>
+        <div
           v-else
           class="input"
-          :class="input.width === 'full' ? 'element-full' : 'element-split'"
+          :class="input.width ? `element-${input.width}` : 'element-1/4'"
         >
           <div
-            v-if="input.type === 'section'"
-            class="text-cv-primary font-semibold text-2xl leading-7"
-          >
-            {{ input.content }}
-          </div>
-          <div
-            v-else-if="
+            v-if="
               input.type === 'text' ||
               input.type === 'number' ||
               input.type === 'password'
@@ -207,18 +200,22 @@ function submitForm() {
   @apply basis-full;
 }
 
-.element-half {
+.element-1\/2 {
   @apply basis-full md:basis-1/2;
 }
 
-.element-third {
+.element-1\/3 {
   @apply basis-full md:basis-1/2 lg:basis-1/3;
 }
-.element-quarter {
+.element-1\/4 {
   @apply basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4;
 }
 
-.element-fifth {
+.element-1\/5 {
   @apply basis-full md:basis-1/3 lg:basis-1/4 xl:basis-1/5;
+}
+
+.element-1\/6 {
+  @apply basis-full sm:basis-1/2 md:basis-1/4 lg:basis-1/5 xl:basis-1/6;
 }
 </style>

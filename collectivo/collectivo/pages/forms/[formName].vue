@@ -66,7 +66,7 @@ let schema = object();
 function addInputToSchema(
   key: string,
   input: FormInput,
-  schema_field: YupSchema
+  schema_field: YupSchema,
 ) {
   if (input.required) {
     schema_field = schema_field.required("This field is required");
@@ -84,7 +84,7 @@ function addInputToSchema(
         } else {
           return schema_field_hidden.strip();
         }
-      }
+      },
     );
 
     schema = schema.shape({ [key]: schema_field_with_conditions });

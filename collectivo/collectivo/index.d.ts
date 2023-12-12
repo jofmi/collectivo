@@ -91,6 +91,75 @@ declare global {
     directus_users: CollectivoUser[];
   }
 
+  // Forms
+
+  interface CollectivoForm {
+    slug: string;
+    title: string;
+    description: string;
+    fields: { [key: string]: FormField };
+    submitMethod?: "triggerFlow" | (() => void); // TODO: Add createItem updateItem APIpost APIput APIpatch
+    submitID?: string;
+    public?: boolean;
+    // TODO: Add conditions, e.g. user has or has not policy XY
+  }
+
+  type FormField = (FormFieldBase & FormFieldLayout) | FormInput;
+
+  interface FormInputChoice {
+    key: string;
+    value: string | number | boolean;
+  }
+
+  interface FormFieldBase {
+    width?: "full" | "half" | "third" | "quarter" | "fifth";
+    visible?: Ref<boolean>;
+    conditions?: FormCondition[];
+  }
+
+  interface FormCondition {
+    key: string;
+    value: string | number | boolean;
+    // TODO: Add operator?: "==" | "!=" | ">" | "<" | ">=" | "<=";
+  }
+
+  interface FormValidator {
+    type: "min" | "max" | "email" | "url" | "regex";
+    value: string | number | RegExp;
+  }
+
+  type FormInput = {
+    label: string;
+    default?: boolean;
+    required?: boolean;
+    disabled?: boolean;
+    validators?: FormValidator[];
+    description?: string;
+  } & FormFieldBase &
+    FormInputType;
+
+  type FormInputType =
+    | {
+        type: "select";
+        choices?: FormInputChoice[];
+      }
+    | {
+        type: "text" | "number" | "email" | "password" | "textarea";
+        placeholder?: string;
+      }
+    | {
+        type: "checkbox";
+      };
+
+  type FormFieldLayout =
+    | {
+        type: "section" | "description"; // TODO: "page" |
+        content: string;
+      }
+    | {
+        type: "clear";
+      };
+
   // Wrappers
   interface DataWrapper<T> {
     data: T | null | undefined;

@@ -12,81 +12,25 @@ import type { FormErrorEvent, FormSubmitEvent } from "#ui/types";
 
 const toast = useToast();
 const route = useRoute();
+const forms = useCollectivoForms();
 const { t } = useI18n();
 
 // Form name is used to load form data
 const formName = route.params.formName;
 const directus = useDirectus();
 
-interface Form {
-  slug: string;
-  title: string;
-  description: string;
-  fields: { [key: string]: FormField };
-  submitMethod?: "triggerFlow" | (() => void); // TODO: Add createItem updateItem APIpost APIput APIpatch
-  submitID?: string;
-  public?: boolean;
-  // TODO: Add conditions, e.g. user has or has not policy XY
+if (typeof formName !== "string" || !forms.value[formName]) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: "Page Not Found",
+    fatal: true,
+  });
 }
 
-type FormField = (FormFieldBase & FormFieldLayout) | FormInput;
-
-interface FormInputChoice {
-  key: string;
-  value: string | number | boolean;
-}
-
-interface FormFieldBase {
-  width?: "full" | "half" | "third" | "quarter" | "fifth";
-  visible?: Ref<boolean>;
-  conditions?: FormCondition[];
-}
-
-interface FormCondition {
-  key: string;
-  value: string | number | boolean;
-  // TODO: Add operator?: "==" | "!=" | ">" | "<" | ">=" | "<=";
-}
-
-interface FormValidator {
-  type: "min" | "max" | "email" | "url" | "regex";
-  value: string | number | RegExp;
-}
-
-type FormInput = {
-  label: string;
-  default?: boolean;
-  required?: boolean;
-  disabled?: boolean;
-  validators?: FormValidator[];
-  description?: string;
-} & FormFieldBase &
-  FormInputType;
-
-type FormInputType =
-  | {
-      type: "select";
-      choices?: FormInputChoice[];
-    }
-  | {
-      type: "text" | "number" | "email" | "password" | "textarea";
-      placeholder?: string;
-    }
-  | {
-      type: "checkbox";
-    };
-
-type FormFieldLayout =
-  | {
-      type: "section" | "description"; // TODO: "page" |
-      content: string;
-    }
-  | {
-      type: "clear";
-    };
+const form2 = forms.value[formName];
 
 // Mockup form data to be replaced later
-const form: Ref<Form> = ref({
+const form: Ref<CollectivoForm> = ref({
   slug: "test",
   title: "Test Form Title",
   description: "Test Form Description",

@@ -5,19 +5,19 @@ import { ExtensionConfig } from "./extensions";
 // Run pending migrations for a set of extensions, based on db state
 export async function migrateAll(
   exts: ExtensionConfig[],
-  createExampleData: boolean = false
+  createExampleData: boolean = false,
 ) {
   const extsDb = await getExtensionsFromDb();
 
   for (const ext of exts) {
     logger.info(
-      `Starting: Migrating schema of extension ${ext.name} to latest`
+      `Starting: Migrating schema of extension ${ext.name} to latest`,
     );
 
     await runMigrations(ext, extsDb);
 
     logger.info(
-      `Successful: Migrating schema of extension ${ext.name} to latest`
+      `Successful: Migrating schema of extension ${ext.name} to latest`,
     );
   }
 
@@ -25,13 +25,13 @@ export async function migrateAll(
     for (const ext of exts) {
       if (ext.examples) {
         logger.info(
-          `Starting: Creating example data for extension ${ext.name}`
+          `Starting: Creating example data for extension ${ext.name}`,
         );
 
         await ext.examples();
 
         logger.info(
-          `Successful: Creating example data for extension ${ext.name}`
+          `Successful: Creating example data for extension ${ext.name}`,
         );
       }
     }
@@ -42,7 +42,7 @@ export async function migrateAll(
 export async function migrateExtension(
   ext: ExtensionConfig,
   to?: string, // Target migration version. If not specified, to latest.
-  createExampleData: boolean = false
+  createExampleData: boolean = false,
 ) {
   const log_message = `Migrating schema of extension ${ext.name} to v${to})`;
   logger.info("Starting: " + log_message);
@@ -83,7 +83,7 @@ async function getExtensionsFromDb() {
           version: "0.0.0",
           schema_version: "0.0.0",
           schema_is_latest: false,
-        })
+        }),
       );
     } catch (e2) {
       logger.log({
@@ -115,7 +115,7 @@ async function getExtensionsFromDb() {
 export async function migrateCustom(
   ext: ExtensionConfig,
   version: string,
-  createExampleData: boolean = false
+  createExampleData: boolean = false,
 ) {
   const log_message = `Applying schema v${version} of extension '${ext.name}'`;
   logger.info("Starting: " + log_message);
@@ -166,7 +166,7 @@ async function runMigrations(ext: ExtensionConfig, extsDb: any[], to?: string) {
           version: ext.version,
           schema_version: "0.0.0",
           schema_is_latest: false,
-        })
+        }),
       );
     } catch (e) {
       logger.error(e);
@@ -179,7 +179,7 @@ async function runMigrations(ext: ExtensionConfig, extsDb: any[], to?: string) {
     await directus.request(
       updateItem("collectivo_extensions", extensionDb.id, {
         version: ext.version,
-      })
+      }),
     );
   }
 
@@ -195,11 +195,11 @@ async function runMigrations(ext: ExtensionConfig, extsDb: any[], to?: string) {
   }
 
   let migrationStateIndex = ext.schemas.findIndex(
-    (f) => f.version === migrationState
+    (f) => f.version === migrationState,
   );
 
   const migrationTargetIndex = ext.schemas.findIndex(
-    (f) => f.version === migrationTarget
+    (f) => f.version === migrationTarget,
   );
 
   if (migrationState === migrationTarget) {
@@ -208,13 +208,13 @@ async function runMigrations(ext: ExtensionConfig, extsDb: any[], to?: string) {
   }
 
   logger.info(
-    `Migrating ${ext.name} from ${migrationState} to ${migrationTarget}`
+    `Migrating ${ext.name} from ${migrationState} to ${migrationTarget}`,
   );
 
   if (migrationStateIndex < migrationTargetIndex) {
     for (const migration of ext.schemas.slice(
       migrationStateIndex + 1,
-      migrationTargetIndex + 1
+      migrationTargetIndex + 1,
     )) {
       try {
         // TODO: checkDependencies(migration, extsDb);
@@ -227,11 +227,11 @@ async function runMigrations(ext: ExtensionConfig, extsDb: any[], to?: string) {
           updateItem("collectivo_extensions", extensionDb.id, {
             schema_version: ext.schemas[migrationStateIndex].version,
             schema_is_latest: migrationStateIndex === ext.schemas.length - 1,
-          })
+          }),
         );
       } catch (e) {
         logger.error(
-          `Error applying schema ${ext.schemas[migrationStateIndex].version} of ${ext.name}`
+          `Error applying schema ${ext.schemas[migrationStateIndex].version} of ${ext.name}`,
         );
 
         throw e;
@@ -252,7 +252,7 @@ async function runMigrations(ext: ExtensionConfig, extsDb: any[], to?: string) {
         // );
       } catch (e) {
         logger.error(
-          `Error running migration ${ext.schemas[migrationStateIndex].version} of ${ext.name}`
+          `Error running migration ${ext.schemas[migrationStateIndex].version} of ${ext.name}`,
         );
 
         throw e;

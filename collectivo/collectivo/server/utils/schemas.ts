@@ -20,7 +20,7 @@ import { createOrUpdateDirectusRole } from "./directusQueries";
 export function initSchema(
   extension: string,
   version: string,
-  options?: Partial<ExtensionSchemaOptions>
+  options?: Partial<ExtensionSchemaOptions>,
 ) {
   return new ExtensionSchema(extension, version, options);
 }
@@ -54,7 +54,7 @@ export class ExtensionSchema {
   constructor(
     extension: string,
     version: string,
-    options?: Partial<ExtensionSchemaOptions>
+    options?: Partial<ExtensionSchemaOptions>,
   ) {
     this.extension = extension;
     this.version = version;
@@ -80,7 +80,7 @@ export class ExtensionSchema {
   createM2MRelation = (
     collection1: string,
     collection2: string,
-    settings?: directusM2MSettings
+    settings?: directusM2MSettings,
   ) => {
     createM2MRelation(this, collection1, collection2, settings);
   };
@@ -89,21 +89,21 @@ export class ExtensionSchema {
     aliasFieldName: string,
     MCollection: string,
     ACollections: string[],
-    aliasField?: NestedPartial<DirectusField<any>>
+    aliasField?: NestedPartial<DirectusField<any>>,
   ) => {
     createM2ARelation(
       this,
       aliasFieldName,
       MCollection,
       ACollections,
-      aliasField
+      aliasField,
     );
   };
 
   createO2MRelation = (
     CollectionOne: string,
     CollectionMany: string,
-    ForeignKey: string
+    ForeignKey: string,
   ) => {
     createO2MRelation(this, CollectionOne, CollectionMany, ForeignKey);
   };
@@ -114,7 +114,7 @@ export class ExtensionSchema {
         collection,
         [],
         [],
-        this.extension
+        this.extension,
       );
     }
 
@@ -152,7 +152,7 @@ export function combineSchemas(
   extension: string,
   version: string,
   options: Partial<ExtensionSchemaOptions>,
-  schemas: ExtensionSchema[]
+  schemas: ExtensionSchema[],
 ) {
   const combinedSchema = initSchema(extension, version, options);
 
@@ -186,7 +186,7 @@ function createM2MRelation(
   schema: ExtensionSchema,
   collection1: string,
   collection2: string,
-  settings?: directusM2MSettings
+  settings?: directusM2MSettings,
 ) {
   // Prepare inputs
   const field1 = settings?.field1 || {};
@@ -280,7 +280,7 @@ export async function createO2MRelation(
   schema: ExtensionSchema,
   CollectionOne: string,
   CollectionMany: string,
-  ForeignKey: string
+  ForeignKey: string,
 ) {
   schema.fields.push({
     collection: CollectionOne,
@@ -304,7 +304,7 @@ export async function createM2ARelation(
   aliasFieldName: string,
   MCollection: string,
   ACollections: string[],
-  aliasField?: NestedPartial<DirectusField<any>>
+  aliasField?: NestedPartial<DirectusField<any>>,
 ) {
   const m2aCollection = `${MCollection}_${aliasFieldName}`;
   const m2aCollectionIdFieldName = `${MCollection}_id`;

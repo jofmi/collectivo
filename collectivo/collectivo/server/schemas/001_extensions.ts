@@ -201,7 +201,7 @@ schema.createM2ARelation(
         { language: "de-DE", translation: "Einträge" },
       ],
     },
-  }
+  },
 );
 
 for (const action of ["read"]) {
@@ -262,5 +262,5 @@ schema.permissions.push(
     action: "update",
     fields: editor_fields,
     permissions: {},
-  }
+  },
 );

@@ -1,6 +1,6 @@
 export function parseBoolean(
   value: boolean | string,
-  defaultValue: boolean = false
+  defaultValue: boolean = false,
 ) {
   if (value === "true" || value === true) {
     return true;

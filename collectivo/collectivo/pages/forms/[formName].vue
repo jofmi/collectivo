@@ -66,7 +66,7 @@ let schema = object();
 function addInputToSchema(
   key: string,
   input: FormInput,
-  schema_field: YupSchema
+  schema_field: YupSchema,
 ) {
   if (input.required) {
     schema_field = schema_field.required("This field is required");
@@ -84,7 +84,7 @@ function addInputToSchema(
         } else {
           return schema_field_hidden.strip();
         }
-      }
+      },
     );
 
     schema = schema.shape({ [key]: schema_field_with_conditions });
@@ -209,6 +209,7 @@ async function onError(event: FormErrorEvent) {
               v-if="input.type === 'text'"
               :label="input.label"
               :name="key"
+              :placeholder="input.placeholder"
             >
               <UInput v-model="state[key]">
                 <template v-if="input.icon" #trailing>
@@ -220,6 +221,7 @@ async function onError(event: FormErrorEvent) {
               v-else-if="input.type === 'email'"
               :label="input.label"
               :name="key"
+              :placeholder="input.placeholder"
             >
               <UInput v-model="state[key]">
                 <template v-if="input.icon" #trailing>
@@ -231,6 +233,7 @@ async function onError(event: FormErrorEvent) {
               v-else-if="input.type === 'password'"
               :label="input.label"
               :name="key"
+              :placeholder="input.placeholder"
             >
               <UInput v-model="state[key]" type="password">
                 <template v-if="input.icon" #trailing>
@@ -242,8 +245,20 @@ async function onError(event: FormErrorEvent) {
               v-else-if="input.type === 'number'"
               :label="input.label"
               :name="key"
+              :placeholder="input.placeholder"
             >
               <UInput v-model="state[key]" type="number" />
+            </UFormGroup>
+            <UFormGroup
+              v-if="input.type === 'textarea'"
+              :label="input.label"
+              :name="key"
+            >
+              <UTextarea
+                v-model="state[key]"
+                resize
+                :placeholder="input.placeholder"
+              />
             </UFormGroup>
             <UFormGroup
               v-else-if="input.type === 'select-radio'"

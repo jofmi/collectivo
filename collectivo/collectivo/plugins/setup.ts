@@ -104,6 +104,14 @@ export default defineNuxtPlugin(() => {
         required: true,
         label: "Password",
       },
+      date: {
+        type: "date",
+        label: "Date",
+      },
+      show_conditional: {
+        type: "toggle",
+        label: "Show conditional",
+      },
       number: {
         type: "number",
         label: "Number",
@@ -157,18 +165,14 @@ export default defineNuxtPlugin(() => {
       clear: {
         type: "clear",
       },
-      date: {
-        type: "date",
-        label: "Date",
-      },
       conditional_text: {
         type: "text",
         label: "Conditional Text",
         required: true,
         conditions: [
           {
-            key: "text",
-            value: "t",
+            key: "show_conditional",
+            value: true,
           },
         ],
         validators: [

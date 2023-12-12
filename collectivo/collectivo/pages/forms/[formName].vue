@@ -219,7 +219,7 @@ async function onError(event: FormErrorEvent) {
               :label="input.label"
               :name="key"
             >
-              <URadioGroup :v-model="state[key]" :options="input.choices" />
+              <URadioGroup v-model="state[key]" :options="input.choices" />
             </UFormGroup>
 
             <UFormGroup

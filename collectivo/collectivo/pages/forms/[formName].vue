@@ -19,100 +19,21 @@ const { t } = useI18n();
 const formName = route.params.formName;
 const directus = useDirectus();
 
+// Do not allow unregistered forms
+// TODO: Fatal not working, no forward to 404
 if (typeof formName !== "string" || !forms.value[formName]) {
   throw createError({
     statusCode: 404,
     statusMessage: "Page Not Found",
-    fatal: true,
+    // fatal: true,
   });
 }
 
-const form2 = forms.value[formName];
+const form = forms.value[formName];
 
-// Mockup form data to be replaced later
-const form: Ref<CollectivoForm> = ref({
-  slug: "test",
-  title: "Test Form Title",
-  description: "Test Form Description",
-  public: true,
-  fields: {
-    section: {
-      type: "section",
-      content: "This is a section",
-    },
-    description: {
-      type: "description",
-      content: "This is a description",
-    },
-    text: {
-      type: "text",
-      required: true,
-      label: "Text",
-      key: "text",
-    },
-    number: {
-      type: "number",
-      label: "Number",
-      key: "text",
-      validators: [
-        {
-          type: "min",
-          value: 5,
-        },
-        {
-          type: "max",
-          value: 10,
-        },
-      ],
-    },
-    select: {
-      type: "select",
-      label: "Select",
-      choices: [
-        {
-          key: "1",
-          value: "1",
-        },
-        {
-          key: "2",
-          value: "2",
-        },
-        {
-          key: "3",
-          value: "3",
-        },
-      ],
-    },
-    clear: {
-      type: "clear",
-    },
-    conditional_text: {
-      type: "text",
-      label: "Conditional Text",
-      required: true,
-      conditions: [
-        {
-          key: "text",
-          value: "t",
-        },
-      ],
-      validators: [
-        {
-          type: "min",
-          value: 5,
-        },
-        {
-          type: "max",
-          value: 10,
-        },
-      ],
-    },
-  },
-});
+setPageTitle(form.title);
 
-setPageTitle(form.value.title);
-
-if (!form.value.public) {
+if (!form.public) {
   requireAuth();
 }
 
@@ -131,7 +52,7 @@ function checkConditions(conditions: FormCondition[] | undefined) {
 }
 
 // Compute visibility of fields
-for (const [_, field] of Object.entries(form.value.fields)) {
+for (const [_, field] of Object.entries(form.fields)) {
   if (field.conditions) {
     field.visible = computed(() => {
       return checkConditions(field.conditions);
@@ -209,7 +130,7 @@ function valNumber(validators: FormValidator[] | undefined) {
 }
 
 // Define state and schema from form object
-for (const [key, input] of Object.entries(form.value.fields)) {
+for (const [key, input] of Object.entries(form.fields)) {
   if (input.type === "text" || input.type === "password") {
     addInputToSchema(key, input, valString(input.validators));
   } else if (input.type === "number") {
@@ -225,8 +146,8 @@ type Schema = InferType<typeof schema>;
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   // TODO: Do something with data
-  //   if (form.value.submitMethod == "triggerFlow" && form.value.submitID) {
-  //     directus.request(triggerFlow("POST", form.value.submitID, {}));
+  //   if (form.submitMethod == "triggerFlow" && form.submitID) {
+  //     directus.request(triggerFlow("POST", form.submitID, {}));
   //   } else {
   //     throw new Error("Invalid form configuration");
   //   }

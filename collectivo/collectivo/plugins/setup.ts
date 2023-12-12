@@ -1,5 +1,6 @@
 export default defineNuxtPlugin(() => {
   const menu = useSidebarMenu();
+  const forms = useCollectivoForms();
   const profile = useUser();
   const runtimeConfig = useRuntimeConfig();
 
@@ -72,4 +73,85 @@ export default defineNuxtPlugin(() => {
   ];
 
   profile.value.inputs.push(...profileInputs);
+
+  // Mockup form data to be replaced later
+  const test_form: CollectivoForm = {
+    key: "test_form",
+    title: "Test Form Title",
+    description: "Test Form Description",
+    public: true,
+    fields: {
+      section: {
+        type: "section",
+        content: "This is a section",
+      },
+      description: {
+        type: "description",
+        content: "This is a description",
+      },
+      text: {
+        type: "text",
+        required: true,
+        label: "Text",
+      },
+      number: {
+        type: "number",
+        label: "Number",
+        validators: [
+          {
+            type: "min",
+            value: 5,
+          },
+          {
+            type: "max",
+            value: 10,
+          },
+        ],
+      },
+      select: {
+        type: "select",
+        label: "Select",
+        choices: [
+          {
+            key: "1",
+            value: "1",
+          },
+          {
+            key: "2",
+            value: "2",
+          },
+          {
+            key: "3",
+            value: "3",
+          },
+        ],
+      },
+      clear: {
+        type: "clear",
+      },
+      conditional_text: {
+        type: "text",
+        label: "Conditional Text",
+        required: true,
+        conditions: [
+          {
+            key: "text",
+            value: "t",
+          },
+        ],
+        validators: [
+          {
+            type: "min",
+            value: 5,
+          },
+          {
+            type: "max",
+            value: 10,
+          },
+        ],
+      },
+    },
+  };
+
+  forms.value[test_form.key] = test_form;
 });

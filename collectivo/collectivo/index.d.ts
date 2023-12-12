@@ -94,7 +94,7 @@ declare global {
   // Forms
 
   interface CollectivoForm {
-    slug: string;
+    key: string;
     title: string;
     description: string;
     fields: { [key: string]: FormField };

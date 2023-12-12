@@ -9,7 +9,7 @@
   "main": "./nuxt.config.ts",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev --p 3001",
+    "dev": "nuxt dev --p 3102",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "format": "prettier --cache --check .",

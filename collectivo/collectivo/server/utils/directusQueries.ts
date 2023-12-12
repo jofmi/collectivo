@@ -29,7 +29,7 @@ async function addItemtoExtension(
   collection: string,
   item: any,
 ) {
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
   const extsDb = await directus.request(readItems("collectivo_extensions"));
   const extDb = extsDb.find((ext) => ext.name === extension);
 
@@ -56,7 +56,7 @@ export async function createOrUpdateDirectusCollection(
     throw new Error("Collection name is required");
   }
 
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
 
   try {
     await directus.request(createCollection(collection));
@@ -104,7 +104,7 @@ export async function updateDirectusCollection(
     throw new Error("Collection name is required");
   }
 
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
 
   try {
     await directus.request(updateCollection(collection.collection, collection));
@@ -137,7 +137,7 @@ export async function createOrUpdateDirectusField(
     throw new Error("Field collection is required");
   }
 
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
 
   try {
     const fieldDB = await directus.request(
@@ -173,7 +173,7 @@ export async function createOrUpdateDirectusRelation(
     throw new Error("Relation name is required");
   }
 
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
 
   try {
     await directus.request(createRelation(relation));
@@ -195,7 +195,7 @@ export async function createOrUpdateDirectusRelation(
 
 // Return first role with given name
 export async function getDirectusRoleByName(name: string) {
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
 
   const roles = await directus.request(
     readRoles({
@@ -222,7 +222,7 @@ export async function createOrUpdateDirectusRole(
     throw new Error("Role name is required");
   }
 
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
   // @ts-ignore
   let roleDb;
 
@@ -244,7 +244,7 @@ export async function createOrUpdateDirectusRole(
 export async function createOrUpdateDirectusTranslation(
   translation: NestedPartial<DirectusTranslation<any>>,
 ) {
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
 
   const tr = await directus.request(
     readTranslations({
@@ -268,7 +268,7 @@ export async function createOrUpdateDirectusPermission(
   permission: NestedPartial<DirectusPermission<any>>,
   _extension: string,
 ) {
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
 
   // Add role id to permission based on RoleName
   if (permission.roleName) {

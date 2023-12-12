@@ -4,6 +4,7 @@ import MenuItem from "./MenuItem.vue";
 import pkg from "../../package.json";
 
 const menuItems = useSidebarMenu();
+const user = useUser();
 
 const sortedMenuItems = Object.values(menuItems.value).sort(
   (a, b) => (a.order ?? 100) - (b.order ?? 100),
@@ -18,7 +19,13 @@ const sortedMenuItems = Object.values(menuItems.value).sort(
           <div class="sidebar__inner__list__item__top">
             <Logo />
             <div v-for="(item, i) in sortedMenuItems" :key="i">
-              <MenuItem :item="item" />
+              <MenuItem
+                v-if="
+                  (user.isAuthenticated && !item.public) ||
+                  (!user.isAuthenticated && item.public)
+                "
+                :item="item"
+              />
             </div>
           </div>
           <div class="sidebar__inner__list__item__bottom">

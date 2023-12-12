@@ -19,10 +19,12 @@ declare global {
     label: string;
     icon?: string;
     to?: string;
+    click?: () => void;
     external?: boolean; // Defaults to false
-    target?: string; // Defaults to "_self"
-    mobile?: boolean; // Defaults to true
-    order?: number; // Defaults to 100
+    target?: string; // Default "_self"
+    order?: number; // Default 100
+    public?: boolean; // Default to false - public is ONLY shown to logged out users
+    hideOnMobile?: boolean; // Default false
     filter?: (item: CollectivoMenuItem) => boolean;
   }
 
@@ -88,6 +90,84 @@ declare global {
     collectivo_tags: CollectivoTag[];
     directus_users: CollectivoUser[];
   }
+
+  // Forms
+
+  interface CollectivoForm {
+    key: string;
+    title: string;
+    description: string;
+    fields: { [key: string]: FormField };
+    submitMethod?: "triggerFlow" | (() => void); // TODO: Add createItem updateItem APIpost APIput APIpatch
+    submitID?: string;
+    public?: boolean;
+    // TODO: Add conditions, e.g. user has or has not policy XY
+  }
+
+  type FormField = (FormFieldBase & FormFieldLayout) | FormInput;
+
+  interface FormInputChoice {
+    key: string;
+    value: string;
+  }
+
+  interface FormFieldBase {
+    width?: "full" | "half" | "third" | "quarter" | "fifth";
+    visible?: Ref<boolean>;
+    conditions?: FormCondition[];
+  }
+
+  interface FormCondition {
+    key: string;
+    value: string | number | boolean;
+    // TODO: Add operator?: "==" | "!=" | ">" | "<" | ">=" | "<=";
+  }
+
+  interface FormValidator {
+    type: "min" | "max" | "email" | "url" | "regex";
+    value?: string | number | RegExp;
+  }
+
+  type FormInput = {
+    label: string;
+    default?: boolean;
+    required?: boolean;
+    disabled?: boolean;
+    validators?: FormValidator[];
+    description?: string;
+  } & FormFieldBase &
+    FormInputType;
+
+  type FormInputType =
+    | {
+        type: "select" | "select-radio" | "multiselect-checkbox";
+        choices?: FormInputChoice[];
+      }
+    | {
+        type: "text" | "number" | "email" | "password" | "textarea" | "date";
+        placeholder?: string;
+        icon?: string;
+      }
+    | {
+        type: "checkbox" | "toggle";
+      }
+    | {
+        type: "custom-input";
+        component: any;
+      };
+
+  type FormFieldLayout =
+    | {
+        type: "section" | "description"; // TODO: "page" |
+        content: string;
+      }
+    | {
+        type: "clear";
+      }
+    | {
+        type: "custom";
+        component: any;
+      };
 
   // Wrappers
   interface DataWrapper<T> {

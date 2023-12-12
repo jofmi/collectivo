@@ -73,7 +73,7 @@ export async function migrateExtension(
 
 // Get current state of extensions from the database
 async function getExtensionsFromDb() {
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
   let extensions: any = null;
 
   try {
@@ -173,7 +173,7 @@ export async function migrateCustom(
 }
 
 async function runMigrations(ext: ExtensionConfig, extsDb: any[], to?: string) {
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
 
   // Get state of current extension from database
   let extensionDb = extsDb.find((f) => f.name === ext.name);

@@ -1,11 +1,15 @@
 <script setup lang="ts">
+definePageMeta({
+  middleware: ["auth"],
+});
+
 setPageTitle("Profile");
 const toast = useToast();
 const { t } = useI18n();
-const profile = useProfile();
+const profile = useUser();
 const runtimeConfig = useRuntimeConfig();
 const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protocol/openid-connect/logout`;
-const temp_data = ref<CollectivoProfile | null>(null);
+const state = ref<CollectivoProfile | null>(null);
 
 // Sort profile.inputs by order
 profile.value.inputs.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
@@ -13,7 +17,7 @@ profile.value.inputs.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 // Get form data
 async function getProfile() {
   await profile.value.load();
-  temp_data.value = { ...profile.value.data } as CollectivoProfile;
+  state.value = { ...profile.value.data } as CollectivoProfile;
 }
 
 getProfile();
@@ -21,11 +25,11 @@ getProfile();
 // Submit form data
 async function saveProfile() {
   try {
-    await profile.value.save(temp_data.value!);
+    await profile.value.save(state.value!);
 
     toast.add({
       title: t("Profile updated"),
-      icon: "i-heroicons-check-circle",
+      icon: "i-mi-circle-check",
       timeout: 10000,
     });
   } catch (e) {
@@ -33,7 +37,7 @@ async function saveProfile() {
 
     toast.add({
       title: t("There was an error"),
-      icon: "i-heroicons-warning-circle",
+      icon: "i-mi-warning",
       color: "red",
       timeout: 0,
     });
@@ -42,20 +46,20 @@ async function saveProfile() {
 </script>
 
 <template>
-  <div class="container">
+  <CollectivoContainer>
     <h2 class="text-cv-primary font-semibold text-2xl leading-7 mb-6">
       {{ t("Personal data") }}
     </h2>
     <div v-if="profile.error">
       {{ profile.error }}
     </div>
-    <div v-else-if="temp_data">
+    <div v-else-if="state">
       <div v-for="field in profile.inputs" :key="field.key" class="mb-6">
-        <CollectivoFormsInput
-          v-model="temp_data[field.key]"
-          :label="field.label"
-          :disabled="field.disabled ?? false"
-        />
+        <UFormGroup :label="field.label" :name="field.key">
+          <UInput
+            v-model="state[field.key]"
+            :disabled="field.disabled ?? false"
+        /></UFormGroup>
       </div>
       <UButton
         class="btn"
@@ -72,8 +76,8 @@ async function saveProfile() {
     <div v-else>
       <USkeleton class="h-12 w-full" />
     </div>
-  </div>
-  <div class="container">
+  </CollectivoContainer>
+  <CollectivoContainer>
     <h2 class="text-cv-primary font-semibold text-2xl leading-7 mb-6">
       {{ t("Actions") }}
     </h2>
@@ -88,12 +92,7 @@ async function saveProfile() {
     >
       {{ t("Logout") }}
     </UButton>
-  </div>
+  </CollectivoContainer>
 </template>
 
-<style scoped lang="scss">
-.container {
-  @apply rounded-xl p-[25px] mb-5 bg-white;
-  box-shadow: 0px 6px 48px 0px rgba(220, 226, 239, 0.5);
-}
-</style>
+<style scoped lang="scss"></style>

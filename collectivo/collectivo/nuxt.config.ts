@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     directusAdminPassword: "",
     public: {
       collectivoUrl: "",
+      authService: "keycloak",
       keycloakUrl: "",
       keycloakRealm: "",
       keycloakClient: "",

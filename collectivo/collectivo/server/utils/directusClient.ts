@@ -27,7 +27,7 @@ export async function refreshDirectus() {
 }
 
 // Return Directus admin client for server plugins
-export async function useDirectus() {
+export async function useDirectusAdmin() {
   if (directus === undefined) {
     await refreshDirectus();
   }

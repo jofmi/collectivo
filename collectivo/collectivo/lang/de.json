@@ -14,8 +14,11 @@
   "Edit": "Bearbeiten",
   "Add": "Hinzufügen",
   "Remove": "Entfernen",
+  "Submit": "Absenden",
 
   "There was an error": "Es ist ein Fehler aufgetreten",
+
+  "Some fields are not filled in correctly": "Einige Felder sind nicht korrekt ausgefüllt",
 
   "Profile": "Profil",
   "Profile updated": "Profil aktualisiert"

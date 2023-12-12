@@ -1,26 +1,21 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 
-defineProps(["level"]);
-const date = ref(new Date());
+defineProps({
+  modelValue: [String],
+});
 
-const setDateHandler = (value) => {
-  date.value = value;
-};
+defineEmits(["update:modelValue"]);
 
 const customPosition = () => ({ top: 55, left: 0 });
 </script>
 
 <template>
   <div>
-    <p class="level-text">
-      {{ level }}
-    </p>
     <div id="date-picker" class="relative">
       <VueDatePicker
-        v-model="date"
+        :model-value="modelValue"
         placeholder="YYYY-MM-DD"
         text-input
         no-title
@@ -34,18 +29,16 @@ const customPosition = () => ({ top: 55, left: 0 });
           showPreview: false,
         }"
         :format="'yyyy-MM-dd'"
-        @date-update="setDateHandler"
+        @date-update="
+          (value: string) => {
+            $emit('update:modelValue', value);
+          }
+        "
       />
-      <Icon
-        icon="system-uicons:calendar-month"
+      <UIcon
+        name="i-system-uicons-calendar-month"
         class="w-[18px] h-[18px] text-cv-primary/50 absolute top-1/2 -translate-y-1/2 right-[18px] z-50"
       />
     </div>
   </div>
 </template>
-
-<style scoped lang="scss">
-.level-text {
-  @apply mb-2 leading-4 text-cv-primary font-semibold text-sm;
-}
-</style>

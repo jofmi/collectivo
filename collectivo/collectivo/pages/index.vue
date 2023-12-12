@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  middleware: ["auth"],
+});
+
 setPageTitle("Dashboard");
 import { parse } from "marked";
 

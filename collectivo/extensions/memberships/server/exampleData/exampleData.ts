@@ -3,7 +3,7 @@ import { createItem, deleteItems, readUsers } from "@directus/sdk";
 export default async function createExampleData() {
   console.log("Creating example data for memberships");
 
-  const directus = await useDirectus();
+  const directus = await useDirectusAdmin();
 
   // Clean up old data
   await directus.request(deleteItems("memberships", { limit: 1000 }));

@@ -9,7 +9,18 @@ defineProps({
 
 <template>
   <div v-if="!item.filter || item.filter(item)">
-    <div v-if="item.external">
+    <!-- IF item.to is function -->
+    <div v-if="item.click">
+      <a class="item cursor-pointer" @click="item.click()">
+        <span class="item__icon">
+          <slot name="icon">
+            <UIcon v-if="item.icon" :name="item.icon" class="link-icon" />
+          </slot>
+        </span>
+        <span class="item__title">{{ item.label }}</span>
+      </a>
+    </div>
+    <div v-else-if="item.external">
       <a :href="item.to" :target="item.target ?? '_blank'" class="item">
         <span class="item__icon">
           <slot name="icon">

@@ -69,7 +69,13 @@ const tsRules = {
 
   // Allow console log statements in development
   //   "no-console": process.env.NODE_ENV !== "development" ? "error" : "off",
-  "no-console": process.env.NODE_ENV !== "development" ? "warn" : "warn",
+  // "no-console": process.env.NODE_ENV !== "development" ? "warn" : "warn",
+  "no-console": [
+    "warn",
+    {
+      allow: ["info", "warn", "error"],
+    },
+  ],
 };
 
 const vueRules = {

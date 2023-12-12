@@ -178,47 +178,7 @@ export default defineAppConfig({
         background: "white",
       },
     },
-    // Select config added by Rabiul
-    selectMenu: {
-      container: "z-20 group font-medium",
-      width: "w-full",
-      height: "max-h-60",
-      base: "relative focus:outline-none overflow-y-auto scroll-py-1",
-      background: "bg-white dark:bg-gray-800",
-      shadow: "shadow-lg",
-      rounded: "rounded-lg",
-      padding: "p-[18px] space-y-[13px]",
-      ring: "ring-1 ring-cv-purple-light dark:ring-cv-purple-light",
-      input: `block w-[calc(100%+0.5rem)] leading-4 text-sm 
-          px-[18px] py-4 text-cv-gray dark:text-gray-200 bg-white dark:bg-gray-800 border-0 
-          border-b border-gray-200 dark:border-gray-700 sticky -top-1 -mt-1 
-          mb-1 -mx-1 z-10 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none`,
-      option: {
-        base: "cursor-pointer select-none relative flex items-center justify-between gap-1",
-        rounded: "rounded-md",
-        padding: "",
-        size: "text-sm",
-        color: "text-cv-gray dark:text-white",
-        container: "flex items-center gap-[13px] min-w-0",
-        active: "text-cv-purple",
-        inactive: "",
-        selected: "pe-0",
-        disabled: "cursor-not-allowed opacity-50",
-        empty: "text-sm text-cv-gray font-urbanist dark:text-gray-500",
-      },
-      transition: {
-        leaveActiveClass: "transition ease-in duration-100",
-        leaveFromClass: "opacity-100",
-        leaveToClass: "opacity-0",
-      },
-      popper: {
-        placement: "bottom-end",
-        offsetDistance: 5,
-      },
-      default: {
-        selectedIcon: "",
-      },
-    },
+
     // Tabs config added by Rabiul
     tabs: {
       wrapper: "relative space-y-2 border-b border-cv-purple-light",
@@ -325,6 +285,8 @@ export default defineAppConfig({
       },
     },
 
+    // Forms ---------------------------------------------------------------------------------
+
     input: {
       wrapper: "relative",
       base: "relative block w-full disabled:cursor-default disabled:text-cv-gray tracking-[0.28px] font-medium leading-4",
@@ -391,7 +353,7 @@ export default defineAppConfig({
       color: "text-cv-purple",
       rounded: "rounded-[5px]",
       border: "border border-cv-gray",
-      label: "text-cv-primary -ms-1 font-medium",
+      label: "text-cv-primary text-sm -ms-1 font-medium",
     },
     radioGroup: {
       wrapper: "flex items-start",
@@ -403,6 +365,47 @@ export default defineAppConfig({
       label: "text-sm font-medium text-gray-700 dark:text-gray-200",
       default: {
         color: "primary",
+      },
+    },
+    // Select config
+    selectMenu: {
+      container: "z-20 group font-medium",
+      width: "w-full",
+      height: "max-h-60",
+      base: "relative focus:outline-none overflow-y-auto scroll-py-1",
+      background: "bg-white dark:bg-gray-800",
+      shadow: "shadow-lg",
+      rounded: "rounded-lg",
+      padding: "p-[18px] space-y-[13px]",
+      ring: "ring-1 ring-cv-purple-light dark:ring-cv-purple-light",
+      input: `block w-[calc(100%+0.5rem)] leading-4 text-sm 
+          px-[18px] py-4 text-cv-gray dark:text-gray-200 bg-white dark:bg-gray-800 border-0 
+          border-b border-gray-200 dark:border-gray-700 sticky -top-1 -mt-1 
+          mb-1 -mx-1 z-10 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none`,
+      option: {
+        base: "cursor-pointer select-none relative flex items-center justify-between gap-1",
+        rounded: "rounded-md",
+        padding: "",
+        size: "text-sm",
+        color: "text-cv-gray dark:text-white",
+        container: "flex items-center gap-[13px] min-w-0",
+        active: "text-cv-purple",
+        inactive: "",
+        selected: "pe-0",
+        disabled: "cursor-not-allowed opacity-50",
+        empty: "text-sm text-cv-gray font-urbanist dark:text-gray-500",
+      },
+      transition: {
+        leaveActiveClass: "transition ease-in duration-100",
+        leaveFromClass: "opacity-100",
+        leaveToClass: "opacity-0",
+      },
+      popper: {
+        placement: "bottom-end",
+        offsetDistance: 5,
+      },
+      default: {
+        selectedIcon: "",
       },
     },
   },

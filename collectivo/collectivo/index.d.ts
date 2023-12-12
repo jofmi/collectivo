@@ -108,7 +108,7 @@ declare global {
 
   interface FormInputChoice {
     key: string;
-    value: string | number | boolean;
+    value: string;
   }
 
   interface FormFieldBase {
@@ -125,7 +125,7 @@ declare global {
 
   interface FormValidator {
     type: "min" | "max" | "email" | "url" | "regex";
-    value: string | number | RegExp;
+    value?: string | number | RegExp;
   }
 
   type FormInput = {
@@ -140,7 +140,7 @@ declare global {
 
   type FormInputType =
     | {
-        type: "select";
+        type: "select" | "select-radio" | "multiselect-checkbox";
         choices?: FormInputChoice[];
       }
     | {
@@ -148,7 +148,7 @@ declare global {
         placeholder?: string;
       }
     | {
-        type: "checkbox";
+        type: "checkbox" | "toggle";
       };
 
   type FormFieldLayout =

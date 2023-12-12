@@ -133,6 +133,10 @@ function valNumber(validators: FormValidator[] | undefined) {
 for (const [key, input] of Object.entries(form.fields)) {
   if (input.type === "text" || input.type === "password") {
     addInputToSchema(key, input, valString(input.validators));
+  } else if (input.type === "email") {
+    input.validators = input.validators ?? [];
+    input.validators.push({ type: "email" });
+    addInputToSchema(key, input, valString(input.validators));
   } else if (input.type === "number") {
     addInputToSchema(key, input, valNumber(input.validators));
   } else if (input.type === "select") {
@@ -201,11 +205,15 @@ async function onError(event: FormErrorEvent) {
               <UInput v-model="state[key]" />
             </UFormGroup>
             <UFormGroup
-              v-else-if="input.type === 'number'"
+              v-else-if="input.type === 'email'"
               :label="input.label"
               :name="key"
             >
-              <UInput v-model="state[key]" type="number" />
+              <UInput v-model="state[key]">
+                <template #trailing>
+                  <UIcon name="i-mi-mail" />
+                </template>
+              </UInput>
             </UFormGroup>
             <UFormGroup
               v-else-if="input.type === 'password'"
@@ -215,19 +223,42 @@ async function onError(event: FormErrorEvent) {
               <UInput v-model="state[key]" type="password" />
             </UFormGroup>
             <UFormGroup
-              v-else-if="input.type === 'select'"
+              v-else-if="input.type === 'number'"
+              :label="input.label"
+              :name="key"
+            >
+              <UInput v-model="state[key]" type="number" />
+            </UFormGroup>
+            <UFormGroup
+              v-else-if="input.type === 'select-radio'"
               :label="input.label"
               :name="key"
             >
               <URadioGroup v-model="state[key]" :options="input.choices" />
             </UFormGroup>
-
+            <UFormGroup
+              v-else-if="input.type === 'multiselect-checkbox'"
+              :label="input.label"
+              :name="key"
+            >
+              <CollectivoFormsCheckboxGroup
+                v-model="state[key]"
+                :choices="input.choices"
+              />
+            </UFormGroup>
             <UFormGroup
               v-else-if="input.type === 'date'"
               :label="input.label"
               :name="key"
             >
               <CollectivoFormsDate v-model="state[key]"></CollectivoFormsDate>
+            </UFormGroup>
+            <UFormGroup
+              v-else-if="input.type === 'toggle'"
+              :label="input.label"
+              :name="key"
+            >
+              <UToggle v-model="state[key]" />
             </UFormGroup>
           </div>
         </template>

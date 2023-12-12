@@ -94,6 +94,16 @@ export default defineNuxtPlugin(() => {
         required: true,
         label: "Text",
       },
+      email: {
+        type: "email",
+        required: true,
+        label: "Email",
+      },
+      password: {
+        type: "password",
+        required: true,
+        label: "Password",
+      },
       number: {
         type: "number",
         label: "Number",
@@ -109,8 +119,26 @@ export default defineNuxtPlugin(() => {
         ],
       },
       select: {
-        type: "select",
+        type: "select-radio",
         label: "Select",
+        choices: [
+          {
+            key: "1",
+            value: "1",
+          },
+          {
+            key: "2",
+            value: "2",
+          },
+          {
+            key: "3",
+            value: "3",
+          },
+        ],
+      },
+      multiselect: {
+        type: "multiselect-checkbox",
+        label: "Multiselect",
         choices: [
           {
             key: "1",

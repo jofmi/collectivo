@@ -66,7 +66,7 @@ let schema = object();
 function addInputToSchema(
   key: string,
   input: FormInput,
-  schema_field: YupSchema,
+  schema_field: YupSchema
 ) {
   if (input.required) {
     schema_field = schema_field.required("This field is required");
@@ -84,7 +84,7 @@ function addInputToSchema(
         } else {
           return schema_field_hidden.strip();
         }
-      },
+      }
     );
 
     schema = schema.shape({ [key]: schema_field_with_conditions });
@@ -192,6 +192,14 @@ async function onError(event: FormErrorEvent) {
           <div v-else-if="input.type === 'description'" class="element-full">
             {{ input.content }}
           </div>
+          <component
+            :is="input.component"
+            v-else-if="input.type === 'custom'"
+            :class="input.width ? `element-${input.width}` : 'element-full'"
+            :input="input"
+            :state="state"
+          >
+          </component>
           <div v-else-if="input.type === 'clear'" class="basis-full"></div>
           <div
             v-else
@@ -267,6 +275,13 @@ async function onError(event: FormErrorEvent) {
               :name="key"
             >
               <UToggle v-model="state[key]" />
+            </UFormGroup>
+            <UFormGroup
+              v-else-if="input.type === 'custom-input'"
+              :label="input.label"
+              :name="key"
+            >
+              <component :is="input.component" v-model="state[key]" />
             </UFormGroup>
           </div>
         </template>

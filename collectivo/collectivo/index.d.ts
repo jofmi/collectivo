@@ -150,6 +150,10 @@ declare global {
       }
     | {
         type: "checkbox" | "toggle";
+      }
+    | {
+        type: "custom-input";
+        component: any;
       };
 
   type FormFieldLayout =
@@ -159,6 +163,10 @@ declare global {
       }
     | {
         type: "clear";
+      }
+    | {
+        type: "custom";
+        component: any;
       };
 
   // Wrappers

@@ -1,3 +1,5 @@
+import CustomVue from "~/components/collectivo/forms/Custom.vue";
+
 export default defineNuxtPlugin(() => {
   const menu = useSidebarMenu();
   const forms = useCollectivoForms();
@@ -186,6 +188,10 @@ export default defineNuxtPlugin(() => {
             value: 10,
           },
         ],
+      },
+      custom: {
+        type: "custom",
+        component: CustomVue,
       },
     },
   };

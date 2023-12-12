@@ -4,10 +4,6 @@ import "@vuepic/vue-datepicker/dist/main.css";
 
 defineProps({
   modelValue: [String],
-  type: String,
-  label: String,
-  disabled: Boolean,
-  placeholder: String,
 });
 
 defineEmits(["update:modelValue"]);

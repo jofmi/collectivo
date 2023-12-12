@@ -29,7 +29,7 @@ async function saveProfile() {
 
     toast.add({
       title: t("Profile updated"),
-      icon: "i-heroicons-check-circle",
+      icon: "i-mi-circle-check",
       timeout: 10000,
     });
   } catch (e) {
@@ -37,7 +37,7 @@ async function saveProfile() {
 
     toast.add({
       title: t("There was an error"),
-      icon: "i-heroicons-warning-circle",
+      icon: "i-mi-warning",
       color: "red",
       timeout: 0,
     });

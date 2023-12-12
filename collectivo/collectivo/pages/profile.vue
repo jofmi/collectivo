@@ -9,7 +9,7 @@ const { t } = useI18n();
 const profile = useUser();
 const runtimeConfig = useRuntimeConfig();
 const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protocol/openid-connect/logout`;
-const temp_data = ref<CollectivoProfile | null>(null);
+const state = ref<CollectivoProfile | null>(null);
 
 // Sort profile.inputs by order
 profile.value.inputs.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
@@ -17,7 +17,7 @@ profile.value.inputs.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 // Get form data
 async function getProfile() {
   await profile.value.load();
-  temp_data.value = { ...profile.value.data } as CollectivoProfile;
+  state.value = { ...profile.value.data } as CollectivoProfile;
 }
 
 getProfile();
@@ -25,7 +25,7 @@ getProfile();
 // Submit form data
 async function saveProfile() {
   try {
-    await profile.value.save(temp_data.value!);
+    await profile.value.save(state.value!);
 
     toast.add({
       title: t("Profile updated"),
@@ -53,13 +53,13 @@ async function saveProfile() {
     <div v-if="profile.error">
       {{ profile.error }}
     </div>
-    <div v-else-if="temp_data">
+    <div v-else-if="state">
       <div v-for="field in profile.inputs" :key="field.key" class="mb-6">
-        <CollectivoFormsInput
-          v-model="temp_data[field.key]"
-          :label="field.label"
-          :disabled="field.disabled ?? false"
-        />
+        <UFormGroup :label="field.label" :name="field.key">
+          <UInput
+            v-model="state[field.key]"
+            :disabled="field.disabled ?? false"
+        /></UFormGroup>
       </div>
       <UButton
         class="btn"

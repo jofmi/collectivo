@@ -66,7 +66,7 @@ let schema = object();
 function addInputToSchema(
   key: string,
   input: FormInput,
-  schema_field: YupSchema,
+  schema_field: YupSchema
 ) {
   if (input.required) {
     schema_field = schema_field.required("This field is required");
@@ -84,7 +84,7 @@ function addInputToSchema(
         } else {
           return schema_field_hidden.strip();
         }
-      },
+      }
     );
 
     schema = schema.shape({ [key]: schema_field_with_conditions });
@@ -209,9 +209,8 @@ async function onError(event: FormErrorEvent) {
               v-if="input.type === 'text'"
               :label="input.label"
               :name="key"
-              :placeholder="input.placeholder"
             >
-              <UInput v-model="state[key]">
+              <UInput v-model="state[key]" :placeholder="input.placeholder">
                 <template v-if="input.icon" #trailing>
                   <UIcon :name="input.icon" />
                 </template>
@@ -221,9 +220,8 @@ async function onError(event: FormErrorEvent) {
               v-else-if="input.type === 'email'"
               :label="input.label"
               :name="key"
-              :placeholder="input.placeholder"
             >
-              <UInput v-model="state[key]">
+              <UInput v-model="state[key]" :placeholder="input.placeholder">
                 <template v-if="input.icon" #trailing>
                   <UIcon :name="input.icon" />
                 </template>
@@ -233,9 +231,12 @@ async function onError(event: FormErrorEvent) {
               v-else-if="input.type === 'password'"
               :label="input.label"
               :name="key"
-              :placeholder="input.placeholder"
             >
-              <UInput v-model="state[key]" type="password">
+              <UInput
+                v-model="state[key]"
+                type="password"
+                :placeholder="input.placeholder"
+              >
                 <template v-if="input.icon" #trailing>
                   <UIcon :name="input.icon" />
                 </template>

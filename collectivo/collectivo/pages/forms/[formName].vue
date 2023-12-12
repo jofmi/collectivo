@@ -4,10 +4,9 @@ import {
   object,
   string,
   number,
-  array,
   boolean,
-  type AnyObject,
   type InferType,
+  type Schema as YupSchema,
 } from "yup";
 import type { FormErrorEvent, FormSubmitEvent } from "#ui/types";
 
@@ -30,9 +29,7 @@ interface Form {
   // TODO: Add conditions, e.g. user has or has not policy XY
 }
 
-type FormField =
-  | (FormFieldBase & FormFieldLayout)
-  | (FormFieldBase & FormInput & FormInputType);
+type FormField = (FormFieldBase & FormFieldLayout) | FormInput;
 
 interface FormInputChoice {
   key: string;
@@ -42,7 +39,7 @@ interface FormInputChoice {
 interface FormFieldBase {
   width?: "full" | "half" | "third" | "quarter" | "fifth";
   visible?: Ref<boolean>;
-  conditions_visible?: FormCondition[];
+  conditions?: FormCondition[];
 }
 
 interface FormCondition {
@@ -56,14 +53,15 @@ interface FormValidator {
   value: string | number | RegExp;
 }
 
-interface FormInput {
-  label?: string;
+type FormInput = {
+  label: string;
   default?: boolean;
   required?: boolean;
   disabled?: boolean;
   validators?: FormValidator[];
   description?: string;
-}
+} & FormFieldBase &
+  FormInputType;
 
 type FormInputType =
   | {
@@ -104,18 +102,9 @@ const form: Ref<Form> = ref({
     },
     text: {
       type: "text",
+      required: true,
       label: "Text",
       key: "text",
-      validators: [
-        {
-          type: "min",
-          value: 5,
-        },
-        {
-          type: "max",
-          value: 10,
-        },
-      ],
     },
     number: {
       type: "number",
@@ -156,10 +145,21 @@ const form: Ref<Form> = ref({
     conditional_text: {
       type: "text",
       label: "Conditional Text",
-      conditions_visible: [
+      required: true,
+      conditions: [
         {
           key: "text",
-          value: "1",
+          value: "t",
+        },
+      ],
+      validators: [
+        {
+          type: "min",
+          value: 5,
+        },
+        {
+          type: "max",
+          value: 10,
         },
       ],
     },
@@ -188,59 +188,95 @@ function checkConditions(conditions: FormCondition[] | undefined) {
 
 // Compute visibility of fields
 for (const [_, field] of Object.entries(form.value.fields)) {
-  if (field.conditions_visible) {
+  if (field.conditions) {
     field.visible = computed(() => {
-      return checkConditions(field.conditions_visible);
+      return checkConditions(field.conditions);
     });
   }
 }
 
 const state: { [key: string]: any } = reactive({});
-const schema_raw: AnyObject = {};
+let schema = object();
 
-// Define state and schema from form object
-for (const [key, input] of Object.entries(form.value.fields)) {
-  // Typeguard to include only FormInput
-  if (!("required" in input)) {
-    continue;
-  }
-
-  let schema_field;
-
-  if (input.type === "text" || input.type === "password") {
-    schema_field = string();
-
-    for (const validator of input.validators ?? []) {
-      if (validator.type === "min") {
-        schema_field = schema_field.min(validator.value as number);
-      } else if (validator.type === "max") {
-        schema_field = schema_field.max(validator.value as number);
-      } else if (validator.type === "email") {
-        schema_field = schema_field.email();
-      } else if (validator.type === "url") {
-        schema_field = schema_field.url();
-      } else if (validator.type === "regex") {
-        schema_field = schema_field.matches(validator.value as RegExp);
-      }
-    }
-
-    schema_raw[key] = schema_field;
-  } else if (input.type === "number") {
-    schema_field = number();
-  } else if (input.type === "select") {
-    schema_field = string();
-  } else if (input.type === "checkbox") {
-    schema_field = boolean();
-  }
-
+function addInputToSchema(
+  key: string,
+  input: FormInput,
+  schema_field: YupSchema
+) {
   if (input.required) {
-    schema_field!.required("This field is required");
+    schema_field = schema_field.required("This field is required");
+  }
+
+  // Create a conditional schema field
+  // If the condition is met, use the original schema field
+  // If the condition is not met, use a hidden schema field
+  if (input.conditions && input.conditions.length > 0) {
+    const schema_field_with_conditions = object().when(
+      input.conditions.map((c) => c.key),
+      (_, schema_field_hidden) => {
+        if (checkConditions(input.conditions)) {
+          return schema_field;
+        } else {
+          return schema_field_hidden.strip();
+        }
+      }
+    );
+
+    schema = schema.shape({ [key]: schema_field_with_conditions });
+  } else {
+    schema = schema.shape({ [key]: schema_field });
   }
 
   state[key] = input.default ?? undefined;
 }
 
-const schema = object(schema_raw);
+function valString(validators: FormValidator[] | undefined) {
+  let schema = string();
+
+  for (const validator of validators ?? []) {
+    if (validator.type === "min") {
+      schema = schema.min(validator.value as number);
+    } else if (validator.type === "max") {
+      schema = schema.max(validator.value as number);
+    } else if (validator.type === "email") {
+      schema = schema.email();
+    } else if (validator.type === "url") {
+      schema = schema.url();
+    } else if (validator.type === "regex") {
+      schema = schema.matches(validator.value as RegExp);
+    }
+  }
+
+  return schema;
+}
+
+function valNumber(validators: FormValidator[] | undefined) {
+  let schema = number();
+
+  for (const validator of validators ?? []) {
+    if (validator.type === "min") {
+      schema = schema.min(validator.value as number);
+    } else if (validator.type === "max") {
+      schema = schema.max(validator.value as number);
+    }
+  }
+
+  return schema;
+}
+
+// Define state and schema from form object
+for (const [key, input] of Object.entries(form.value.fields)) {
+  if (input.type === "text" || input.type === "password") {
+    addInputToSchema(key, input, valString(input.validators));
+  } else if (input.type === "number") {
+    addInputToSchema(key, input, valNumber(input.validators));
+  } else if (input.type === "select") {
+    addInputToSchema(key, input, valString(input.validators));
+  } else if (input.type === "checkbox") {
+    addInputToSchema(key, input, boolean());
+  }
+}
+
 type Schema = InferType<typeof schema>;
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {

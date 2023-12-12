@@ -129,6 +129,10 @@ export default defineNuxtPlugin(() => {
       clear: {
         type: "clear",
       },
+      date: {
+        type: "date",
+        label: "Date",
+      },
       conditional_text: {
         type: "text",
         label: "Conditional Text",

@@ -221,6 +221,14 @@ async function onError(event: FormErrorEvent) {
             >
               <URadioGroup :v-model="state[key]" :options="input.choices" />
             </UFormGroup>
+
+            <UFormGroup
+              v-else-if="input.type === 'date'"
+              :label="input.label"
+              :name="key"
+            >
+              <CollectivoFormsDate v-model="state[key]"></CollectivoFormsDate>
+            </UFormGroup>
           </div>
         </template>
       </template>
@@ -240,6 +248,7 @@ async function onError(event: FormErrorEvent) {
       </div>
     </UForm>
   </CollectivoContainer>
+  {{ state }}
 </template>
 
 <style lang="scss" scoped>

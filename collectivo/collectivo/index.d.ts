@@ -144,7 +144,7 @@ declare global {
         choices?: FormInputChoice[];
       }
     | {
-        type: "text" | "number" | "email" | "password" | "textarea";
+        type: "text" | "number" | "email" | "password" | "textarea" | "date";
         placeholder?: string;
       }
     | {

@@ -12,7 +12,7 @@ export default defineNuxtPlugin({
     // Create directus REST client or redirect to offline error page
     try {
       directus = createDirectus<CollectivoSchema>(
-        runtimeConfig.public.directusUrl as string,
+        runtimeConfig.public.directusUrl as string
       )
         .with(authentication("cookie", { credentials: "include" }))
         .with(rest({ credentials: "include" }));
@@ -26,7 +26,7 @@ export default defineNuxtPlugin({
       user.value.isAuthenticated = true;
     } catch (e: any) {
       // If error is not auth-related, throw error
-      if (![400, 401, 403].includes(e.response.status)) {
+      if (!("response" in e) || ![400, 401, 403].includes(e.response.status)) {
         throw new Error("Cannot reach backend server (directus)");
       }
     }

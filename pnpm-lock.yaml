@@ -87,6 +87,9 @@ importers:
       '@popperjs/core':
         specifier: ^2.11.8
         version: 2.11.8
+      '@vueform/nuxt':
+        specifier: ^1.4.0
+        version: 1.4.0
       '@vuepic/vue-datepicker':
         specifier: ^7.2.2
         version: 7.3.0(vue@3.3.6)
@@ -105,9 +108,6 @@ importers:
       yup:
         specifier: ^1.3.2
         version: 1.3.2
-      zod:
-        specifier: ^3.22.4
-        version: 3.22.4
     devDependencies:
       '@iconify/vue':
         specifier: ^4.1.1
@@ -157,6 +157,9 @@ importers:
 
   collectivo/extensions/memberships:
     dependencies:
+      '@collectivo/collectivo':
+        specifier: workspace:*
+        version: link:../../collectivo
       '@directus/sdk':
         specifier: ^13.0.1
         version: 13.0.1
@@ -254,6 +257,9 @@ importers:
 
   collectivo/extensions/mila:
     dependencies:
+      '@collectivo/collectivo':
+        specifier: workspace:*
+        version: link:../../collectivo
       '@directus/sdk':
         specifier: ^13.0.1
         version: 13.0.1
@@ -3602,6 +3608,50 @@ packages:
   /@vue/shared@3.3.6:
     resolution: {integrity: sha512-Xno5pEqg8SVhomD0kTSmfh30ZEmV/+jZtyh39q6QflrjdJCXah5lrnOLi9KB6a5k5aAHXMXjoMnxlzUkCNfWLQ==}
 
+  /@vueform/multiselect@2.6.6:
+    resolution: {integrity: sha512-JDWesVRmyGz9HmHp2Ooy1cb8XgKohiztwMDtjm8c0/Th+7wEZENZuYa0iY5CTvaJNANl3LVqh9BNnCc/YlM/Bg==}
+    dev: false
+
+  /@vueform/nuxt@1.4.0:
+    resolution: {integrity: sha512-oFvvfp1KMFR3DprS2A7aHjc0LNwga4Y4IeRKLOLprENOijUPMASOHbS6Ev2+SWAn7OO2xLHSKlr1FhtPURXctg==}
+    dependencies:
+      '@nuxt/kit': 3.8.2
+      '@vueform/vueform': 1.6.5
+      pathe: 1.1.1
+    transitivePeerDependencies:
+      - debug
+      - rollup
+      - supports-color
+    dev: false
+
+  /@vueform/slider@2.1.10:
+    resolution: {integrity: sha512-L2G3Ju51Yq6yWF2wzYYsicUUaH56kL1QKGVtimUVHT1K1ADcRT94xVyIeJpS0klliVEeF6iMZFbdXtHq8AsDHw==}
+    dev: false
+
+  /@vueform/toggle@2.1.4:
+    resolution: {integrity: sha512-tEITFf5wlqIWoCYZXJdoXvCnrc97weOu2csR/BEoROVvFu1zRsoK0wY1pJG7BR+g5zpGJneGSdLhMUsbx8y1yw==}
+    dev: false
+
+  /@vueform/vueform@1.6.5:
+    resolution: {integrity: sha512-EqcBcZtPsVBisQ59I9V+U4pgJsh+LoYQt5R4gBsQtLNhqrMmXHBjGqrHBIdjaFMlitIfp+sWefggVhR12PDE7Q==}
+    dependencies:
+      '@popperjs/core': 2.11.8
+      '@vueform/multiselect': 2.6.6
+      '@vueform/slider': 2.1.10
+      '@vueform/toggle': 2.1.4
+      axios: 1.6.2
+      color: 4.2.3
+      lodash: 4.17.21
+      mini-svg-data-uri: 1.4.4
+      moment: 2.29.4
+      nouislider: 15.7.1
+      sass: 1.69.5
+      trix: 1.3.1
+      wnumb: 1.2.0
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
   /@vuepic/vue-datepicker@7.3.0(vue@3.3.6):
     resolution: {integrity: sha512-bPMMEShIcOJaoGVnR7QZO4CzNLVDS08XPZKdLNMRDTdHv6cbAtgBCCItTtrr62bkp2kkw3m63ED+duhd/9PoYA==}
     engines: {node: '>=18.12.0'}
@@ -4032,6 +4082,10 @@ packages:
   /async@3.2.4:
     resolution: {integrity: sha512-iAB+JbDEGXhyIUavoDl9WP/Jj106Kz9DEn1DPgYw5ruDn0e3Wgi3sKFm55sASdGBNOQB8F59d9qQ7deqrHA8wQ==}
 
+  /asynckit@0.4.0:
+    resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
+    dev: false
+
   /at-least-node@1.0.0:
     resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
     engines: {node: '>= 4.0.0'}
@@ -4081,6 +4135,16 @@ packages:
       picocolors: 1.0.0
       postcss: 8.4.31
       postcss-value-parser: 4.2.0
+
+  /axios@1.6.2:
+    resolution: {integrity: sha512-7i24Ri4pmDRfJTR7LDBhsOTtcm+9kjX5WiY1X3wIisx6G9So3pfMkEiU7emUBe46oceVImccTEM3k6C5dbVW8A==}
+    dependencies:
+      follow-redirects: 1.15.3
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+    dev: false
 
   /b4a@1.6.4:
     resolution: {integrity: sha512-fpWrvyVHEKyeEvbKZTVOeZF3VSKKWtJxFIxX/jaVPf+cLbGUSitjb49pHLqPV2BUNNZ0LcoeEGfE/YCpyDYHIw==}
@@ -4434,6 +4498,14 @@ packages:
       color-string: 1.9.1
     dev: false
 
+  /color@4.2.3:
+    resolution: {integrity: sha512-1rXeuUUiGGrykh+CeBdu5Ie7OJwinCgQY0bc7GCRxy5xVHy+moaqkpL/jqQq0MtQOeYcrqEz4abc5f0KtU7W4A==}
+    engines: {node: '>=12.5.0'}
+    dependencies:
+      color-convert: 2.0.1
+      color-string: 1.9.1
+    dev: false
+
   /colord@2.9.3:
     resolution: {integrity: sha512-jeC1axXpnb0/2nn/Y1LPuLdgXBLH7aDcHu4KEKfqw3CUhX7ZpfBSlPKyqXE6btIgEzfWtrX3/tyBCaCvXvMkOw==}
 
@@ -4445,6 +4517,13 @@ packages:
     dependencies:
       color: 3.2.1
       text-hex: 1.0.0
+    dev: false
+
+  /combined-stream@1.0.8:
+    resolution: {integrity: sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==}
+    engines: {node: '>= 0.8'}
+    dependencies:
+      delayed-stream: 1.0.0
     dev: false
 
   /commander@2.20.3:
@@ -4800,6 +4879,11 @@ packages:
 
   /defu@6.1.3:
     resolution: {integrity: sha512-Vy2wmG3NTkmHNg/kzpuvHhkqeIx3ODWqasgCRbKtbXEN0G+HpEEv9BtJLp7ZG1CZloFaC41Ah3ZFbq7aqCqMeQ==}
+
+  /delayed-stream@1.0.0:
+    resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
+    engines: {node: '>=0.4.0'}
+    dev: false
 
   /delegates@1.0.0:
     resolution: {integrity: sha512-bd2L678uiWATM6m5Z1VzNCErI3jiGzt6HGY8OVICs40JQq/HALfbyNJmp0UDakEY4pMMaN0Ly5om/B1VI/+xfQ==}
@@ -5375,6 +5459,16 @@ packages:
     resolution: {integrity: sha512-GRnmB5gPyJpAhTQdSZTSp9uaPSvl09KoYcMQtsB9rQoOmzs9dH6ffeccH+Z+cv6P68Hu5bC6JjRh4Ah/mHSNRw==}
     dev: false
 
+  /follow-redirects@1.15.3:
+    resolution: {integrity: sha512-1VzOtuEM8pC9SFU1E+8KfTjZyMztRsgEfwQl44z8A25uy13jSzTj6dyK2Df52iV0vgHCfBwLhDWevLn95w5v6Q==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dev: false
+
   /foreground-child@3.1.1:
     resolution: {integrity: sha512-TMKDUnIte6bfb5nWv7V/caI169OHgvwjb7V4WkeUvbQQdjr5rWKqHFiKWb/fcOwB+CzBT+qbWjvj+DVwRskpIg==}
     engines: {node: '>=14'}
@@ -5382,6 +5476,15 @@ packages:
       cross-spawn: 7.0.3
       signal-exit: 4.1.0
     dev: true
+
+  /form-data@4.0.0:
+    resolution: {integrity: sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==}
+    engines: {node: '>= 6'}
+    dependencies:
+      asynckit: 0.4.0
+      combined-stream: 1.0.8
+      mime-types: 2.1.35
+    dev: false
 
   /formdata-polyfill@4.0.10:
     resolution: {integrity: sha512-buewHzMvYL29jdeQTVILecSaZKnt/RJWjoZCF5OW60Z67/GmSLBkOFM7qh1PI3zFNtJbaZL5eQu1vLfazOwj4g==}
@@ -6801,6 +6904,10 @@ packages:
       pkg-types: 1.0.3
       ufo: 1.3.0
 
+  /moment@2.29.4:
+    resolution: {integrity: sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==}
+    dev: false
+
   /mri@1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
     engines: {node: '>=4'}
@@ -7123,6 +7230,10 @@ packages:
   /normalize-range@0.1.2:
     resolution: {integrity: sha512-bdok/XvKII3nUpklnV6P2hxtMNrCboOjAcyBuQnWEhO665FwrSNRxU+AqpsyvO6LgGYPspN+lu5CLtw4jPRKNA==}
     engines: {node: '>=0.10.0'}
+
+  /nouislider@15.7.1:
+    resolution: {integrity: sha512-5N7C1ru/i8y3dg9+Z6ilj6+m1EfabvOoaRa7ztpxBSKKRZso4vA52DGSbBJjw5XLtFr/LZ9SgGAXqyVtlVHO5w==}
+    dev: false
 
   /npm-bundled@3.0.0:
     resolution: {integrity: sha512-Vq0eyEQy+elFpzsKjMss9kxqb9tG3YHg4dsyWuUENuzvSUWe1TCnW/vV9FkhvBk/brEDoDiVd+M1Btosa6ImdQ==}
@@ -8227,6 +8338,10 @@ packages:
   /protocols@2.0.1:
     resolution: {integrity: sha512-/XJ368cyBJ7fzLMwLKv1e4vLxOju2MNAIokcr7meSaNcVbWz/CPcW22cP04mwxOErdA5mwjA8Q6w/cdAQxVn7Q==}
 
+  /proxy-from-env@1.1.0:
+    resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
+    dev: false
+
   /prr@1.0.1:
     resolution: {integrity: sha512-yPw4Sng1gWghHQWj0B3ZggWUm4qVbPwPFcRG8KyxiU7J2OHFSoEHKS+EZ3fv5l1t9CyCiop6l/ZYeWbrgoQejw==}
 
@@ -9111,6 +9226,10 @@ packages:
   /triple-beam@1.4.1:
     resolution: {integrity: sha512-aZbgViZrg1QNcG+LULa7nhZpJTZSLm/mXnHXnbAbjmN5aSa0y7V+wvv6+4WaBtpISJzThKy+PIPxc1Nq1EJ9mg==}
     engines: {node: '>= 14.0.0'}
+    dev: false
+
+  /trix@1.3.1:
+    resolution: {integrity: sha512-BbH6mb6gk+AV4f2as38mP6Ucc1LE3OD6XxkZnAgPIduWXYtvg2mI3cZhIZSLqmMh9OITEpOBCCk88IVmyjU7bA==}
     dev: false
 
   /ts-api-utils@1.0.3(typescript@5.3.2):
@@ -10103,6 +10222,10 @@ packages:
       winston-transport: 4.5.0
     dev: false
 
+  /wnumb@1.2.0:
+    resolution: {integrity: sha512-eYut5K/dW7usfk/Mwm6nxBNoTPp/uP7PlXld+hhg7lDtHLdHFnNclywGYM9BRC7Ohd4JhwuHg+vmOUGfd3NhVA==}
+    dev: false
+
   /wrap-ansi@7.0.0:
     resolution: {integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==}
     engines: {node: '>=10'}
@@ -10222,7 +10345,3 @@ packages:
       archiver-utils: 4.0.1
       compress-commons: 5.0.1
       readable-stream: 3.6.2
-
-  /zod@3.22.4:
-    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
-    dev: false

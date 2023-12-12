@@ -26,7 +26,7 @@ export default defineNuxtConfig({
     preference: "light",
   },
   hooks: {},
-  modules: ["@nuxt/ui", "@nuxtjs/i18n", "vue3-carousel-nuxt"],
+  modules: ["@nuxt/ui", "@nuxtjs/i18n", "vue3-carousel-nuxt"], // "@vueform/nuxt",
   // https://v8.i18n.nuxtjs.org/guide/layers
   i18n: {
     lazy: false, // TODO: Lazy loading does not work with current switch

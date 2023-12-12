@@ -1,4 +1,7 @@
-export function parseBoolean(value: boolean | string, defaultValue?: boolean) {
+export function parseBoolean(
+  value: boolean | string,
+  defaultValue: boolean = false
+) {
   if (value === "true" || value === true) {
     return true;
   }
@@ -7,10 +10,7 @@ export function parseBoolean(value: boolean | string, defaultValue?: boolean) {
     return false;
   }
 
-  if (
-    !defaultValue &&
-    (value === "" || value === undefined || value === null)
-  ) {
+  if (value === "" || value === undefined || value === null) {
     return defaultValue;
   }
 

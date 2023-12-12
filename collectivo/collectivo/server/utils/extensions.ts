@@ -1,5 +1,5 @@
 // Register extensions into nuxt memory and get registered extensions
-import { CollectivoMigration } from "./migrations";
+import { ExtensionSchema } from "./schemas";
 import { validateStrict, compareVersions } from "compare-versions";
 
 // This object defines an extension
@@ -7,8 +7,8 @@ export interface ExtensionConfig {
   name: string;
   version: string;
   description?: string;
-  migrations?: CollectivoMigration[];
-  exampleDataFn?: () => Promise<void>;
+  schemas?: ExtensionSchema[];
+  examples?: () => Promise<void>; // Always relates to latest schema
 }
 
 // Store for loaded extensions
@@ -64,7 +64,7 @@ function loadExtension(ext: ExtensionConfig) {
   // Check that extension name does not contain an underscore
   if (ext.name.includes("_")) {
     throw new Error(
-      `Extension name '${ext.name}' should not contain underscores`,
+      `Extension name '${ext.name}' should not contain underscores`
     );
   }
 
@@ -83,30 +83,28 @@ function loadExtension(ext: ExtensionConfig) {
     throw new Error(`Extension setup already run: ${ext.name}`);
   }
 
-  if (ext.migrations) {
-    // Check that no version exists twice
-    const versions = ext.migrations.map((m) => m.version);
+  if (ext.schemas) {
+    // Check that schema version has to be unique
+    const versions = ext.schemas.map((m) => m.version);
     const uniqueVersions = [...new Set(versions)];
 
     if (uniqueVersions.length !== versions.length) {
-      throw new Error(
-        `Extension ${ext.name} has duplicate versions in migrations`,
-      );
+      throw new Error(`Extension ${ext.name} schema versions are not unique`);
     }
 
-    // Sort migrations based on version
-    ext.migrations.sort((a, b) => compareVersions(a.version, b.version));
+    // Sort schemas based on version
+    ext.schemas.sort((a, b) => compareVersions(a.version, b.version));
 
-    // Check that latest migration is not above extension version
-    const latestMigration = ext.migrations[ext.migrations.length - 1];
+    // Check that latest schema is not above extension version
+    const latestSchema = ext.schemas[ext.schemas.length - 1];
 
-    if (compareVersions(latestMigration?.version || "0.0.0", ext.version) > 0) {
+    if (compareVersions(latestSchema?.version || "0.0.0", ext.version) > 0) {
       throw new Error(
-        `Extension ${ext.name} has migration above extension version`,
+        `Extension ${ext.name} schema version cannot be higher then extension`
       );
     }
   }
 
-  // Add config to memory
+  // Add extension to server store
   registeredExtensions.push(ext);
 }

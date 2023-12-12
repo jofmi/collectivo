@@ -48,7 +48,8 @@ declare global {
     id: number;
     name: string;
     version: string;
-    migration_state: number;
+    schema_version: number;
+    schema_is_latest: boolean;
   }
 
   interface CollectivoSettings {

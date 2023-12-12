@@ -1,16 +1,6 @@
-const migration = createMigration("collectivo", "0.0.5", up, down);
+const schema = initSchema("collectivo", "0.0.1");
 
-export default migration;
-
-async function up() {
-  await applySchema(schema);
-}
-
-async function down() {
-  // unapplySchema(schema);
-}
-
-const schema = initSchema();
+export default schema;
 
 schema.collections = [
   {
@@ -174,14 +164,14 @@ directusO2MRelation(
   schema,
   "messages_campaigns",
   "messages_templates",
-  "messages_template",
+  "messages_template"
 );
 
 directusO2MRelation(
   schema,
   "messages_records",
   "messages_campaigns",
-  "messages_campaign",
+  "messages_campaign"
 );
 
 directusM2MRelation(schema, "messages_campaigns", "directus_users", {

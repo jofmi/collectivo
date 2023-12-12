@@ -1,55 +1,38 @@
 import { createItem, readItems, updateItem } from "@directus/sdk";
-import ExtensionBaseMigration from "../migrations/001_extensions";
+import ExtensionBaseMigration from "../schemas/001_extensions";
 import { ExtensionConfig } from "./extensions";
-
-// Type definition for a dependency of a migration
-export interface CollectivoMigrationDependency {
-  extension: string;
-  version: string;
-}
-
-// Type definition for a migration of an extension
-export interface CollectivoMigration {
-  extension: string;
-  version: string;
-  description?: string;
-  up: () => Promise<void>;
-  down: () => Promise<void>;
-  dependencies?: CollectivoMigrationDependency[];
-}
-
-// Utility function to create a migration
-export function createMigration(
-  extension: string,
-  version: string,
-  up: () => Promise<void>,
-  down: () => Promise<void>,
-  dependencies?: CollectivoMigrationDependency[],
-): CollectivoMigration {
-  return {
-    extension: extension,
-    version: version,
-    up: up,
-    down: down,
-    dependencies: dependencies,
-  } as CollectivoMigration;
-}
 
 // Run pending migrations for a set of extensions, based on db state
 export async function migrateAll(
   exts: ExtensionConfig[],
-  createExampleData: boolean = false,
+  createExampleData: boolean = false
 ) {
   const extsDb = await getExtensionsFromDb();
 
   for (const ext of exts) {
+    logger.info(
+      `Starting: Migrating schema of extension ${ext.name} to latest`
+    );
+
     await runMigrations(ext, extsDb);
+
+    logger.info(
+      `Successful: Migrating schema of extension ${ext.name} to latest`
+    );
   }
 
   if (createExampleData) {
     for (const ext of exts) {
-      if (ext.exampleDataFn) {
-        await ext.exampleDataFn();
+      if (ext.examples) {
+        logger.info(
+          `Starting: Creating example data for extension ${ext.name}`
+        );
+
+        await ext.examples();
+
+        logger.info(
+          `Successful: Creating example data for extension ${ext.name}`
+        );
       }
     }
   }
@@ -59,15 +42,20 @@ export async function migrateAll(
 export async function migrateExtension(
   ext: ExtensionConfig,
   to?: string, // Target migration version. If not specified, to latest.
-  createExampleData: boolean = false,
+  createExampleData: boolean = false
 ) {
+  const log_message = `Migrating schema of extension ${ext.name} to v${to})`;
+  logger.info("Starting: " + log_message);
   const extsDb = await getExtensionsFromDb();
   await runMigrations(ext, extsDb, to);
+  logger.info("Successful: " + log_message);
 
   if (createExampleData) {
-    if (ext.exampleDataFn) {
-      await ext.exampleDataFn();
+    if (ext.examples) {
+      await ext.examples();
     }
+
+    logger.info(`Successful: Creating example data of extension '${ext.name}'`);
   }
 }
 
@@ -87,14 +75,15 @@ async function getExtensionsFromDb() {
   } catch (e) {
     // Run initial migration if extensions collection is not found
     try {
-      await ExtensionBaseMigration.up();
+      await ExtensionBaseMigration.apply();
 
       await directus.request(
         createItem("collectivo_extensions", {
           name: "collectivo",
           version: "0.0.0",
-          migration: "0.0.0",
-        }),
+          schema_version: "0.0.0",
+          schema_is_latest: false,
+        })
       );
     } catch (e2) {
       logger.log({
@@ -126,56 +115,46 @@ async function getExtensionsFromDb() {
 export async function migrateCustom(
   ext: ExtensionConfig,
   version: string,
-  down?: boolean,
-  createExampleData: boolean = false,
+  createExampleData: boolean = false
 ) {
-  const direction = down ? "down" : "up";
+  const log_message = `Applying schema v${version} of extension '${ext.name}'`;
+  logger.info("Starting: " + log_message);
 
-  logger.info(
-    `Forced migration ${version} (${direction}) of ${ext.name} starting`,
-  );
-
-  if (!ext.migrations) {
-    throw new Error(`Migration ${version} of ${ext.name} not found`);
+  if (!ext.schemas) {
+    throw new Error(`Schema v${version} of extension '${ext.name}' not found`);
   }
 
-  const migration = ext.migrations.find((f) => f.version === version);
+  const schema = ext.schemas.find((f) => f.version === version);
 
-  if (!migration) {
-    throw new Error(`Migration ${version} of ${ext.name} not found`);
+  if (!schema) {
+    throw new Error(`Schema v${version} of extension '${ext.name}' not found`);
   }
 
   try {
-    if (down) {
-      await migration.down();
-    } else {
-      await migration.up();
-    }
+    await schema.run_before();
+    await schema.apply();
+    await schema.run_after();
   } catch (e) {
-    logger.error(
-      `Error running forced migration v${version} (${direction}) of extension '${ext.name}'`,
-    );
+    logger.error("Error: " + log_message);
 
     throw e;
   }
 
-  logger.info(
-    `Forced migration v${version} (${direction}) of extension '${ext.name}' successful`,
-  );
+  logger.info("Successful: " + log_message);
 
   if (createExampleData) {
-    if (ext.exampleDataFn) {
-      await ext.exampleDataFn();
+    if (ext.examples) {
+      await ext.examples();
     }
   }
 
-  logger.info(`Creating example data of extension '${ext.name}' successful`);
+  logger.info(`Successful: Creating example data of extension '${ext.name}'`);
 }
 
 async function runMigrations(ext: ExtensionConfig, extsDb: any[], to?: string) {
   const directus = await useDirectusAdmin();
 
-  // Get state of current extension from database
+  // Get schema state of current extension from database
   let extensionDb = extsDb.find((f) => f.name === ext.name);
 
   // Register extension if not found
@@ -185,8 +164,9 @@ async function runMigrations(ext: ExtensionConfig, extsDb: any[], to?: string) {
         createItem("collectivo_extensions", {
           name: ext.name,
           version: ext.version,
-          migration: "0.0.0",
-        }),
+          schema_version: "0.0.0",
+          schema_is_latest: false,
+        })
       );
     } catch (e) {
       logger.error(e);
@@ -199,27 +179,27 @@ async function runMigrations(ext: ExtensionConfig, extsDb: any[], to?: string) {
     await directus.request(
       updateItem("collectivo_extensions", extensionDb.id, {
         version: ext.version,
-      }),
+      })
     );
   }
 
   // Run selected migrations
-  if (!ext.migrations) return;
+  if (!ext.schemas) return;
   const migrationState: string = extensionDb ? extensionDb.migration : "0.0.0";
 
   // Target is either "to" or that latest migration
-  const migrationTarget = to != undefined ? to : ext.migrations.at(-1)?.version;
+  const migrationTarget = to != undefined ? to : ext.schemas.at(-1)?.version;
 
   if (!migrationTarget) {
     throw new Error(`Error reading target migration version for ${ext.name}`);
   }
 
-  let migrationStateIndex = ext.migrations.findIndex(
-    (f) => f.version === migrationState,
+  let migrationStateIndex = ext.schemas.findIndex(
+    (f) => f.version === migrationState
   );
 
-  const migrationTargetIndex = ext.migrations.findIndex(
-    (f) => f.version === migrationTarget,
+  const migrationTargetIndex = ext.schemas.findIndex(
+    (f) => f.version === migrationTarget
   );
 
   if (migrationState === migrationTarget) {
@@ -228,58 +208,60 @@ async function runMigrations(ext: ExtensionConfig, extsDb: any[], to?: string) {
   }
 
   logger.info(
-    `Migrating ${ext.name} from ${migrationState} to ${migrationTarget}`,
+    `Migrating ${ext.name} from ${migrationState} to ${migrationTarget}`
   );
 
   if (migrationStateIndex < migrationTargetIndex) {
-    for (const migration of ext.migrations.slice(
+    for (const migration of ext.schemas.slice(
       migrationStateIndex + 1,
-      migrationTargetIndex + 1,
+      migrationTargetIndex + 1
     )) {
       try {
         // TODO: checkDependencies(migration, extsDb);
-        await migration.up();
+        await migration.run_before();
+        await migration.apply();
+        await migration.run_after();
         migrationStateIndex++;
 
         await directus.request(
           updateItem("collectivo_extensions", extensionDb.id, {
-            migration: ext.migrations[migrationStateIndex].version,
-          }),
+            schema_version: ext.schemas[migrationStateIndex].version,
+            schema_is_latest: migrationStateIndex === ext.schemas.length - 1,
+          })
         );
       } catch (e) {
         logger.error(
-          `Error running migration ${ext.migrations[migrationStateIndex].version} of ${ext.name}`,
+          `Error applying schema ${ext.schemas[migrationStateIndex].version} of ${ext.name}`
         );
 
         throw e;
       }
     }
   } else if (migrationStateIndex > migrationTargetIndex) {
-    for (const migration of ext.migrations
+    for (const _ of ext.schemas
       .slice(migrationTargetIndex, migrationStateIndex)
       .reverse()) {
       try {
-        await migration.down();
-        migrationStateIndex--;
+        throw new Error("Rollback not implemented");
+        // migrationStateIndex--;
 
-        await directus.request(
-          updateItem("collectivo_extensions", extensionDb.id, {
-            migration: ext.migrations[migrationStateIndex].version,
-          }),
-        );
+        // await directus.request(
+        //   updateItem("collectivo_extensions", extensionDb.id, {
+        //     migration: ext.schemas[migrationStateIndex].version,
+        //   })
+        // );
       } catch (e) {
         logger.error(
-          `Error running migration ${ext.migrations[migrationStateIndex].version} of ${ext.name}`,
+          `Error running migration ${ext.schemas[migrationStateIndex].version} of ${ext.name}`
         );
 
         throw e;
       }
     }
   }
-
-  logger.info(`Migrations of ${ext.name} successful`);
 }
 
+// TODO: Dependency checking
 // function checkDependencies(
 //   migration: CollectivoMigration,
 //   extsDb: any[]

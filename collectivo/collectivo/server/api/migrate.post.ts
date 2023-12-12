@@ -9,17 +9,17 @@ export default defineEventHandler(async (event) => {
   const extension = query["extension"];
   const version = query["version"];
   const isolated = parseBoolean(query["isolated"]);
-  const exampleData = parseBoolean(query["exampleData"]);
+  const examples = parseBoolean(query["examples"]);
 
   // Get extension configs
   const exts = getRegisteredExtensions();
 
   // Case 1: Apply all schemas
   if (!extension && !version) {
-    migrateAll(exts, exampleData);
+    migrateAll(exts, examples);
     let response = "Applying schema (all extensions, latest";
 
-    if (exampleData) {
+    if (examples) {
       response += " , incl. example data";
     }
 
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // Case 2: Apply all example data
-  if (!extension && !version && isolated && exampleData) {
+  if (!extension && !version && isolated && examples) {
     for (const ext of exts) {
       if (ext.examples) {
         await ext.examples();
@@ -53,7 +53,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // Case 3-1: Apply example data
-  if (!version && isolated && exampleData) {
+  if (!version && isolated && examples) {
     if (ext.examples) {
       await ext.examples();
     }
@@ -65,14 +65,14 @@ export default defineEventHandler(async (event) => {
 
   // Case 3-2: Apply a isolated schema individually
   if (isolated && version) {
-    migrateCustom(ext, version, isolated, exampleData);
+    migrateCustom(ext, version, isolated, examples);
     return {
       detail: `Applying schema ${version} of ${ext.name} individually`,
     };
   }
 
   // Case 3-3: Migrate extension to specified version
-  migrateExtension(ext, version, exampleData);
+  migrateExtension(ext, version, examples);
   return {
     detail: "Running migrations for extension " + extension,
   };

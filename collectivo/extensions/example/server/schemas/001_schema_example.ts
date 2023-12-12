@@ -1,27 +1,8 @@
-// Create a migration for version 0.0.1 of the example extension
-const extension = "example";
-const migration = createMigration(extension, "0.0.1", up, down);
-
-export default migration;
-
-// This function creates an empty schema
+// This function creates an empty schema for version 0.0.1 of the example extension
 // A schema can be used to declaratively define the structure of the database
-const schema = initSchema(extension);
+const schema = initSchema("example", "0.0.1");
 
-// This function will be called when the migration is applied
-async function up() {
-  // This function applies the schema to the database
-  await schema.apply();
-
-  // Alternatively, you can also use the directus client directly
-  // const directus = await useDirectusAdmin()
-  // await directus.request(createCollection(...))
-}
-
-// This function will be called when the migration is rolled back
-async function down() {
-  await schema.rollBack();
-}
+export default schema;
 
 // Here you can define collections for your database
 // See https://docs.directus.io/reference/system/collections.html

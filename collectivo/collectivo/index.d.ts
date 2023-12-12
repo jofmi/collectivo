@@ -29,7 +29,7 @@ declare global {
   }
 
   // Profile section
-  interface CollectivoProfile {
+  interface CollectivoUser {
     id: string;
     first_name: string;
     last_name: string;
@@ -37,7 +37,7 @@ declare global {
     [key: string]: string | undefined;
   }
 
-  interface CollectivoProfileInput {
+  interface CollectivoUserInput {
     label: string;
     key: string;
     disabled?: boolean;

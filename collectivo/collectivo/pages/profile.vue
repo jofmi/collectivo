@@ -9,7 +9,7 @@ const { t } = useI18n();
 const profile = useUser();
 const runtimeConfig = useRuntimeConfig();
 const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protocol/openid-connect/logout`;
-const state = ref<CollectivoProfile | null>(null);
+const state = ref<CollectivoUser | null>(null);
 
 // Sort profile.inputs by order
 profile.value.inputs.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
@@ -17,7 +17,7 @@ profile.value.inputs.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 // Get form data
 async function getProfile() {
   await profile.value.load();
-  state.value = { ...profile.value.data } as CollectivoProfile;
+  state.value = { ...profile.value.data } as CollectivoUser;
 }
 
 getProfile();

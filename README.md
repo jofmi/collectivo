@@ -11,9 +11,10 @@ Collectivo is based on [Nuxt Layers](https://nuxt.com/docs/guide/going-further/l
 ## Structure
 
 - collectivo - Modular frontend & Nuxt API for migrations
-  - app - A development app
+  - app - A container to run collectivo
   - collectivo - Core functionalities
   - extensions - Optional modules
+    - memberships - Manage memberships of an organization
 - directus - Database, REST/GraphQL API, & Admin app
 - keycloak - Authentication
 
@@ -67,25 +68,23 @@ You can now log in with the following example users on both the user and admin a
 
 ## Migrations
 
-Extensions can define migrations for each version. E.g. a migration can be for version `0.0.1` of the core extension `collectivo`.
+Migrations between schemas can be run via the Nuxt API endpoint `/api/migrate/`. Extensions can define a schema for each version. E.g. a schema can be for version `0.0.1` of the core extension `collectivo`. A migration script can be run both before and after applying each schema version.
 
-Migrations can be run via the Nuxt API endpoint `/api/migrate/`.
+![Migration flow](docs/migrations.png)
 
-Requests must be authorized with the `NUXT_API_TOKEN` from `.env`.
+Migration requests must be authorized with the `NUXT_API_TOKEN` from `.env`.
 
-The following optional parameters can be passed:
+The following parameters can be passed:
 
-- `all` (boolean) - Apply migrations of all extensions to latest.
-- `exampleData` (boolean) - Apply example data after migrations.
-- `extension` (string) - Apply migrations of a specific extension.
-  - `version` (string) - Apply migrations up or down towards specified version. If not given, migrations will be applied to latest.
-  - `force` (boolean) - Apply only the migration up of the specified version.
-    - `down` (boolean) - Apply the forced migration down instead of up.
+- `extension (string)` - Apply migrations of a specific extension. If not given, all extensions will be migrated.
+- `version (string)` - Apply schemas towards specified version. If not given, migration will run up to the latest version.
+- `examples (boolean)` - Create example data (default false).
+- `isolated (boolean)` - Apply only the specified schema (if version is passed) or example data (if no version passed).
 
 Here is an example to prepare a new system for local development (the same code is run by `pnpm seed`):
 
 ```sh
-curl --header "Authorization: badToken" --request POST "http://localhost:3000/api/migrate/?all=true&exampleData=true"
+curl --header "Authorization: badToken" --request POST "http://localhost:3000/api/migrate/?examples=true"
 ```
 
 This cURL command can also imported in an HTTP client like [Postman](https://www.postman.com/).
@@ -98,21 +97,20 @@ Migration logs can be found in the nuxt terminal.
 
 ## Linting
 
-- To run linting, use: `pnpm lint`
+- To run linting checks, use: `pnpm lint`
 - To apply linting to all files, use: `pnpm lint:fix`
 
 ## Formatting
 
 - To run formatting checks, use: `pnpm format`
-- To apply the formatting to all files, use: `pnpm format:fix`
+- To apply formatting to all files, use: `pnpm format:fix`
 
 ## Troubleshooting
 
-- To reset the database, run
-  - drop table
-  - `docker compose restart directus directus-cache directus-db`
-- Udate dependencies `pnpm update -r -L`
-- Publish all packages (remove --dry-run) `pnpm publish -r --access=public --dry-run`
+- To reset the database, delete the volume of the directus-db database
+- To udate dependencies, run `pnpm update -r -L`
+- To check packages ready to publich, run `pnpm publish -r --access=public  --dry-run`
+- To publish all packages, run `pnpm publish -r --access=public`
 
 ## Developing extensions
 
@@ -139,3 +137,133 @@ Infos & recommendations:
 - Adding `"@collectivo/collectivo": "workspace:*"` to your dependencies in `package.json` gives you access to the types and functions of collectivo.
 - To publish your extension, run `pnpm publish collectivo/extensions/my-extension -r --access=public --dry-run` (remove --dry-run after checking that everything is correct)
 - The example extension is licensed under [public domain](https://de.wikipedia.org/wiki/Unlicense). You can choose your own license for your extension, it does not have to be the same as collectivo.
+
+### UI
+
+Collectivo uses [`tailwindcss`](https://tailwindcss.com/) and [`nuxt-ui`](https://ui.nuxt.com/) for styling and components. The theme can be adapted in `tailwind.config.ts` and `app.config.ts`.
+
+### Icons
+
+Collectivo uses [`nuxt-ui`](https://ui.nuxt.com/getting-started/theming#icons) and [`Iconify`](https://iconify.design/) to load icons. They have to be defined as `i-{collection_name}-{icon_name}`.
+
+By default, Collectivo loads the following to icon libraries:
+
+- [System UIcons](https://icones.js.org/collection/system-uicons) for the UI
+- [Mono Icons](https://icones.js.org/collection/mi) for form components
+
+Additional libraries can be loaded in `nuxt.config.ts`.
+
+## Frontend API (plugin)
+
+### `useSidebarMenu`
+
+`useSidebarMenu(): Ref<CollectivoMenuItem[]>`
+
+This composable can be used to add or adapt menu items. Best to use in a plugin as follows:
+
+```ts
+// myExtension/plugins/setup.ts
+export default defineNuxtPlugin(() => {
+  const menu = useSidebarMenu();
+  menu.value.push({
+    label: "My menu item",
+    to: "/my/path",
+    icon: "i-system-uicons-cubes",
+    order: 100
+  });
+}
+```
+
+### `useDirectus`
+
+`useDirectus(): DirectusClient<CollectivoSchema> & AuthenticationClient<CollectivoSchema> & RestClient<CollectivoSchema>`
+
+Access the [directus client](https://docs.directus.io/guides/sdk/getting-started.html) to interact with the database.
+
+### `useUser`
+
+`useUser(): UserStore`
+
+Store for data of the currently authenticated user, with the following attributes:
+
+- `data: CollectivoUser | null`
+- `inputs: CollectivoUserInput[]` -> Can be used to add fields to the profile section
+- `isAuthenticated: boolean`
+- `saving: boolean`
+- `loading: boolean`
+- `error: unknown`
+- `load: (force: boolean = false) => Promise<UserStore>` -> Fetch user data
+- `save: (data: CollectivoUser) => Promise<UserStore>` -> Update user data
+
+### `setPageTitle`
+
+`setPageTitle(title: string)`
+
+Use in a page to set a page title for both the visible header and the metadata.
+
+## Frontend API (pages & components)
+
+## Server API
+
+### `registerExtension`
+
+`registerExtension({name: string, description:string, version:string, schemas:ExtensionSchema[], examples: ()=>Promise<void>})`
+
+Registers a function within the runtime of the backend server, being able to multiple schemas for different versions of the extension as well as a function to create example data.
+
+Should be used within a server plugin as follows:
+
+```ts
+// myExtension/server/plugins/registerExtension.ts
+import pkg from "../../package.json";
+import examples from "../examples/examples";
+import mySchema from "../schemas/mySchema";
+export default defineNitroPlugin(() => {
+  registerExtension({
+    name: "myExtension",
+    description: pkg.description,
+    version: pkg.version,
+    schemas: [mySchema],
+    examples: examples,
+  });
+});
+```
+
+### `initSchema`
+
+`initSchema(extension: string, version: string, options: ExtensionSchemaOptions)`
+
+Creates a new schema class that can be used to define the database structure and migrations of your extension (see [migrations](#migrations)).
+
+Should be declared as follows and used by [`registerExtension`](#registerextension):
+
+```ts
+// myExtension/server/schemas/mySchema.ts
+const schema = initSchema("myExtension", "0.0.1");
+
+export default schema;
+```
+
+The resulting schema has the following attributes:
+
+- `extension: string`
+- `version: string`
+- `options: ExtensionSchemaOptions`
+- `run_before: () => Promise<void>` -> Custom migration script to be run before applying this schema version
+- `run_after: () => Promise<void>` -> Custom migration script to be run after applying this schema version
+- `collections: NestedPartial<DirectusCollection<any>>[]`
+- `fields: NestedPartial<DirectusField<any>>[]`
+- `relations: NestedPartial<DirectusRelation<any>>[]`
+- `roles: NestedPartial<DirectusRole<any>>[]`
+- `permissions: NestedPartial<DirectusPermission<any>>[]`
+- `flows: NestedPartial<DirectusFlow<any>>[]`
+- `operations: NestedPartial<DirectusOperation<any>>[]`
+- `translations: any[]`
+
+### `logger`
+
+You can use winston to write information to the nuxt logs (`console.log` will not appear in production), e.g.:
+
+```ts
+logger.info("Hello world!");
+```

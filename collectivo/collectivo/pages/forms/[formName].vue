@@ -66,7 +66,7 @@ let schema = object();
 function addInputToSchema(
   key: string,
   input: FormInput,
-  schema_field: YupSchema
+  schema_field: YupSchema,
 ) {
   if (input.required) {
     schema_field = schema_field.required("This field is required");
@@ -84,7 +84,7 @@ function addInputToSchema(
         } else {
           return schema_field_hidden.strip();
         }
-      }
+      },
     );
 
     schema = schema.shape({ [key]: schema_field_with_conditions });
@@ -160,7 +160,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
 async function onError(event: FormErrorEvent) {
   toast.add({
-    title: t("There was an error"),
+    title: t("Some fields are not filled in correctly"),
     icon: "i-mi-warning",
     color: "red",
     timeout: 0,
@@ -202,7 +202,11 @@ async function onError(event: FormErrorEvent) {
               :label="input.label"
               :name="key"
             >
-              <UInput v-model="state[key]" />
+              <UInput v-model="state[key]">
+                <template v-if="input.icon" #trailing>
+                  <UIcon :name="input.icon" />
+                </template>
+              </UInput>
             </UFormGroup>
             <UFormGroup
               v-else-if="input.type === 'email'"
@@ -210,8 +214,8 @@ async function onError(event: FormErrorEvent) {
               :name="key"
             >
               <UInput v-model="state[key]">
-                <template #trailing>
-                  <UIcon name="i-mi-mail" />
+                <template v-if="input.icon" #trailing>
+                  <UIcon :name="input.icon" />
                 </template>
               </UInput>
             </UFormGroup>
@@ -220,7 +224,11 @@ async function onError(event: FormErrorEvent) {
               :label="input.label"
               :name="key"
             >
-              <UInput v-model="state[key]" type="password" />
+              <UInput v-model="state[key]" type="password">
+                <template v-if="input.icon" #trailing>
+                  <UIcon :name="input.icon" />
+                </template>
+              </UInput>
             </UFormGroup>
             <UFormGroup
               v-else-if="input.type === 'number'"
@@ -279,7 +287,6 @@ async function onError(event: FormErrorEvent) {
       </div>
     </UForm>
   </CollectivoContainer>
-  {{ state }}
 </template>
 
 <style lang="scss" scoped>

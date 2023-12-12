@@ -71,7 +71,7 @@ const tsRules = {
   //   "no-console": process.env.NODE_ENV !== "development" ? "error" : "off",
   // "no-console": process.env.NODE_ENV !== "development" ? "warn" : "warn",
   "no-console": [
-    "error",
+    "warn",
     {
       allow: ["info", "warn", "error"],
     },

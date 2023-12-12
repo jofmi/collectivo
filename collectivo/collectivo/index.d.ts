@@ -146,6 +146,7 @@ declare global {
     | {
         type: "text" | "number" | "email" | "password" | "textarea" | "date";
         placeholder?: string;
+        icon?: string;
       }
     | {
         type: "checkbox" | "toggle";

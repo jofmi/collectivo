@@ -98,6 +98,7 @@ export default defineNuxtPlugin(() => {
         type: "email",
         required: true,
         label: "Email",
+        icon: "i-system-uicons-mail",
       },
       password: {
         type: "password",

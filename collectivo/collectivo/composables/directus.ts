@@ -17,11 +17,12 @@ export function requireAuth() {
   if (runtimeConfig.public.authService === "keycloak") {
     return navigateTo(
       `${runtimeConfig.public.directusUrl}/auth/login/keycloak?redirect=${runtimeConfig.public.collectivoUrl}`,
-      { external: true }
+      { external: true },
     );
   } else {
     throw new Error(
-      "Unknown auth service in nuxt.config: " + runtimeConfig.public.authService
+      "Unknown auth service in nuxt.config: " +
+        runtimeConfig.public.authService,
     );
   }
 }

@@ -148,9 +148,9 @@ Collectivo uses a [pnpm workspace](https://pnpm.io/workspaces) to manage multipl
 
 Collectivo uses [`tailwindcss`](https://tailwindcss.com/) and [`nuxt-ui`](https://ui.nuxt.com/) for styling and components. The theme can be adapted in `tailwind.config.ts` and `app.config.ts`.
 
-## Auth
+## Authentication
 
-Collectivo authenticated through directus. To protect pages, add the following middleware to the setup script.
+Collectivo authenticated through directus. To protect pages, add the following middleware to the setup script. If keycloak is used, this will forward people directly to keycloak, using Directus' [seamless SSO](https://docs.directus.io/self-hosted/sso.html#seamless-sso) feature.
 
 ```ts
 definePageMeta({

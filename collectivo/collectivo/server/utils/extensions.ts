@@ -69,7 +69,7 @@ function loadExtension(ext: ExtensionConfig) {
   // Check that extension name does not contain an underscore
   if (ext.name.includes("_")) {
     throw new Error(
-      `Extension name '${ext.name}' should not contain underscores`
+      `Extension name '${ext.name}' should not contain underscores`,
     );
   }
 
@@ -105,7 +105,7 @@ function loadExtension(ext: ExtensionConfig) {
 
     if (compareVersions(latestSchema?.version || "0.0.0", ext.version) > 0) {
       throw new Error(
-        `Extension ${ext.name} schema version cannot be higher then extension`
+        `Extension ${ext.name} schema version cannot be higher then extension`,
       );
     }
   }

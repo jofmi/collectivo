@@ -15,7 +15,7 @@ async function getRole(name: string) {
       filter: {
         name: { _eq: name },
       },
-    })
+    }),
   );
 
   if (membersRoles.length < 1) {
@@ -77,7 +77,7 @@ export default async function examples() {
     const usersDB = await directus.request(
       readUsers({
         filter: { email: { _eq: user.email } },
-      })
+      }),
     );
 
     let userID;

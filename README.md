@@ -1,24 +1,12 @@
-# Collectivo
+![Collectivo](docs/collectivo_rgb_header.png)
 
-Collectivo is a modular system for community plattforms.
+Collectivo is an open-source platform for collaboration, participation, and data management. The software is specifically designed to promote the active engagement of members in community projects and organizations. With a modular structure, it can be easily customized to meet the needs of different users.
 
-In development / not ready for production.
+Collectivo is build on [Nuxt](https://nuxt.com/docs/), [Directus](https://directus.io/), and (optionally) [Keycloak](https://www.keycloak.org/). Features of Collectivo are split into separate extensions, using [Nuxt Layers](https://nuxt.com/docs/guide/going-further/layers). The software is designed to make it as easy as possible to develop additional extensions and integrate existing tools into the plattform.
 
-## Technologies
+# Installation
 
-Collectivo is based on [Nuxt Layers](https://nuxt.com/docs/guide/going-further/layers), [Directus](https://directus.io/), and [Keycloak](https://www.keycloak.org/).
-
-## Structure
-
-- collectivo - Modular frontend & Nuxt API for migrations
-  - app - A container to run collectivo
-  - collectivo - Core functionalities
-  - extensions - Optional modules
-    - memberships - Manage memberships of an organization
-- directus - Database, REST/GraphQL API, & Admin app
-- keycloak - Authentication
-
-## Installation
+## Getting started
 
 Install the following requirements:
 
@@ -98,9 +86,21 @@ Migration logs can be found in the nuxt terminal.
 - To check packages ready to publich, run `pnpm publish -r --access=public  --dry-run`
 - To publish all packages, run `pnpm publish -r --access=public`
 
-## Development guide
+# Development
 
-### Creating an extension
+## Overview
+
+The repository is structured as follows:
+
+- collectivo - Modular frontend & Nuxt API for migrations
+  - app - A container to run collectivo
+  - collectivo - Core functionalities
+  - extensions - Optional modules
+    - memberships - Manage memberships of an organization
+- directus - Database, REST/GraphQL API, & Admin app
+- keycloak - Authentication
+
+## Creating an extension
 
 - Decide on a name for your extension, e.g. `my-extension`.
 - Create a fork of this repository
@@ -118,7 +118,7 @@ Migration logs can be found in the nuxt terminal.
 - Create frontend components for your extension (see [Frontend API](#frontend-api))
 - Follow [installation](#installation) to set up a development server that will now include your extension.
 
-### Best practices
+## Best practices
 
 - Regularly [sync your fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork) with the upstream repository.
 - All named elements (database collections and fields as well as frontend components and composables) should start with the extension name to avoid name conflicts with other extensions, e.g. `myExtension_myCollection`, `myExtension_myField`, `myExtensionVueComponent`.
@@ -126,29 +126,29 @@ Migration logs can be found in the nuxt terminal.
 - To publish your extension, run `pnpm publish collectivo/extensions/my-extension -r --access=public --dry-run` (remove `--dry-run` after checking that everything is correct)
 - The example extension is licensed under [public domain](https://de.wikipedia.org/wiki/Unlicense). You can choose your own license for your extension, it does not have to be the same as collectivo.
 
-### Unit testing
+## Unit testing
 
 - To run unit tests, use: `pnpm test`
 
-### Linting
+## Linting
 
 - To run linting checks, use: `pnpm lint`
 - To apply linting to all files, use: `pnpm lint:fix`
 
-### Formatting
+## Formatting
 
 - To run formatting checks, use: `pnpm format`
 - To apply formatting to all files, use: `pnpm format:fix`
 
-### Workspace
+## Workspace
 
 Collectivo uses a [pnpm workspace](https://pnpm.io/workspaces) to manage multiple packages in a single repository. This allows you to declare dependencies to other packages in the workspace with `package-name: "workspace:*"`. If you publish your package, the workspace `"workspace:*"` will be replaced with the current version of the depedency.
 
-### Theme
+## Theme
 
 Collectivo uses [`tailwindcss`](https://tailwindcss.com/) and [`nuxt-ui`](https://ui.nuxt.com/) for styling and components. The theme can be adapted in `tailwind.config.ts` and `app.config.ts`.
 
-### Auth
+## Auth
 
 Collectivo authenticated through directus. To protect pages, add the following middleware to the setup script.
 
@@ -158,7 +158,7 @@ definePageMeta({
 });
 ```
 
-### Icons
+## Icons
 
 Collectivo uses [`nuxt-ui`](https://ui.nuxt.com/getting-started/theming#icons) and [`Iconify`](https://iconify.design/) to load icons. They have to be defined as `i-{collection_name}-{icon_name}`.
 
@@ -169,7 +169,9 @@ By default, Collectivo loads the following to icon libraries:
 
 Additional libraries can be loaded in `nuxt.config.ts`.
 
-## Frontend API
+# API Reference
+
+## Frontend
 
 The following [composables](https://nuxt.com/docs/guide/directory-structure/composables) are available for frontend development.
 
@@ -219,7 +221,7 @@ export default defineNuxtPlugin(() => {
 }
 ```
 
-## Server API
+## Backend
 
 The following utility functions can be used for server-side scripts (within `/myExtension/server/`)
 

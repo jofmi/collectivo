@@ -6,9 +6,9 @@ Collectivo is build on [Nuxt](https://nuxt.com/docs/), [Directus](https://direct
 
 If you are interested in using Collectivo or contributing to its development, please join our Discord server: https://discord.gg/42MWureAYW
 
-# Installation
+# Getting started
 
-## Getting started
+## Installation
 
 Install the following requirements:
 
@@ -84,9 +84,6 @@ Migration logs can be found in the nuxt terminal.
 ## Troubleshooting
 
 - To reset the database, delete the volume of the directus-db database
-- To udate dependencies, run `pnpm update -r -L`
-- To check packages ready to publich, run `pnpm publish -r --access=public  --dry-run`
-- To publish all packages, run `pnpm publish -r --access=public`
 
 # Development
 
@@ -115,7 +112,7 @@ The repository is structured as follows:
 - Configure `my-extension/nuxt.config.ts`.
   - To add collectivo, add `extends: ["@collectivo/collectivo"]` (see [Nuxt Layer](https://nuxt.com/docs/guide/going-further/layers)).
 - Register your extension on the backend (see [registerExtension](#registerextension))
-  - Here, you can set the name of your extension that should be used in the database. The name should not include underscores, e.g. `my-extension` or `myExtension`.
+  - Here, you can set the name of your extension that should be used in the database. The name should not include underscores, e.g. `myExtension`.
 - Create a database schema for your extension (see [initschema](#initschema)).
 - Create frontend components for your extension (see [Frontend API](#frontend-api))
 - Follow [installation](#installation) to set up a development server that will now include your extension.
@@ -123,9 +120,10 @@ The repository is structured as follows:
 ## Best practices
 
 - Regularly [sync your fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork) with the upstream repository.
+- To update dependencies, run `pnpm update collectivo/extensions/my-extension -L`
 - All named elements (database collections and fields as well as frontend components and composables) should start with the extension name to avoid name conflicts with other extensions, e.g. `myExtension_myCollection`, `myExtension_myField`, `myExtensionVueComponent`.
 - You can also add fields to collections that are not part of your extensions, like `directus_users`.
-- To publish your extension, run `pnpm publish collectivo/extensions/my-extension -r --access=public --dry-run` (remove `--dry-run` after checking that everything is correct)
+- To publish your extension, run `pnpm publish collectivo/extensions/my-extension --access=public --dry-run` (remove `--dry-run` after checking that everything is correct)
 - The example extension is licensed under [public domain](https://de.wikipedia.org/wiki/Unlicense). You can choose your own license for your extension, it does not have to be the same as collectivo.
 
 ## Unit testing
@@ -211,7 +209,7 @@ Store for data of the currently authenticated user, with the following attribute
 This composable can be used to add or adapt menu items. Best to use in a plugin as follows:
 
 ```ts
-// myExtension/plugins/setup.ts
+// my-extension/plugins/setup.ts
 export default defineNuxtPlugin(() => {
   const menu = useSidebarMenu();
   menu.value.push({
@@ -225,7 +223,7 @@ export default defineNuxtPlugin(() => {
 
 ## Backend
 
-The following utility functions can be used for server-side scripts (within `/myExtension/server/`)
+The following utility functions can be used for server-side scripts (within `/my-extension/server/`)
 
 ### `registerExtension`
 
@@ -236,7 +234,7 @@ Registers a function within the runtime of the backend server, being able to mul
 Should be used within a server plugin as follows:
 
 ```ts
-// myExtension/server/plugins/registerExtension.ts
+// my-extension/server/plugins/registerExtension.ts
 import pkg from "../../package.json";
 import examples from "../examples/examples";
 import mySchema from "../schemas/mySchema";
@@ -260,7 +258,7 @@ Creates a new schema class that can be used to define the database structure and
 Should be declared as follows and used by [`registerExtension`](#registerextension):
 
 ```ts
-// myExtension/server/schemas/mySchema.ts
+// my-extension/server/schemas/mySchema.ts
 const schema = initSchema("myExtension", "0.0.1");
 
 export default schema;

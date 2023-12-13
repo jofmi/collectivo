@@ -35,26 +35,31 @@ export function registerExtension(ext: ExtensionConfig) {
 // To avoid name conflicts, the following extension names are forbidden
 const FORBIDDEN_EXTENSION_NAMES = [
   "directus",
+  "keycloak",
   "sort",
   "user",
   "users",
   "date",
   "email",
+  "auth",
   "content",
   "profile",
   "files",
   "name",
   "notes",
   "version",
+  "schema",
   "migration",
   "description",
   "status",
   "messages",
   "api",
+  "use",
   "tiles",
   "type",
   "subtype",
   "tags",
+  "extension",
   "extensions",
   "settings",
 ];
@@ -64,7 +69,7 @@ function loadExtension(ext: ExtensionConfig) {
   // Check that extension name does not contain an underscore
   if (ext.name.includes("_")) {
     throw new Error(
-      `Extension name '${ext.name}' should not contain underscores`,
+      `Extension name '${ext.name}' should not contain underscores`
     );
   }
 
@@ -100,7 +105,7 @@ function loadExtension(ext: ExtensionConfig) {
 
     if (compareVersions(latestSchema?.version || "0.0.0", ext.version) > 0) {
       throw new Error(
-        `Extension ${ext.name} schema version cannot be higher then extension`,
+        `Extension ${ext.name} schema version cannot be higher then extension`
       );
     }
   }

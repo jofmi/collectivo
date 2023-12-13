@@ -1,8 +1,8 @@
 import { readMe, updateMe } from "@directus/sdk";
 
-class ProfileStore {
-  data: CollectivoProfile | null;
-  inputs: CollectivoProfileInput[];
+class UserStore {
+  data: CollectivoUser | null;
+  inputs: CollectivoUserInput[];
   isAuthenticated: boolean;
   saving: boolean;
   loading: boolean;
@@ -26,25 +26,26 @@ class ProfileStore {
       readMe({
         fields: ["id", "first_name", "last_name", "email"],
       }),
-    )) as CollectivoProfile;
+    )) as CollectivoUser;
 
     this.loading = false;
     return this;
   }
 
-  async save(data: CollectivoProfile) {
+  async save(data: CollectivoUser) {
     const { $directus } = useNuxtApp();
     this.saving = true;
     await $directus?.request(updateMe(data));
     this.data = data;
     this.saving = false;
+    return this;
   }
 }
 
 export const useUser = () => {
-  const state = useState<ProfileStore>(
+  const state = useState<UserStore>(
     "collectivo_profile",
-    () => new ProfileStore(),
+    () => new UserStore(),
   );
 
   return state;

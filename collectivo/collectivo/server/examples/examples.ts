@@ -25,8 +25,8 @@ async function getRole(name: string) {
   return membersRoles[0].id;
 }
 
-export default async function createExampleData() {
-  console.log("Creating example data for collectivo");
+export default async function examples() {
+  console.info("Creating example data for collectivo");
 
   const directus = await useDirectusAdmin();
 
@@ -35,7 +35,7 @@ export default async function createExampleData() {
   const adminRole = await getRole("collectivo_admin");
 
   // Create some users
-  console.log("Creating users");
+  console.info("Creating users");
 
   const userNames = [
     "Admin",
@@ -85,20 +85,20 @@ export default async function createExampleData() {
     if (usersDB.length > 0) {
       userID = usersDB[0].id;
       // tslint:disable-next-line:no-console
-      console.log("Updating user " + user.email + " with ID " + userID);
+      console.info("Updating user " + user.email + " with ID " + userID);
       await directus.request(updateUser(userID, user));
       // tslint:disable-next-line:no-console
-      console.log("Updated good");
+      console.info("Updated good");
     } else {
       // tslint:disable-next-line:no-console
-      console.log("Creating user " + user.email);
+      console.info("Creating user " + user.email);
       const us = await directus.request(createUser(user));
       userID = us.id;
     }
   }
 
   // Create some tags
-  console.log("Creating tags");
+  console.info("Creating tags");
   await directus.request(deleteItems("collectivo_tags", { limit: 1000 }));
   const tagNames = ["Has a dog", "Has a cat", "Has a bird", "Has a fish"];
   const tags: any[] = [];
@@ -111,7 +111,7 @@ export default async function createExampleData() {
 
   // Add some members to some tags
   // TODO: This is not working
-  // console.log("Creating tag-member relations");
+  // console.info("Creating tag-member relations");
   // for (var i = 0; i < 3; i++) {
   //   tags[i].directus_users = {
   //     create: [
@@ -125,11 +125,11 @@ export default async function createExampleData() {
   try {
     await directus.request(createItems("collectivo_tags", tags));
   } catch (error) {
-    console.log(error);
+    console.info(error);
   }
 
   // Create some tiles
-  console.log("Creating tiles");
+  console.info("Creating tiles");
   await directus.request(deleteItems("collectivo_tiles", { limit: 1000 }));
   const tileNames = ["Tile 1", "Tile 2", "Tile 3", "Tile 4"];
   const tiles = [];
@@ -144,6 +144,6 @@ export default async function createExampleData() {
   try {
     await directus.request(createItems("collectivo_tiles", tiles));
   } catch (error) {
-    console.log(error);
+    console.info(error);
   }
 }

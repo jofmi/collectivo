@@ -54,7 +54,7 @@ export default defineNuxtPlugin(() => {
 
   menu.value.push(...items);
 
-  const profileInputs: CollectivoProfileInput[] = [
+  const profileInputs: CollectivoUserInput[] = [
     {
       label: "First Name",
       key: "first_name",

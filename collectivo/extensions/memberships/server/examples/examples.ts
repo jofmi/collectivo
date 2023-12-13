@@ -1,7 +1,7 @@
 import { createItem, deleteItems, readUsers } from "@directus/sdk";
 
-export default async function createExampleData() {
-  console.log("Creating example data for memberships");
+export default async function examples() {
+  console.info("Creating example data for memberships");
 
   const directus = await useDirectusAdmin();
 
@@ -10,7 +10,7 @@ export default async function createExampleData() {
   await directus.request(deleteItems("memberships_types", { limit: 1000 }));
 
   // Create some membership types
-  console.log("Creating memberships");
+  console.info("Creating memberships");
   const types = [["Active"], ["Investing"]];
   const type_ids = [];
 
@@ -24,10 +24,10 @@ export default async function createExampleData() {
     type_ids.push(type_response.id);
   }
 
-  console.log("Created membership types", type_ids);
+  console.info("Created membership types", type_ids);
 
   // Create some memberships
-  console.log("Creating memberships");
+  console.info("Creating memberships");
 
   const users = [
     ["Alice", [type_ids[0]], "applied"],

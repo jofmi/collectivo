@@ -29,7 +29,7 @@ declare global {
   }
 
   // Profile section
-  interface CollectivoProfile {
+  interface CollectivoUser {
     id: string;
     first_name: string;
     last_name: string;
@@ -37,7 +37,7 @@ declare global {
     [key: string]: string | undefined;
   }
 
-  interface CollectivoProfileInput {
+  interface CollectivoUserInput {
     label: string;
     key: string;
     disabled?: boolean;
@@ -48,7 +48,8 @@ declare global {
     id: number;
     name: string;
     version: string;
-    migration_state: number;
+    schema_version: number;
+    schema_is_latest: boolean;
   }
 
   interface CollectivoSettings {

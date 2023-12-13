@@ -12,14 +12,36 @@ import {
 } from "@directus/sdk";
 import { createOrUpdateDirectusRole } from "./directusQueries";
 
-// Create a new schema that can be applied to the database
-export function initSchema(extension: string) {
-  return new ExtensionSchema(extension);
+// Create a new schema
+// This defines the database structure of an extension
+// A schema relates to a specific version of an extension
+// Non-breaking schemas will be skipped if there is a newer version
+// Migrations can be called before and after the schema is applied
+export function initSchema(
+  extension: string,
+  version: string,
+  options?: Partial<ExtensionSchemaOptions>,
+) {
+  return new ExtensionSchema(extension, version, options);
 }
 
-class ExtensionSchema {
+export interface ExtensionDependency {
   extension: string;
-  // @ts-ignore
+  version: string;
+}
+
+export interface ExtensionSchemaOptions {
+  breaking: boolean;
+  dependencies?: ExtensionDependency[];
+}
+
+export class ExtensionSchema {
+  extension: string;
+  version: string;
+  options: ExtensionSchemaOptions;
+  run_before: () => Promise<void>;
+  run_after: () => Promise<void>;
+
   collections: NestedPartial<DirectusCollection<any>>[];
   fields: NestedPartial<DirectusField<any>>[];
   relations: NestedPartial<DirectusRelation<any>>[];
@@ -28,10 +50,20 @@ class ExtensionSchema {
   flows: NestedPartial<DirectusFlow<any>>[];
   operations: NestedPartial<DirectusOperation<any>>[];
   translations: any[];
-  custom: (() => Promise<void>)[];
 
-  constructor(extension: string) {
+  constructor(
+    extension: string,
+    version: string,
+    options?: Partial<ExtensionSchemaOptions>,
+  ) {
     this.extension = extension;
+    this.version = version;
+
+    this.options = {
+      breaking: false,
+      ...options,
+    };
+
     this.collections = [];
     this.fields = [];
     this.relations = [];
@@ -40,7 +72,9 @@ class ExtensionSchema {
     this.flows = [];
     this.operations = [];
     this.translations = [];
-    this.custom = [];
+
+    this.run_before = () => Promise.resolve();
+    this.run_after = () => Promise.resolve();
   }
 
   createM2MRelation = (
@@ -114,8 +148,13 @@ class ExtensionSchema {
   };
 }
 
-export function combineSchemas(...schemas: ExtensionSchema[]) {
-  const combinedSchema = initSchema(schemas[0].extension);
+export function combineSchemas(
+  extension: string,
+  version: string,
+  options: Partial<ExtensionSchemaOptions>,
+  schemas: ExtensionSchema[],
+) {
+  const combinedSchema = initSchema(extension, version, options);
 
   for (const schema of schemas) {
     combinedSchema.collections.push(...schema.collections);
@@ -126,7 +165,6 @@ export function combineSchemas(...schemas: ExtensionSchema[]) {
     combinedSchema.flows.push(...schema.flows);
     combinedSchema.operations.push(...schema.operations);
     combinedSchema.translations.push(...schema.translations);
-    combinedSchema.custom.push(...schema.custom);
   }
 
   return combinedSchema;

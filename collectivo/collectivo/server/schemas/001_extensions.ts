@@ -1,18 +1,6 @@
-import { I } from "@directus/sdk/dist/index-4004a0b7";
+const schema = initSchema("collectivo", "0.0.1");
 
-const extension = "collectivo";
-const schema = initSchema(extension);
-const migration = createMigration(extension, "0.0.1", up, down);
-
-export default migration;
-
-async function up() {
-  await schema.apply();
-}
-
-async function down() {
-  await schema.rollBack();
-}
+export default schema;
 
 schema.roles = [
   {
@@ -153,17 +141,32 @@ schema.fields = [
   },
   {
     collection: "collectivo_extensions",
-    field: "migration",
+    field: "schema_version",
     type: "string",
     meta: {
       translations: [
-        { language: "en-US", translation: "Migration" },
-        { language: "de-DE", translation: "Migration" },
+        { language: "en-US", translation: "Schema Version" },
+        { language: "de-DE", translation: "Schema Version" },
       ],
       required: true,
       readonly: true,
       sort: 4,
-      note: "Semantic version of the extensions latest migration (e.g. 1.0.0)",
+      note: "Semantic version of the extension schema (e.g. 1.0.0)",
+    },
+  },
+  {
+    collection: "collectivo_extensions",
+    field: "schema_is_latest",
+    type: "string",
+    meta: {
+      translations: [
+        { language: "en-US", translation: "Schema is latest" },
+        { language: "de-DE", translation: "Schema ist aktuell" },
+      ],
+      required: true,
+      readonly: true,
+      sort: 4,
+      note: "Whether the extension schema is up to date.",
     },
   },
 ];

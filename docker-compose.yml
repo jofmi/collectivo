@@ -12,8 +12,10 @@ services:
     links:
       - keycloak
     depends_on:
-      - keycloak
-      # condition: service_healthy
+      keycloak:
+        condition: service_healthy
+      directus-db:
+        condition: service_healthy
     environment:
       KEY: "0fda9121-269d-44bd-91f2-4ff05be14b4b"
       SECRET: "86cb4a76-a4c6-4ce7-8181-b0445d95675c"
@@ -92,7 +94,10 @@ services:
       retries: 5
 
   keycloak:
-    image: quay.io/keycloak/keycloak:22.0.1
+    #image: quay.io/keycloak/keycloak:22.0.1
+    build:
+      context: ./keycloak
+      dockerfile: Dockerfile
     environment:
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
@@ -108,8 +113,12 @@ services:
     volumes:
       - ./keycloak/import:/opt/keycloak/data/import:ro
       - ./keycloak/export:/tmp/export
-      - ./keycloak/healthcheck.sh:/healthcheck.sh
     command: start-dev --import-realm --health-enabled true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ready"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
     depends_on:
       - keycloak-db
     ports:

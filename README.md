@@ -21,17 +21,11 @@ Add the following to your [`etc/hosts`](https://www.howtogeek.com/27350/beginner
 127.0.0.1 keycloak
 ```
 
-Prepare the environment:
+Prepare the environment and start up a development server:
 
 ```sh
 cp .env.example .env
-docker compose up -d keycloak
 pnpm install
-```
-
-Wait for keycloak to be ready, then run:
-
-```sh
 docker compose up -d
 pnpm dev
 ```
@@ -42,19 +36,19 @@ In a separate terminal, run the following to apply migrations and example data:
 pnpm seed
 ```
 
-If you go back to the previous terminal (from `pnpm dev`), you will see the migration logs.
+Go back to the previous terminal (from `pnpm dev`) to see the migration logs.
 
 The following services should now be available:
 
-- Collectivo/Nuxt (user app): http://localhost:3000/
-- Directus (admin app): http://localhost:8055/
+- Collectivo (user app): http://localhost:3000/
+- Directus (data studio): http://localhost:8055/
 - Keycloak (access control): http://localhost:8080/admin/master/console/
 
-You can now log in with the following example users on both the user and admin app:
+Log in with the following example users:
 
-- Admin: admin@example.com / admin
-- Editor: editor@example.com / editor
-- User: user@example.com / user
+- Admin: admin@example.com / admin (Collectivo, Directus, Keycloak)
+- Editor: editor@example.com / editor (Collectivo, Directus)
+- User: user@example.com / user (Collectivo)
 
 ## Migrations
 

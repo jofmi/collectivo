@@ -269,7 +269,7 @@ This class has the following attributes:
 - `run_after: () => Promise<void>` -> Custom migration script to be run after applying this schema version
 - `collections: NestedPartial<DirectusCollection<any>>[]`
 - `fields: NestedPartial<DirectusField<any>>[]`
-- `relations: NestedPartial<DirectusRelation<any>>[]` -> Can be created with the utility methods below.
+- `relations: NestedPartial<DirectusRelation<any>>[]` -> Can be created with the methods below.
 - `roles: NestedPartial<DirectusRole<any>>[]`
 - `permissions: NestedPartial<DirectusPermission<any>>[]`
 - `flows: NestedPartial<DirectusFlow<any>>[]`
@@ -278,11 +278,9 @@ This class has the following attributes:
 
 And the following methods:
 
-- Utility methods to create [relationships](https://docs.directus.io/app/data-model/relationships.html)
-  - `createO2MRelation()` - [One-to-Many](https://docs.directus.io/app/data-model/relationships.html#one-to-many-o2m)
-  - `createM2MRelation()` - [Many-to_many](https://docs.directus.io/app/data-model/relationships.html#many-to-many-m2m)
-  - `createM2ARelation()` - [Many-to-Any](https://docs.directus.io/app/data-model/relationships.html#many-to-any-m2a)
-- `apply()` -> Apply the schema to the database
+- `createO2MRelation()` - Utility method to create a [One-to-Many](https://docs.directus.io/app/data-model/relationships.html#one-to-many-o2m) relationship
+- `createM2MRelation()` - Utility method to create a [Many-to_many](https://docs.directus.io/app/data-model/relationships.html#many-to-many-m2m) relationship
+- `createM2ARelation()` - Utility method to create a [Many-to-Any](https://docs.directus.io/app/data-model/relationships.html#many-to-any-m2a) relationship
 
 ### `useDirectusAdmin`
 

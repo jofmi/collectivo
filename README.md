@@ -107,6 +107,10 @@ The repository is structured as follows:
   - To add collectivo, add `extends: ["@collectivo/collectivo"]` (see [Nuxt Layer](https://nuxt.com/docs/guide/going-further/layers)).
 - Register your extension on the backend (see [registerExtension](#registerextension))
   - Here, you can set the name of your extension that should be used in the database. The name should not include underscores, e.g. `myExtension`.
+- Add your package to the development app
+  - Add your package name to the `dependencies` in `collectivo/app/package.json`, with the version being `"workspace:*"`
+  - Add the package name to `extends` in `collectivo/app/nuxt.config.ts`.
+  - Run `pnpm i`
 - Create a database schema for your extension (see [initschema](#initschema)).
 - Create frontend components for your extension (see [Frontend API](#frontend-api))
 - Follow [installation](#installation) to set up a development server that will now include your extension.

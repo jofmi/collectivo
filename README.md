@@ -245,11 +245,11 @@ export default defineNitroPlugin(() => {
 
 ### `initSchema`
 
-`initSchema(extension: string, version: string, options: ExtensionSchemaOptions)`
+`initSchema(extension: string, version: string, options: ExtensionSchemaOptions): ExtensionSchema`
 
-Creates a new schema class that can be used to define the database structure and migrations of your extension (see [migrations](#migrations)).
+Initiates a new [ExtensionSchema](#extensionschema) that can be used to define the database structure and migrations of your extension (see [migrations](#migrations)).
 
-Should be declared as follows and used by [`registerExtension`](#registerextension):
+Can be applied as follows and added to [`registerExtension`](#registerextension):
 
 ```ts
 // my-extension/server/schemas/mySchema.ts
@@ -258,7 +258,9 @@ const schema = initSchema("myExtension", "0.0.1");
 export default schema;
 ```
 
-The resulting schema has the following attributes:
+### `ExtensionSchema`
+
+This class has the following attributes:
 
 - `extension: string`
 - `version: string`
@@ -267,12 +269,20 @@ The resulting schema has the following attributes:
 - `run_after: () => Promise<void>` -> Custom migration script to be run after applying this schema version
 - `collections: NestedPartial<DirectusCollection<any>>[]`
 - `fields: NestedPartial<DirectusField<any>>[]`
-- `relations: NestedPartial<DirectusRelation<any>>[]`
+- `relations: NestedPartial<DirectusRelation<any>>[]` -> Can be created with the utility methods below.
 - `roles: NestedPartial<DirectusRole<any>>[]`
 - `permissions: NestedPartial<DirectusPermission<any>>[]`
 - `flows: NestedPartial<DirectusFlow<any>>[]`
 - `operations: NestedPartial<DirectusOperation<any>>[]`
 - `translations: any[]`
+
+And the following methods:
+
+- Utility methods to create [relationships](https://docs.directus.io/app/data-model/relationships.html)
+  - `createO2MRelation()` - [One-to-Many](https://docs.directus.io/app/data-model/relationships.html#one-to-many-o2m)
+  - `createM2MRelation()` - [Many-to_many](https://docs.directus.io/app/data-model/relationships.html#many-to-many-m2m)
+  - `createM2ARelation()` - [Many-to-Any](https://docs.directus.io/app/data-model/relationships.html#many-to-any-m2a)
+- `apply()` -> Apply the schema to the database
 
 ### `useDirectusAdmin`
 

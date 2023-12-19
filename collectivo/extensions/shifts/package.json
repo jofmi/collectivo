@@ -1,0 +1,34 @@
+{
+  "name": "@collectivo/shifts",
+  "description": "A module to create shifts that members can register to.",
+  "version": "0.0.1",
+  "type": "module",
+  "license": "Unlicense",
+  "main": "./nuxt.config.ts",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev --p 3100",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "test": "vitest run",
+    "format": "prettier --cache --check .",
+    "format:fix": "prettier --cache --check . --write",
+    "lint": "eslint --cache .",
+    "lint:fix": "eslint --cache . --fix"
+  },
+  "dependencies": {
+    "@collectivo/collectivo": "workspace:*"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "latest",
+    "@nuxt/test-utils": "^3.7.1",
+    "nuxt": "^3.7.0",
+    "vitest": "^0.34.3",
+    "@typescript-eslint/eslint-plugin": "6.11.0",
+    "@typescript-eslint/parser": "6.11.0",
+    "eslint": "8.54.0",
+    "eslint-config-prettier": "9.0.0",
+    "eslint-plugin-vue": "9.18.1",
+    "prettier": "3.1.0"
+  }
+}

@@ -16,6 +16,7 @@
     "@collectivo/collectivo": "workspace:*",
     "@collectivo/memberships": "workspace:*",
     "@collectivo/payments": "workspace:*"
+    "@collectivo/shifts": "workspace:*",
   },
   "devDependencies": {
     "@nuxt/devtools": "^1.0.8",

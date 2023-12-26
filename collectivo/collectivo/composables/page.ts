@@ -9,11 +9,6 @@ export const setCollectivoTitle = (title: string) => {
   });
 };
 
-interface CollectivoMenus {
-  main: CollectivoMenuItem[];
-  public: CollectivoMenuItem[];
-}
-
 export const useCollectivoMenus = () =>
   useState<CollectivoMenus>("collectivoMenus", () => {
     return {

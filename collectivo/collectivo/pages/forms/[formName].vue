@@ -31,7 +31,7 @@ if (typeof formName !== "string" || !forms.value[formName]) {
 
 const form = forms.value[formName];
 
-setPageTitle(form.title);
+setCollectivoPageTitle(form.title);
 
 if (!form.public) {
   requireAuth();

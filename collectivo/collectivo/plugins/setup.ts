@@ -1,7 +1,7 @@
 import CustomVue from "~/components/collectivo/forms/Custom.vue";
 
 export default defineNuxtPlugin(() => {
-  const menu = useSidebarMenu();
+  const menu = useCollectivoMenus();
   const forms = useCollectivoForms();
   const profile = useUser();
   const runtimeConfig = useRuntimeConfig();
@@ -30,6 +30,9 @@ export default defineNuxtPlugin(() => {
         return true;
       },
     },
+  ];
+
+  const publicItems: CollectivoMenuItem[] = [
     {
       label: "Register",
       icon: "i-system-uicons-document-stack",
@@ -52,7 +55,8 @@ export default defineNuxtPlugin(() => {
     },
   ];
 
-  menu.value.push(...items);
+  menu.value.main.push(...items);
+  menu.value.public.push(...publicItems);
 
   const profileInputs: CollectivoUserInput[] = [
     {

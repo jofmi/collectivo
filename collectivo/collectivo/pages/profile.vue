@@ -3,7 +3,7 @@ definePageMeta({
   middleware: ["auth"],
 });
 
-setPageTitle("Profile");
+setCollectivoPageTitle("Profile");
 const toast = useToast();
 const { t } = useI18n();
 const profile = useUser();

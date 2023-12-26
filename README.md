@@ -173,9 +173,9 @@ Additional libraries can be loaded in `nuxt.config.ts`.
 
 The following [composables](https://nuxt.com/docs/guide/directory-structure/composables) are available for frontend development.
 
-### `setPageTitle`
+### `setCollectivoPageTitle`
 
-`setPageTitle(title: string)`
+`setCollectivoPageTitle(title: string)`
 
 Use in a page to set a page title for both the visible header and the metadata.
 
@@ -200,20 +200,38 @@ Store for data of the currently authenticated user, with the following attribute
 - `load: (force: boolean = false) => Promise<UserStore>` -> Fetch user data
 - `save: (data: CollectivoUser) => Promise<UserStore>` -> Update user data
 
-### `useSidebarMenu`
+### `useCollectivoMenus`
 
-`useSidebarMenu(): Ref<CollectivoMenuItem[]>`
+`useCollectivoMenus(): Ref<CollectivoMenus>`
 
-This composable can be used to add or adapt menu items. Best to use in a plugin as follows:
+This composable can be used to add or adapt menu items.
+
+There are two menus in `CollectivoMenus`:
+
+- `main`: Shown for authenticated users.
+- `public`: Shown for unauthenticated users.
+
+Attributes:
+
+- `label: string` - Will be shown next to the icon.
+- `icon: string` - Icon to be used (see [icons](#icons))
+- `to: string` - A path like `/my/path` or `https://externallink.com`
+- `external: boolan` - If true, path will be interepreted as an external URL.
+- `hideOnMobile: boolean` - If true, item will not be shown on small screens.
+- `target: string` - Target attribute of the link.
+- `click: Function` - Click attribute of the link.
+- `filter: (item: CollectivoMenuItem) => boolean` - Show item only if this function returns `true`.
+
+Here is an example of how to add a menu item to the main menu through a plugin:
 
 ```ts
 // my-extension/plugins/setup.ts
 export default defineNuxtPlugin(() => {
-  const menu = useSidebarMenu();
-  menu.value.push({
+  const menu = useCollectivoMenus();
+  menu.value.main.push({
     label: "My menu item",
-    to: "/my/path",
     icon: "i-system-uicons-cubes",
+    to: "/my/path",
     order: 100
   });
 }

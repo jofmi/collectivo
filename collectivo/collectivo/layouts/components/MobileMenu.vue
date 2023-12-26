@@ -1,19 +1,29 @@
 <script setup lang="ts">
 import MenuItem from "./MenuItem.vue";
 
-const menuItems = useSidebarMenu();
+const menus = useCollectivoMenus();
+const user = useUser();
 
-const sortedMenuItems = Object.values(menuItems.value).sort(
-  (a, b) => (a.order ?? 100) - (b.order ?? 100),
+const mainMenuItems = Object.values(menus.value.main).sort(
+  (a, b) => (a.order ?? 100) - (b.order ?? 100)
+);
+
+const publicMenuItems = Object.values(menus.value.public).sort(
+  (a, b) => (a.order ?? 100) - (b.order ?? 100)
 );
 </script>
 
 <template>
   <div class="mobile-menu">
     <div class="mobile-menu__inner">
-      <div v-for="(item, i) in sortedMenuItems" :key="i">
+      <div
+        v-for="(item, i) in user.isAuthenticated
+          ? mainMenuItems
+          : publicMenuItems"
+        :key="i"
+      >
         <MenuItem
-          v-if="item.mobile == undefined || item.mobile == true"
+          v-if="!item.hideOnMobile == true"
           :item="item"
           class="mobile-menu-item"
         />

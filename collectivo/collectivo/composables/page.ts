@@ -1,12 +1,23 @@
-export const usePageTitle = () => useState<string>("pageTitle", () => "");
+export const useCollectivoPageTitle = () =>
+  useState<string>("pageTitle", () => "");
 
-export const setPageTitle = (title: string) => {
-  usePageTitle().value = title;
+export const setCollectivoPageTitle = (title: string) => {
+  useCollectivoPageTitle().value = title;
 
   useHead({
     title: title + " - " + useAppConfig().projectName,
   });
 };
 
-export const useSidebarMenu = () =>
-  useState<CollectivoMenuItem[]>("sideBarMenu", () => []);
+interface CollectivoMenus {
+  main: CollectivoMenuItem[];
+  public: CollectivoMenuItem[];
+}
+
+export const useCollectivoMenus = () =>
+  useState<CollectivoMenus>("collectivoMenus", () => {
+    return {
+      main: [],
+      public: [],
+    };
+  });

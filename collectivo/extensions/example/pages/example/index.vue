@@ -1,7 +1,7 @@
 <!-- This section will be available under /example -->
 
 <script setup lang="ts">
-setPageTitle("Example");
+setCollectivoPageTitle("Example");
 </script>
 
 <template>

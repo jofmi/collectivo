@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const pageTitle = usePageTitle();
+const pageTitle = useCollectivoPageTitle();
 const { t } = useI18n();
 </script>
 

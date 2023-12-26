@@ -14,7 +14,12 @@ declare global {
     dependencies?: CollectivoMigrationDependency[];
   }
 
-  // Directus schema types
+  // Layout
+  interface CollectivoMenus {
+    main: CollectivoMenuItem[];
+    public: CollectivoMenuItem[];
+  }
+
   interface CollectivoMenuItem {
     label: string;
     icon?: string;
@@ -23,7 +28,6 @@ declare global {
     external?: boolean; // Defaults to false
     target?: string; // Default "_self"
     order?: number; // Default 100
-    public?: boolean; // Default to false - public is ONLY shown to logged out users
     hideOnMobile?: boolean; // Default false
     filter?: (item: CollectivoMenuItem) => boolean;
   }

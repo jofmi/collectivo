@@ -1,8 +1,8 @@
-export const useCollectivoPageTitle = () =>
-  useState<string>("pageTitle", () => "");
+export const useCollectivoTitle = () =>
+  useState<string>("collectivoTitle", () => "");
 
-export const setCollectivoPageTitle = (title: string) => {
-  useCollectivoPageTitle().value = title;
+export const setCollectivoTitle = (title: string) => {
+  useCollectivoTitle().value = title;
 
   useHead({
     title: title + " - " + useAppConfig().projectName,

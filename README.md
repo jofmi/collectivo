@@ -173,9 +173,9 @@ Additional libraries can be loaded in `nuxt.config.ts`.
 
 The following [composables](https://nuxt.com/docs/guide/directory-structure/composables) are available for frontend development.
 
-### `setCollectivoPageTitle`
+### `setCollectivoTitle`
 
-`setCollectivoPageTitle(title: string)`
+`setCollectivoTitle(title: string)`
 
 Use in a page to set a page title for both the visible header and the metadata.
 

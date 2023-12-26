@@ -1,5 +1,5 @@
 <script setup lang="ts">
-setCollectivoPageTitle("Membership");
+setCollectivoTitle("Membership");
 </script>
 
 <template>

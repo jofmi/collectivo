@@ -6,7 +6,7 @@ definePageMeta({
 setCollectivoTitle("Profile");
 const toast = useToast();
 const { t } = useI18n();
-const profile = useUser();
+const profile = useCollectivoUser();
 const runtimeConfig = useRuntimeConfig();
 const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protocol/openid-connect/logout`;
 const state = ref<CollectivoUser | null>(null);

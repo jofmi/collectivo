@@ -2,7 +2,7 @@
 import MenuItem from "./MenuItem.vue";
 
 const menus = useCollectivoMenus();
-const user = useUser();
+const user = useCollectivoUser();
 
 const mainMenuItems = Object.values(menus.value.main).sort(
   (a, b) => (a.order ?? 100) - (b.order ?? 100)

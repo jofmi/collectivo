@@ -185,9 +185,9 @@ Use in a page to set a page title for both the visible header and the metadata.
 
 Access the [directus client](https://docs.directus.io/guides/sdk/getting-started.html) to interact with the database.
 
-### `useUser`
+### `useCollectivoUser`
 
-`useUser(): UserStore`
+`useCollectivoUser(): UserStore`
 
 Store for data of the currently authenticated user, with the following attributes:
 

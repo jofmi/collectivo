@@ -1,6 +1,6 @@
 import { readMe, updateMe } from "@directus/sdk";
 
-class UserStore {
+class CollectivoUserStore {
   data: CollectivoUser | null;
   inputs: CollectivoUserInput[];
   isAuthenticated: boolean;
@@ -25,7 +25,7 @@ class UserStore {
     this.data = (await $directus?.request(
       readMe({
         fields: ["id", "first_name", "last_name", "email"],
-      }),
+      })
     )) as CollectivoUser;
 
     this.loading = false;
@@ -42,10 +42,10 @@ class UserStore {
   }
 }
 
-export const useUser = () => {
-  const state = useState<UserStore>(
+export const useCollectivoUser = () => {
+  const state = useState<CollectivoUserStore>(
     "collectivo_profile",
-    () => new UserStore(),
+    () => new CollectivoUserStore()
   );
 
   return state;

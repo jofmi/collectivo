@@ -3,7 +3,7 @@ import CustomVue from "~/components/collectivo/forms/Custom.vue";
 export default defineNuxtPlugin(() => {
   const menu = useCollectivoMenus();
   const forms = useCollectivoForms();
-  const profile = useUser();
+  const profile = useCollectivoUser();
   const runtimeConfig = useRuntimeConfig();
 
   const items: CollectivoMenuItem[] = [

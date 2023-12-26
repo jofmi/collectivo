@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { triggerFlow } from "@directus/sdk";
 import {
   object,
   string,
@@ -20,7 +19,6 @@ const props = defineProps({
 });
 
 const form = { fields: props.fields ?? {} };
-const directus = useDirectus();
 
 function checkConditions(conditions: FormCondition[] | undefined) {
   if (!conditions) {
@@ -134,6 +132,7 @@ for (const [key, input] of Object.entries(form.fields)) {
 
 type Schema = InferType<typeof schema>;
 
+// Form handlers
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   await props.submit!(event.data);
 }
@@ -189,7 +188,11 @@ async function onError(event: FormErrorEvent) {
             :label="input.label"
             :name="key"
           >
-            <UInput v-model="state[key]" :placeholder="input.placeholder">
+            <UInput
+              v-model="state[key]"
+              :placeholder="input.placeholder"
+              :disabled="input.disabled"
+            >
               <template v-if="input.icon" #trailing>
                 <UIcon :name="input.icon" />
               </template>
@@ -215,6 +218,7 @@ async function onError(event: FormErrorEvent) {
               v-model="state[key]"
               type="password"
               :placeholder="input.placeholder"
+              :disabled="input.disabled"
             >
               <template v-if="input.icon" #trailing>
                 <UIcon :name="input.icon" />
@@ -227,7 +231,12 @@ async function onError(event: FormErrorEvent) {
             :name="key"
             :placeholder="input.placeholder"
           >
-            <UInput v-model="state[key]" type="number" />
+            <UInput
+              v-model="state[key]"
+              type="number"
+              :placeholder="input.placeholder"
+              :disabled="input.disabled"
+            />
           </UFormGroup>
           <UFormGroup
             v-if="input.type === 'textarea'"
@@ -238,6 +247,7 @@ async function onError(event: FormErrorEvent) {
               v-model="state[key]"
               resize
               :placeholder="input.placeholder"
+              :disabled="input.disabled"
             />
           </UFormGroup>
           <UFormGroup
@@ -245,7 +255,11 @@ async function onError(event: FormErrorEvent) {
             :label="input.label"
             :name="key"
           >
-            <URadioGroup v-model="state[key]" :options="input.choices" />
+            <URadioGroup
+              v-model="state[key]"
+              :options="input.choices"
+              :disabled="input.disabled"
+            />
           </UFormGroup>
           <UFormGroup
             v-else-if="input.type === 'multiselect-checkbox'"
@@ -260,6 +274,7 @@ async function onError(event: FormErrorEvent) {
           <UFormGroup
             v-else-if="input.type === 'date'"
             :label="input.label"
+            :disabled="input.disabled"
             :name="key"
           >
             <CollectivoFormsDate v-model="state[key]"></CollectivoFormsDate>
@@ -269,7 +284,7 @@ async function onError(event: FormErrorEvent) {
             :label="input.label"
             :name="key"
           >
-            <UToggle v-model="state[key]" />
+            <UToggle v-model="state[key]" :disabled="input.disabled" />
           </UFormGroup>
           <UFormGroup
             v-else-if="input.type === 'custom-input'"

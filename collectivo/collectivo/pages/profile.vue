@@ -21,7 +21,7 @@ async function getProfile() {
 getProfile();
 
 // Submit form data
-async function saveProfile(data: any) {
+async function saveProfile(data: CollectivoUser) {
   try {
     await user.value.save(data);
 

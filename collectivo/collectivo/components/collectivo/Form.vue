@@ -6,6 +6,7 @@ import {
   boolean,
   type InferType,
   type Schema as YupSchema,
+  date,
 } from "yup";
 import type { FormErrorEvent, FormSubmitEvent } from "#ui/types";
 
@@ -52,7 +53,17 @@ function addInputToSchema(
   schema_field: YupSchema
 ) {
   if (input.required) {
-    schema_field = schema_field.required("This field is required");
+    if (input.type === "checkbox" || input.type === "toggle") {
+      schema_field = schema_field.test(
+        "checkbox",
+        "This field is required",
+        (value) => {
+          return value === true;
+        }
+      );
+    } else {
+      schema_field = schema_field.required("This field is required");
+    }
   }
 
   // Create a conditional schema field
@@ -76,7 +87,6 @@ function addInputToSchema(
   }
 
   // Fill state with either data or default value
-  state[key] = props.data?.[key] ?? input.default ?? undefined;
 }
 
 function valString(validators: FormValidator[] | undefined) {
@@ -113,20 +123,48 @@ function valNumber(validators: FormValidator[] | undefined) {
   return schema;
 }
 
+function valDate(validators: FormValidator[] | undefined) {
+  let schema = date();
+
+  for (const validator of validators ?? []) {
+    if (validator.type === "min") {
+      schema = schema.min(validator.value as number);
+    } else if (validator.type === "max") {
+      schema = schema.max(validator.value as number);
+    }
+  }
+
+  return schema;
+}
+
 // Define state and schema from form object
 for (const [key, input] of Object.entries(form.fields)) {
-  if (input.type === "text" || input.type === "password") {
+  if (
+    input.type === "text" ||
+    input.type === "textarea" ||
+    input.type === "password"
+  ) {
     addInputToSchema(key, input, valString(input.validators));
   } else if (input.type === "email") {
     input.validators = input.validators ?? [];
     input.validators.push({ type: "email" });
     addInputToSchema(key, input, valString(input.validators));
+  } else if (input.type === "date") {
+    addInputToSchema(key, input, valDate(input.validators));
   } else if (input.type === "number") {
     addInputToSchema(key, input, valNumber(input.validators));
-  } else if (input.type === "select") {
+  } else if (input.type === "select" || input.type === "select-radio") {
     addInputToSchema(key, input, valString(input.validators));
-  } else if (input.type === "checkbox") {
+  } else if (input.type === "toggle" || input.type === "checkbox") {
     addInputToSchema(key, input, boolean());
+  }
+
+  if (props.data?.[key]) {
+    state[key] = props.data[key];
+  } else if ("default" in input && input.default) {
+    state[key] = input.default;
+  } else {
+    state[key] = undefined;
   }
 }
 

@@ -89,8 +89,8 @@ declare global {
     | CollectivoFormInput;
 
   interface CollectivoFormInputChoice {
-    key: string;
     value: string;
+    label: string;
   }
 
   interface CollectivoFormFieldBase {
@@ -112,7 +112,7 @@ declare global {
 
   type CollectivoFormInput = {
     label: string;
-    default?: boolean;
+    default?: any;
     required?: boolean;
     disabled?: boolean;
     validators?: FormValidator[];

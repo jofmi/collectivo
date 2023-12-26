@@ -2,7 +2,7 @@
 const { t } = useI18n();
 
 interface Choice {
-  key: string;
+  label: string;
   value: string;
 }
 
@@ -16,7 +16,7 @@ const emit = defineEmits(["update:modelValue"]);
 const choice_values: Ref<{ [key: string]: boolean | undefined }> = ref({});
 
 for (const choice of props.choices ?? []) {
-  choice_values.value[choice.key] = false;
+  choice_values.value[choice.value] = false;
 }
 
 // Emit if any choice_values changes
@@ -33,7 +33,7 @@ watch(
 
     emit("update:modelValue", values);
   },
-  { deep: true },
+  { deep: true }
 );
 </script>
 
@@ -41,9 +41,9 @@ watch(
   <div>
     <UCheckbox
       v-for="choice in choices"
-      :key="choice.key"
-      v-model="choice_values[choice.key]"
-      :label="choice.value"
+      :key="choice.value"
+      v-model="choice_values[choice.value]"
+      :label="choice.label"
     />
   </div>
 </template>

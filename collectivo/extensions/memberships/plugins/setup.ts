@@ -36,33 +36,101 @@ export default defineNuxtPlugin(() => {
 
   user.value.fields = Object.assign(profileInputs, user.value.fields);
 
+  const is_legal = [
+    {
+      key: "person_type",
+      value: "legal",
+    },
+  ];
+
+  const is_natural = [
+    {
+      key: "person_type",
+      value: "natural",
+    },
+  ];
+
+  const is_sepa = [
+    {
+      key: "payment_type",
+      value: "sepa",
+    },
+  ];
+
   // Mockup form data to be replaced later
-  const test_form: CollectivoFormPage = {
-    title: "Membership registration",
+  const registration_form: CollectivoFormPage = {
+    title: "Membership application",
     submitMode: "postNuxt",
     submitPath: "/api/memberships/register",
     fields: {
-      person_type_section: {
+      section_person_type: {
         type: "section",
         content: "Type of person",
       },
       person_type: {
-        type: "select-radio",
         label: "Type of person",
+        type: "select-radio",
+        default: "natural",
+        required: true,
         choices: [
           {
-            key: "natural",
-            value: "Natural person",
+            value: "natural",
+            label: "Natural person",
           },
           {
-            key: "legal",
-            value: "Legal person",
+            value: "legal",
+            label: "Organisation",
           },
         ],
       },
-      personal_section: {
+      section_account: {
+        type: "section",
+        content: "Account details",
+      },
+      email: {
+        label: "Email",
+        type: "email",
+        required: true,
+        icon: "i-system-uicons-mail",
+      },
+      password: {
+        label: "Password",
+        type: "password",
+        required: true,
+        icon: "i-system-uicons-lock",
+      },
+      section_organisation: {
+        type: "section",
+        content: "Organisation",
+        conditions: is_legal,
+      },
+      organisation_name: {
+        label: "Organisation name",
+        type: "text",
+        required: true,
+        conditions: is_legal,
+      },
+      organisation_type: {
+        label: "Organisation type",
+        type: "text",
+        required: true,
+        conditions: is_legal,
+      },
+      organisation_id: {
+        label: "Organisation ID",
+        type: "text",
+        required: true,
+        conditions: is_legal,
+      },
+      section_personal_data: {
         type: "section",
         content: "Personal data",
+        conditions: is_natural,
+      },
+      section_personal_data_legal: {
+        type: "section",
+        content: "Organisation - Contact person",
+        conditions: is_legal,
       },
       first_name: {
         type: "text",
@@ -74,32 +142,131 @@ export default defineNuxtPlugin(() => {
         required: true,
         label: "Last name",
       },
-      email: {
-        type: "email",
-        required: true,
-        label: "Email",
-        icon: "i-system-uicons-mail",
-      },
-      password: {
-        type: "password",
-        required: true,
-        label: "Password",
+      phone: {
+        type: "text",
+        label: "Phone",
       },
       birth_date: {
-        type: "date",
         label: "Birthdate",
-        conditions: [
+        type: "date",
+        required: true,
+        conditions: is_natural,
+      },
+      occupation: {
+        label: "Occupation",
+        type: "text",
+        required: true,
+        conditions: is_natural,
+      },
+      section_address: {
+        type: "section",
+        content: "Address",
+        conditions: is_natural,
+      },
+      section_address_legal: {
+        type: "section",
+        content: "Organisation - Address",
+        conditions: is_legal,
+      },
+      street: {
+        label: "Street",
+        type: "text",
+        required: true,
+      },
+      number: {
+        label: "Number",
+        type: "text",
+        width: "quarter",
+        required: true,
+      },
+      stair: {
+        label: "Stair",
+        type: "text",
+        width: "quarter",
+      },
+      door: {
+        label: "Door",
+        type: "text",
+        width: "quarter",
+      },
+      postal_code: {
+        label: "Postal code",
+        type: "text",
+        width: "quarter",
+        required: true,
+      },
+      city: {
+        label: "City",
+        type: "text",
+        required: true,
+      },
+      country: {
+        label: "Country",
+        type: "text",
+        required: true,
+      },
+      section_membership: {
+        type: "section",
+        content: "Type of membership",
+      },
+      membership_type: {
+        label: "Membership type",
+        type: "select-radio",
+        required: true,
+        choices: [
           {
-            key: "person_type",
-            value: "natural",
+            value: "active",
+            label: "Active",
+          },
+          {
+            value: "investing",
+            label: "Investing",
           },
         ],
       },
-      clear: {
-        type: "clear",
+      section_payment: {
+        type: "section",
+        content: "Payment details",
+      },
+      payment_type: {
+        label: "Payment type",
+        type: "select-radio",
+        width: "full",
+        required: true,
+        choices: [
+          {
+            value: "sepa",
+            label: "SEPA",
+          },
+          {
+            value: "transfer",
+            label: "Direct transfer",
+          },
+        ],
+      },
+      bank_account_iban: {
+        label: "IBAN",
+        type: "text",
+        conditions: is_sepa,
+        required: true,
+      },
+      bank_account_owner: {
+        label: "Account owner",
+        type: "text",
+        conditions: is_sepa,
+        required: true,
+      },
+      section_final: {
+        type: "section",
+        content: "Terms",
+      },
+      terms: {
+        label: "Terms",
+        type: "toggle",
+        required: true,
       },
     },
   };
 
-  forms.value["memberships_register"] = test_form;
+  forms.value["memberships_register"] = registration_form;
 });

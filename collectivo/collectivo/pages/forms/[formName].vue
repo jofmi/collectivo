@@ -14,6 +14,13 @@ if (typeof formName !== "string" || !forms.value[formName]) {
   });
 }
 
+// TODO: Do something with data
+//   if (form.submitMethod == "triggerFlow" && form.submitID) {
+//     directus.request(triggerFlow("POST", form.submitID, {}));
+//   } else {
+//     throw new Error("Invalid form configuration");
+//   }
+
 const form = forms.value[formName];
 
 setCollectivoTitle(form.title);
@@ -25,6 +32,6 @@ if (!form.public) {
 
 <template>
   <CollectivoContainer>
-    <CollectivoForm v-if="form" :form="form" />
+    <CollectivoForm v-if="form" :fields="form.fields" />
   </CollectivoContainer>
 </template>

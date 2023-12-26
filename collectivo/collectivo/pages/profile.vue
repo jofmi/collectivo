@@ -49,37 +49,8 @@ async function saveProfile(data: any) {
       v-if="user.data"
       :data="user.data"
       :fields="user.fields"
-      :save="saveProfile"
+      :submit="saveProfile"
     />
-    <!-- <h2 class="text-cv-primary font-semibold text-2xl leading-7 mb-6">
-      {{ t("Personal data") }}
-    </h2>
-    <div v-if="profile.error">
-      {{ profile.error }}
-    </div>
-    <div v-else-if="state">
-      <div v-for="field in profile.inputs" :key="field.key" class="mb-6">
-        <UFormGroup :label="field.label" :name="field.key">
-          <UInput
-            v-model="state[field.key]"
-            :disabled="field.disabled ?? false"
-        /></UFormGroup>
-      </div>
-      <UButton
-        class="btn"
-        variant="solid"
-        color="cyan"
-        size="md"
-        icon="i-mi-circle-check"
-        :loading="profile.saving"
-        @click="saveProfile"
-      >
-        {{ t("Save") }}
-      </UButton>
-    </div>
-    <div v-else>
-      <USkeleton class="h-12 w-full" />
-    </div> -->
   </CollectivoContainer>
   <CollectivoContainer>
     <h2 class="text-cv-primary font-semibold text-2xl leading-7 mb-6">

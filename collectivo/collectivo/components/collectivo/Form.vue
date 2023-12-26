@@ -16,7 +16,7 @@ const { t } = useI18n();
 const props = defineProps({
   fields: Object as PropType<CollectivoFormFields>,
   data: Object as PropType<Record<string, any>>,
-  save: Function as PropType<(data: any) => Promise<void>>,
+  submit: Function as PropType<(data: any) => Promise<void>>,
 });
 
 const form = { fields: props.fields ?? {} };
@@ -77,7 +77,8 @@ function addInputToSchema(
     schema = schema.shape({ [key]: schema_field });
   }
 
-  state[key] = input.default ?? undefined;
+  // Fill state with either data or default value
+  state[key] = props.data?.[key] ?? input.default ?? undefined;
 }
 
 function valString(validators: FormValidator[] | undefined) {
@@ -134,13 +135,7 @@ for (const [key, input] of Object.entries(form.fields)) {
 type Schema = InferType<typeof schema>;
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  // TODO: Do something with data
-  //   if (form.submitMethod == "triggerFlow" && form.submitID) {
-  //     directus.request(triggerFlow("POST", form.submitID, {}));
-  //   } else {
-  //     throw new Error("Invalid form configuration");
-  //   }
-  console.error("Not implemented", event.data);
+  await props.submit!(event.data);
 }
 
 async function onError(event: FormErrorEvent) {
@@ -289,6 +284,7 @@ async function onError(event: FormErrorEvent) {
     <div class="basis-full"></div>
     <div class="px-2 py-3 lg:p-4">
       <UButton
+        v-if="props.submit"
         class="btn"
         variant="solid"
         color="cyan"

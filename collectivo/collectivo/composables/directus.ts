@@ -25,3 +25,15 @@ export function requireAuth() {
     );
   }
 }
+
+export async function fetchWithAuth(request: string, options?: any) {
+  const directus = useDirectus();
+  const token = await directus.getToken();
+  return await $fetch(request, {
+    ...(options || {}),
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ...(options?.headers || {}),
+    },
+  });
+}

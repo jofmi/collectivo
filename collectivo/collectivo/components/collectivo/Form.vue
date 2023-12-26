@@ -312,6 +312,7 @@ async function onError(event: FormErrorEvent) {
       </UButton>
     </div>
   </UForm>
+  {{ state }}
 </template>
 
 <style lang="scss" scoped>

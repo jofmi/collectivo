@@ -74,7 +74,8 @@ declare global {
   interface CollectivoFormPage {
     title: string;
     fields: CollectivoFormFields;
-    onSubmit?: "triggerFlow" | (() => void); // TODO: Add createItem updateItem APIpost APIput APIpatch
+    submitMode?: "postNuxt" | (() => void);
+    submitPath?: string;
     // TODO: Add conditions, e.g. user has or has not policy XY
   }
   // TODO: How can an extension add a form input type?

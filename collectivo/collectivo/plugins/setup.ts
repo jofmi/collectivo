@@ -78,6 +78,8 @@ export default defineNuxtPlugin(() => {
   // Mockup form data to be replaced later
   const test_form: CollectivoFormPage = {
     title: "Test Form Title",
+    submitMode: "postNuxt",
+    submitPath: "/api/memberships/register",
     fields: {
       section: {
         type: "section",

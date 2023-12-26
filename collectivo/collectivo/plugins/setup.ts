@@ -3,7 +3,7 @@ import CustomVue from "~/components/collectivo/forms/Custom.vue";
 export default defineNuxtPlugin(() => {
   const menu = useCollectivoMenus();
   const forms = useCollectivoForms();
-  const profile = useCollectivoUser();
+  const user = useCollectivoUser();
   const runtimeConfig = useRuntimeConfig();
 
   const items: CollectivoMenuItem[] = [
@@ -37,7 +37,6 @@ export default defineNuxtPlugin(() => {
       label: "Register",
       icon: "i-system-uicons-document-stack",
       to: "/forms/registration",
-      public: true,
       order: 1,
       filter: (_item) => {
         return true;
@@ -47,7 +46,6 @@ export default defineNuxtPlugin(() => {
       label: "Login",
       icon: "i-system-uicons-enter",
       click: requireAuth,
-      public: true,
       order: 2,
       filter: (_item) => {
         return true;
@@ -58,34 +56,28 @@ export default defineNuxtPlugin(() => {
   menu.value.main.push(...items);
   menu.value.public.push(...publicItems);
 
-  const profileInputs: CollectivoUserInput[] = [
-    {
+  const profileInputs: CollectivoFormFields = {
+    first_name: {
       label: "First Name",
-      key: "first_name",
+      type: "text",
       disabled: true,
-      order: 1,
     },
-    {
+    last_name: {
       label: "Last Name",
-      key: "last_name",
+      type: "text",
       disabled: true,
-      order: 2,
     },
-    {
+    email: {
       label: "Email",
-      key: "email",
-      order: 3,
+      type: "text",
     },
-  ];
+  };
 
-  profile.value.inputs.push(...profileInputs);
+  user.value.fields = Object.assign(profileInputs, user.value.fields);
 
   // Mockup form data to be replaced later
-  const test_form: CollectivoForm = {
-    key: "test_form",
+  const test_form: CollectivoFormPage = {
     title: "Test Form Title",
-    description: "Test Form Description",
-    public: true,
     fields: {
       section: {
         type: "section",
@@ -200,5 +192,5 @@ export default defineNuxtPlugin(() => {
     },
   };
 
-  forms.value[test_form.key] = test_form;
+  forms.value["test_form"] = test_form;
 });

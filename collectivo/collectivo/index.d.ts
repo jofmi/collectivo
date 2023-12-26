@@ -70,34 +70,29 @@ declare global {
     filter?: (item: CollectivoMenuItem) => boolean;
   }
 
-  // Profile section
-  interface CollectivoUserInput {
-    label: string;
-    key: string;
-    disabled?: boolean;
-    order?: number;
-  }
-
   // Forms
-  interface CollectivoForm {
-    key: string;
+  interface CollectivoFormPage {
     title: string;
-    description: string;
-    fields: { [key: string]: FormField };
-    submitMethod?: "triggerFlow" | (() => void); // TODO: Add createItem updateItem APIpost APIput APIpatch
-    submitID?: string;
-    public?: boolean;
+    fields: CollectivoFormFields;
+    onSubmit?: "triggerFlow" | (() => void); // TODO: Add createItem updateItem APIpost APIput APIpatch
     // TODO: Add conditions, e.g. user has or has not policy XY
   }
+  // TODO: How can an extension add a form input type?
 
-  type FormField = (FormFieldBase & FormFieldLayout) | FormInput;
+  interface CollectivoFormFields {
+    [key: string]: CollectivoFormField;
+  }
 
-  interface FormInputChoice {
+  type CollectivoFormField =
+    | (CollectivoFormFieldBase & CollectivoFormFieldLayout)
+    | CollectivoFormInput;
+
+  interface CollectivoFormInputChoice {
     key: string;
     value: string;
   }
 
-  interface FormFieldBase {
+  interface CollectivoFormFieldBase {
     width?: "full" | "half" | "third" | "quarter" | "fifth";
     visible?: Ref<boolean>;
     conditions?: FormCondition[];
@@ -114,20 +109,20 @@ declare global {
     value?: string | number | RegExp;
   }
 
-  type FormInput = {
+  type CollectivoFormInput = {
     label: string;
     default?: boolean;
     required?: boolean;
     disabled?: boolean;
     validators?: FormValidator[];
     description?: string;
-  } & FormFieldBase &
-    FormInputType;
+  } & CollectivoFormFieldBase &
+    CollectivoFormInputType;
 
-  type FormInputType =
+  type CollectivoFormInputType =
     | {
         type: "select" | "select-radio" | "multiselect-checkbox";
-        choices?: FormInputChoice[];
+        choices?: CollectivoFormInputChoice[];
       }
     | {
         type: "text" | "number" | "email" | "password" | "textarea" | "date";
@@ -142,7 +137,7 @@ declare global {
         component: any;
       };
 
-  type FormFieldLayout =
+  type CollectivoFormFieldLayout =
     | {
         type: "section" | "description"; // TODO: "page" |
         content: string;

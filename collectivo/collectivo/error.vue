@@ -13,6 +13,7 @@ setCollectivoTitle(title);
 <template>
   <NuxtLayout>
     <CollectivoContainer>
+      <!-- HTTP ERROR -->
       <template v-if="error && 'statusCode' in error">
         <template v-if="error.statusCode === 404">
           <p>{{ t("This page doesn't exist.") }}</p>
@@ -20,12 +21,15 @@ setCollectivoTitle(title);
         <template v-else>
           <div>
             <p>{{ t("An error has occured.") }}</p>
-            <p>
-              <strong>{{ error.message }}</strong>
-            </p>
           </div>
-        </template></template
-      >
+        </template>
+      </template>
+      <!-- OTHER KIND OF ERROR -->
+      <template v-else-if="error != null && error != undefined">
+        <div>
+          <p>{{ t("An error has occured.") }}</p>
+        </div>
+      </template>
     </CollectivoContainer>
   </NuxtLayout>
 </template>

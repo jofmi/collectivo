@@ -2,7 +2,7 @@ import { readMe, updateMe } from "@directus/sdk";
 
 class CollectivoUserStore {
   data: CollectivoUser | null;
-  inputs: CollectivoUserInput[];
+  fields: CollectivoFormFields;
   isAuthenticated: boolean;
   saving: boolean;
   loading: boolean;
@@ -10,7 +10,7 @@ class CollectivoUserStore {
 
   constructor() {
     this.data = null;
-    this.inputs = [];
+    this.fields = {};
     this.isAuthenticated = false;
     this.saving = false;
     this.loading = false;
@@ -44,7 +44,7 @@ class CollectivoUserStore {
 
 export const useCollectivoUser = () => {
   const state = useState<CollectivoUserStore>(
-    "collectivo_profile",
+    "collectivo_user",
     () => new CollectivoUserStore()
   );
 

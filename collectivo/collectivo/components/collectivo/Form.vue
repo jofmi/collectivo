@@ -14,10 +14,12 @@ const toast = useToast();
 const { t } = useI18n();
 
 const props = defineProps({
-  form: Object as PropType<CollectivoForm>,
+  fields: Object as PropType<CollectivoFormFields>,
+  data: Object as PropType<Record<string, any>>,
+  save: Function as PropType<(data: any) => Promise<void>>,
 });
 
-const form = props.form!;
+const form = { fields: props.fields ?? {} };
 const directus = useDirectus();
 
 function checkConditions(conditions: FormCondition[] | undefined) {
@@ -48,7 +50,7 @@ let schema = object();
 
 function addInputToSchema(
   key: string,
-  input: FormInput,
+  input: CollectivoFormInput,
   schema_field: YupSchema
 ) {
   if (input.required) {

@@ -112,7 +112,7 @@ declare global {
   }
 
   type CollectivoFormInput = {
-    label: string;
+    label?: string;
     default?: any;
     required?: boolean;
     disabled?: boolean;

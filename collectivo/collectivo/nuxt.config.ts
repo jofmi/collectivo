@@ -20,6 +20,7 @@ export default defineNuxtConfig({
       keycloakRealm: "",
       keycloakClient: "",
       directusUrl: "",
+      debug: true,
     },
   },
   colorMode: {

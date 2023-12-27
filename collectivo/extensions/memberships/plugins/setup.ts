@@ -69,7 +69,6 @@ export default defineNuxtPlugin(() => {
         content: "Type of person",
       },
       person_type: {
-        label: "Type of person",
         type: "select-radio",
         default: "natural",
         required: true,
@@ -92,13 +91,13 @@ export default defineNuxtPlugin(() => {
         label: "Email",
         type: "email",
         required: true,
-        icon: "i-system-uicons-mail",
+        icon: "i-mi-mail",
       },
       password: {
         label: "Password",
         type: "password",
         required: true,
-        icon: "i-system-uicons-lock",
+        icon: "i-mi-lock",
       },
       section_organisation: {
         type: "section",
@@ -146,6 +145,7 @@ export default defineNuxtPlugin(() => {
       phone: {
         type: "text",
         label: "Phone",
+        icon: "i-mi-call",
       },
       birth_date: {
         label: "Birthdate",
@@ -211,7 +211,6 @@ export default defineNuxtPlugin(() => {
         content: "Type of membership",
       },
       membership_type: {
-        label: "Membership type",
         type: "select-radio",
         required: true,
         choices: [
@@ -246,13 +245,13 @@ export default defineNuxtPlugin(() => {
         ],
       },
       bank_account_iban: {
-        label: "IBAN",
+        label: "Bank account IBAN",
         type: "text",
         conditions: is_sepa,
         required: true,
       },
       bank_account_owner: {
-        label: "Account owner",
+        label: "Bank account owner",
         type: "text",
         conditions: is_sepa,
         required: true,
@@ -262,8 +261,9 @@ export default defineNuxtPlugin(() => {
         content: "Terms",
       },
       terms: {
-        label: "Terms",
         type: "toggle",
+        description: "I agree to the terms and conditions",
+        width: "full",
         required: true,
       },
     },

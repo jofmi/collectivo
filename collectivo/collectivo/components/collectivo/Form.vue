@@ -12,6 +12,7 @@ import type { FormErrorEvent, FormSubmitEvent } from "#ui/types";
 
 const toast = useToast();
 const { t } = useI18n();
+const config = useRuntimeConfig();
 
 const props = defineProps({
   fields: Object as PropType<CollectivoFormFields>,
@@ -322,7 +323,15 @@ async function onError(event: FormErrorEvent) {
             :label="input.label"
             :name="key"
           >
-            <UToggle v-model="state[key]" :disabled="input.disabled" />
+            <div
+              class="bg-[#F4F7FE] shadow-sm rounded-lg px-4 py-3 flex flex-row gap-2"
+            >
+              <UToggle v-model="state[key]" :disabled="input.disabled" />
+              <span
+                class="text-sm font-medium text-gray-700 dark:text-gray-200"
+                >{{ input.description }}</span
+              >
+            </div>
           </UFormGroup>
           <UFormGroup
             v-else-if="input.type === 'custom-input'"
@@ -350,7 +359,9 @@ async function onError(event: FormErrorEvent) {
       </UButton>
     </div>
   </UForm>
-  {{ state }}
+  <div v-if="config.public.debug" class="element-full text-sm">
+    Form state (debug mode): {{ state }}
+  </div>
 </template>
 
 <style lang="scss" scoped>

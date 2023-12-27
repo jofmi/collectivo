@@ -312,7 +312,8 @@ export default defineAppConfig({
         "placeholder:text-cv-primary/50 placeholder:font-medium placeholder:tracking-[0.28px] placeholder:leading-4",
       icon: {
         trailing: {
-          wrapper: "absolute inset-y-0 end-[18px] flex items-center",
+          wrapper:
+            "absolute inset-y-0 end-[18px] flex items-center text-cv-primary/50",
         },
       },
       default: {
@@ -366,6 +367,10 @@ export default defineAppConfig({
       default: {
         color: "primary",
       },
+    },
+    radio: {
+      wrapper:
+        "relative flex items-start bg-[#F4F7FE] shadow-sm rounded-lg mb-2 last:mb-0 px-5 py-3",
     },
     // Select config
     selectMenu: {

@@ -65,7 +65,7 @@ export default defineEventHandler(async (event) => {
 
   // Case 3-2: Apply a isolated schema individually
   if (isolated && version) {
-    migrateCustom(ext, version, isolated, examples);
+    migrateCustom(ext, version, examples);
     return {
       detail: `Applying schema ${version} of ${ext.name} individually`,
     };

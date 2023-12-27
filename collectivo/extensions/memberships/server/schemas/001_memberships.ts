@@ -85,7 +85,7 @@ schema.fields = [
   },
   {
     collection: "memberships",
-    field: "type",
+    field: "memberships_type",
     type: "integer",
     schema: {},
     meta: {

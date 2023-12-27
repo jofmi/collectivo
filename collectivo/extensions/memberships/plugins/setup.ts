@@ -7,7 +7,7 @@ export default defineNuxtPlugin(() => {
     {
       label: "Register",
       icon: "i-system-uicons-document-stack",
-      to: "/forms/registration",
+      to: "/forms/membership",
       order: 200,
       filter: (_item) => {
         return true;
@@ -36,29 +36,29 @@ export default defineNuxtPlugin(() => {
 
   user.value.fields = Object.assign(profileInputs, user.value.fields);
 
+  // Membership application form
   const is_legal = [
     {
-      key: "person_type",
+      key: "directus_users.memberships_person_type",
       value: "legal",
     },
   ];
 
   const is_natural = [
     {
-      key: "person_type",
+      key: "directus_users.memberships_person_type",
       value: "natural",
     },
   ];
 
   const is_sepa = [
     {
-      key: "payment_type",
+      key: "directus_users.memberships_payment_type",
       value: "sepa",
     },
   ];
 
-  // Mockup form data to be replaced later
-  const registration_form: CollectivoFormPage = {
+  const membershipForm: CollectivoFormPage = {
     title: "Membership application",
     public: true,
     submitMode: "postNuxt",
@@ -71,7 +71,7 @@ export default defineNuxtPlugin(() => {
         type: "section",
         content: "Type of person",
       },
-      person_type: {
+      "directus_users.memberships_person_type": {
         type: "select-radio",
         default: "natural",
         required: true,
@@ -90,14 +90,14 @@ export default defineNuxtPlugin(() => {
         type: "section",
         content: "Account details",
       },
-      email: {
+      "directus_users.email": {
         label: "Email",
         type: "email",
         default: "test@example.com",
         required: true,
         icon: "i-mi-mail",
       },
-      password: {
+      "directus_users.password": {
         label: "Password",
         type: "password",
         required: true,
@@ -105,23 +105,23 @@ export default defineNuxtPlugin(() => {
       },
       section_organisation: {
         type: "section",
-        content: "Organisation",
+        content: "Organization",
         conditions: is_legal,
       },
-      organisation_name: {
-        label: "Organisation name",
+      "directus_users.memberships_organization_name": {
+        label: "Organization name",
         type: "text",
         required: true,
         conditions: is_legal,
       },
-      organisation_type: {
-        label: "Organisation type",
+      "directus_users.memberships_organization_type": {
+        label: "Organization type",
         type: "text",
         required: true,
         conditions: is_legal,
       },
-      organisation_id: {
-        label: "Organisation ID",
+      "directus_users.memberships_organization_id": {
+        label: "Organization ID",
         type: "text",
         required: true,
         conditions: is_legal,
@@ -136,29 +136,49 @@ export default defineNuxtPlugin(() => {
         content: "Organisation - Contact person",
         conditions: is_legal,
       },
-      first_name: {
+      "directus_users.first_name": {
         type: "text",
         required: true,
         label: "First name",
       },
-      last_name: {
+      "directus_users.last_name": {
         type: "text",
         required: true,
         label: "Last name",
       },
-      phone: {
+      "directus_users.memberships_gender": {
+        type: "select-radio",
+        label: "Gender",
+        required: true,
+        default: "diverse",
+        choices: [
+          {
+            value: "diverse",
+            label: "Divers",
+          },
+          {
+            value: "female",
+            label: "Female",
+          },
+          {
+            value: "male",
+            label: "Male",
+          },
+        ],
+      },
+      "directus_users.memberships_phone": {
         type: "text",
         label: "Phone",
         icon: "i-mi-call",
       },
-      birth_date: {
+      "directus_users.memberships_birthdate": {
         label: "Birthdate",
         type: "date",
         default: "2000-01-01",
         required: true,
         conditions: is_natural,
       },
-      occupation: {
+      "directus_users.memberships_occupation": {
         label: "Occupation",
         type: "text",
         required: true,
@@ -174,39 +194,39 @@ export default defineNuxtPlugin(() => {
         content: "Organisation - Address",
         conditions: is_legal,
       },
-      street: {
+      "directus_users.memberships_street": {
         label: "Street",
         type: "text",
         required: true,
       },
-      number: {
+      "directus_users.memberships_streetnumber": {
         label: "Number",
         type: "text",
         width: "xs",
         required: true,
       },
-      stair: {
+      "directus_users.memberships_stair": {
         label: "Stair",
         type: "text",
         width: "xs",
       },
-      door: {
+      "directus_users.memberships_door": {
         label: "Door",
         type: "text",
         width: "xs",
       },
-      postal_code: {
-        label: "Postal code",
+      "directus_users.memberships_postcode": {
+        label: "Postcode",
         type: "text",
         width: "xs",
         required: true,
       },
-      city: {
+      "directus_users.memberships_city": {
         label: "City",
         type: "text",
         required: true,
       },
-      country: {
+      "directus_users.memberships_country": {
         label: "Country",
         type: "text",
         required: true,
@@ -215,7 +235,7 @@ export default defineNuxtPlugin(() => {
         type: "section",
         content: "Type of membership",
       },
-      membership_type: {
+      "memberships.memberships_type": {
         type: "select-radio",
         required: true,
         default: "active",
@@ -234,7 +254,7 @@ export default defineNuxtPlugin(() => {
         type: "section",
         content: "Payment details",
       },
-      payment_type: {
+      "directus_users.payments_type": {
         label: "Payment type",
         type: "select-radio",
         width: "full",
@@ -251,31 +271,31 @@ export default defineNuxtPlugin(() => {
           },
         ],
       },
-      bank_account_iban: {
+      "directus_users.payments_account_iban": {
         label: "Bank account IBAN",
         type: "text",
         conditions: is_sepa,
         required: true,
       },
-      bank_account_owner: {
+      "directus_users.payments_account_owner": {
         label: "Bank account owner",
         type: "text",
         conditions: is_sepa,
         required: true,
       },
-      section_final: {
-        type: "section",
-        content: "Terms",
-      },
-      terms: {
-        type: "toggle",
-        description: "I agree to the terms and conditions",
-        width: "full",
-        default: true,
-        required: true,
-      },
+      // section_final: {
+      //   type: "section",
+      //   content: "Terms",
+      // },
+      // terms: {
+      //   type: "toggle",
+      //   description: "I agree to XY.",
+      //   width: "full",
+      //   default: true,
+      //   required: true,
+      // },
     },
   };
 
-  forms.value["memberships_register"] = registration_form;
+  forms.value["membership"] = membershipForm;
 });

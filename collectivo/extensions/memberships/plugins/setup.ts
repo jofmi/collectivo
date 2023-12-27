@@ -171,8 +171,8 @@ export default defineNuxtPlugin(() => {
         label: "Phone",
         icon: "i-mi-call",
       },
-      "directus_users.memberships_birthdate": {
-        label: "Birthdate",
+      "directus_users.memberships_birthday": {
+        label: "Birthday",
         type: "date",
         default: "2000-01-01",
         required: true,

@@ -13,7 +13,7 @@ schema.collections = [
     meta: {
       sort: 100,
       icon: "switch_account",
-      archive_field: "status",
+      archive_field: "memberships_status",
       archive_value: "ended",
       unarchive_value: "draft",
       display_template: "{{user}} - {{type}}",
@@ -40,6 +40,16 @@ schema.collections = [
       name: "schema",
       comment: null,
     },
+    fields: [
+      {
+        field: "id",
+        type: "string",
+        schema: {
+          is_primary_key: true,
+          has_auto_increment: false,
+        },
+      },
+    ],
     meta: {
       sort: 10,
       group: "collectivo_settings",
@@ -66,7 +76,7 @@ schema.collections = [
 schema.fields = [
   {
     collection: "memberships",
-    field: "user",
+    field: "memberships_user",
     type: "uuid",
     schema: {},
     meta: {
@@ -86,7 +96,7 @@ schema.fields = [
   {
     collection: "memberships",
     field: "memberships_type",
-    type: "integer",
+    type: "string",
     schema: {},
     meta: {
       interface: "select-dropdown-m2o",
@@ -104,7 +114,7 @@ schema.fields = [
   },
   {
     collection: "memberships",
-    field: "status",
+    field: "memberships_status",
     type: "string",
     meta: {
       sort: 10,
@@ -283,14 +293,14 @@ schema.translations = [
 schema.relations = [
   {
     collection: "memberships",
-    field: "user",
+    field: "memberships_user",
     related_collection: "directus_users",
     meta: { sort_field: null },
     schema: { on_delete: "SET NULL" },
   },
   {
     collection: "memberships",
-    field: "type",
+    field: "memberships_type",
     related_collection: "memberships_types",
     meta: { sort_field: null },
     schema: { on_delete: "NO ACTION" },

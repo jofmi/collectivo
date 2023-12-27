@@ -17,8 +17,9 @@ export default async function examples() {
   for (const type of types) {
     const type_response = await directus.request(
       createItem("memberships_types", {
+        id: type[0].toLowerCase(),
         name: type[0],
-      }),
+      })
     );
 
     type_ids.push(type_response.id);
@@ -46,10 +47,10 @@ export default async function examples() {
     for (const membership_type of user[1]) {
       await directus.request(
         createItem("memberships", {
-          user: user_id,
-          type: membership_type,
-          status: user[2],
-        }),
+          memberships_user: user_id,
+          memberships_type: membership_type,
+          memberships_status: user[2],
+        })
       );
     }
   }

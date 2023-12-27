@@ -308,9 +308,6 @@ schema.fields = [
 schema.relations = [];
 
 const editor_fields = [
-  "collectivo_tags_divider",
-  "collectivo_tags",
-
   "memberships_profile_group",
   "memberships_occupation",
   "memberships_gender",
@@ -334,9 +331,6 @@ const editor_fields = [
 ];
 
 const user_fields = [
-  "collectivo_tags_divider",
-  "collectivo_tags",
-
   "memberships_profile_group",
   "memberships_occupation",
   "memberships_gender",
@@ -365,7 +359,7 @@ schema.permissions = [
     roleName: "collectivo_editor",
     action: "read",
     // @ts-ignore
-    fields: editor_fields,
+    fields: user_fields,
   },
   {
     collection: "directus_users",

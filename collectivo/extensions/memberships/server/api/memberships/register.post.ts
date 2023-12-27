@@ -12,7 +12,9 @@ export default defineEventHandler(async (event) => {
 });
 
 async function registerMembership(body: any) {
-  logger.info("Received membership application: " + body.user_email);
+  logger.info(
+    "Received membership application: " + body["directus_users.email"]
+  );
 
   const userData: any = {};
   const membershipData: any = {};
@@ -32,8 +34,9 @@ async function registerMembership(body: any) {
   const user_id = await directus.request(createUser(userData));
 
   // Prepare membership
-  membershipData.user = user_id;
-  membershipData.status = "applied";
+  membershipData.memberships_user = user_id;
+  membershipData.memberships_status = "applied";
+  membershipData.memberships_date_applied = new Date().toISOString();
 
   // Create membership
   await directus.request(createItem("memberships", membershipData));

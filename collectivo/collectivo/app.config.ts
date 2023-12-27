@@ -372,7 +372,38 @@ export default defineAppConfig({
       wrapper:
         "relative flex items-start bg-[#F4F7FE] shadow-sm rounded-lg mb-2 last:mb-0 px-5 py-3",
     },
-    // Select config
+    select: {
+      base: "relative block w-full disabled:cursor-default disabled:text-cv-gray tracking-[0.28px] font-medium leading-4",
+
+      rounded: "rounded-lg",
+      color: {
+        gray: {
+          outline:
+            "bg-[#F4F7FE] text-cv-primary border-0 focus:ring-1 focus:ring-cv-active",
+        },
+      },
+      variant: {
+        outline: "shadow-sm bg-[#F4F7FE] text-gray-900",
+      },
+      padding: {
+        md: "py-4 px-[18px] pe-9",
+      },
+      placeholder:
+        "placeholder:text-cv-primary/50 placeholder:font-medium placeholder:tracking-[0.28px] placeholder:leading-4",
+      icon: {
+        trailing: {
+          wrapper:
+            "absolute inset-y-0 end-[18px] flex items-center text-cv-primary/50",
+        },
+      },
+      default: {
+        size: "md",
+        color: "gray",
+        variant: "outline",
+        loadingIcon: "i-heroicons-arrow-path-20-solid",
+        trailingIcon: "i-heroicons-chevron-down-20-solid",
+      },
+    },
     selectMenu: {
       container: "z-20 group font-medium",
       width: "w-full",

@@ -82,7 +82,7 @@ export default defineNuxtPlugin(() => {
           },
           {
             value: "legal",
-            label: "Organisation",
+            label: "Organization",
           },
         ],
       },
@@ -147,14 +147,14 @@ export default defineNuxtPlugin(() => {
         label: "Last name",
       },
       "directus_users.memberships_gender": {
-        type: "select-radio",
+        type: "select",
         label: "Gender",
         required: true,
         default: "diverse",
         choices: [
           {
             value: "diverse",
-            label: "Divers",
+            label: "Diverse",
           },
           {
             value: "female",
@@ -183,6 +183,7 @@ export default defineNuxtPlugin(() => {
         type: "text",
         required: true,
         conditions: is_natural,
+        icon: "i-system-uicons-briefcase",
       },
       section_address: {
         type: "section",

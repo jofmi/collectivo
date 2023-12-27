@@ -293,6 +293,17 @@ async function onError(event: FormErrorEvent) {
             />
           </UFormGroup>
           <UFormGroup
+            v-else-if="input.type === 'select'"
+            :label="input.label"
+            :name="key"
+          >
+            <USelect
+              v-model="state[key]"
+              :options="input.choices"
+              :disabled="input.disabled"
+            />
+          </UFormGroup>
+          <UFormGroup
             v-else-if="input.type === 'select-radio'"
             :label="input.label"
             :name="key"

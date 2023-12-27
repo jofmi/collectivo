@@ -18,42 +18,41 @@ if (typeof formName !== "string" || !forms.value[formName]) {
 
 const form = forms.value[formName];
 setCollectivoTitle(form.title);
-// TODO: Do something with data
-//   if (form.submitMethod == "triggerFlow" && form.submitID) {
-//     directus.request(triggerFlow("POST", form.submitID, {}));
-//   } else {
-//     throw new Error("Invalid form configuration");
-//   }
+
+async function onSubmitNuxt(data: any) {
+  const res = await useFetch(form.submitPath, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (res.status.value === "error") {
+    throw res.error.value;
+  }
+}
+
+const submitted = ref(false);
 
 async function onSubmit(data: any) {
-  if (form.submitMode === "postNuxt") {
-    const res = await useFetch(form.submitPath, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (res.status.value === "error") {
-      console.log(res.error.value);
-
-      toast.add({
-        title: t("There was an error"),
-        icon: "i-mi-warning",
-        color: "red",
-        timeout: 0,
-      });
+  try {
+    if (form.submitMode === "postNuxt") {
+      await onSubmitNuxt(data);
     } else {
-      toast.add({
-        title: t("Success"),
-        icon: "i-mi-check",
-        color: "green",
-        timeout: 0,
-      });
+      throw new Error("Invalid form configuration");
     }
-  } else {
-    throw new Error("Invalid form configuration");
+
+    submitted.value = true;
+  } catch (err) {
+    console.error(err);
+
+    toast.add({
+      title: t("There was an error"),
+      icon: "i-mi-warning",
+      color: "red",
+      timeout: 0,
+    });
   }
 }
 
@@ -64,6 +63,24 @@ if (!form.public) {
 
 <template>
   <CollectivoContainer>
-    <CollectivoForm v-if="form" :fields="form.fields" :submit="onSubmit" />
+    <CollectivoForm
+      v-if="form && !submitted"
+      :fields="form.fields"
+      :submit="onSubmit"
+    />
+    <template v-else>
+      <div class="flex flex-col items-center justify-center space-y-4">
+        <UIcon
+          name="i-system-uicons-check"
+          class="w-[64px] h-[64px] text-cv-primary"
+        />
+        <h1 class="text-2xl font-bold text-center">
+          {{ t(form.successTitle ?? "Form submitted") }}
+        </h1>
+        <p class="text-center">
+          {{ t(form.successText ?? "Thank you for your submission") }}
+        </p>
+      </div>
+    </template>
   </CollectivoContainer>
 </template>

@@ -73,10 +73,18 @@ declare global {
   // Forms
   interface CollectivoFormPage {
     title: string;
-    public: boolean;
     fields: CollectivoFormFields;
+    public?: boolean;
     submitMode?: "postNuxt" | (() => void);
     submitPath?: string;
+    successTitle?: string;
+    successText?: string;
+    successIcon?: string;
+    // successButtons?: {
+    //   label: string;
+    //   to?: string;
+    //   icon?: string;
+    // }[];
     // TODO: Add conditions, e.g. user has or has not policy XY
   }
   // TODO: How can an extension add a form input type?

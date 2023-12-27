@@ -63,6 +63,9 @@ export default defineNuxtPlugin(() => {
     public: true,
     submitMode: "postNuxt",
     submitPath: "/api/memberships/register",
+    successTitle: "Application submitted!",
+    successText:
+      "Your membership application has been received. Please check your emails.",
     fields: {
       section_person_type: {
         type: "section",
@@ -90,6 +93,7 @@ export default defineNuxtPlugin(() => {
       email: {
         label: "Email",
         type: "email",
+        default: "test@example.com",
         required: true,
         icon: "i-mi-mail",
       },
@@ -150,6 +154,7 @@ export default defineNuxtPlugin(() => {
       birth_date: {
         label: "Birthdate",
         type: "date",
+        default: "2000-01-01",
         required: true,
         conditions: is_natural,
       },
@@ -213,6 +218,7 @@ export default defineNuxtPlugin(() => {
       membership_type: {
         type: "select-radio",
         required: true,
+        default: "active",
         choices: [
           {
             value: "active",
@@ -232,6 +238,7 @@ export default defineNuxtPlugin(() => {
         label: "Payment type",
         type: "select-radio",
         width: "full",
+        default: "transfer",
         required: true,
         choices: [
           {
@@ -264,6 +271,7 @@ export default defineNuxtPlugin(() => {
         type: "toggle",
         description: "I agree to the terms and conditions",
         width: "full",
+        default: true,
         required: true,
       },
     },

@@ -165,7 +165,7 @@ for (const [key, input] of Object.entries(form.fields)) {
   } else if ("default" in input && input.default) {
     state[key] = input.default;
   } else {
-    state[key] = undefined;
+    state[key] = "test";
   }
 }
 

@@ -46,43 +46,73 @@ async function registerMembership(body: any) {
     clientSecret: config.keycloakAdminSecret,
   });
 
-  // TODO: Finish keycloak process
-  const users = await keycloak.users.find({ first: 0, max: 10 });
-  console.log(users);
-  // await keycloak.users.create({
-  //   realm: "collectivo",
-  //   // enabled: true,
-  //   username: userData.email,
-  //   email: userData.email,
-  //   // firstName: userData.first_name,
-  //   // lastName: userData.last_name,
-  // });
-
-  return;
+  // Random call to test connection
+  await keycloak.users.find({ first: 0, max: 1 });
 
   // Create user
-  const password = userData.password;
-  delete userData.password;
-  userData.provider = "keycloak";
-  userData.external_identifier = userData.email;
+  let password = "";
+
+  if (config.public.authService == "keycloak") {
+    password = userData.password;
+    delete userData.password;
+    userData.provider = "keycloak";
+    userData.external_identifier = userData.email;
+  }
+
+  console.log("PASSWORD IS '" + password + "'");
+  console.log("TYPE OF PASSWORD IS " + typeof password);
+
   const user_id = await directus.request(createUser(userData));
 
   // Prepare membership
   membershipData.memberships_user = user_id;
   membershipData.memberships_status = "applied";
   membershipData.memberships_date_applied = new Date().toISOString();
+  // TODO: ADD ROLE
 
   // Create membership
-  await directus.request(createItem("memberships", membershipData));
+  const membership_id = await directus.request(
+    createItem("memberships", membershipData)
+  );
 
-  // Create keycloak user
+  // Create keycloak user & send verification mail
+  if (config.public.authService == "keycloak") {
+    const kcUser = await keycloak.users.create({
+      enabled: true,
+      username: userData.email,
+      email: userData.email,
+      firstName: userData.first_name,
+      lastName: userData.last_name,
+      emailVerified: false,
+    });
 
-  // Send verification email
+    await keycloak.users.resetPassword({
+      id: kcUser.id,
+      credential: {
+        temporary: false,
+        type: "password",
+        value: password,
+      },
+    });
+
+    // await keycloak.users.sendVerifyEmail({
+    //   id: kcUser.id,
+    //   clientId: "directus",
+    //   redirectUri: config.public.collectivoUrl,
+    // });
+    // await keycloak.users.executeActionsEmail({
+    //   id: kcUser.id,
+    //   clientId: "directus",
+    //   redirectUri: config.public.collectivoUrl,
+    //   actions: ["VERIFY_EMAIL"],
+    // });
+  }
 
   return {
-    status: 200,
+    status: 201,
     body: {
-      message: "Membership registered",
+      // user: user_id,
+      // membership: membership_id,
     },
   };
 }

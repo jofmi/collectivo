@@ -219,7 +219,7 @@ async function onError(event: FormErrorEvent) {
         <div v-else-if="input.type === 'clear'" class="basis-full"></div>
         <div
           v-else
-          :class="input.width ? `element-${input.width}` : 'element-1/4'"
+          :class="input.width ? `element-${input.width}` : 'element-md'"
         >
           <UFormGroup
             v-if="input.type === 'text'"
@@ -361,22 +361,22 @@ async function onError(event: FormErrorEvent) {
   @apply input basis-full;
 }
 
-.element-1\/2 {
+.element-xl {
   @apply input basis-full md:basis-1/2;
 }
 
-.element-1\/3 {
+.element-lg {
   @apply input basis-full md:basis-1/2 lg:basis-1/3;
 }
-.element-1\/4 {
+.element-md {
   @apply input basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4;
 }
 
-.element-1\/5 {
+.element-sm {
   @apply input basis-full md:basis-1/3 lg:basis-1/4 xl:basis-1/5;
 }
 
-.element-1\/6 {
+.element-xs {
   @apply input basis-full sm:basis-1/2 md:basis-1/4 lg:basis-1/5 xl:basis-1/6;
 }
 </style>

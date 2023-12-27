@@ -73,6 +73,7 @@ declare global {
   // Forms
   interface CollectivoFormPage {
     title: string;
+    public: boolean;
     fields: CollectivoFormFields;
     submitMode?: "postNuxt" | (() => void);
     submitPath?: string;
@@ -94,7 +95,7 @@ declare global {
   }
 
   interface CollectivoFormFieldBase {
-    width?: "full" | "half" | "third" | "quarter" | "fifth";
+    width?: "full" | "xl" | "lg" | "md" | "sm" | "xs";
     visible?: Ref<boolean>;
     conditions?: FormCondition[];
   }

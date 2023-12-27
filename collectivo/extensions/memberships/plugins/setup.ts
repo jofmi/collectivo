@@ -60,6 +60,7 @@ export default defineNuxtPlugin(() => {
   // Mockup form data to be replaced later
   const registration_form: CollectivoFormPage = {
     title: "Membership application",
+    public: true,
     submitMode: "postNuxt",
     submitPath: "/api/memberships/register",
     fields: {
@@ -176,23 +177,23 @@ export default defineNuxtPlugin(() => {
       number: {
         label: "Number",
         type: "text",
-        width: "quarter",
+        width: "xs",
         required: true,
       },
       stair: {
         label: "Stair",
         type: "text",
-        width: "quarter",
+        width: "xs",
       },
       door: {
         label: "Door",
         type: "text",
-        width: "quarter",
+        width: "xs",
       },
       postal_code: {
         label: "Postal code",
         type: "text",
-        width: "quarter",
+        width: "xs",
         required: true,
       },
       city: {

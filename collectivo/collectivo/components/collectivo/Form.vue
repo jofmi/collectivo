@@ -228,6 +228,7 @@ async function onError(event: FormErrorEvent) {
           <UFormGroup
             v-if="input.type === 'text'"
             :label="input.label"
+            :required="input.required"
             :name="key"
           >
             <UInput
@@ -243,6 +244,7 @@ async function onError(event: FormErrorEvent) {
           <UFormGroup
             v-else-if="input.type === 'email'"
             :label="input.label"
+            :required="input.required"
             :name="key"
           >
             <UInput v-model="state[key]" :placeholder="input.placeholder">
@@ -254,6 +256,7 @@ async function onError(event: FormErrorEvent) {
           <UFormGroup
             v-else-if="input.type === 'password'"
             :label="input.label"
+            :required="input.required"
             :name="key"
           >
             <UInput
@@ -270,6 +273,7 @@ async function onError(event: FormErrorEvent) {
           <UFormGroup
             v-else-if="input.type === 'number'"
             :label="input.label"
+            :required="input.required"
             :name="key"
             :placeholder="input.placeholder"
           >
@@ -283,6 +287,7 @@ async function onError(event: FormErrorEvent) {
           <UFormGroup
             v-if="input.type === 'textarea'"
             :label="input.label"
+            :required="input.required"
             :name="key"
           >
             <UTextarea
@@ -295,6 +300,7 @@ async function onError(event: FormErrorEvent) {
           <UFormGroup
             v-else-if="input.type === 'select'"
             :label="input.label"
+            :required="input.required"
             :name="key"
           >
             <USelect
@@ -306,6 +312,7 @@ async function onError(event: FormErrorEvent) {
           <UFormGroup
             v-else-if="input.type === 'select-radio'"
             :label="input.label"
+            :required="input.required"
             :name="key"
           >
             <URadioGroup
@@ -317,6 +324,7 @@ async function onError(event: FormErrorEvent) {
           <UFormGroup
             v-else-if="input.type === 'multiselect-checkbox'"
             :label="input.label"
+            :required="input.required"
             :name="key"
           >
             <CollectivoFormsCheckboxGroup
@@ -327,6 +335,7 @@ async function onError(event: FormErrorEvent) {
           <UFormGroup
             v-else-if="input.type === 'date'"
             :label="input.label"
+            :required="input.required"
             :disabled="input.disabled"
             :name="key"
           >
@@ -335,6 +344,7 @@ async function onError(event: FormErrorEvent) {
           <UFormGroup
             v-else-if="input.type === 'toggle'"
             :label="input.label"
+            :required="input.required"
             :name="key"
           >
             <div
@@ -350,6 +360,7 @@ async function onError(event: FormErrorEvent) {
           <UFormGroup
             v-else-if="input.type === 'custom-input'"
             :label="input.label"
+            :required="input.required"
             :name="key"
           >
             <component :is="input.component" v-model="state[key]" />

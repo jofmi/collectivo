@@ -13,6 +13,8 @@ export default defineNuxtConfig({
     apiToken: "",
     directusAdminEmail: "",
     directusAdminPassword: "",
+    keycloakAdminClient: "",
+    keycloakAdminSecret: "",
     public: {
       collectivoUrl: "",
       authService: "keycloak",

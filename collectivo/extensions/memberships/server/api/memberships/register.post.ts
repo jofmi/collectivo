@@ -1,4 +1,5 @@
 import { createItem, createUser } from "@directus/sdk";
+import KcAdminClient from "@keycloak/keycloak-admin-client";
 
 // Register a new membership
 export default defineEventHandler(async (event) => {
@@ -29,8 +30,41 @@ async function registerMembership(body: any) {
 
   await refreshDirectus();
   const directus = await useDirectusAdmin();
+  const config = useRuntimeConfig();
+
+  console.log(config);
+
+  // Connect to keycloak
+  const keycloak = new KcAdminClient({
+    baseUrl: config.public.keycloakUrl,
+    realmName: config.public.keycloakRealm,
+  });
+
+  await keycloak.auth({
+    grantType: "client_credentials",
+    clientId: config.keycloakAdminClient,
+    clientSecret: config.keycloakAdminSecret,
+  });
+
+  // TODO: Finish keycloak process
+  const users = await keycloak.users.find({ first: 0, max: 10 });
+  console.log(users);
+  // await keycloak.users.create({
+  //   realm: "collectivo",
+  //   // enabled: true,
+  //   username: userData.email,
+  //   email: userData.email,
+  //   // firstName: userData.first_name,
+  //   // lastName: userData.last_name,
+  // });
+
+  return;
 
   // Create user
+  const password = userData.password;
+  delete userData.password;
+  userData.provider = "keycloak";
+  userData.external_identifier = userData.email;
   const user_id = await directus.request(createUser(userData));
 
   // Prepare membership

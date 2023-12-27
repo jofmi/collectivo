@@ -31,6 +31,7 @@
     "@popperjs/core": "^2.11.8",
     "@vuepic/vue-datepicker": "^7.2.2",
     "compare-versions": "^6.1.0",
+    "@keycloak/keycloak-admin-client": "^23.0.3",
     "marked": "^9.1.0",
     "vue3-carousel-nuxt": "^1.1.0",
     "winston": "^3.10.0",

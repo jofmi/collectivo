@@ -21,6 +21,7 @@ const props = defineProps({
 });
 
 const form = { fields: props.fields ?? {} };
+const loading = ref(false);
 
 function checkConditions(conditions: FormCondition[] | undefined) {
   if (!conditions) {
@@ -173,7 +174,9 @@ type Schema = InferType<typeof schema>;
 
 // Form handlers
 async function onSubmit(event: FormSubmitEvent<Schema>) {
+  loading.value = true;
   await props.submit!(event.data);
+  loading.value = false;
 }
 
 async function onError(event: FormErrorEvent) {
@@ -352,7 +355,7 @@ async function onError(event: FormErrorEvent) {
         color="cyan"
         size="md"
         icon="i-mi-circle-check"
-        :loading="false"
+        :loading="loading"
         type="submit"
       >
         {{ t("Submit") }}

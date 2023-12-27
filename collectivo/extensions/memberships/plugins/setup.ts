@@ -8,7 +8,7 @@ export default defineNuxtPlugin(() => {
       label: "Register",
       icon: "i-system-uicons-document-stack",
       to: "/forms/registration",
-      order: 1,
+      order: 200,
       filter: (_item) => {
         return true;
       },

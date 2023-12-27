@@ -16,7 +16,7 @@ schema.collections = [
       archive_field: "memberships_status",
       archive_value: "ended",
       unarchive_value: "draft",
-      display_template: "{{user}} - {{type}}",
+      display_template: "{{memberships_user}} - {{memberships_type}}",
       translations: [
         {
           language: "en-US",

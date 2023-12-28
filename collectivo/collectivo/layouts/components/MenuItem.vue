@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const { t } = useI18n();
+
 defineProps({
   item: {
     type: Object as PropType<CollectivoMenuItem>,
@@ -17,7 +19,7 @@ defineProps({
             <UIcon v-if="item.icon" :name="item.icon" class="link-icon" />
           </slot>
         </span>
-        <span class="item__title">{{ item.label }}</span>
+        <span class="item__title">{{ t(item.label) }}</span>
       </a>
     </div>
     <div v-else-if="item.external">
@@ -27,7 +29,7 @@ defineProps({
             <UIcon v-if="item.icon" :name="item.icon" class="link-icon" />
           </slot>
         </span>
-        <span class="item__title">{{ item.label }}</span>
+        <span class="item__title">{{ t(item.label) }}</span>
       </a>
     </div>
     <div v-else>
@@ -37,7 +39,7 @@ defineProps({
             <UIcon v-if="item.icon" :name="item.icon" class="link-icon"
           /></slot>
         </span>
-        <span class="item__title">{{ item.label }}</span>
+        <span class="item__title">{{ t(item.label) }}</span>
       </NuxtLink>
     </div>
   </div>

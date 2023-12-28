@@ -46,13 +46,13 @@ export default defineNuxtPlugin(() => {
 
   const profileInputs: CollectivoFormFields = {
     first_name: {
-      label: "First Name",
+      label: "First name",
       type: "text",
       order: 1,
       disabled: true,
     },
     last_name: {
-      label: "Last Name",
+      label: "Last name",
       type: "text",
       order: 2,
       disabled: true,

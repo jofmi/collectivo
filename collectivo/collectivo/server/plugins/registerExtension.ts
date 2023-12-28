@@ -11,14 +11,6 @@ import examples from "../examples/examples";
 export default defineNitroPlugin(() => {
   logger.info("Starting collectivo v" + pkg.version);
 
-  const config = useRuntimeConfig();
-
-  if (config.public.collectivoUrl === "") {
-    throw new Error(
-      "Environment variable NUXT_PUBLIC_COLLECTIVO_URL is missing."
-    );
-  }
-
   registerExtension({
     name: "collectivo",
     version: pkg.version,

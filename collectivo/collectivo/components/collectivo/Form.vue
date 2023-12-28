@@ -23,6 +23,11 @@ const props = defineProps({
 const form = { fields: props.fields ?? {} };
 const loading = ref(false);
 
+// Create ordered list of form fields
+form.fields = Object.fromEntries(
+  Object.entries(form.fields).sort((a, b) => a[1].order - b[1].order)
+);
+
 function checkConditions(conditions: FormCondition[] | undefined) {
   if (!conditions) {
     return true;
@@ -40,7 +45,7 @@ function checkConditions(conditions: FormCondition[] | undefined) {
 // Compute visibility of fields
 for (const [_, field] of Object.entries(form.fields)) {
   if (field.conditions) {
-    field.visible = computed(() => {
+    field._visible = computed(() => {
       return checkConditions(field.conditions);
     });
   }
@@ -165,8 +170,6 @@ for (const [key, input] of Object.entries(form.fields)) {
     state[key] = props.data[key];
   } else if ("default" in input && input.default) {
     state[key] = input.default;
-  } else {
-    state[key] = "test";
   }
 }
 
@@ -191,6 +194,23 @@ async function onError(event: FormErrorEvent) {
   element?.focus();
   element?.scrollIntoView({ behavior: "smooth", block: "center" });
 }
+
+// Debug tools
+async function fillOutAll() {
+  for (const [key, input] of Object.entries(form.fields)) {
+    if ("choices" in input && input.choices) {
+      state[key] = input.choices[0].value;
+    } else if (input.type === "email") {
+      state[key] = "test@example.com";
+    } else if (input.type === "toggle") {
+      state[key] = true;
+    } else if (input.type === "date") {
+      state[key] = "2021-01-01";
+    } else {
+      state[key] = "test";
+    }
+  }
+}
 </script>
 
 <template>
@@ -202,19 +222,24 @@ async function onError(event: FormErrorEvent) {
     @error="onError"
   >
     <template v-for="(input, key) in form.fields" :key="key">
-      <template v-if="typeof key === 'string' && (input.visible ?? true)">
-        <div
-          v-if="input.type === 'section'"
-          class="text-cv-primary font-semibold text-2xl leading-7 element-full"
-        >
-          {{ input.content }}
+      <template v-if="typeof key === 'string' && (input._visible ?? true)">
+        <div v-if="input.type === 'section'" class="element-full">
+          <div v-if="input.title" class="form-title">
+            {{ t(input.title) }}
+          </div>
+          <div
+            v-if="input.description"
+            class="text-cv-primary text-sm leading-5"
+          >
+            {{ t(input.description) }}
+          </div>
         </div>
         <div v-else-if="input.type === 'description'" class="element-full">
           {{ input.content }}
         </div>
         <component
           :is="input.component"
-          v-else-if="input.type === 'custom'"
+          v-else-if="input.type === 'custom-layout'"
           :class="input.width ? `element-${input.width}` : 'element-full'"
           :input="input"
           :state="state"
@@ -227,7 +252,7 @@ async function onError(event: FormErrorEvent) {
         >
           <UFormGroup
             v-if="input.type === 'text'"
-            :label="input.label"
+            :label="input.label ? t(input.label) : undefined"
             :required="input.required"
             :name="key"
           >
@@ -243,7 +268,7 @@ async function onError(event: FormErrorEvent) {
           </UFormGroup>
           <UFormGroup
             v-else-if="input.type === 'email'"
-            :label="input.label"
+            :label="input.label ? t(input.label) : undefined"
             :required="input.required"
             :name="key"
           >
@@ -255,7 +280,7 @@ async function onError(event: FormErrorEvent) {
           </UFormGroup>
           <UFormGroup
             v-else-if="input.type === 'password'"
-            :label="input.label"
+            :label="input.label ? t(input.label) : undefined"
             :required="input.required"
             :name="key"
           >
@@ -272,7 +297,7 @@ async function onError(event: FormErrorEvent) {
           </UFormGroup>
           <UFormGroup
             v-else-if="input.type === 'number'"
-            :label="input.label"
+            :label="input.label ? t(input.label) : undefined"
             :required="input.required"
             :name="key"
             :placeholder="input.placeholder"
@@ -286,7 +311,7 @@ async function onError(event: FormErrorEvent) {
           </UFormGroup>
           <UFormGroup
             v-if="input.type === 'textarea'"
-            :label="input.label"
+            :label="input.label ? t(input.label) : undefined"
             :required="input.required"
             :name="key"
           >
@@ -299,7 +324,7 @@ async function onError(event: FormErrorEvent) {
           </UFormGroup>
           <UFormGroup
             v-else-if="input.type === 'select'"
-            :label="input.label"
+            :label="input.label ? t(input.label) : undefined"
             :required="input.required"
             :name="key"
           >
@@ -311,7 +336,7 @@ async function onError(event: FormErrorEvent) {
           </UFormGroup>
           <UFormGroup
             v-else-if="input.type === 'select-radio'"
-            :label="input.label"
+            :label="input.label ? t(input.label) : undefined"
             :required="input.required"
             :name="key"
           >
@@ -323,7 +348,7 @@ async function onError(event: FormErrorEvent) {
           </UFormGroup>
           <UFormGroup
             v-else-if="input.type === 'multiselect-checkbox'"
-            :label="input.label"
+            :label="input.label ? t(input.label) : undefined"
             :required="input.required"
             :name="key"
           >
@@ -334,7 +359,7 @@ async function onError(event: FormErrorEvent) {
           </UFormGroup>
           <UFormGroup
             v-else-if="input.type === 'date'"
-            :label="input.label"
+            :label="input.label ? t(input.label) : undefined"
             :required="input.required"
             :disabled="input.disabled"
             :name="key"
@@ -343,7 +368,7 @@ async function onError(event: FormErrorEvent) {
           </UFormGroup>
           <UFormGroup
             v-else-if="input.type === 'toggle'"
-            :label="input.label"
+            :label="input.label ? t(input.label) : undefined"
             :required="input.required"
             :name="key"
           >
@@ -359,7 +384,7 @@ async function onError(event: FormErrorEvent) {
           </UFormGroup>
           <UFormGroup
             v-else-if="input.type === 'custom-input'"
-            :label="input.label"
+            :label="input.label ? t(input.label) : undefined"
             :required="input.required"
             :name="key"
           >
@@ -384,12 +409,23 @@ async function onError(event: FormErrorEvent) {
       </UButton>
     </div>
   </UForm>
-  <div v-if="config.public.debug" class="element-full text-sm">
-    Form state (debug mode): {{ state }}
+  <div v-if="config.public.debug" class="element-full">
+    <div class="form-title">DEBUG TOOLS</div>
+    <div>You are seeing this because NUXT_DEBUG=True</div>
+    <div class="text-sm">
+      <UButton class="btn" @click="fillOutAll">
+        {{ t("Fill out all") }}
+      </UButton>
+    </div>
+    <div class="text-sm">Form state: {{ state }}</div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.form-title {
+  @apply text-cv-primary font-semibold text-2xl leading-7;
+}
+
 .input {
   @apply px-2 py-3 lg:p-4;
 }

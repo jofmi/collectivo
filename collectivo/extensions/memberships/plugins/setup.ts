@@ -18,19 +18,11 @@ export default defineNuxtPlugin(() => {
   menu.value.public.push(...publicItems);
 
   const profileInputs: CollectivoFormFields = {
-    first_name: {
-      label: "First Name",
+    another: {
+      label: "Another profile field",
       type: "text",
+      order: 4,
       disabled: true,
-    },
-    last_name: {
-      label: "Last Name",
-      type: "text",
-      disabled: true,
-    },
-    email: {
-      label: "Email",
-      type: "text",
     },
   };
 
@@ -53,101 +45,121 @@ export default defineNuxtPlugin(() => {
 
   const is_sepa = [
     {
-      key: "directus_users.memberships_payment_type",
+      key: "directus_users.payments_type",
       value: "sepa",
     },
   ];
 
   const membershipForm: CollectivoFormPage = {
-    title: "Membership application",
+    title: "Membership application form",
     public: true,
+    status: "published",
     submitMode: "postNuxt",
     submitPath: "/api/memberships/register",
     successTitle: "Application submitted!",
-    successText:
-      "Your membership application has been received. Please check your emails.",
+    successText: "t:memberships_form_success_text",
     fields: {
+      section_welcome: {
+        type: "section",
+        order: 10,
+        title: "Welcome!",
+        description: "t:memberships_form_intro",
+      },
       section_person_type: {
         type: "section",
-        content: "Type of person",
+        order: 100,
+        title: "Type of person",
       },
       "directus_users.memberships_person_type": {
         type: "select-radio",
+        label: "t:memberships_form_ptype",
         default: "natural",
+        order: 110,
         required: true,
         choices: [
           {
             value: "natural",
-            label: "Natural person",
+            label: "an individual",
           },
           {
             value: "legal",
-            label: "Organization",
+            label: "an organization",
           },
         ],
       },
       section_account: {
         type: "section",
-        content: "Account details",
+        order: 200,
+        title: "User account",
       },
       "directus_users.email": {
         label: "Email",
         type: "email",
-        default: "test@example.com",
+        order: 210,
         required: true,
         icon: "i-mi-mail",
       },
       "directus_users.password": {
         label: "Password",
         type: "password",
+        order: 220,
         required: true,
         icon: "i-mi-lock",
       },
-      section_organisation: {
+      section_organization: {
         type: "section",
-        content: "Organization",
+        title: "Organization",
+        order: 300,
         conditions: is_legal,
       },
       "directus_users.memberships_organization_name": {
         label: "Organization name",
         type: "text",
+        order: 310,
         required: true,
         conditions: is_legal,
       },
       "directus_users.memberships_organization_type": {
         label: "Organization type",
         type: "text",
+        order: 320,
         required: true,
         conditions: is_legal,
       },
       "directus_users.memberships_organization_id": {
         label: "Organization ID",
         type: "text",
+        order: 330,
         required: true,
         conditions: is_legal,
       },
       section_personal_data: {
         type: "section",
-        content: "Personal data",
+        order: 400,
+        title: "Personal data",
         conditions: is_natural,
       },
       section_personal_data_legal: {
         type: "section",
-        content: "Organisation - Contact person",
+        order: 401,
+        title: "Organization Contact person",
         conditions: is_legal,
       },
       "directus_users.first_name": {
         type: "text",
+        order: 410,
         required: true,
         label: "First name",
       },
       "directus_users.last_name": {
         type: "text",
+        order: 420,
         required: true,
         label: "Last name",
       },
       "directus_users.memberships_gender": {
         type: "select",
+        order: 430,
         label: "Gender",
         required: true,
         default: "diverse",
@@ -168,12 +180,14 @@ export default defineNuxtPlugin(() => {
       },
       "directus_users.memberships_phone": {
         type: "text",
+        order: 440,
         label: "Phone",
         icon: "i-mi-call",
       },
       "directus_users.memberships_birthday": {
         label: "Birthday",
         type: "date",
+        order: 450,
         default: "2000-01-01",
         required: true,
         conditions: is_natural,
@@ -181,65 +195,78 @@ export default defineNuxtPlugin(() => {
       "directus_users.memberships_occupation": {
         label: "Occupation",
         type: "text",
+        order: 460,
         required: true,
         conditions: is_natural,
         icon: "i-system-uicons-briefcase",
       },
       section_address: {
         type: "section",
-        content: "Address",
+        order: 500,
+        title: "Address",
         conditions: is_natural,
       },
       section_address_legal: {
         type: "section",
-        content: "Organisation - Address",
+        order: 501,
+        title: "Organization Address",
         conditions: is_legal,
       },
       "directus_users.memberships_street": {
         label: "Street",
         type: "text",
+        order: 510,
         required: true,
       },
       "directus_users.memberships_streetnumber": {
         label: "Number",
         type: "text",
+        order: 511,
         width: "xs",
         required: true,
       },
       "directus_users.memberships_stair": {
         label: "Stair",
         type: "text",
+        order: 512,
         width: "xs",
       },
       "directus_users.memberships_door": {
         label: "Door",
         type: "text",
+        order: 513,
         width: "xs",
       },
       "directus_users.memberships_postcode": {
         label: "Postcode",
         type: "text",
+        order: 514,
         width: "xs",
         required: true,
       },
       "directus_users.memberships_city": {
         label: "City",
         type: "text",
+        order: 515,
         required: true,
       },
       "directus_users.memberships_country": {
         label: "Country",
         type: "text",
+        order: 516,
         required: true,
       },
       section_membership: {
         type: "section",
-        content: "Type of membership",
+        order: 600,
+        title: "Type of membership",
       },
       "memberships.memberships_type": {
         type: "select-radio",
+        label: "t:memberships_form_mtype",
         required: true,
-        default: "active",
+        width: "full",
+        order: 610,
         choices: [
           {
             value: "active",
@@ -251,50 +278,6 @@ export default defineNuxtPlugin(() => {
           },
         ],
       },
-      section_payment: {
-        type: "section",
-        content: "Payment details",
-      },
-      "directus_users.payments_type": {
-        label: "Payment type",
-        type: "select-radio",
-        width: "full",
-        default: "transfer",
-        required: true,
-        choices: [
-          {
-            value: "sepa",
-            label: "SEPA",
-          },
-          {
-            value: "transfer",
-            label: "Direct transfer",
-          },
-        ],
-      },
-      "directus_users.payments_account_iban": {
-        label: "Bank account IBAN",
-        type: "text",
-        conditions: is_sepa,
-        required: true,
-      },
-      "directus_users.payments_account_owner": {
-        label: "Bank account owner",
-        type: "text",
-        conditions: is_sepa,
-        required: true,
-      },
-      // section_final: {
-      //   type: "section",
-      //   content: "Terms",
-      // },
-      // terms: {
-      //   type: "toggle",
-      //   description: "I agree to XY.",
-      //   width: "full",
-      //   default: true,
-      //   required: true,
-      // },
     },
   };
 

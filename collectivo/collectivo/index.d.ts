@@ -74,6 +74,7 @@ declare global {
   interface CollectivoFormPage {
     title: string;
     fields: CollectivoFormFields;
+    status: "draft" | "published" | "archived";
     public?: boolean;
     submitMode?: "postNuxt" | (() => void);
     submitPath?: string;
@@ -97,15 +98,35 @@ declare global {
     | (CollectivoFormFieldBase & CollectivoFormFieldLayout)
     | CollectivoFormInput;
 
+  interface CollectivoFormFieldBase {
+    order: number;
+    width?: "full" | "xl" | "lg" | "md" | "sm" | "xs";
+    conditions?: FormCondition[];
+    _visible?: Ref<boolean>;
+  }
+
+  type CollectivoFormFieldLayout =
+    | {
+        type: "description";
+        content: string;
+      }
+    | {
+        type: "section";
+        title?: string;
+        icon?: string;
+        description?: string;
+      }
+    | {
+        type: "clear";
+      }
+    | {
+        type: "custom-layout";
+        component: any;
+      };
+
   interface CollectivoFormInputChoice {
     value: string;
     label: string;
-  }
-
-  interface CollectivoFormFieldBase {
-    width?: "full" | "xl" | "lg" | "md" | "sm" | "xs";
-    visible?: Ref<boolean>;
-    conditions?: FormCondition[];
   }
 
   interface FormCondition {
@@ -120,6 +141,7 @@ declare global {
   }
 
   type CollectivoFormInput = {
+    type: string;
     label?: string;
     default?: any;
     required?: boolean;
@@ -144,19 +166,6 @@ declare global {
       }
     | {
         type: "custom-input";
-        component: any;
-      };
-
-  type CollectivoFormFieldLayout =
-    | {
-        type: "section" | "description"; // TODO: "page" |
-        content: string;
-      }
-    | {
-        type: "clear";
-      }
-    | {
-        type: "custom";
         component: any;
       };
 }

@@ -1,7 +1,7 @@
 {
   "name": "@collectivo/memberships",
   "version": "0.1.0",
-  "description": "Collectivo is a module system for community plattforms.",
+  "description": "An extension of collectivo to manage memberships.",
   "type": "module",
   "license": "AGPL-3.0",
   "author": "Joël Foramitti",

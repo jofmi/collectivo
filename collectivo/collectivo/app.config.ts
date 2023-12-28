@@ -373,8 +373,7 @@ export default defineAppConfig({
         "relative flex items-start bg-[#F4F7FE] shadow-sm rounded-lg mb-2 last:mb-0 px-5 py-3",
     },
     select: {
-      base: "relative block w-full disabled:cursor-default disabled:text-cv-gray tracking-[0.28px] font-medium leading-4",
-
+      base: "relative block w-full disabled:cursor-default disabled:text-cv-gray tracking-[0.28px] font-medium leading-4 h-[50px]",
       rounded: "rounded-lg",
       color: {
         gray: {

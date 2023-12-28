@@ -328,13 +328,21 @@ async function fillOutAll() {
             :required="input.required"
             :name="key"
           >
-            <USelect
+            <USelectMenu
               v-model="state[key]"
               :options="input.choices"
               :disabled="input.disabled"
+              value-attribute="value"
             >
-              <template #label="{ option }">{{ t(option.label) }}</template>
-            </USelect>
+              <!-- Get choice label with value==state[key] -->
+              <template #label>{{
+                t(
+                  input.choices?.find((choice) => choice.value === state[key])
+                    ?.label ?? ""
+                )
+              }}</template>
+              <template #option="{ option }">{{ t(option.label) }}</template>
+            </USelectMenu>
           </UFormGroup>
           <UFormGroup
             v-else-if="input.type === 'select-radio'"

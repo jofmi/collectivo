@@ -3,6 +3,7 @@ import Sidebar from "./components/Sidebar.vue";
 import PageTitle from "./components/PageTitle.vue";
 import MobileHeader from "./components/MobileHeader.vue";
 import MobileMenu from "./components/MobileMenu.vue";
+
 const { setLocale } = useI18n();
 const user = useCollectivoUser();
 
@@ -70,17 +71,14 @@ for (const [key, value] of Object.entries(locales)) {
               name="i-system-uicons-exit-left"
               class="main__top__right__icon"
           /></a> -->
-          <div v-if="!user.isAuthenticated">
-            <UDropdown
-              :items="langItems"
-              :popper="{ placement: 'bottom-start' }"
-            >
-              <UIcon
-                class="main__top__right__icon"
-                name="i-system-uicons-translate"
-              ></UIcon>
-            </UDropdown>
-          </div>
+          <!-- <div v-if="!user.isAuthenticated"> -->
+          <UDropdown :items="langItems" :popper="{ placement: 'bottom-start' }">
+            <UIcon
+              class="main__top__right__icon"
+              name="i-system-uicons-translate"
+            ></UIcon>
+          </UDropdown>
+          <!-- </div> -->
         </div>
       </div>
       <slot></slot>

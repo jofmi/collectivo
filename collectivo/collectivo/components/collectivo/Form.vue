@@ -332,7 +332,9 @@ async function fillOutAll() {
               v-model="state[key]"
               :options="input.choices"
               :disabled="input.disabled"
-            />
+            >
+              <template #label="{ option }">{{ t(option.label) }}</template>
+            </USelect>
           </UFormGroup>
           <UFormGroup
             v-else-if="input.type === 'select-radio'"
@@ -344,7 +346,9 @@ async function fillOutAll() {
               v-model="state[key]"
               :options="input.choices"
               :disabled="input.disabled"
-            />
+            >
+              <template #label="{ option }">{{ t(option.label) }}</template>
+            </URadioGroup>
           </UFormGroup>
           <UFormGroup
             v-else-if="input.type === 'multiselect-checkbox'"

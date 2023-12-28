@@ -364,7 +364,7 @@ async function fillOutAll() {
             :required="input.required"
             :name="key"
           >
-            <CollectivoFormsCheckboxGroup
+            <CollectivoFormCheckboxGroup
               v-model="state[key]"
               :choices="input.choices"
             />
@@ -376,7 +376,7 @@ async function fillOutAll() {
             :disabled="input.disabled"
             :name="key"
           >
-            <CollectivoFormsDate v-model="state[key]"></CollectivoFormsDate>
+            <CollectivoFormDate v-model="state[key]"></CollectivoFormDate>
           </UFormGroup>
           <UFormGroup
             v-else-if="input.type === 'toggle'"
@@ -424,7 +424,7 @@ async function fillOutAll() {
   <div v-if="config.public.debug" class="element-full">
     <div class="form-title">DEBUG TOOLS</div>
     <div>You are seeing this because NUXT_DEBUG=True</div>
-    <div class="text-sm">
+    <div class="">
       <UButton class="btn" @click="fillOutAll">
         {{ t("Fill out all") }}
       </UButton>

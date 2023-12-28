@@ -71,10 +71,9 @@ declare global {
   }
 
   // Forms
-  interface CollectivoFormPage {
+  interface CollectivoForm {
     title: string;
     fields: CollectivoFormFields;
-    status: "draft" | "published" | "archived";
     public?: boolean;
     submitMode?: "postNuxt" | (() => void);
     submitPath?: string;

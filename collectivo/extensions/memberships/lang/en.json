@@ -32,7 +32,7 @@
   "t:memberships_form_ptype": "I am applying for a membership as:",
   "t:memberships_form_mtype": "I am applying for the following kind of membership:",
   "t:memberships_form_intro": "Please fill out this form to apply for a membership.",
-  "t:memberships_form_success_text": "Your membership application has been received. Please check your emails.",
+  "t:memberships_form_success": "Please log in in order to verify your email address.",
 
   "": ""
 }

@@ -52,6 +52,12 @@ export default defineAppConfig({
         xl: "p-2.5",
       },
       color: {
+        primary: {
+          solid:
+            "text-white bg-cv-purple hover:bg-cv-purple/90 disabled:bg-cv-purple/50",
+          outline:
+            "text-cv-purple border border-cv-purple hover:bg-cv-purple/90 disabled:bg-cv-purple/50",
+        },
         cyan: {
           solid:
             "text-white bg-cv-cyan hover:bg-[#29A699] disabled:bg-cv-cyan/50",
@@ -84,7 +90,7 @@ export default defineAppConfig({
         // link: 'text-{color}-500 hover:text-{color}-600 disabled:text-{color}-500 dark:text-{color}-400 dark:hover:text-{color}-500 dark:disabled:text-{color}-400 underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-{color}-500 dark:focus-visible:ring-{color}-400',
       },
       default: {
-        size: "sm",
+        size: "md",
         variant: "solid",
         color: "primary",
         loadingIcon: "i-heroicons-arrow-path-20-solid",

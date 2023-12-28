@@ -1,5 +1,6 @@
 {
   "Membership application form": "Mitgliedschaftsantrag",
+  "Application submitted!": "Antrag gesendet!",
   "Welcome!": "Willkommen!",
   "User account": "Benutzerkonto",
   "Organization": "Organisation",
@@ -37,7 +38,7 @@
   "t:memberships_form_ptype": "Ich stelle diesen Antrag als:",
   "t:memberships_form_mtype": "Ich bewerbe mich für folgende Art der Mitgliedschaft:",
   "t:memberships_form_intro": "Bitte fülle das Formular aus, um Mitglied zu werden.",
-  "t:memberships_form_success_text": "Deine Mitgliedschaft wurde erfolgreich beantragt.",
+  "t:memberships_form_success": "Bitte melde dich an, um deine Email Adresse zu bestätigen.",
 
   "": ""
 }

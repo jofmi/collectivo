@@ -45,7 +45,7 @@ async function saveProfile(data: CollectivoUser) {
 
 <template>
   <CollectivoContainer>
-    <CollectivoForm
+    <CollectivoFormBuilder
       v-if="user.data"
       :data="user.data"
       :fields="user.fields"

@@ -94,14 +94,13 @@ services:
       retries: 5
 
   keycloak:
-    #image: quay.io/keycloak/keycloak:22.0.1
     build:
       context: ./keycloak
       dockerfile: Dockerfile
     environment:
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
-      KEYCLOAK_FRONTEND_URL: ${NUXT_PUBLIC_KEYCLOAK_URL}
+      KEYCLOAK_FRONTEND_URL: ${KEYCLOAK_URL}
       KEYCLOAK_IMPORT: /tmp/collectivo-realm.json
       KC_DB_USERNAME: keycloak
       KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}

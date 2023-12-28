@@ -62,9 +62,9 @@ if (!form.public) {
 </script>
 
 <template>
-  <CollectivoContainer>
+  <CollectivoContainer v-if="form">
     <CollectivoForm
-      v-if="form && !submitted"
+      v-if="!submitted"
       :fields="form.fields"
       :submit="onSubmit"
     />

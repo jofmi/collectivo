@@ -3,6 +3,8 @@ import Sidebar from "./components/Sidebar.vue";
 import PageTitle from "./components/PageTitle.vue";
 import MobileHeader from "./components/MobileHeader.vue";
 import MobileMenu from "./components/MobileMenu.vue";
+
+// const { t, locale } = useI18n();
 </script>
 
 <template>
@@ -52,6 +54,13 @@ import MobileMenu from "./components/MobileMenu.vue";
               name="i-system-uicons-exit-left"
               class="main__top__right__icon"
           /></a> -->
+          <!-- Language:
+          <form>
+            <select v-model="locale">
+              <option value="en">en</option>
+              <option value="de">de</option>
+            </select>
+          </form> -->
         </div>
       </div>
       <slot></slot>

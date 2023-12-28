@@ -630,11 +630,11 @@ packages:
       '@babel/helper-plugin-utils': 7.22.5
       '@babel/plugin-syntax-typescript': 7.23.3(@babel/core@7.23.6)
 
-  /@babel/runtime@7.23.5:
-    resolution: {integrity: sha512-NdUTHcPe4C99WxPub+K9l9tK5/lV4UXIoaHSYgzco9BCyjKAAwzdBI+wWtYqHt7LJdbo74ZjRPJgzVweq1sz0w==}
+  /@babel/runtime@7.23.6:
+    resolution: {integrity: sha512-zHd0eUrf5GZoOWVCXp6koAKQTfZV07eit6bGPmJgnZdnSAvvZee6zniW2XMF7Cmc4ISOOnPy3QaSiIJGJkVEDQ==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      regenerator-runtime: 0.14.0
+      regenerator-runtime: 0.14.1
 
   /@babel/standalone@7.23.6:
     resolution: {integrity: sha512-+AzS6BZwZdSosrgS/TiGDYLxtlefARKClWgJ4ql//XfmV9KbPWbkEekvbvDRJ8a6qog8E9j3CziHLz5dbIEMyw==}
@@ -2029,6 +2029,7 @@ packages:
     dependencies:
       is-glob: 4.0.3
       micromatch: 4.0.5
+      napi-wasm: 1.1.0
     bundledDependencies:
       - napi-wasm
 
@@ -3679,7 +3680,7 @@ packages:
     resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
     engines: {node: '>=0.11'}
     dependencies:
-      '@babel/runtime': 7.23.5
+      '@babel/runtime': 7.23.6
 
   /debug@2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
@@ -5365,6 +5366,9 @@ packages:
     engines: {node: ^14 || ^16 || >=18}
     hasBin: true
 
+  /napi-wasm@1.1.0:
+    resolution: {integrity: sha512-lHwIAJbmLSjF9VDRm9GoVOy9AGp3aIvkjv+Kvz9h16QR3uSVYH78PNQUnT2U4X53mhlnV2M7wrhibQ3GHicDmg==}
+
   /natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
@@ -6520,8 +6524,8 @@ packages:
     dependencies:
       redis-errors: 1.2.0
 
-  /regenerator-runtime@0.14.0:
-    resolution: {integrity: sha512-srw17NI0TUWHuGa5CFGGmhfNIeja30WMBfbslPNhf6JrqQlLN5gcrvig1oqPxiVaXb0oW0XRKtH6Nngs5lKCIA==}
+  /regenerator-runtime@0.14.1:
+    resolution: {integrity: sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw==}
 
   /replace-in-file@6.3.5:
     resolution: {integrity: sha512-arB9d3ENdKva2fxRnSjwBEXfK1npgyci7ZZuwysgAp7ORjHSyxz6oqIjTEv8R0Ydl4Ll7uOAZXL4vbkhGIizCg==}

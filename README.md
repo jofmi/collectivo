@@ -50,6 +50,11 @@ Log in with the following example users:
 - Editor: editor@example.com / editor (Collectivo, Directus)
 - User: user@example.com / user (Collectivo)
 
+## Configuration
+
+- Internationalization (see [nuxt/i18n](https://i18n.nuxtjs.org/))
+  - Change the default language: add `i18n: {defaultLocale: 'en'}` to `nuxt.config.ts`.
+
 ## Migrations
 
 Migrations between schemas can be run via the Nuxt API endpoint `/api/migrate/`. Extensions can define a schema for each version. E.g. a schema can be for version `0.0.1` of the core extension `collectivo`. A migration script can be run both before and after applying each schema version.

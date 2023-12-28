@@ -33,15 +33,13 @@ export default defineNuxtConfig({
   // https://v8.i18n.nuxtjs.org/guide/layers
   i18n: {
     lazy: false, // TODO: Lazy loading does not work with current switch
+    strategy: "no_prefix",
+    defaultLocale: "en",
     langDir: "./lang",
     locales: [
       { code: "en", file: "en.json" },
       { code: "de", file: "de.json" },
     ],
-    strategy: "no_prefix",
-    defaultLocale: process.env.COLLECTIVO_DEFAULT_LOCAL ?? "en",
-    detectBrowserLanguage:
-      process.env.COLLECTIVO_USE_BROWSER_LOCAL == "true" ?? false,
   },
   css: [
     join(currentDir, "./assets/fonts/fonts.css"),

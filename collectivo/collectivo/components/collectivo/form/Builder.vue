@@ -235,7 +235,9 @@ async function fillOutAll() {
           </div>
         </div>
         <div v-else-if="input.type === 'description'" class="element-full">
-          {{ input.content }}
+          <UFormGroup :label="input.label ? t(input.label) : undefined"
+            >{{ t(input.description) }}
+          </UFormGroup>
         </div>
         <component
           :is="input.component"
@@ -389,8 +391,9 @@ async function fillOutAll() {
             >
               <UToggle v-model="state[key]" :disabled="input.disabled" />
               <span
+                v-if="input.description"
                 class="text-sm font-medium text-gray-700 dark:text-gray-200"
-                >{{ input.description }}</span
+                >{{ t(input.description) }}</span
               >
             </div>
           </UFormGroup>

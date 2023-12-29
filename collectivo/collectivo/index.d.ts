@@ -107,7 +107,8 @@ declare global {
   type CollectivoFormFieldLayout =
     | {
         type: "description";
-        content: string;
+        label?: string;
+        description: string;
       }
     | {
         type: "section";
@@ -126,6 +127,7 @@ declare global {
   interface CollectivoFormInputChoice {
     value: string;
     label: string;
+    conditions?: FormCondition[];
   }
 
   interface FormCondition {

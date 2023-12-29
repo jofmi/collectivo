@@ -77,6 +77,7 @@ declare global {
     public?: boolean;
     submitMode?: "postNuxt" | (() => void);
     submitPath?: string;
+    submitLabel?: string;
     successTitle?: string;
     successText?: string;
     successIcon?: string;
@@ -109,6 +110,7 @@ declare global {
         type: "description";
         label?: string;
         description: string;
+        boxed?: boolean;
       }
     | {
         type: "section";
@@ -154,8 +156,10 @@ declare global {
 
   type CollectivoFormInputType =
     | {
-        type: "select" | "select-radio" | "multiselect-checkbox";
+        type: "select";
         choices?: CollectivoFormInputChoice[];
+        multiple?: boolean;
+        expand?: boolean;
       }
     | {
         type: "text" | "number" | "email" | "password" | "textarea" | "date";

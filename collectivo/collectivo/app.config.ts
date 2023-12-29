@@ -293,6 +293,11 @@ export default defineAppConfig({
 
     // Forms ---------------------------------------------------------------------------------
 
+    formGroup: {
+      label: {
+        base: "block text-md font-semibold text-cv-primary",
+      },
+    },
     input: {
       wrapper: "relative",
       base: "relative block w-full disabled:cursor-default disabled:text-cv-gray tracking-[0.28px] font-medium leading-4",

@@ -58,6 +58,7 @@ async function onSubmit(data: any) {
       v-if="!submitted"
       :fields="form.fields"
       :submit="onSubmit"
+      :submit-label="form.submitLabel"
     />
     <template v-else>
       <slot name="success">

@@ -18,6 +18,7 @@ const props = defineProps({
   fields: Object as PropType<CollectivoFormFields>,
   data: Object as PropType<Record<string, any>>,
   submit: Function as PropType<(data: any) => Promise<void>>,
+  submitLabel: String,
 });
 
 const form = { fields: props.fields ?? {} };
@@ -223,26 +224,32 @@ async function fillOutAll() {
   >
     <template v-for="(input, key) in form.fields" :key="key">
       <template v-if="typeof key === 'string' && (input._visible ?? true)">
-        <div v-if="input.type === 'section'" class="element-full">
+        <div
+          v-if="input.type === 'section'"
+          class="form-field-full mt-10 first:mt-0"
+        >
           <div v-if="input.title" class="form-title">
             {{ t(input.title) }}
           </div>
           <div
             v-if="input.description"
-            class="text-cv-primary text-sm leading-5"
+            class="text-cv-primary text-sm leading-5 py-2"
           >
             {{ t(input.description) }}
           </div>
         </div>
-        <div v-else-if="input.type === 'description'" class="element-full">
-          <UFormGroup :label="input.label ? t(input.label) : undefined"
-            >{{ t(input.description) }}
+        <div v-else-if="input.type === 'description'" class="form-field-full">
+          <UFormGroup :label="input.label ? t(input.label) : undefined">
+            <div v-if="input.boxed" class="form-box text-sm">
+              {{ t(input.description) }}
+            </div>
+            <div v-else class="text-sm">{{ t(input.description) }}</div>
           </UFormGroup>
         </div>
         <component
           :is="input.component"
           v-else-if="input.type === 'custom-layout'"
-          :class="input.width ? `element-${input.width}` : 'element-full'"
+          :class="input.width ? `form-field-${input.width}` : 'form-field-full'"
           :input="input"
           :state="state"
         >
@@ -250,7 +257,7 @@ async function fillOutAll() {
         <div v-else-if="input.type === 'clear'" class="basis-full"></div>
         <div
           v-else
-          :class="input.width ? `element-${input.width}` : 'element-md'"
+          :class="input.width ? `form-field-${input.width}` : 'form-field-md'"
         >
           <UFormGroup
             v-if="input.type === 'text'"
@@ -330,46 +337,46 @@ async function fillOutAll() {
             :required="input.required"
             :name="key"
           >
-            <USelectMenu
-              v-model="state[key]"
-              :options="input.choices"
-              :disabled="input.disabled"
-              value-attribute="value"
-            >
-              <!-- Get choice label with value==state[key] -->
-              <template #label>{{
-                t(
-                  input.choices?.find((choice) => choice.value === state[key])
-                    ?.label ?? ""
-                )
-              }}</template>
-              <template #option="{ option }">{{ t(option.label) }}</template>
-            </USelectMenu>
-          </UFormGroup>
-          <UFormGroup
-            v-else-if="input.type === 'select-radio'"
-            :label="input.label ? t(input.label) : undefined"
-            :required="input.required"
-            :name="key"
-          >
-            <URadioGroup
-              v-model="state[key]"
-              :options="input.choices"
-              :disabled="input.disabled"
-            >
-              <template #label="{ option }">{{ t(option.label) }}</template>
-            </URadioGroup>
-          </UFormGroup>
-          <UFormGroup
-            v-else-if="input.type === 'multiselect-checkbox'"
-            :label="input.label ? t(input.label) : undefined"
-            :required="input.required"
-            :name="key"
-          >
-            <CollectivoFormCheckboxGroup
-              v-model="state[key]"
-              :choices="input.choices"
-            />
+            <!-- Single choice -->
+            <template v-if="!input.multiple">
+              <template v-if="!input.expand">
+                <USelectMenu
+                  v-model="state[key]"
+                  :options="input.choices"
+                  :disabled="input.disabled"
+                  value-attribute="value"
+                >
+                  <template #label>{{
+                    t(
+                      input.choices?.find(
+                        (choice) => choice.value === state[key]
+                      )?.label ?? ""
+                    )
+                  }}</template>
+                  <template #option="{ option }">{{
+                    t(option.label)
+                  }}</template>
+                </USelectMenu>
+              </template>
+              <!-- Expanded single choice (radio buttons) -->
+              <template v-else>
+                <URadioGroup
+                  v-model="state[key]"
+                  :options="input.choices"
+                  :disabled="input.disabled"
+                >
+                  <template #label="{ option }">{{ t(option.label) }}</template>
+                </URadioGroup>
+              </template>
+            </template>
+
+            <!-- Multiple choice -->
+            <template v-else>
+              <CollectivoFormCheckboxGroup
+                v-model="state[key]"
+                :choices="input.choices"
+              />
+            </template>
           </UFormGroup>
           <UFormGroup
             v-else-if="input.type === 'date'"
@@ -386,9 +393,7 @@ async function fillOutAll() {
             :required="input.required"
             :name="key"
           >
-            <div
-              class="bg-[#F4F7FE] shadow-sm rounded-lg px-4 py-3 flex flex-row gap-2"
-            >
+            <div class="form-box">
               <UToggle v-model="state[key]" :disabled="input.disabled" />
               <span
                 v-if="input.description"
@@ -420,11 +425,11 @@ async function fillOutAll() {
         :loading="loading"
         type="submit"
       >
-        {{ t("Submit") }}
+        {{ t(submitLabel ?? "Submit") }}
       </UButton>
     </div>
   </UForm>
-  <div v-if="config.public.debug" class="element-full">
+  <div v-if="config.public.debug" class="form-field-full">
     <div class="form-title">DEBUG TOOLS</div>
     <div>You are seeing this because NUXT_DEBUG=True</div>
     <div class="">
@@ -438,32 +443,37 @@ async function fillOutAll() {
 
 <style lang="scss" scoped>
 .form-title {
-  @apply text-cv-primary font-semibold text-2xl leading-7;
+  @apply text-cv-primary font-semibold text-2xl leading-7 pb-2;
 }
 
-.input {
-  @apply px-2 py-3 lg:p-4;
-}
-.element-full {
-  @apply input basis-full;
+.form-box {
+  @apply bg-[#F4F7FE] shadow-sm rounded-lg text-cv-primary px-4 py-2 flex flex-row gap-2;
 }
 
-.element-xl {
-  @apply input basis-full md:basis-1/2;
+.form-field {
+  @apply p-2;
 }
 
-.element-lg {
-  @apply input basis-full md:basis-1/2 lg:basis-1/3;
-}
-.element-md {
-  @apply input basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4;
+.form-field-full {
+  @apply form-field basis-full;
 }
 
-.element-sm {
-  @apply input basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5;
+.form-field-xl {
+  @apply form-field basis-full md:basis-1/2;
 }
 
-.element-xs {
-  @apply input basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6;
+.form-field-lg {
+  @apply form-field basis-full md:basis-1/2 lg:basis-1/3;
+}
+.form-field-md {
+  @apply form-field basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4;
+}
+
+.form-field-sm {
+  @apply form-field basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5;
+}
+
+.form-field-xs {
+  @apply form-field basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6;
 }
 </style>

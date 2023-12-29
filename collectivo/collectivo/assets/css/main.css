@@ -1,0 +1,31 @@
+html {
+  font-family: "Urbanist", sans-serif;
+  @apply text-cv-primary font-normal tracking-wide;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /*background: #FFFFFF;*/
+}
+
+h1 {
+  @apply font-semibold text-4xl tracking-[0.6px];
+}
+
+h2 {
+  @apply font-semibold text-3xl;
+}
+
+h3 {
+  @apply font-semibold text-2xl;
+}
+
+h4 {
+  @apply font-semibold text-xl;
+}
+
+h5 {
+  @apply font-semibold text-lg;
+}
+
+p {
+  @apply text-base font-normal;
+}

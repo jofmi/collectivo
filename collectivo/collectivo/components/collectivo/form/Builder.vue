@@ -228,16 +228,10 @@ async function fillOutAll() {
           v-if="input.type === 'section'"
           class="form-field-full mt-10 first:mt-0"
         >
-          <div
-            v-if="input.title"
-            class="text-cv-primary font-semibold text-2xl leading-7 pb-2"
-          >
+          <h2 v-if="input.title">
             {{ t(input.title) }}
-          </div>
-          <div
-            v-if="input.description"
-            class="text-cv-primary text-sm leading-5 py-2"
-          >
+          </h2>
+          <div v-if="input.description" class="text-cv-primary leading-5 py-2">
             {{ t(input.description) }}
           </div>
         </div>
@@ -364,8 +358,12 @@ async function fillOutAll() {
               ></CollectivoFormDate>
             </template>
             <template v-else-if="input.type === 'toggle'">
-              <div class="form-box">
-                <UToggle v-model="state[key]" :disabled="input.disabled" />
+              <div class="form-box flex flex-row">
+                <UToggle
+                  v-model="state[key]"
+                  :disabled="input.disabled"
+                  class="mt-0.5 mr-2"
+                />
                 <span
                   v-if="input.description"
                   class="text-sm font-medium text-gray-700 dark:text-gray-200"
@@ -381,13 +379,13 @@ async function fillOutAll() {
       </template>
     </template>
     <div class="basis-full"></div>
-    <div class="px-2 py-3 lg:p-4">
+    <div class="form-field mt-2">
       <UButton
         v-if="props.submit"
         class="btn"
         variant="solid"
         color="cyan"
-        size="md"
+        size="lg"
         icon="i-mi-circle-check"
         :loading="loading"
         type="submit"
@@ -396,9 +394,15 @@ async function fillOutAll() {
       </UButton>
     </div>
   </UForm>
-  <div v-if="config.public.debug" class="m-2 p-4 rounded-lg bg-slate-100">
-    <div>You are seeing this because NUXT_DEBUG=True</div>
-    <div class="">
+  <div
+    v-if="config.public.debug"
+    class="mx-2 my-10 p-6 rounded-lg bg-slate-100"
+  >
+    <div>
+      DEBUG Tools. <br />
+      You are seeing this because NUXT_DEBUG=True
+    </div>
+    <div class="my-2">
       <UButton class="btn" @click="fillOutAll">
         {{ t("Fill out all") }}
       </UButton>
@@ -409,7 +413,7 @@ async function fillOutAll() {
 
 <style lang="scss" scoped>
 .form-box {
-  @apply bg-[#F4F7FE] shadow-sm rounded-lg text-cv-primary px-4 py-2 flex flex-row gap-2;
+  @apply bg-[#F4F7FE] shadow-sm rounded-lg text-cv-primary px-4 py-3 flex flex-row gap-2;
 }
 
 .form-field {
@@ -421,11 +425,11 @@ async function fillOutAll() {
 }
 
 .form-field-xl {
-  @apply form-field basis-full md:basis-1/2;
+  @apply form-field basis-full xl:basis-1/2;
 }
 
 .form-field-lg {
-  @apply form-field basis-full md:basis-1/2 lg:basis-1/3;
+  @apply form-field basis-full lg:basis-1/2 xl:basis-1/3;
 }
 .form-field-md {
   @apply form-field basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4;

@@ -42,6 +42,7 @@ export default defineNuxtConfig({
     ],
   },
   css: [
+    join(currentDir, "./assets/css/main.css"),
     join(currentDir, "./assets/fonts/fonts.css"),
     join(currentDir, "./assets/css/calendar.scss"),
     join(currentDir, "./assets/css/group-radio.scss"),

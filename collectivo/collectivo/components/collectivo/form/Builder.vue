@@ -161,7 +161,7 @@ for (const [key, input] of Object.entries(form.fields)) {
     addInputToSchema(key, input, valDate(input.validators));
   } else if (input.type === "number") {
     addInputToSchema(key, input, valNumber(input.validators));
-  } else if (input.type === "select" || input.type === "select-radio") {
+  } else if (input.type === "select") {
     addInputToSchema(key, input, valString(input.validators));
   } else if (input.type === "toggle" || input.type === "checkbox") {
     addInputToSchema(key, input, boolean());
@@ -228,7 +228,10 @@ async function fillOutAll() {
           v-if="input.type === 'section'"
           class="form-field-full mt-10 first:mt-0"
         >
-          <div v-if="input.title" class="form-title">
+          <div
+            v-if="input.title"
+            class="text-cv-primary font-semibold text-2xl leading-7 pb-2"
+          >
             {{ t(input.title) }}
           </div>
           <div
@@ -260,155 +263,119 @@ async function fillOutAll() {
           :class="input.width ? `form-field-${input.width}` : 'form-field-md'"
         >
           <UFormGroup
-            v-if="input.type === 'text'"
             :label="input.label ? t(input.label) : undefined"
             :required="input.required"
             :name="key"
           >
-            <UInput
-              v-model="state[key]"
-              :placeholder="input.placeholder"
-              :disabled="input.disabled"
-            >
-              <template v-if="input.icon" #trailing>
-                <UIcon :name="input.icon" />
-              </template>
-            </UInput>
-          </UFormGroup>
-          <UFormGroup
-            v-else-if="input.type === 'email'"
-            :label="input.label ? t(input.label) : undefined"
-            :required="input.required"
-            :name="key"
-          >
-            <UInput v-model="state[key]" :placeholder="input.placeholder">
-              <template v-if="input.icon" #trailing>
-                <UIcon :name="input.icon" />
-              </template>
-            </UInput>
-          </UFormGroup>
-          <UFormGroup
-            v-else-if="input.type === 'password'"
-            :label="input.label ? t(input.label) : undefined"
-            :required="input.required"
-            :name="key"
-          >
-            <UInput
-              v-model="state[key]"
-              type="password"
-              :placeholder="input.placeholder"
-              :disabled="input.disabled"
-            >
-              <template v-if="input.icon" #trailing>
-                <UIcon :name="input.icon" />
-              </template>
-            </UInput>
-          </UFormGroup>
-          <UFormGroup
-            v-else-if="input.type === 'number'"
-            :label="input.label ? t(input.label) : undefined"
-            :required="input.required"
-            :name="key"
-            :placeholder="input.placeholder"
-          >
-            <UInput
-              v-model="state[key]"
-              type="number"
-              :placeholder="input.placeholder"
-              :disabled="input.disabled"
-            />
-          </UFormGroup>
-          <UFormGroup
-            v-if="input.type === 'textarea'"
-            :label="input.label ? t(input.label) : undefined"
-            :required="input.required"
-            :name="key"
-          >
-            <UTextarea
-              v-model="state[key]"
-              resize
-              :placeholder="input.placeholder"
-              :disabled="input.disabled"
-            />
-          </UFormGroup>
-          <UFormGroup
-            v-else-if="input.type === 'select'"
-            :label="input.label ? t(input.label) : undefined"
-            :required="input.required"
-            :name="key"
-          >
-            <!-- Single choice -->
-            <template v-if="!input.multiple">
-              <template v-if="!input.expand">
-                <USelectMenu
-                  v-model="state[key]"
-                  :options="input.choices"
-                  :disabled="input.disabled"
-                  value-attribute="value"
-                >
-                  <template #label>{{
-                    t(
-                      input.choices?.find(
-                        (choice) => choice.value === state[key]
-                      )?.label ?? ""
-                    )
-                  }}</template>
-                  <template #option="{ option }">{{
-                    t(option.label)
-                  }}</template>
-                </USelectMenu>
-              </template>
-              <!-- Expanded single choice (radio buttons) -->
-              <template v-else>
-                <URadioGroup
-                  v-model="state[key]"
-                  :options="input.choices"
-                  :disabled="input.disabled"
-                >
-                  <template #label="{ option }">{{ t(option.label) }}</template>
-                </URadioGroup>
-              </template>
-            </template>
-
-            <!-- Multiple choice -->
-            <template v-else>
-              <CollectivoFormCheckboxGroup
+            <template v-if="input.type === 'text'">
+              <UInput
                 v-model="state[key]"
-                :choices="input.choices"
+                :placeholder="input.placeholder"
+                :disabled="input.disabled"
+              >
+                <template v-if="input.icon" #trailing>
+                  <UIcon :name="input.icon" />
+                </template>
+              </UInput>
+            </template>
+            <template v-else-if="input.type === 'email'">
+              <UInput v-model="state[key]" :placeholder="input.placeholder">
+                <template v-if="input.icon" #trailing>
+                  <UIcon :name="input.icon" />
+                </template>
+              </UInput>
+            </template>
+            <template v-else-if="input.type === 'password'">
+              <UInput
+                v-model="state[key]"
+                type="password"
+                :placeholder="input.placeholder"
+                :disabled="input.disabled"
+              >
+                <template v-if="input.icon" #trailing>
+                  <UIcon :name="input.icon" />
+                </template>
+              </UInput>
+            </template>
+            <template v-else-if="input.type === 'number'">
+              <UInput
+                v-model="state[key]"
+                type="number"
+                :placeholder="input.placeholder"
+                :disabled="input.disabled"
               />
             </template>
-          </UFormGroup>
-          <UFormGroup
-            v-else-if="input.type === 'date'"
-            :label="input.label ? t(input.label) : undefined"
-            :required="input.required"
-            :disabled="input.disabled"
-            :name="key"
-          >
-            <CollectivoFormDate v-model="state[key]"></CollectivoFormDate>
-          </UFormGroup>
-          <UFormGroup
-            v-else-if="input.type === 'toggle'"
-            :label="input.label ? t(input.label) : undefined"
-            :required="input.required"
-            :name="key"
-          >
-            <div class="form-box">
-              <UToggle v-model="state[key]" :disabled="input.disabled" />
-              <span
-                v-if="input.description"
-                class="text-sm font-medium text-gray-700 dark:text-gray-200"
-                >{{ t(input.description) }}</span
-              >
-            </div>
-          </UFormGroup>
-          <UFormGroup
-            v-else-if="input.type === 'custom-input'"
-            :label="input.label ? t(input.label) : undefined"
-            :required="input.required"
-            :name="key"
-          >
-            <component :is="input.component" v-model="state[key]" />
+            <template v-if="input.type === 'textarea'">
+              <UTextarea
+                v-model="state[key]"
+                resize
+                :placeholder="input.placeholder"
+                :disabled="input.disabled"
+              />
+            </template>
+            <template v-else-if="input.type === 'select'">
+              <!-- Single choice -->
+              <template v-if="!input.multiple">
+                <template v-if="!input.expand">
+                  <USelectMenu
+                    v-model="state[key]"
+                    :options="input.choices"
+                    :disabled="input.disabled"
+                    value-attribute="value"
+                  >
+                    <template #label>{{
+                      t(
+                        input.choices?.find(
+                          (choice) => choice.value === state[key]
+                        )?.label ?? ""
+                      )
+                    }}</template>
+                    <template #option="{ option }">{{
+                      t(option.label)
+                    }}</template>
+                  </USelectMenu>
+                </template>
+                <!-- Expanded single choice (radio buttons) -->
+                <template v-else>
+                  <URadioGroup
+                    v-model="state[key]"
+                    :options="input.choices"
+                    :disabled="input.disabled"
+                  >
+                    <template #label="{ option }">{{
+                      t(option.label)
+                    }}</template>
+                  </URadioGroup>
+                </template>
+              </template>
+
+              <!-- Multiple choice -->
+              <template v-else>
+                <CollectivoFormCheckboxGroup
+                  v-model="state[key]"
+                  :choices="input.choices"
+                />
+              </template>
+            </template>
+            <template v-else-if="input.type === 'date'">
+              <CollectivoFormDate
+                v-model="state[key]"
+                :disabled="input.disabled"
+              ></CollectivoFormDate>
+            </template>
+            <template v-else-if="input.type === 'toggle'">
+              <div class="form-box">
+                <UToggle v-model="state[key]" :disabled="input.disabled" />
+                <span
+                  v-if="input.description"
+                  class="text-sm font-medium text-gray-700 dark:text-gray-200"
+                  >{{ t(input.description) }}</span
+                >
+              </div>
+            </template>
+            <template v-else-if="input.type === 'custom-input'">
+              <component :is="input.component" v-model="state[key]" />
+            </template>
           </UFormGroup>
         </div>
       </template>
@@ -429,8 +396,7 @@ async function fillOutAll() {
       </UButton>
     </div>
   </UForm>
-  <div v-if="config.public.debug" class="form-field-full">
-    <div class="form-title">DEBUG TOOLS</div>
+  <div v-if="config.public.debug" class="m-2 p-4 rounded-lg bg-slate-100">
     <div>You are seeing this because NUXT_DEBUG=True</div>
     <div class="">
       <UButton class="btn" @click="fillOutAll">
@@ -442,10 +408,6 @@ async function fillOutAll() {
 </template>
 
 <style lang="scss" scoped>
-.form-title {
-  @apply text-cv-primary font-semibold text-2xl leading-7 pb-2;
-}
-
 .form-box {
   @apply bg-[#F4F7FE] shadow-sm rounded-lg text-cv-primary px-4 py-2 flex flex-row gap-2;
 }

@@ -101,7 +101,7 @@ function valString(validators: FormValidator[] | undefined) {
     } else if (validator.type === "max") {
       schema = schema.max(validator.value as number);
     } else if (validator.type === "email") {
-      schema = schema.email();
+      schema = schema.email("This email address is not valid");
     } else if (validator.type === "url") {
       schema = schema.url();
     } else if (validator.type === "regex") {

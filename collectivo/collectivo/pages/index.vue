@@ -6,30 +6,8 @@ definePageMeta({
 setCollectivoTitle("Dashboard");
 import { parse } from "marked";
 
-const tiles = useTiles();
-getTiles();
-
-const items = [
-  [
-    {
-      title: "Week",
-    },
-    {
-      title: "Day",
-    },
-  ],
-];
-
-const yearItems = [
-  [
-    {
-      title: 2022,
-    },
-    {
-      title: 2023,
-    },
-  ],
-];
+const tiles = useCollectivoTiles();
+tiles.value.load();
 </script>
 
 <template>

@@ -7,8 +7,6 @@ setCollectivoTitle("Profile");
 const toast = useToast();
 const { t } = useI18n();
 const user = useCollectivoUser();
-const runtimeConfig = useRuntimeConfig();
-const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protocol/openid-connect/logout`;
 
 // Sort profile.inputs by order
 // profile.value.inputs.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
@@ -62,8 +60,7 @@ async function saveProfile(data: CollectivoUser) {
       color="red"
       size="md"
       icon="i-mi-log-out"
-      :to="logoutPath"
-      target="_blank"
+      @click="user.logout"
     >
       {{ t("Logout") }}
     </UButton>

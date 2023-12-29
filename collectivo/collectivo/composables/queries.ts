@@ -1,4 +1,6 @@
 import { readItems } from "@directus/sdk";
+import type { UseFetchOptions } from "nuxt/app";
+import type { KeysOf } from "nuxt/dist/app/composables/asyncData";
 
 export function initData(): DataWrapper<any> {
   return {
@@ -9,10 +11,25 @@ export function initData(): DataWrapper<any> {
   };
 }
 
+export async function useCollectivoFetch(
+  request: string,
+  opts?: UseFetchOptions<unknown, unknown, KeysOf<unknown>, null, string, "get">
+) {
+  const directus = useDirectus();
+  const token = await directus.getToken();
+  return await useFetch(request, {
+    ...(opts || {}),
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ...(opts?.headers || {}),
+    },
+  });
+}
+
 export async function getDataFromDirectusItems(
   wrapper: Ref<DataWrapper<unknown>>,
   name: keyof CollectivoSchema,
-  reload?: boolean,
+  reload?: boolean
 ) {
   if (!reload && wrapper.value.data) return wrapper;
   const { $directus } = useNuxtApp();

@@ -33,7 +33,7 @@ export default defineNuxtPlugin(() => {
     {
       label: "Login",
       icon: "i-system-uicons-enter",
-      click: requireAuth,
+      click: user.value.login,
       order: 100,
       filter: (_item) => {
         return true;

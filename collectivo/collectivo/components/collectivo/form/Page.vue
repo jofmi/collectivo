@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const toast = useToast();
 const { t } = useI18n();
-const config = useRuntimeConfig();
+const debug = false;
 
 const props = defineProps({
   form: {
@@ -76,7 +76,7 @@ async function onSubmit(data: any) {
         </div>
       </slot>
     </template>
-    <div v-if="config.public.debug">
+    <div v-if="debug">
       <div class="">
         <UButton class="btn" @click="submitted = !submitted">
           {{ t("Toggle success page") }}

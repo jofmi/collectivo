@@ -12,7 +12,7 @@ import type { FormErrorEvent, FormSubmitEvent } from "#ui/types";
 
 const toast = useToast();
 const { t } = useI18n();
-const config = useRuntimeConfig();
+const debug = false;
 
 const props = defineProps({
   fields: Object as PropType<CollectivoFormField[]>,
@@ -403,7 +403,7 @@ async function fillOutAll() {
     </div>
   </UForm>
   <div
-    v-if="config.public.debug"
+    v-if="debug"
     class="mx-2 my-10 p-6 rounded-lg bg-slate-100 flex flex-col gap-2"
   >
     <div>

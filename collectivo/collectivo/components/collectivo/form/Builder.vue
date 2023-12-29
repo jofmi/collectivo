@@ -15,19 +15,16 @@ const { t } = useI18n();
 const config = useRuntimeConfig();
 
 const props = defineProps({
-  fields: Object as PropType<CollectivoFormFields>,
+  fields: Object as PropType<CollectivoFormField[]>,
   data: Object as PropType<Record<string, any>>,
   submit: Function as PropType<(data: any) => Promise<void>>,
   submitLabel: String,
 });
 
-const form = { fields: props.fields ?? {} };
+const form = { fields: props.fields ?? [] };
 const loading = ref(false);
 
-// Create ordered list of form fields
-form.fields = Object.fromEntries(
-  Object.entries(form.fields).sort((a, b) => a[1].order - b[1].order)
-);
+form.fields.sort((a, b) => a.order - b.order);
 
 function checkConditions(conditions: FormCondition[] | undefined) {
   if (!conditions) {
@@ -44,7 +41,7 @@ function checkConditions(conditions: FormCondition[] | undefined) {
 }
 
 // Compute visibility of fields
-for (const [_, field] of Object.entries(form.fields)) {
+for (const field of form.fields) {
   if (field.conditions) {
     field._visible = computed(() => {
       return checkConditions(field.conditions);
@@ -93,8 +90,6 @@ function addInputToSchema(
   } else {
     schema = schema.shape({ [key]: schema_field });
   }
-
-  // Fill state with either data or default value
 }
 
 function valString(validators: FormValidator[] | undefined) {
@@ -146,31 +141,36 @@ function valDate(validators: FormValidator[] | undefined) {
 }
 
 // Define state and schema from form object
-for (const [key, input] of Object.entries(form.fields)) {
+for (const input of form.fields) {
+  // Skip layout elements
+  if (!("key" in input)) {
+    continue;
+  }
+
   if (
     input.type === "text" ||
     input.type === "textarea" ||
     input.type === "password"
   ) {
-    addInputToSchema(key, input, valString(input.validators));
+    addInputToSchema(input.key, input, valString(input.validators));
   } else if (input.type === "email") {
     input.validators = input.validators ?? [];
     input.validators.push({ type: "email" });
-    addInputToSchema(key, input, valString(input.validators));
+    addInputToSchema(input.key, input, valString(input.validators));
   } else if (input.type === "date") {
-    addInputToSchema(key, input, valDate(input.validators));
+    addInputToSchema(input.key, input, valDate(input.validators));
   } else if (input.type === "number") {
-    addInputToSchema(key, input, valNumber(input.validators));
+    addInputToSchema(input.key, input, valNumber(input.validators));
   } else if (input.type === "select") {
-    addInputToSchema(key, input, valString(input.validators));
+    addInputToSchema(input.key, input, valString(input.validators));
   } else if (input.type === "checkbox") {
-    addInputToSchema(key, input, boolean());
+    addInputToSchema(input.key, input, boolean());
   }
 
-  if (props.data?.[key]) {
-    state[key] = props.data[key];
+  if (props.data?.[input.key]) {
+    state[input.key] = props.data[input.key];
   } else if ("default" in input && input.default) {
-    state[key] = input.default;
+    state[input.key] = input.default;
   }
 }
 
@@ -222,8 +222,8 @@ async function fillOutAll() {
     @submit="onSubmit"
     @error="onError"
   >
-    <template v-for="(input, key) in form.fields" :key="key">
-      <template v-if="typeof key === 'string' && (input._visible ?? true)">
+    <template v-for="(input, i) in form.fields" :key="i">
+      <template v-if="input._visible ?? true">
         <div
           v-if="input.type === 'section'"
           class="form-field-full mt-10 first:mt-0"
@@ -259,11 +259,16 @@ async function fillOutAll() {
           <UFormGroup
             :label="input.label ? t(input.label) : undefined"
             :required="input.required"
-            :name="key"
+            :name="input.key"
           >
+            <template #error="{ error }">
+              <div v-if="error && typeof error === 'string'">
+                {{ t(error) }}
+              </div>
+            </template>
             <template v-if="input.type === 'text'">
               <UInput
-                v-model="state[key]"
+                v-model="state[input.key]"
                 :placeholder="input.placeholder"
                 :disabled="input.disabled"
               >
@@ -273,7 +278,10 @@ async function fillOutAll() {
               </UInput>
             </template>
             <template v-else-if="input.type === 'email'">
-              <UInput v-model="state[key]" :placeholder="input.placeholder">
+              <UInput
+                v-model="state[input.key]"
+                :placeholder="input.placeholder"
+              >
                 <template v-if="input.icon" #trailing>
                   <UIcon :name="input.icon" />
                 </template>
@@ -281,7 +289,7 @@ async function fillOutAll() {
             </template>
             <template v-else-if="input.type === 'password'">
               <UInput
-                v-model="state[key]"
+                v-model="state[input.key]"
                 type="password"
                 :placeholder="input.placeholder"
                 :disabled="input.disabled"
@@ -293,7 +301,7 @@ async function fillOutAll() {
             </template>
             <template v-else-if="input.type === 'number'">
               <UInput
-                v-model="state[key]"
+                v-model="state[input.key]"
                 type="number"
                 :placeholder="input.placeholder"
                 :disabled="input.disabled"
@@ -301,7 +309,7 @@ async function fillOutAll() {
             </template>
             <template v-if="input.type === 'textarea'">
               <UTextarea
-                v-model="state[key]"
+                v-model="state[input.key]"
                 resize
                 :placeholder="input.placeholder"
                 :disabled="input.disabled"
@@ -312,7 +320,7 @@ async function fillOutAll() {
               <template v-if="!input.multiple">
                 <template v-if="!input.expand">
                   <USelectMenu
-                    v-model="state[key]"
+                    v-model="state[input.key]"
                     :options="input.choices"
                     :disabled="input.disabled"
                     value-attribute="value"
@@ -320,7 +328,7 @@ async function fillOutAll() {
                     <template #label>{{
                       t(
                         input.choices?.find(
-                          (choice) => choice.value === state[key]
+                          (choice) => choice.value === state[input.key]
                         )?.label ?? ""
                       )
                     }}</template>
@@ -332,7 +340,7 @@ async function fillOutAll() {
                 <!-- Expanded single choice (radio buttons) -->
                 <template v-else>
                   <URadioGroup
-                    v-model="state[key]"
+                    v-model="state[input.key]"
                     :options="input.choices"
                     :disabled="input.disabled"
                   >
@@ -346,21 +354,21 @@ async function fillOutAll() {
               <!-- Multiple choice -->
               <template v-else>
                 <CollectivoFormCheckboxGroup
-                  v-model="state[key]"
+                  v-model="state[input.key]"
                   :choices="input.choices"
                 />
               </template>
             </template>
             <template v-else-if="input.type === 'date'">
               <CollectivoFormDate
-                v-model="state[key]"
+                v-model="state[input.key]"
                 :disabled="input.disabled"
               ></CollectivoFormDate>
             </template>
             <template v-else-if="input.type === 'checkbox'">
               <div class="form-box flex flex-row">
                 <UToggle
-                  v-model="state[key]"
+                  v-model="state[input.key]"
                   :disabled="input.disabled"
                   class="mt-0.5 mr-2"
                 />
@@ -372,7 +380,7 @@ async function fillOutAll() {
               </div>
             </template>
             <template v-else-if="input.type === 'custom-input'">
-              <component :is="input.component" v-model="state[key]" />
+              <component :is="input.component" v-model="state[input.key]" />
             </template>
           </UFormGroup>
         </div>
@@ -408,7 +416,6 @@ async function fillOutAll() {
       </UButton>
     </div>
     <div class="text-sm">Form state: {{ state }}</div>
-    <div class="text-sm">Validation state: {{ schema }}</div>
   </div>
 </template>
 

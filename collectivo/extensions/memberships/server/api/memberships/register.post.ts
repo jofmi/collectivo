@@ -21,10 +21,10 @@ async function registerMembership(body: any) {
   const membershipData: any = {};
 
   for (const [key, value] of Object.entries(body)) {
-    if (key.startsWith("directus_users.")) {
-      userData[key.replace("directus_users.", "")] = value;
-    } else if (key.startsWith("memberships.")) {
-      membershipData[key.replace("memberships.", "")] = value;
+    if (key.startsWith("directus_users__")) {
+      userData[key.replace("directus_users__", "")] = value;
+    } else if (key.startsWith("memberships__")) {
+      membershipData[key.replace("memberships__", "")] = value;
     }
   }
 

@@ -73,7 +73,7 @@ declare global {
   // Forms
   interface CollectivoForm {
     title: string;
-    fields: CollectivoFormFields;
+    fields: CollectivoFormField[];
     public?: boolean;
     submitMode?: "postNuxt" | (() => void);
     submitPath?: string;
@@ -90,13 +90,7 @@ declare global {
   }
   // TODO: How can an extension add a form input type?
 
-  interface CollectivoFormFields {
-    [key: string]: CollectivoFormField;
-  }
-
-  type CollectivoFormField =
-    | (CollectivoFormFieldBase & CollectivoFormFieldLayout)
-    | CollectivoFormInput;
+  type CollectivoFormField = CollectivoFormLayout | CollectivoFormInput;
 
   interface CollectivoFormFieldBase {
     order: number;
@@ -105,46 +99,33 @@ declare global {
     _visible?: Ref<boolean>;
   }
 
-  type CollectivoFormFieldLayout =
-    | {
-        type: "description";
-        label?: string;
-        description: string;
-        boxed?: boolean;
-      }
-    | {
-        type: "section";
-        title?: string;
-        icon?: string;
-        description?: string;
-      }
-    | {
-        type: "clear";
-      }
-    | {
-        type: "custom-layout";
-        component: any;
-      };
-
-  interface CollectivoFormInputChoice {
-    value: string;
-    label: string;
-    conditions?: FormCondition[];
-  }
-
-  interface FormCondition {
-    key: string;
-    value: string | number | boolean;
-    // TODO: Add operator?: "==" | "!=" | ">" | "<" | ">=" | "<=";
-  }
-
-  interface FormValidator {
-    type: "min" | "max" | "email" | "url" | "regex";
-    value?: string | number | RegExp;
-  }
+  // These should not have a "key" property, because "key" is used to identify inputs
+  type CollectivoFormLayout = CollectivoFormFieldBase &
+    (
+      | {
+          type: "description";
+          label?: string;
+          description: string;
+          boxed?: boolean;
+        }
+      | {
+          type: "section";
+          title?: string;
+          icon?: string;
+          description?: string;
+        }
+      | {
+          type: "clear";
+        }
+      | {
+          type: "custom-layout";
+          component: any;
+        }
+    );
 
   type CollectivoFormInput = {
     type: string;
+    key: string;
     label?: string;
     default?: any;
     required?: boolean;
@@ -173,6 +154,23 @@ declare global {
         type: "custom-input";
         component: any;
       };
+
+  interface CollectivoFormInputChoice {
+    value: string;
+    label: string;
+    conditions?: FormCondition[];
+  }
+
+  interface FormCondition {
+    key: string;
+    value: string | number | boolean;
+    // TODO: Add operator?: "==" | "!=" | ">" | "<" | ">=" | "<=";
+  }
+
+  interface FormValidator {
+    type: "min" | "max" | "email" | "url" | "regex";
+    value?: string | number | RegExp;
+  }
 }
 
 // Types for input of app.config.ts

@@ -167,7 +167,7 @@ declare global {
         icon?: string;
       }
     | {
-        type: "checkbox" | "toggle";
+        type: "checkbox";
       }
     | {
         type: "custom-input";

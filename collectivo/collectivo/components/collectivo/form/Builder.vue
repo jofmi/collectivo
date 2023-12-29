@@ -61,7 +61,7 @@ function addInputToSchema(
   schema_field: YupSchema
 ) {
   if (input.required) {
-    if (input.type === "checkbox" || input.type === "toggle") {
+    if (input.type === "checkbox") {
       schema_field = schema_field.test(
         "checkbox",
         "This field is required",
@@ -163,7 +163,7 @@ for (const [key, input] of Object.entries(form.fields)) {
     addInputToSchema(key, input, valNumber(input.validators));
   } else if (input.type === "select") {
     addInputToSchema(key, input, valString(input.validators));
-  } else if (input.type === "toggle" || input.type === "checkbox") {
+  } else if (input.type === "checkbox") {
     addInputToSchema(key, input, boolean());
   }
 
@@ -203,7 +203,7 @@ async function fillOutAll() {
       state[key] = input.choices[0].value;
     } else if (input.type === "email") {
       state[key] = "test@example.com";
-    } else if (input.type === "toggle") {
+    } else if (input.type === "checkbox") {
       state[key] = true;
     } else if (input.type === "date") {
       state[key] = "2021-01-01";
@@ -231,7 +231,7 @@ async function fillOutAll() {
           <h2 v-if="input.title">
             {{ t(input.title) }}
           </h2>
-          <div v-if="input.description" class="text-cv-primary leading-5 py-2">
+          <div v-if="input.description" class="leading-5 py-2">
             {{ t(input.description) }}
           </div>
         </div>
@@ -357,7 +357,7 @@ async function fillOutAll() {
                 :disabled="input.disabled"
               ></CollectivoFormDate>
             </template>
-            <template v-else-if="input.type === 'toggle'">
+            <template v-else-if="input.type === 'checkbox'">
               <div class="form-box flex flex-row">
                 <UToggle
                   v-model="state[key]"
@@ -396,24 +396,25 @@ async function fillOutAll() {
   </UForm>
   <div
     v-if="config.public.debug"
-    class="mx-2 my-10 p-6 rounded-lg bg-slate-100"
+    class="mx-2 my-10 p-6 rounded-lg bg-slate-100 flex flex-col gap-2"
   >
     <div>
       DEBUG Tools. <br />
       You are seeing this because NUXT_DEBUG=True
     </div>
-    <div class="my-2">
+    <div>
       <UButton class="btn" @click="fillOutAll">
         {{ t("Fill out all") }}
       </UButton>
     </div>
     <div class="text-sm">Form state: {{ state }}</div>
+    <div class="text-sm">Validation state: {{ schema }}</div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .form-box {
-  @apply bg-[#F4F7FE] shadow-sm rounded-lg text-cv-primary px-4 py-3 flex flex-row gap-2;
+  @apply bg-[#F4F7FE] shadow-sm rounded-lg  px-4 py-3 flex flex-row gap-2;
 }
 
 .form-field {

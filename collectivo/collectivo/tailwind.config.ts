@@ -8,6 +8,7 @@ export default <Partial<Config>>{
         white: "#ffffff",
 
         // This will be renamed to primary by nuxt-ui
+        // 500 matches purple-900 (collectivo logo color)
         // See https://ui.nuxt.com/getting-started/theming
         "ui-primary": {
           "50": "#ededff",
@@ -103,7 +104,7 @@ export default <Partial<Config>>{
           "600": "#723cef",
           "700": "#632fd3",
           "800": "#5129aa",
-          "900": "#3b2476", // This is the collectivo logo color
+          "900": "#3b2476",
           "950": "#28184e",
         },
       },
@@ -119,9 +120,6 @@ export default <Partial<Config>>{
       },
       fontFamily: {
         urbanist: '"Urbanist", sans-serif',
-      },
-      gridTemplateColumns: {
-        "custom-4": "repeat(4, minmax(270px, 1fr))",
       },
     },
   },

@@ -1,8 +1,5 @@
 html {
-  font-family: "Urbanist", sans-serif;
-  @apply text-black font-normal tracking-wide;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  @apply text-black font-normal font-urbanist tracking-wide subpixel-antialiased;
 }
 
 h1 {

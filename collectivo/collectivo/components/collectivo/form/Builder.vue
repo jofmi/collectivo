@@ -274,6 +274,7 @@ async function fillOutAll() {
           <UFormGroup
             :label="input.label ? t(input.label) : undefined"
             :required="input.required"
+            :description="input.description ? t(input.description) : undefined"
             :name="input.key"
           >
             <template #error="{ error }">
@@ -388,9 +389,9 @@ async function fillOutAll() {
                   class="mt-0.5 mr-2"
                 />
                 <span
-                  v-if="input.description"
+                  v-if="input.content"
                   class="text-sm font-medium text-gray-500-700 dark:text-gray-500-200"
-                  >{{ t(input.description) }}</span
+                  >{{ t(input.content) }}</span
                 >
               </div>
             </template>

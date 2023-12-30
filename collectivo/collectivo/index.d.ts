@@ -143,6 +143,7 @@ declare global {
       }
     | {
         type: "checkbox";
+        content?: string;
       }
     | {
         type: "custom-input";

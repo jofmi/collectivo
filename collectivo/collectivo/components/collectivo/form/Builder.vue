@@ -118,9 +118,15 @@ function valNumber(validators: FormValidator[] | undefined) {
 
   for (const validator of validators ?? []) {
     if (validator.type === "min") {
-      schema = schema.min(validator.value as number);
+      schema = schema.min(
+        validator.value as number,
+        (x) => t("Minimum value") + `: ${x.min}`
+      );
     } else if (validator.type === "max") {
-      schema = schema.max(validator.value as number);
+      schema = schema.max(
+        validator.value as number,
+        (x) => t("Maximum value") + `: ${x.max}`
+      );
     }
   }
 

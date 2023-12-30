@@ -21,6 +21,8 @@
   "This email address is not valid": "Diese E-Mail-Adresse ist nicht gültig",
 
   "Some fields are not filled in correctly": "Einige Felder sind nicht korrekt ausgefüllt",
+  "Minimum value": "Minimaler Wert",
+  "Maximum value": "Maximaler Wert",
 
   "Profile": "Profil",
   "Profile updated": "Profil aktualisiert"

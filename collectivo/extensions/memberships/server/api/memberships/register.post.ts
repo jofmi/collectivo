@@ -2,13 +2,24 @@ import { createItem, createUser } from "@directus/sdk";
 import KcAdminClient from "@keycloak/keycloak-admin-client";
 
 // Register a new membership
+// Receives input from /memberships/register
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event);
     return await registerMembership(body);
-  } catch (e) {
-    logger.error(e);
-    throw e;
+  } catch (e: any) {
+    if (
+      e &&
+      "response" in e &&
+      typeof e.response === "object" &&
+      e.response.status
+    ) {
+      setResponseStatus(event, e.response.status);
+    } else {
+      setResponseStatus(event, 500);
+    }
+
+    return e;
   }
 });
 
@@ -31,8 +42,6 @@ async function registerMembership(body: any) {
   await refreshDirectus();
   const directus = await useDirectusAdmin();
   const config = useRuntimeConfig();
-
-  console.log(config);
 
   // Connect to keycloak
   const keycloak = new KcAdminClient({

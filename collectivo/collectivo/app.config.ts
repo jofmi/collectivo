@@ -5,7 +5,7 @@ export default defineAppConfig({
   logoPath: "/img/logo.svg",
   logoLabel: "COLLECTIVO",
   ui: {
-    primary: "purple",
+    primary: "ui-primary",
     gray: "cool",
     button: {
       font: "font-semibold tracking-wider",

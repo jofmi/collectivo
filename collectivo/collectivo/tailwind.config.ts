@@ -4,8 +4,24 @@ export default <Partial<Config>>{
   theme: {
     extend: {
       colors: {
-        // Do not define primary here, it is defined in app.config.ts
+        black: "#0F1A2B",
+        white: "#ffffff",
+
+        // This will be renamed to primary by nuxt-ui
         // See https://ui.nuxt.com/getting-started/theming
+        "ui-primary": {
+          "50": "#ededff",
+          "100": "#dedeff",
+          "200": "#c6c4ff",
+          "300": "#a6a0ff",
+          "400": "#8e7aff", // Primary color (dark mode)
+          "500": "#3b2476", // Primary color (light mode)
+          "600": "#723cef",
+          "700": "#632fd3",
+          "800": "#5129aa",
+          "900": "#3b2476",
+          "950": "#28184e",
+        },
 
         blue: {
           "50": "#f1f5fd",
@@ -36,20 +52,6 @@ export default <Partial<Config>>{
         },
 
         green: {
-          "50": "#f2fbf9",
-          "100": "#d2f5ee",
-          "200": "#a4ebdd",
-          "300": "#6fd9c9",
-          "400": "#42bfb1",
-          "500": "#2cb3a5",
-          "600": "#1e837b",
-          "700": "#1c6963",
-          "800": "#1b5451",
-          "900": "#1a4744",
-          "950": "#092a29",
-        },
-
-        cyan: {
           "50": "#f2fbf9",
           "100": "#d2f5ee",
           "200": "#a4ebdd",

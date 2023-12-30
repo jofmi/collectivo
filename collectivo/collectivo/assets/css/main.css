@@ -1,6 +1,6 @@
 html {
   font-family: "Urbanist", sans-serif;
-  @apply text-gray-800 font-normal tracking-wide;
+  @apply text-black font-normal tracking-wide;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

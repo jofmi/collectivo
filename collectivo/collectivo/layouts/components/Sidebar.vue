@@ -47,7 +47,7 @@ const publicMenuItems = Object.values(menus.value.public).sort(
 
 <style lang="scss" scoped>
 .about {
-  @apply flex items-center justify-center text-cv-primary text-xs;
+  @apply flex items-center justify-center text-primary text-xs;
   letter-spacing: 0.24px;
 }
 .sidebar {

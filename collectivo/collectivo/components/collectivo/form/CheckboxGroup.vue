@@ -38,7 +38,7 @@ watch(
 </script>
 
 <template>
-  <div>
+  <div class="bg-blue-50 shadow-sm rounded-lg px-4 py-3 flex flex-col gap-1">
     <UCheckbox
       v-for="choice in choices"
       :key="choice.value"

@@ -51,7 +51,7 @@ async function saveProfile(data: CollectivoUser) {
     />
   </CollectivoContainer>
   <CollectivoContainer>
-    <h2 class="text-cv-primary font-semibold text-2xl leading-7 mb-6">
+    <h2 class="text-primary font-semibold text-2xl leading-7 mb-6">
       {{ t("Actions") }}
     </h2>
     <UButton

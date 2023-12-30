@@ -53,36 +53,36 @@ defineProps({
   }
 
   &__title {
-    @apply md:text-xs lg:text-sm text-cv-primary font-semibold;
+    @apply md:text-xs lg:text-sm text-primary font-semibold;
     letter-spacing: 0.28px;
   }
 
   &:hover {
     @apply bg-[#ECF1FD];
     .item__title {
-      @apply text-cv-active;
+      @apply text-primary;
     }
 
     .item__icon {
       .link-icon {
-        @apply text-cv-active;
+        @apply text-primary;
       }
     }
   }
 }
 
 .link-icon {
-  @apply h-7 w-7 md:h-6 lg:h-[30px] md:w-6 lg:w-[30px] text-cv-primary;
+  @apply h-7 w-7 md:h-6 lg:h-[30px] md:w-6 lg:w-[30px] text-primary;
 }
 
 .router-link-exact-active {
   .item__title {
-    @apply text-cv-active;
+    @apply text-primary;
   }
 
   .item__icon {
     .link-icon {
-      @apply text-cv-active;
+      @apply text-primary;
     }
   }
 }
@@ -103,7 +103,7 @@ defineProps({
       .item__icon {
         @apply relative z-10;
         &::after {
-          @apply content-[''] bg-cv-purple-light w-11 h-[34px] rounded-lg absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 -z-10;
+          @apply content-[''] bg-purple-500 w-11 h-[34px] rounded-lg absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 -z-10;
         }
       }
     }
@@ -112,12 +112,12 @@ defineProps({
   &:hover {
     @apply bg-transparent;
     .item__title {
-      @apply text-cv-active;
+      @apply text-primary;
     }
 
     .item__icon {
       .link-icon {
-        @apply text-cv-active;
+        @apply text-primary;
       }
     }
   }

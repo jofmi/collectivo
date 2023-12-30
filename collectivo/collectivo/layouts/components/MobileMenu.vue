@@ -37,7 +37,7 @@ const publicMenuItems = Object.values(menus.value.public).sort(
   @apply w-20;
 }
 .mobile-menu {
-  @apply bg-white px-3 pt-2 pb-1 fixed bottom-0 w-full z-10 md:hidden border-t-2 border-cv-gray;
+  @apply bg-white px-3 pt-2 pb-1 fixed bottom-0 w-full z-10 md:hidden border-t-2 border-gray-500;
   box-shadow: 4px 0px 48px 0px rgba(220, 226, 239, 0.5);
 
   &__inner {

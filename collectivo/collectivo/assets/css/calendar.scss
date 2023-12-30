@@ -28,7 +28,7 @@
       tbody {
         tr {
           td {
-            @apply border-cv-purple-light;
+            @apply border-purple-500;
           }
         }
       }
@@ -39,7 +39,7 @@
     @apply border-none;
 
     th {
-      @apply bg-[#F4F7FE] rounded-xl font-medium text-sm text-cv-primary;
+      @apply bg-[#F4F7FE] rounded-xl font-medium text-sm text-primary;
       .fc-cell-shaded {
         @apply bg-transparent py-3 px-5;
       }
@@ -52,7 +52,7 @@
 
   .fc-scrollgrid-section {
     > td {
-      @apply border-[1px] border-solid border-cv-purple-light rounded-2xl;
+      @apply border-[1px] border-solid border-purple-500 rounded-2xl;
     }
   }
 
@@ -72,20 +72,20 @@
 
       .fc-next-button,
       .fc-prev-button {
-        @apply p-0.5 bg-cv-purple-light rounded-lg border-none focus:shadow-none;
+        @apply p-0.5 bg-purple-500 rounded-lg border-none focus:shadow-none;
         &:hover {
-          @apply bg-cv-purple-light/70;
+          @apply bg-purple-500/70;
         }
 
         .fc-icon {
-          @apply h-6 w-6 text-cv-primary;
+          @apply h-6 w-6 text-primary;
         }
       }
     }
   }
 
   a.fc-daygrid-day-number {
-    @apply text-left absolute bottom-0 left-0 px-3 py-2 text-sm  text-cv-primary tracking-[0.24px] font-semibold leading-4;
+    @apply text-left absolute bottom-0 left-0 px-3 py-2 text-sm  text-primary tracking-[0.24px] font-semibold leading-4;
   }
 
   .fc-day-past {
@@ -134,7 +134,7 @@
       }
 
       &.fc-day-today {
-        @apply bg-cv-purple-light;
+        @apply bg-purple-500;
       }
     }
   }
@@ -149,26 +149,26 @@
   }
 
   .fc-daygrid-event {
-    @apply font-semibold text-xs bg-cv-purple-light border-none py-2 px-3 rounded-lg transition-all cursor-pointer mt-0 mr-[5px] mb-[3px] ml-0;
+    @apply font-semibold text-xs bg-purple-500 border-none py-2 px-3 rounded-lg transition-all cursor-pointer mt-0 mr-[5px] mb-[3px] ml-0;
 
     .fc-event-main {
-      @apply text-cv-purple;
+      @apply text-purple-500;
     }
 
     //&:hover {
-    //  @apply bg-cv-purple-light/60;
+    //  @apply bg-purple-500/60;
     //}
   }
 
   .fc-daygrid-day-bottom {
-    @apply flex justify-end font-medium text-cv-gray text-xs mr-1.5;
+    @apply flex justify-end font-medium text-gray-500 text-xs mr-1.5;
   }
 
   .fc-list {
     @apply border-0;
 
     .fc-list-event + .fc-list-event:not(.fc-list-day) {
-      @apply border-t-[1px] border-cv-purple-light;
+      @apply border-t-[1px] border-purple-500;
     }
 
     .fc-list-event {
@@ -187,7 +187,7 @@
       }
 
       td.fc-list-event-time {
-        @apply text-sm font-medium text-cv-primary/60 leading-8;
+        @apply text-sm font-medium text-primary/60 leading-8;
       }
 
       td .fc-list-event-dot {
@@ -195,7 +195,7 @@
       }
 
       td .list-week-view {
-        @apply font-semibold text-xs bg-cv-purple-light border-none py-2 px-3 rounded-lg transition-all cursor-pointer text-cv-purple;
+        @apply font-semibold text-xs bg-purple-500 border-none py-2 px-3 rounded-lg transition-all cursor-pointer text-purple-500;
       }
     }
 
@@ -232,7 +232,7 @@
               td:first-child {
                 @apply relative;
                 &:before {
-                  @apply bg-[#EFF9FF] text-cv-blue text-sm font-semibold text-center border border-cv-blue border-t-4 rounded-[3px] absolute top-1/2 -left-10 transform -translate-y-1/2 w-6 h-[22px] font-urbanist leading-[18px];
+                  @apply bg-[#EFF9FF] text-blue-500 text-sm font-semibold text-center border border-blue-500 border-t-4 rounded-[3px] absolute top-1/2 -left-10 transform -translate-y-1/2 w-6 h-[22px] font-urbanist leading-[18px];
                 }
               }
 

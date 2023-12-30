@@ -37,7 +37,7 @@ const customPosition = () => ({ top: 55, left: 0 });
       />
       <UIcon
         name="i-system-uicons-calendar-month"
-        class="w-[18px] h-[18px] text-cv-primary/50 absolute top-1/2 -translate-y-1/2 right-[18px] z-50"
+        class="w-[18px] h-[18px] text-gray-500 absolute top-1/2 -translate-y-1/2 right-[18px] z-50"
       />
     </div>
   </div>

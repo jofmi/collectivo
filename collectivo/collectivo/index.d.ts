@@ -158,7 +158,6 @@ declare global {
   interface CollectivoFormInputChoice {
     value: string;
     label: string;
-    conditions?: FormCondition[];
   }
 
   interface FormCondition {

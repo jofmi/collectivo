@@ -19,7 +19,7 @@ setCollectivoTitle(form.value.title);
       <div class="flex flex-col items-center justify-center space-y-4">
         <UIcon
           name="i-system-uicons-check"
-          class="w-[64px] h-[64px] text-cv-primary"
+          class="w-[64px] h-[64px] text-primary"
         />
         <h1 class="text-2xl font-bold text-center">
           {{ t(form.successTitle ?? "Application submitted!") }}

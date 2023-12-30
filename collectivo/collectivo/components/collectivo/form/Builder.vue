@@ -374,7 +374,7 @@ async function fillOutAll() {
                 />
                 <span
                   v-if="input.description"
-                  class="text-sm font-medium text-gray-700 dark:text-gray-200"
+                  class="text-sm font-medium text-gray-500-700 dark:text-gray-500-200"
                   >{{ t(input.description) }}</span
                 >
               </div>
@@ -392,7 +392,7 @@ async function fillOutAll() {
         v-if="props.submit"
         class="btn"
         variant="solid"
-        color="cyan"
+        color="green"
         size="lg"
         icon="i-mi-circle-check"
         :loading="loading"
@@ -421,7 +421,7 @@ async function fillOutAll() {
 
 <style lang="scss" scoped>
 .form-box {
-  @apply bg-[#F4F7FE] shadow-sm rounded-lg  px-4 py-3 flex flex-row gap-2;
+  @apply bg-blue-50 shadow-sm rounded-lg  px-4 py-3 flex flex-row gap-2;
 }
 
 .form-field {

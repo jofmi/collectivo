@@ -24,9 +24,9 @@ defineProps(["variant", "title"]);
 
 <style lang="scss" scoped>
 .card {
-  @apply h-fit w-full bg-cv-cyan-light rounded-[15px] relative overflow-hidden p-6;
+  @apply h-fit w-full bg-cyan-500 rounded-[15px] relative overflow-hidden p-6;
   &__title {
-    @apply mb-1 font-semibold text-lg text-cv-primary leading-[22px];
+    @apply mb-1 font-semibold text-lg text-primary leading-[22px];
   }
 
   .card-corner {
@@ -34,21 +34,21 @@ defineProps(["variant", "title"]);
   }
 
   &.purple {
-    @apply bg-cv-violet-light;
+    @apply bg-purple-500;
     .card-corner {
       @apply bg-[#F4DBF8];
     }
   }
 
   &.orange {
-    @apply bg-cv-orange-light;
+    @apply bg-orange-500;
     .card-corner {
       @apply bg-[#D36D29]/[15%];
     }
   }
 
   &.gray {
-    @apply bg-cv-purple-light;
+    @apply bg-purple-500;
     .card-corner {
       @apply bg-[#4E3095]/10;
     }

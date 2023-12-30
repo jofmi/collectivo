@@ -8,9 +8,9 @@
 
 <style lang="scss" scoped>
 .breadcrumb {
-  @apply text-sm font-semibold text-cv-gray tracking-[0.28px] leading-normal;
+  @apply text-sm font-semibold text-gray-500 tracking-[0.28px] leading-normal;
   .active {
-    @apply text-cv-active;
+    @apply text-primary;
   }
 }
 </style>

@@ -37,6 +37,6 @@ if (props.modelValue === undefined) {
 
 <style scoped lang="scss">
 .label-text {
-  @apply mb-2 leading-4 text-cv-primary font-semibold text-sm;
+  @apply mb-2 leading-4 text-primary font-semibold text-sm;
 }
 </style>

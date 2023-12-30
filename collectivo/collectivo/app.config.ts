@@ -8,7 +8,7 @@ export default defineAppConfig({
     primary: "purple",
     gray: "cool",
     button: {
-      font: "font-semibold",
+      font: "font-semibold tracking-wider",
       rounded: "rounded-lg",
       size: {
         sm: "text-sm",

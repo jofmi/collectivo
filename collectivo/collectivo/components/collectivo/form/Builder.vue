@@ -3,6 +3,7 @@ import {
   object,
   string,
   number,
+  array,
   boolean,
   type InferType,
   type Schema as YupSchema,
@@ -162,7 +163,11 @@ for (const input of form.fields) {
   } else if (input.type === "number") {
     addInputToSchema(input.key, input, valNumber(input.validators));
   } else if (input.type === "select") {
-    addInputToSchema(input.key, input, valString(input.validators));
+    if (input.multiple) {
+      addInputToSchema(input.key, input, array());
+    } else {
+      addInputToSchema(input.key, input, valString(input.validators));
+    }
   } else if (input.type === "checkbox") {
     addInputToSchema(input.key, input, boolean());
   }

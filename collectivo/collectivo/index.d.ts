@@ -81,14 +81,8 @@ declare global {
     successTitle?: string;
     successText?: string;
     successIcon?: string;
-    // successButtons?: {
-    //   label: string;
-    //   to?: string;
-    //   icon?: string;
-    // }[];
-    // TODO: Add conditions, e.g. user has or has not policy XY
+    beforeSubmit?: (data: any) => any;
   }
-  // TODO: How can an extension add a form input type?
 
   type CollectivoFormField = CollectivoFormLayout | CollectivoFormInput;
 

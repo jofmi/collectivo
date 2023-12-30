@@ -13,7 +13,7 @@ import type { FormErrorEvent, FormSubmitEvent } from "#ui/types";
 
 const toast = useToast();
 const { t } = useI18n();
-const debug = false;
+const debug = true;
 
 const props = defineProps({
   fields: Object as PropType<CollectivoFormField[]>,
@@ -209,17 +209,21 @@ async function onError(event: FormErrorEvent) {
 
 // Debug tools
 async function fillOutAll() {
-  for (const [key, input] of Object.entries(form.fields)) {
-    if ("choices" in input && input.choices) {
-      state[key] = input.choices[0].value;
+  for (const input of form.fields) {
+    if (input.type === "select" && input.choices) {
+      if (input.multiple) {
+        state[input.key] = [input.choices[0].value];
+      } else {
+        state[input.key] = input.choices[0].value;
+      }
     } else if (input.type === "email") {
-      state[key] = "test@example.com";
+      state[input.key] = "test@example.com";
     } else if (input.type === "checkbox") {
-      state[key] = true;
+      state[input.key] = true;
     } else if (input.type === "date") {
-      state[key] = "2021-01-01";
-    } else {
-      state[key] = "test";
+      state[input.key] = "2021-01-01";
+    } else if ("key" in input) {
+      state[input.key] = "test";
     }
   }
 }

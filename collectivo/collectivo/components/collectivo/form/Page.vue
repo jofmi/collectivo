@@ -2,6 +2,7 @@
 const toast = useToast();
 const { t } = useI18n();
 const debug = false;
+const submitted = ref(false);
 
 const props = defineProps({
   form: {
@@ -28,12 +29,16 @@ async function onSubmitNuxt(data: any) {
   }
 }
 
-const submitted = ref(false);
-
 async function onSubmit(data: any) {
+  const dataReady = props.form.beforeSubmit
+    ? await props.form.beforeSubmit(data)
+    : data;
+
+  console.log(dataReady);
+
   try {
     if (props.form.submitMode === "postNuxt") {
-      await onSubmitNuxt(data);
+      await onSubmitNuxt(dataReady);
     } else {
       throw new Error("Invalid form configuration");
     }

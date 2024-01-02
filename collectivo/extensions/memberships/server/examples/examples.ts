@@ -19,7 +19,7 @@ export default async function examples() {
       createItem("memberships_types", {
         id: type[0].toLowerCase(),
         name: type[0],
-      })
+      }),
     );
 
     type_ids.push(type_response.id);
@@ -50,7 +50,7 @@ export default async function examples() {
           memberships_user: user_id,
           memberships_type: membership_type,
           memberships_status: user[2],
-        })
+        }),
       );
     }
   }

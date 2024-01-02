@@ -3,7 +3,7 @@ import { readItems } from "@directus/sdk";
 export const useCollectivoExtensions = () =>
   useState<CollectivoExtensionsStore>(
     "collectivo_extensions",
-    () => new CollectivoExtensionsStore()
+    () => new CollectivoExtensionsStore(),
   );
 
 class CollectivoExtensionsStore {

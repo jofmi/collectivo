@@ -56,7 +56,7 @@ let schema = object();
 function addInputToSchema(
   key: string,
   input: CollectivoFormInput,
-  schema_field: YupSchema
+  schema_field: YupSchema,
 ) {
   if (input.required) {
     if (input.type === "checkbox") {
@@ -65,7 +65,7 @@ function addInputToSchema(
         "This field is required",
         (value) => {
           return value === true;
-        }
+        },
       );
     } else {
       schema_field = schema_field.required("This field is required");
@@ -84,7 +84,7 @@ function addInputToSchema(
         } else {
           return schema_field_hidden.strip();
         }
-      }
+      },
     );
 
     schema = schema.shape({ [key]: schema_field_with_conditions });
@@ -120,12 +120,12 @@ function valNumber(validators: FormValidator[] | undefined) {
     if (validator.type === "min") {
       schema = schema.min(
         validator.value as number,
-        (x) => t("Minimum value") + `: ${x.min}`
+        (x) => t("Minimum value") + `: ${x.min}`,
       );
     } else if (validator.type === "max") {
       schema = schema.max(
         validator.value as number,
-        (x) => t("Maximum value") + `: ${x.max}`
+        (x) => t("Maximum value") + `: ${x.max}`,
       );
     }
   }
@@ -344,8 +344,8 @@ async function fillOutAll() {
                     <template #label>{{
                       t(
                         input.choices?.find(
-                          (choice) => choice.value === state[input.key]
-                        )?.label ?? ""
+                          (choice) => choice.value === state[input.key],
+                        )?.label ?? "",
                       )
                     }}</template>
                     <template #option="{ option }">{{

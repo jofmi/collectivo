@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
 
 async function registerMembership(body: any) {
   logger.info(
-    "Received membership application: " + body["directus_users.email"]
+    "Received membership application: " + body["directus_users.email"],
   );
 
   const userData: any = {};
@@ -81,7 +81,7 @@ async function registerMembership(body: any) {
 
   // Create membership
   const membership_id = await directus.request(
-    createItem("memberships", membershipData)
+    createItem("memberships", membershipData),
   );
 
   // Create keycloak user & send verification mail

@@ -12,7 +12,7 @@ export default defineNuxtPlugin({
     // Create directus REST client or redirect to offline error page
     try {
       directus = createDirectus<CollectivoSchema>(
-        runtimeConfig.public.directusUrl as string
+        runtimeConfig.public.directusUrl as string,
       )
         .with(authentication("cookie", { credentials: "include" }))
         .with(rest({ credentials: "include" }));

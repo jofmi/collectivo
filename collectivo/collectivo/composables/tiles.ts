@@ -3,7 +3,7 @@ import { readItems } from "@directus/sdk";
 export const useCollectivoTiles = () =>
   useState<CollectivoTileStore>(
     "collectivo_tiles",
-    () => new CollectivoTileStore()
+    () => new CollectivoTileStore(),
   );
 
 class CollectivoTileStore {

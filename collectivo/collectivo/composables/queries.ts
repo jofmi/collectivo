@@ -13,7 +13,14 @@ export function initData(): DataWrapper<any> {
 
 export async function useCollectivoFetch(
   request: string,
-  opts?: UseFetchOptions<unknown, unknown, KeysOf<unknown>, null, string, "get">
+  opts?: UseFetchOptions<
+    unknown,
+    unknown,
+    KeysOf<unknown>,
+    null,
+    string,
+    "get"
+  >,
 ) {
   const directus = useDirectus();
   const token = await directus.getToken();
@@ -29,7 +36,7 @@ export async function useCollectivoFetch(
 export async function getDataFromDirectusItems(
   wrapper: Ref<DataWrapper<unknown>>,
   name: keyof CollectivoSchema,
-  reload?: boolean
+  reload?: boolean,
 ) {
   if (!reload && wrapper.value.data) return wrapper;
   const { $directus } = useNuxtApp();

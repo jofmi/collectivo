@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
   const user = await client.request(
     readMe({
       fields: ["id", "first_name", "last_name", "email"],
-    })
+    }),
   );
 
   return {

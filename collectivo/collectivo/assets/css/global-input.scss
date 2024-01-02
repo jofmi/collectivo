@@ -1,17 +1,17 @@
 .error-input {
   & input {
-    @apply ring-1 ring-inset ring-cv-red focus:ring-cv-red focus:outline-none;
+    @apply ring-1 ring-inset ring-red-500 focus:ring-red-500 focus:outline-none;
   }
   & p {
-    @apply text-cv-red text-sm font-medium tracking-[0.28px] mt-[6px];
+    @apply text-red-500 text-sm font-medium tracking-[0.28px] mt-[6px];
   }
 }
 
 .success-input {
   & input {
-    @apply ring-1 ring-inset ring-cv-cyan focus:ring-cv-cyan focus:outline-none;
+    @apply ring-1 ring-inset bg-cyan-500 focus:bg-cyan-500 focus:outline-none;
   }
   & p {
-    @apply text-cv-cyan  text-sm font-medium tracking-[0.28px] mt-[6px];
+    @apply text-cyan-500  text-sm font-medium tracking-[0.28px] mt-[6px];
   }
 }

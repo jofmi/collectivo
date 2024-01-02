@@ -7,7 +7,7 @@ export default defineNuxtPlugin({
   async setup() {
     let directus;
     const runtimeConfig = useRuntimeConfig();
-    const user = useUser();
+    const user = useCollectivoUser();
 
     // Create directus REST client or redirect to offline error page
     try {

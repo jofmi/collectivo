@@ -1,8 +1,17 @@
 import { readMe, updateMe } from "@directus/sdk";
 
-class UserStore {
+export const useCollectivoUser = () => {
+  const state = useState<CollectivoUserStore>(
+    "collectivo_user",
+    () => new CollectivoUserStore(),
+  );
+
+  return state;
+};
+
+class CollectivoUserStore {
   data: CollectivoUser | null;
-  inputs: CollectivoUserInput[];
+  fields: CollectivoFormFields;
   isAuthenticated: boolean;
   saving: boolean;
   loading: boolean;
@@ -10,7 +19,7 @@ class UserStore {
 
   constructor() {
     this.data = null;
-    this.inputs = [];
+    this.fields = {};
     this.isAuthenticated = false;
     this.saving = false;
     this.loading = false;
@@ -40,13 +49,42 @@ class UserStore {
     this.saving = false;
     return this;
   }
+
+  async login(force: boolean = false) {
+    const directus = useDirectus();
+    const user = useCollectivoUser();
+    const runtimeConfig = useRuntimeConfig();
+
+    // If user is authenticated, do nothing
+    if (user.value.isAuthenticated === true && !force) return;
+
+    // If user is not authenticated, log out of directus and redirect to keycloak
+    directus.logout();
+
+    if (runtimeConfig.public.authService === "keycloak") {
+      return navigateTo(
+        `${runtimeConfig.public.directusUrl}/auth/login/keycloak?redirect=${runtimeConfig.public.collectivoUrl}`,
+        { external: true },
+      );
+    } else {
+      throw new Error(
+        "Unknown auth service in nuxt.config: " +
+          runtimeConfig.public.authService,
+      );
+    }
+  }
+
+  async logout() {
+    const runtimeConfig = useRuntimeConfig();
+
+    if (runtimeConfig.public.authService === "keycloak") {
+      const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protocol/openid-connect/logout`;
+      return navigateTo(logoutPath, { external: true });
+    } else {
+      throw new Error(
+        "Unknown auth service in nuxt.config: " +
+          runtimeConfig.public.authService,
+      );
+    }
+  }
 }
-
-export const useUser = () => {
-  const state = useState<UserStore>(
-    "collectivo_profile",
-    () => new UserStore(),
-  );
-
-  return state;
-};

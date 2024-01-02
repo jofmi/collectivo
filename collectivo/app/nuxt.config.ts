@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     "collectivo_mila",
   ],
   i18n: {
+    lazy: true,
     langDir: "./lang",
     locales: [
       { code: "en", file: "en.json" },

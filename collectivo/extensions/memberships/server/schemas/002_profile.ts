@@ -59,21 +59,6 @@ schema.fields = [
       ],
     },
   },
-  {
-    collection: "directus_users",
-    field: "memberships_address_group",
-    type: "alias",
-    meta: {
-      order: 400,
-      interface: "group-detail",
-      special: ["alias", "no-data", "group"],
-      options: { title: "$t:address", headerIcon: "house" },
-      translations: [
-        { language: "de-DE", translation: "Adresse" },
-        { language: "en-US", translation: "Address" },
-      ],
-    },
-  },
 
   // Profile fields
   {
@@ -142,17 +127,22 @@ schema.fields = [
   },
   {
     collection: "directus_users",
-    field: "memberships_is_organization",
-    type: "boolean",
-    schema: { default_value: false, is_nullable: false },
+    field: "memberships_person_type",
+    type: "string",
     meta: {
       group: "memberships_profile_group",
-      interface: "boolean",
-      special: ["cast-boolean"],
-      required: true,
+      interface: "select-dropdown",
+      display: "labels",
+      width: "half",
+      options: {
+        choices: [
+          { text: "$t:natural", value: "natural" },
+          { text: "$t:legal", value: "legal" },
+        ],
+      },
       translations: [
-        { language: "de-DE", translation: "Ist Organisation" },
-        { language: "en-US", translation: "Is organization" },
+        { language: "de-DE", translation: "Art der Person" },
+        { language: "en-US", translation: "Person Type" },
       ],
     },
   },
@@ -175,7 +165,7 @@ schema.fields = [
   },
   {
     collection: "directus_users",
-    field: "memberships_number",
+    field: "memberships_streetnumber",
     type: "string",
     meta: {
       group: "memberships_address_group",
@@ -318,9 +308,6 @@ schema.fields = [
 schema.relations = [];
 
 const editor_fields = [
-  "collectivo_tags_divider",
-  "collectivo_tags",
-
   "memberships_profile_group",
   "memberships_occupation",
   "memberships_gender",
@@ -344,9 +331,6 @@ const editor_fields = [
 ];
 
 const user_fields = [
-  "collectivo_tags_divider",
-  "collectivo_tags",
-
   "memberships_profile_group",
   "memberships_occupation",
   "memberships_gender",
@@ -375,7 +359,7 @@ schema.permissions = [
     roleName: "collectivo_editor",
     action: "read",
     // @ts-ignore
-    fields: editor_fields,
+    fields: user_fields,
   },
   {
     collection: "directus_users",

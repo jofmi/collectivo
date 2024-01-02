@@ -1,9 +1,6 @@
-import CustomVue from "~/components/collectivo/forms/Custom.vue";
-
 export default defineNuxtPlugin(() => {
-  const menu = useSidebarMenu();
-  const forms = useCollectivoForms();
-  const profile = useUser();
+  const menu = useCollectivoMenus();
+  const user = useCollectivoUser();
   const runtimeConfig = useRuntimeConfig();
 
   const items: CollectivoMenuItem[] = [
@@ -30,171 +27,43 @@ export default defineNuxtPlugin(() => {
         return true;
       },
     },
-    {
-      label: "Register",
-      icon: "i-system-uicons-document-stack",
-      to: "/forms/registration",
-      public: true,
-      order: 1,
-      filter: (_item) => {
-        return true;
-      },
-    },
+  ];
+
+  const publicItems: CollectivoMenuItem[] = [
     {
       label: "Login",
       icon: "i-system-uicons-enter",
-      click: requireAuth,
-      public: true,
-      order: 2,
+      click: user.value.login,
+      order: 100,
       filter: (_item) => {
         return true;
       },
     },
   ];
 
-  menu.value.push(...items);
+  menu.value.main.push(...items);
+  menu.value.public.push(...publicItems);
 
-  const profileInputs: CollectivoUserInput[] = [
-    {
-      label: "First Name",
-      key: "first_name",
-      disabled: true,
+  const profileInputs: CollectivoFormFields = {
+    first_name: {
+      label: "First name",
+      type: "text",
       order: 1,
-    },
-    {
-      label: "Last Name",
-      key: "last_name",
       disabled: true,
+    },
+    last_name: {
+      label: "Last name",
+      type: "text",
       order: 2,
+      disabled: true,
     },
-    {
+    email: {
       label: "Email",
-      key: "email",
+      type: "text",
       order: 3,
-    },
-  ];
-
-  profile.value.inputs.push(...profileInputs);
-
-  // Mockup form data to be replaced later
-  const test_form: CollectivoForm = {
-    key: "test_form",
-    title: "Test Form Title",
-    description: "Test Form Description",
-    public: true,
-    fields: {
-      section: {
-        type: "section",
-        content: "This is a section",
-      },
-      description: {
-        type: "description",
-        content: "This is a description",
-      },
-      text: {
-        type: "text",
-        required: true,
-        label: "Text",
-      },
-      email: {
-        type: "email",
-        required: true,
-        label: "Email",
-        icon: "i-system-uicons-mail",
-      },
-      password: {
-        type: "password",
-        required: true,
-        label: "Password",
-      },
-      date: {
-        type: "date",
-        label: "Date",
-      },
-      show_conditional: {
-        type: "toggle",
-        label: "Show conditional",
-      },
-      number: {
-        type: "number",
-        label: "Number",
-        validators: [
-          {
-            type: "min",
-            value: 5,
-          },
-          {
-            type: "max",
-            value: 10,
-          },
-        ],
-      },
-      select: {
-        type: "select-radio",
-        label: "Select",
-        choices: [
-          {
-            key: "1",
-            value: "1",
-          },
-          {
-            key: "2",
-            value: "2",
-          },
-          {
-            key: "3",
-            value: "3",
-          },
-        ],
-      },
-      multiselect: {
-        type: "multiselect-checkbox",
-        label: "Multiselect",
-        choices: [
-          {
-            key: "1",
-            value: "1",
-          },
-          {
-            key: "2",
-            value: "2",
-          },
-          {
-            key: "3",
-            value: "3",
-          },
-        ],
-      },
-      clear: {
-        type: "clear",
-      },
-      conditional_text: {
-        type: "text",
-        label: "Conditional Text",
-        required: true,
-        conditions: [
-          {
-            key: "show_conditional",
-            value: true,
-          },
-        ],
-        validators: [
-          {
-            type: "min",
-            value: 5,
-          },
-          {
-            type: "max",
-            value: 10,
-          },
-        ],
-      },
-      custom: {
-        type: "custom",
-        component: CustomVue,
-      },
+      disabled: true,
     },
   };
 
-  forms.value[test_form.key] = test_form;
+  user.value.fields = Object.assign(profileInputs, user.value.fields);
 });

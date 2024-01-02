@@ -3,6 +3,25 @@ import Sidebar from "./components/Sidebar.vue";
 import PageTitle from "./components/PageTitle.vue";
 import MobileHeader from "./components/MobileHeader.vue";
 import MobileMenu from "./components/MobileMenu.vue";
+
+const { setLocale } = useI18n();
+const user = useCollectivoUser();
+
+const langItems: any = ref([[]]);
+
+const locales = {
+  de: "Deutsch",
+  en: "English",
+};
+
+for (const [key, value] of Object.entries(locales)) {
+  langItems.value[0].push({
+    label: value,
+    click: () => {
+      setLocale(key);
+    },
+  });
+}
 </script>
 
 <template>
@@ -52,9 +71,17 @@ import MobileMenu from "./components/MobileMenu.vue";
               name="i-system-uicons-exit-left"
               class="main__top__right__icon"
           /></a> -->
+          <!-- <div v-if="!user.isAuthenticated"> -->
+          <UDropdown :items="langItems" :popper="{ placement: 'bottom-start' }">
+            <UIcon
+              class="main__top__right__icon"
+              name="i-system-uicons-translate"
+            ></UIcon>
+          </UDropdown>
+          <!-- </div> -->
         </div>
       </div>
-      <router-view />
+      <slot></slot>
     </div>
     <MobileMenu />
   </div>
@@ -80,7 +107,7 @@ import MobileMenu from "./components/MobileMenu.vue";
 
     &__right {
       &__icon {
-        @apply w-7 h-7 text-cv-primary;
+        @apply w-7 h-7 text-primary;
       }
     }
   }

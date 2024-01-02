@@ -6,7 +6,7 @@ import Sidebar from "./components/dev/Header.vue";
 
 const { t } = useI18n();
 const appConfig = useAppConfig();
-const pageTitle = usePageTitle();
+const pageTitle = useCollectivoTitle();
 const getSideBarOpen = ref(false);
 
 function toggleSideBar() {

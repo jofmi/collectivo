@@ -3,10 +3,14 @@ import Logo from "./Logo.vue";
 import MenuItem from "./MenuItem.vue";
 import pkg from "../../package.json";
 
-const menuItems = useSidebarMenu();
-const user = useUser();
+const menus = useCollectivoMenus();
+const user = useCollectivoUser();
 
-const sortedMenuItems = Object.values(menuItems.value).sort(
+const mainMenuItems = Object.values(menus.value.main).sort(
+  (a, b) => (a.order ?? 100) - (b.order ?? 100),
+);
+
+const publicMenuItems = Object.values(menus.value.public).sort(
   (a, b) => (a.order ?? 100) - (b.order ?? 100),
 );
 </script>
@@ -18,12 +22,14 @@ const sortedMenuItems = Object.values(menuItems.value).sort(
         <div class="sidebar__inner__list__item">
           <div class="sidebar__inner__list__item__top">
             <Logo />
-            <div v-for="(item, i) in sortedMenuItems" :key="i">
+            <div
+              v-for="(item, i) in user.isAuthenticated
+                ? mainMenuItems
+                : publicMenuItems"
+              :key="i"
+            >
               <MenuItem
-                v-if="
-                  (user.isAuthenticated && !item.public) ||
-                  (!user.isAuthenticated && item.public)
-                "
+                v-if="user.isAuthenticated || !user.isAuthenticated"
                 :item="item"
               />
             </div>
@@ -41,7 +47,7 @@ const sortedMenuItems = Object.values(menuItems.value).sort(
 
 <style lang="scss" scoped>
 .about {
-  @apply flex items-center justify-center text-cv-primary text-xs;
+  @apply flex items-center justify-center text-primary text-xs;
   letter-spacing: 0.24px;
 }
 .sidebar {

@@ -1,6 +1,6 @@
 #date-picker {
   .dp__input {
-    @apply bg-cv-gray-light border-0 outline outline-1 outline-transparent focus:outline-cv-active px-[18px] py-4 rounded-lg text-sm text-cv-primary/50 font-medium font-urbanist tracking-[0.28px] leading-[18px] placeholder:text-sm;
+    @apply bg-blue-50 border-0 outline outline-1 outline-transparent focus:outline-primary px-[18px] py-4 rounded-lg text-sm text-primary/50 font-medium font-urbanist tracking-[0.28px] leading-[18px] placeholder:text-sm;
   }
 
   .dp__instance_calendar {
@@ -16,16 +16,16 @@
     }
 
     .dp__calendar_header_item {
-      @apply text-xs font-semibold tracking-[0.28px] text-cv-gray h-auto leading-4;
+      @apply text-xs font-semibold tracking-[0.28px] text-gray-500 h-auto leading-4;
     }
 
     .dp__calendar_item {
       @apply text-sm font-semibold font-urbanist;
       .dp__today {
-        @apply rounded-[50%] bg-cv-gray/40 border-0;
+        @apply rounded-[50%] bg-gray-200 border-0;
       }
       .dp__active_date {
-        @apply rounded-[50%] bg-cv-active;
+        @apply rounded-[50%] bg-primary;
       }
 
       .dp__date_hover:hover {
@@ -38,23 +38,12 @@
       .dp__month_year_wrap {
         @apply w-full justify-start gap-[6px] flex-1;
         .dp__month_year_select {
-          @apply font-urbanist justify-start text-xl text-cv-primary font-semibold w-fit hover:bg-transparent;
+          @apply font-urbanist justify-start text-xl text-primary font-semibold w-fit hover:bg-transparent;
         }
 
         .dp__overlay {
           .dp__overlay_cell_pad {
             @apply font-urbanist;
-          }
-        }
-      }
-
-      .dp__btn.dp--arrow-btn-nav {
-        @apply bg-cv-purple-light w-[30px] h-[30px] rounded-lg order-1 flex items-center justify-center;
-        .dp__inner_nav {
-          svg {
-            path {
-              @apply fill-black;
-            }
           }
         }
       }
@@ -77,6 +66,6 @@
   }
 
   .dp__overlay_cell_active {
-    @apply bg-cv-active;
+    @apply bg-primary;
   }
 }

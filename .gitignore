@@ -6,6 +6,7 @@ workbench/
 # Ignore custom files in app
 collectivo/app/public/*
 collectivo/app/app.config.ts
+collectivo/custom_extensions/*
 
 # Directus
 directus/database/

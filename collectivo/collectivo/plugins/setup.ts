@@ -44,26 +44,29 @@ export default defineNuxtPlugin(() => {
   menu.value.main.push(...items);
   menu.value.public.push(...publicItems);
 
-  const profileInputs: CollectivoFormFields = {
-    first_name: {
+  const profileInputs: CollectivoFormField[] = [
+    {
       label: "First name",
+      key: "first_name",
       type: "text",
       order: 1,
       disabled: true,
     },
-    last_name: {
+    {
       label: "Last name",
+      key: "last_name",
       type: "text",
       order: 2,
       disabled: true,
     },
-    email: {
+    {
       label: "Email",
+      key: "email",
       type: "text",
       order: 3,
       disabled: true,
     },
-  };
+  ];
 
   user.value.fields = Object.assign(profileInputs, user.value.fields);
 });

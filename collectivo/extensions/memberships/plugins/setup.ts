@@ -18,15 +18,16 @@ export default defineNuxtPlugin({
 
     menu.value.public.push(...publicItems);
 
-    const profileInputs: CollectivoFormFields = {
-      another: {
+    const profileInputs: CollectivoFormField[] = [
+      {
         label: "Another profile field",
+        key: "another",
         type: "text",
         order: 4,
         disabled: true,
       },
-    };
+    ];
 
-    user.value.fields = Object.assign(profileInputs, user.value.fields);
+    user.value.fields.push(...profileInputs);
   },
 });

@@ -25,6 +25,9 @@ const props = defineProps({
 const form = { fields: props.fields ?? [] };
 const loading = ref(false);
 
+console.log(form);
+console.log(typeof form.fields);
+console.log(form.fields.sort);
 form.fields.sort((a, b) => a.order - b.order);
 
 function checkConditions(conditions: FormCondition[] | undefined) {

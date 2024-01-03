@@ -15,7 +15,7 @@ defineProps(["variant", "title"]);
   <!-- <UButton
         class="mt-6 w-full"
         variant="solid"
-        color="cyan"
+        color="green"
         size="base"
       >
         Hello again!
@@ -24,9 +24,9 @@ defineProps(["variant", "title"]);
 
 <style lang="scss" scoped>
 .card {
-  @apply h-fit w-full bg-cyan-500 rounded-[15px] relative overflow-hidden p-6;
+  @apply h-fit w-full bg-green-100 rounded-[15px] relative overflow-hidden p-6;
   &__title {
-    @apply mb-1 font-semibold text-lg text-primary leading-[22px];
+    @apply mb-1 font-semibold text-lg leading-[22px];
   }
 
   .card-corner {

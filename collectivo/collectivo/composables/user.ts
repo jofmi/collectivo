@@ -11,7 +11,7 @@ export const useCollectivoUser = () => {
 
 class CollectivoUserStore {
   data: CollectivoUser | null;
-  fields: CollectivoFormFields;
+  fields: CollectivoFormField[];
   isAuthenticated: boolean;
   saving: boolean;
   loading: boolean;
@@ -19,7 +19,7 @@ class CollectivoUserStore {
 
   constructor() {
     this.data = null;
-    this.fields = {};
+    this.fields = [];
     this.isAuthenticated = false;
     this.saving = false;
     this.loading = false;

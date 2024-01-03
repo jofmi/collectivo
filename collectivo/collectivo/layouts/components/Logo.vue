@@ -26,7 +26,7 @@ defineProps({
 .logo {
   @apply lg:w-full flex flex-col justify-center items-center md:mb-10 lg:mb-[52px];
   &__label {
-    @apply md:text-xs lg:text-sm text-primary font-semibold justify-center mt-2;
+    @apply md:text-xs lg:text-sm font-semibold justify-center mt-2;
     letter-spacing: 0.28px;
   }
 }

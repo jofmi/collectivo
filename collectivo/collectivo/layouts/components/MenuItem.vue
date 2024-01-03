@@ -53,7 +53,7 @@ defineProps({
   }
 
   &__title {
-    @apply md:text-xs lg:text-sm text-primary font-semibold;
+    @apply md:text-xs lg:text-sm font-semibold;
     letter-spacing: 0.28px;
   }
 
@@ -72,7 +72,7 @@ defineProps({
 }
 
 .link-icon {
-  @apply h-7 w-7 md:h-6 lg:h-[30px] md:w-6 lg:w-[30px] text-primary;
+  @apply h-7 w-7 md:h-6 lg:h-[30px] md:w-6 lg:w-[30px];
 }
 
 .router-link-exact-active {

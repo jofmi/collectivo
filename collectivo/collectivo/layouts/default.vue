@@ -107,7 +107,7 @@ for (const [key, value] of Object.entries(locales)) {
 
     &__right {
       &__icon {
-        @apply w-7 h-7 text-primary;
+        @apply w-7 h-7;
       }
     }
   }

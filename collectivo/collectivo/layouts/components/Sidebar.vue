@@ -7,11 +7,11 @@ const menus = useCollectivoMenus();
 const user = useCollectivoUser();
 
 const mainMenuItems = Object.values(menus.value.main).sort(
-  (a, b) => (a.order ?? 100) - (b.order ?? 100),
+  (a, b) => (a.order ?? 100) - (b.order ?? 100)
 );
 
 const publicMenuItems = Object.values(menus.value.public).sort(
-  (a, b) => (a.order ?? 100) - (b.order ?? 100),
+  (a, b) => (a.order ?? 100) - (b.order ?? 100)
 );
 </script>
 
@@ -47,7 +47,7 @@ const publicMenuItems = Object.values(menus.value.public).sort(
 
 <style lang="scss" scoped>
 .about {
-  @apply flex items-center justify-center text-primary text-xs;
+  @apply flex items-center justify-center text-xs;
   letter-spacing: 0.24px;
 }
 .sidebar {

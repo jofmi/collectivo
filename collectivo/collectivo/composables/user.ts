@@ -3,7 +3,7 @@ import { readMe, updateMe } from "@directus/sdk";
 export const useCollectivoUser = () => {
   const state = useState<CollectivoUserStore>(
     "collectivo_user",
-    () => new CollectivoUserStore()
+    () => new CollectivoUserStore(),
   );
 
   return state;
@@ -34,7 +34,7 @@ class CollectivoUserStore {
     this.data = (await $directus?.request(
       readMe({
         fields: ["id", "first_name", "last_name", "email"],
-      })
+      }),
     )) as CollectivoUser;
 
     this.loading = false;
@@ -64,12 +64,12 @@ class CollectivoUserStore {
     if (runtimeConfig.public.authService === "keycloak") {
       return navigateTo(
         `${runtimeConfig.public.directusUrl}/auth/login/keycloak?redirect=${runtimeConfig.public.collectivoUrl}`,
-        { external: true }
+        { external: true },
       );
     } else {
       throw new Error(
         "Unknown auth service in nuxt.config: " +
-          runtimeConfig.public.authService
+          runtimeConfig.public.authService,
       );
     }
   }
@@ -83,7 +83,7 @@ class CollectivoUserStore {
     } else {
       throw new Error(
         "Unknown auth service in nuxt.config: " +
-          runtimeConfig.public.authService
+          runtimeConfig.public.authService,
       );
     }
   }

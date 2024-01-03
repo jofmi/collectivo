@@ -14,8 +14,7 @@
   },
   "dependencies": {
     "@collectivo/collectivo": "workspace:*",
-    "@collectivo/memberships": "workspace:*",
-    "collectivo_mila": "workspace:*"
+    "@collectivo/memberships": "workspace:*"
   },
   "devDependencies": {
     "@nuxt/devtools": "^1.0.6",

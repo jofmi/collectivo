@@ -69,22 +69,23 @@ defineProps({
       }
     }
   }
+
+  &.router-link-exact-active {
+    @apply bg-[#ECF1FD];
+    .item__title {
+      @apply text-primary;
+    }
+
+    .item__icon {
+      .link-icon {
+        @apply text-primary;
+      }
+    }
+  }
 }
 
 .link-icon {
   @apply h-7 w-7 md:h-6 lg:h-[30px] md:w-6 lg:w-[30px] text-primary;
-}
-
-.router-link-exact-active {
-  .item__title {
-    @apply text-primary;
-  }
-
-  .item__icon {
-    .link-icon {
-      @apply text-primary;
-    }
-  }
 }
 
 .mobile-menu-item {

@@ -4,8 +4,6 @@ const schema = initSchema("shifts", "0.0.1");
 
 export default schema;
 
-// Here you can define collections for your database
-// See https://docs.directus.io/reference/system/collections.html
 schema.collections = [
   {
     collection: "shifts",
@@ -16,28 +14,92 @@ schema.collections = [
     },
     meta: {},
   },
+  {
+    collection: "slots",
+    schema: {
+      schema: "schema",
+      name: "schema",
+      comment: null,
+    },
+    meta: {},
+  },
+  {
+    collection: "skills",
+    schema: {
+      schema: "schema",
+      name: "schema",
+      comment: null,
+    },
+    meta: {},
+  },
+  {
+    collection: "assignments",
+    schema: {
+      schema: "schema",
+      name: "schema",
+      comment: null,
+    },
+    meta: {},
+  },
 ];
 
-// Here you can define fields for your collections
-// See https://docs.directus.io/reference/system/fields.html
 schema.fields = [
   ...directusSystemFields("shifts"),
   {
     collection: "shifts",
-    field: "example_field",
+    field: "name",
     type: "string",
+    schema: {},
+    meta: {},
+  },
+  {
+    collection: "shifts",
+    field: "start_datetime",
+    type: "dateTime",
+    schema: {"is_nullable": false,},
+    meta: {},
+  },
+  {
+    collection: "shifts",
+    field: "end_datetime",
+    type: "dateTime",
+    schema: {"is_nullable": false,},
+    meta: {},
+  },
+  ...directusSystemFields("slots"),
+  {
+    collection: "slots",
+    field: "name",
+    type: "string",
+    schema: {},
+    meta: {},
+  },
+  ...directusSystemFields("skills"),
+  {
+    collection: "skills",
+    field: "name",
+    type: "string",
+    schema: {},
+    meta: {},
+  },
+  ...directusSystemFields("assignments"),
+  {
+    collection: "assignments",
+    field: "from",
+    type: "date",
+    schema: {},
+    meta: {},
+  },
+  {
+    collection: "assignments",
+    field: "to",
+    type: "date",
     schema: {},
     meta: {},
   },
 ];
 
-// Here you can define custom translations
-// See https://docs.directus.io/reference/system/translations.html
-schema.translations = [
-  { language: "de-DE", key: "shifts", value: "Beispiel" },
-];
-
-// To create relations, you can use the following helper functions
-// schema.createM2ORelation();
-// schema.createM2MRelation();
-// schema.createM2ARelation();
+schema.createO2MRelation("slots", "shifts", "shift")
+schema.createM2MRelation("skills", "slots")
+schema.createO2MRelation("assignments", "slots", "slot")
+schema.createO2MRelation("assignments", "directus_users", "user")

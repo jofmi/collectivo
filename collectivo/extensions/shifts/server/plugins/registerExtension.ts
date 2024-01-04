@@ -12,5 +12,3 @@ export default defineNitroPlugin(() => {
     examples: examples,
   });
 });
-
-console.log("SHIFT GOT INSTALLED")

@@ -1,7 +1,7 @@
 <!-- This section will be available under /shifts -->
 
 <script setup lang="ts">
-setPageTitle("Shifts");
+setCollectivoTitle("Shifts");
 </script>
 
 <template>

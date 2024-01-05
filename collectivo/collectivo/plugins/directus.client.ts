@@ -4,28 +4,7 @@ import { createDirectus, authentication, rest } from "@directus/sdk";
 export default defineNuxtPlugin({
   name: "directus-client",
   enforce: "pre",
-  async setup(nuxtApp) {
-    // nuxtApp.hook("vue:error", (..._args) => {
-    //   console.log("vue:error");
-    //   // if (process.client) {
-    //   //   console.log(..._args)
-    //   // }
-    // });
-
-    // nuxtApp.hook("app:error", (..._args) => {
-    //   console.log("app:error");
-    //   // if (process.client) {
-    //   //   console.log(..._args)
-    //   // }
-    // });
-
-    // nuxtApp.vueApp.config.errorHandler = (..._args) => {
-    //   console.log("global error handler");
-    //   // if (process.client) {
-    //   //   console.log(..._args)
-    //   // }
-    // };
-
+  async setup() {
     let directus;
     const runtimeConfig = useRuntimeConfig();
     const user = useCollectivoUser();
@@ -38,9 +17,10 @@ export default defineNuxtPlugin({
         .with(authentication("cookie", { credentials: "include" }))
         .with(rest({ credentials: "include" }));
     } catch (e) {
+      console.error("Possible invalid env var: NUXT_PUBLIC_DIRECTUS_URL");
       throw createError({
-        statusMessage: "Environment variable NUXT_PUBLIC_DIRECTUS_URL invalid",
-        statusCode: 500,
+        statusMessage: "Server is unavailable",
+        statusCode: 503,
         fatal: true,
       });
     }
@@ -53,13 +33,10 @@ export default defineNuxtPlugin({
       // If error is not auth-related, throw error
       if (![400, 401, 403].includes("response" in e && e.response.status)) {
         throw createError({
-          statusMessage: "Cannot reach backend server (directus)",
-          statusCode: 500,
+          statusMessage: "Server is unavailable",
+          statusCode: 503,
           fatal: true,
         });
-      } else {
-        // If error is auth-related, redirect to keycloak
-        console.error("Error in directus.client.ts", e);
       }
     }
 

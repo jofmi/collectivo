@@ -5,7 +5,6 @@ export default schema;
 schema.collections = [];
 
 schema.fields = [
-  // Groups
   {
     collection: "directus_users",
     field: "payments_profile_group",

@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     collectivoVersion: pkg.version,
     apiToken: "badToken",
-    directusAdminEmail: "nuxt_api@example.com",
+    directusAdminEmail: "api@example.com",
     directusAdminPassword: "d1r3ctu5",
     keycloakAdminClient: "admin-cli",
     keycloakAdminSecret: "**********",

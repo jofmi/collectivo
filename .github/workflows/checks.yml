@@ -78,7 +78,7 @@ jobs:
           KEY: 0fda9121-269d-44bd-91f2-4ff05be14b4b
           SECRET: 86cb4a76-a4c6-4ce7-8181-b0445d95675c
           CACHE_ENABLED: false
-          ADMIN_EMAIL: nuxt_api@example.com
+          ADMIN_EMAIL: api@example.com
           ADMIN_PASSWORD: d1r3ctu5
         ports:
           - 8055:8055

@@ -74,7 +74,7 @@ schema.permissions = [
     roleName: "collectivo_user",
     collection: collection,
     action: "read",
-    fields: "*",
+    fields: ["*"],
     permissions: {},
     validation: {},
   },
@@ -85,6 +85,6 @@ for (const action of ["read", "update", "create", "delete"]) {
     collection: collection,
     roleName: "collectivo_editor",
     action: action,
-    fields: "*",
+    fields: ["*"],
   });
 }

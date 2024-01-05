@@ -6,7 +6,7 @@ export default schema;
 
 schema.collections = [
   {
-    collection: "shifts",
+    collection: "shifts_shifts",
     schema: {
       schema: "schema",
       name: "schema",
@@ -15,7 +15,7 @@ schema.collections = [
     meta: {},
   },
   {
-    collection: "slots",
+    collection: "shifts_slots",
     schema: {
       schema: "schema",
       name: "schema",
@@ -24,7 +24,7 @@ schema.collections = [
     meta: {},
   },
   {
-    collection: "skills",
+    collection: "shifts_skills",
     schema: {
       schema: "schema",
       name: "schema",
@@ -33,7 +33,7 @@ schema.collections = [
     meta: {},
   },
   {
-    collection: "assignments",
+    collection: "shifts_assignments",
     schema: {
       schema: "schema",
       name: "schema",
@@ -44,62 +44,62 @@ schema.collections = [
 ];
 
 schema.fields = [
-  ...directusSystemFields("shifts"),
+  ...directusSystemFields("shifts_shifts"),
   {
-    collection: "shifts",
-    field: "name",
+    collection: "shifts_shifts",
+    field: "shifts_name",
     type: "string",
     schema: {},
     meta: {},
   },
   {
-    collection: "shifts",
-    field: "start_datetime",
+    collection: "shifts_shifts",
+    field: "shifts_start_datetime",
     type: "dateTime",
     schema: {"is_nullable": false,},
     meta: {},
   },
   {
-    collection: "shifts",
-    field: "end_datetime",
+    collection: "shifts_shifts",
+    field: "shifts_end_datetime",
     type: "dateTime",
     schema: {"is_nullable": false,},
     meta: {},
   },
-  ...directusSystemFields("slots"),
+  ...directusSystemFields("shifts_slots"),
   {
-    collection: "slots",
-    field: "name",
+    collection: "shifts_slots",
+    field: "shifts_name",
     type: "string",
     schema: {},
     meta: {},
   },
-  ...directusSystemFields("skills"),
+  ...directusSystemFields("shifts_skills"),
   {
-    collection: "skills",
-    field: "name",
+    collection: "shifts_skills",
+    field: "shifts_name",
     type: "string",
     schema: {},
     meta: {},
   },
-  ...directusSystemFields("assignments"),
+  ...directusSystemFields("shifts_assignments"),
   {
-    collection: "assignments",
-    field: "from",
+    collection: "shifts_assignments",
+    field: "shifts_from",
     type: "date",
     schema: {},
     meta: {},
   },
   {
-    collection: "assignments",
-    field: "to",
+    collection: "shifts_assignments",
+    field: "shifts_to",
     type: "date",
     schema: {},
     meta: {},
   },
 ];
 
-schema.createO2MRelation("slots", "shifts", "shift")
-schema.createM2MRelation("skills", "slots")
-schema.createO2MRelation("assignments", "slots", "slot")
-schema.createO2MRelation("assignments", "directus_users", "user")
+schema.createO2MRelation("shifts_slots", "shifts_shifts", "shifts_shift")
+schema.createM2MRelation("shifts_skills", "shifts_slots")
+schema.createO2MRelation("shifts_assignments", "shifts_slots", "shifts_slot")
+schema.createO2MRelation("shifts_assignments", "directus_users", "shifts_user", "uuid")

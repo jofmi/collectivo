@@ -42,16 +42,14 @@
     "@iconify/json": "^2.2.165",
     "@nuxt/devtools": "^1.0.6",
     "@nuxt/test-utils": "^3.9.0",
+    "@nuxtjs/eslint-module": "^4.1.0",
     "@nuxtjs/i18n": "8.0.0",
-    "@typescript-eslint/eslint-plugin": "6.16.0",
-    "@typescript-eslint/parser": "6.16.0",
     "@vitest/ui": "^1.1.0",
     "eslint": "8.56.0",
-    "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-vue": "9.19.2",
     "nuxt": "^3.9.0",
     "prettier": "3.1.1",
     "sass": "^1.69.5",
     "vitest": "^1.1.0"
   }
 }
+

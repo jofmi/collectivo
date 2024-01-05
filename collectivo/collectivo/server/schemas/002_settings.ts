@@ -66,6 +66,6 @@ for (const action of ["read", "update"]) {
     collection: "collectivo_project_settings",
     roleName: "collectivo_editor",
     action: action,
-    fields: "*",
+    fields: ["*"],
   });
 }

@@ -215,7 +215,7 @@ for (const action of ["read"]) {
       collection: collection,
       roleName: "collectivo_editor",
       action: action,
-      fields: "*",
+      fields: ["*"],
     });
   }
 }

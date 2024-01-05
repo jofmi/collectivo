@@ -312,18 +312,18 @@ schema.permissions = [
     collection: "memberships",
     roleName: "collectivo_editor",
     action: "read",
-    fields: "*",
+    fields: ["*"],
   },
   {
     collection: "memberships",
     roleName: "collectivo_editor",
     action: "update",
-    fields: "*",
+    fields: ["*"],
   },
   {
     collection: "memberships_types",
     roleName: "collectivo_editor",
     action: "read",
-    fields: "*",
+    fields: ["*"],
   },
 ];

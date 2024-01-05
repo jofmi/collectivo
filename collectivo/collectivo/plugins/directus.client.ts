@@ -17,7 +17,12 @@ export default defineNuxtPlugin({
         .with(authentication("cookie", { credentials: "include" }))
         .with(rest({ credentials: "include" }));
     } catch (e) {
-      throw new Error("Environment variable NUXT_PUBLIC_DIRECTUS_URL invalid");
+      console.error("Possible invalid env var: NUXT_PUBLIC_DIRECTUS_URL");
+      throw createError({
+        statusMessage: "Server is unavailable",
+        statusCode: 503,
+        fatal: true,
+      });
     }
 
     // Try to refresh token and set user to authenticated if successful
@@ -26,8 +31,12 @@ export default defineNuxtPlugin({
       user.value.isAuthenticated = true;
     } catch (e: any) {
       // If error is not auth-related, throw error
-      if (![400, 401, 403].includes(e.response.status)) {
-        throw new Error("Cannot reach backend server (directus)");
+      if (![400, 401, 403].includes("response" in e && e.response.status)) {
+        throw createError({
+          statusMessage: "Server is unavailable",
+          statusCode: 503,
+          fatal: true,
+        });
       }
     }
 

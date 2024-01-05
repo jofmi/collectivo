@@ -1,64 +1,27 @@
-import { FunctionalComponent } from "vue";
 import { DirectusUser } from "@directus/sdk";
 
 declare global {
-  // Server side migration types
-  interface CollectivoMigrationDependency {
-    name: string;
-    id: number;
+  // Database schema
+  interface CollectivoSchema {
+    collectivo_extensions: CollectivoExtension[];
+    collectivo_tiles: CollectivoTile[];
+    collectivo_tags: CollectivoTag[];
+    directus_users: CollectivoUser[];
   }
 
-  interface CollectivoMigration {
-    up: () => Promise<void>;
-    down: () => Promise<void>;
-    dependencies?: CollectivoMigrationDependency[];
+  interface DataWrapper<T> {
+    data: T | null | undefined;
+    error: Error | null | undefined | unknown;
+    loading: boolean;
+    saving: boolean;
   }
 
-  // Directus schema types
-  interface CollectivoMenuItem {
-    label: string;
-    link?: string;
-    icon?: FunctionalComponent;
-    external?: boolean;
-    target?: string;
-    children?: CollectivoMenuItem[];
-    order?: number; // Defaults to 100
-    filter?: (item: CollectivoMenuItem) => boolean;
-  }
-
-  interface CollectivoExtension {
-    id: number;
-    name: string;
-    version: string;
-    migration_state: number;
-  }
-
-  interface CollectivoSettings {
-    id: number;
-    collectivo_project_name: string;
-    collectivo_project_description: string;
-    collectivo_members_role: string;
-    collectivo_admin_role: string;
-  }
-
-  interface CollectivoCurrentUser {
+  interface CollectivoUser {
     id: string;
     first_name: string;
     last_name: string;
     email: string;
-  }
-
-  interface CollectivoMember {
-    id: number;
-    first_name: string;
-    last_name: string;
-    email: string;
-    user: DirectusUser | number;
-    status: number;
-    collectivo_tags: CollectivoTag[] | number[];
-    notes: string;
-    files_visible: any;
-    files_hidden: any;
+    [key: string]: string | undefined;
   }
 
   interface CollectivoTag {
@@ -73,19 +36,134 @@ declare global {
     content: string;
   }
 
-  interface CollectivoSchema {
-    collectivo_extensions: CollectivoExtension[];
-    collectivo_members: CollectivoMember[];
-    collectivo_tiles: CollectivoTile[];
-    collectivo_tags: CollectivoTag[];
-    directus_users: CollectivoUser[];
+  interface CollectivoExtension {
+    id: number;
+    name: string;
+    version: string;
+    schema_version: number;
+    schema_is_latest: boolean;
   }
 
-  // Wrappers
-  interface DataWrapper<T> {
-    data: T | null | undefined;
-    error: any;
-    loading: boolean;
+  interface CollectivoSettings {
+    id: number;
+    collectivo_project_name: string;
+    collectivo_project_description: string;
+    collectivo_members_role: string;
+    collectivo_admin_role: string;
+  }
+
+  // Layout
+  interface CollectivoMenus {
+    main: CollectivoMenuItem[];
+    public: CollectivoMenuItem[];
+  }
+
+  interface CollectivoMenuItem {
+    label: string;
+    icon?: string;
+    to?: string;
+    click?: () => void;
+    external?: boolean; // Defaults to false
+    target?: string; // Default "_self"
+    order?: number; // Default 100
+    hideOnMobile?: boolean; // Default false
+    filter?: (item: CollectivoMenuItem) => boolean;
+  }
+
+  // Forms
+  interface CollectivoForm {
+    title: string;
+    fields: CollectivoFormField[];
+    public?: boolean;
+    submitMode?: "postNuxt" | (() => void);
+    submitPath?: string;
+    submitLabel?: string;
+    successTitle?: string;
+    successText?: string;
+    successIcon?: string;
+    beforeSubmit?: (data: any) => any;
+  }
+
+  type CollectivoFormField = CollectivoFormLayout | CollectivoFormInput;
+
+  interface CollectivoFormFieldBase {
+    order: number;
+    width?: "full" | "xl" | "lg" | "md" | "sm" | "xs";
+    conditions?: FormCondition[];
+    _visible?: Ref<boolean>;
+  }
+
+  // These should not have a "key" property, because "key" is used to identify inputs
+  type CollectivoFormLayout = CollectivoFormFieldBase &
+    (
+      | {
+          type: "description";
+          label?: string;
+          description: string;
+          boxed?: boolean;
+        }
+      | {
+          type: "section";
+          title?: string;
+          icon?: string;
+          description?: string;
+        }
+      | {
+          type: "clear";
+        }
+      | {
+          type: "custom-layout";
+          component: any;
+        }
+    );
+
+  type CollectivoFormInput = {
+    type: string;
+    key: string;
+    label?: string;
+    default?: any;
+    required?: boolean;
+    disabled?: boolean;
+    validators?: FormValidator[];
+    description?: string;
+  } & CollectivoFormFieldBase &
+    CollectivoFormInputType;
+
+  type CollectivoFormInputType =
+    | {
+        type: "select";
+        choices?: CollectivoFormInputChoice[];
+        multiple?: boolean;
+        expand?: boolean;
+      }
+    | {
+        type: "text" | "number" | "email" | "password" | "textarea" | "date";
+        placeholder?: string;
+        icon?: string;
+      }
+    | {
+        type: "checkbox";
+        content?: string;
+      }
+    | {
+        type: "custom-input";
+        component: any;
+      };
+
+  interface CollectivoFormInputChoice {
+    value: string;
+    label: string;
+  }
+
+  interface FormCondition {
+    key: string;
+    value: string | number | boolean;
+    // TODO: Add operator?: "==" | "!=" | ">" | "<" | ">=" | "<=";
+  }
+
+  interface FormValidator {
+    type: "min" | "max" | "email" | "url" | "regex";
+    value?: string | number | RegExp;
   }
 }
 

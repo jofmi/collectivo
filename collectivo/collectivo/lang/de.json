@@ -1,5 +1,30 @@
 {
   "Home": "Startseite",
+  "Studio": "Studio",
+
+  "Action": "Aktion",
+  "Actions": "Aktionen",
+
+  "Login": "Anmelden",
+  "Logout": "Abmelden",
+
+  "Save": "Speichern",
+  "Cancel": "Abbrechen",
+  "Delete": "Löschen",
+  "Edit": "Bearbeiten",
+  "Add": "Hinzufügen",
+  "Remove": "Entfernen",
+  "Submit": "Absenden",
+
+  "There was an error": "Es ist ein Fehler aufgetreten",
+  "This field is required": "Dieses Feld ist erforderlich",
+  "This email address is not valid": "Diese E-Mail-Adresse ist nicht gültig",
+  "This email is already in use": "Diese E-Mail-Adresse wird bereits verwendet",
+
+  "Some fields are not filled in correctly": "Einige Felder sind nicht korrekt ausgefüllt",
+  "Minimum value": "Minimaler Wert",
+  "Maximum value": "Maximaler Wert",
+
   "Profile": "Profil",
-  "Admin App": "Admin App"
+  "Profile updated": "Profil aktualisiert"
 }

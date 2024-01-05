@@ -1,51 +1,44 @@
-import {
-  createDirectus,
-  authentication,
-  rest,
-  readMe,
-  RestClient,
-} from "@directus/sdk";
+import { createDirectus, authentication, rest } from "@directus/sdk";
 
 // Set up directus client or redirect to keycloak if not authenticated
 export default defineNuxtPlugin({
   name: "directus-client",
   enforce: "pre",
   async setup() {
+    let directus;
     const runtimeConfig = useRuntimeConfig();
-    var directus;
+    const user = useCollectivoUser();
 
     // Create directus REST client or redirect to offline error page
     try {
       directus = createDirectus<CollectivoSchema>(
-        runtimeConfig.public.directusUrl as string
+        runtimeConfig.public.directusUrl as string,
       )
-        .with(
-          authentication("json", {
-            autoRefresh: false,
-            credentials: "include",
-          })
-        )
+        .with(authentication("cookie", { credentials: "include" }))
         .with(rest({ credentials: "include" }));
     } catch (e) {
-      throw new Error("Environment variable NUXT_PUBLIC_DIRECTUS_URL invalid");
+      console.error("Possible invalid env var: NUXT_PUBLIC_DIRECTUS_URL");
+      throw createError({
+        statusMessage: "Server is unavailable",
+        statusCode: 503,
+        fatal: true,
+      });
     }
 
-    // Try to refresh token or redirect to keycloak login page
+    // Try to refresh token and set user to authenticated if successful
     try {
       await directus.refresh();
+      user.value.isAuthenticated = true;
     } catch (e: any) {
-      if (e.response?.status != 400) {
-        throw new Error("Cannot reach backend server (directus)");
+      // If error is not auth-related, throw error
+      if (![400, 401, 403].includes("response" in e && e.response.status)) {
+        throw createError({
+          statusMessage: "Server is unavailable",
+          statusCode: 503,
+          fatal: true,
+        });
       }
-      directus.logout();
-      navigateTo(
-        `${runtimeConfig.public.directusUrl}/auth/login/keycloak?redirect=${runtimeConfig.public.collectivoUrl}`,
-        { external: true }
-      );
     }
-
-    // Load data of current user to store
-    getCurrentUser(directus);
 
     // Provide directus client to app
     return {
@@ -55,14 +48,3 @@ export default defineNuxtPlugin({
     };
   },
 });
-
-// Load data of current user to store
-async function getCurrentUser(directus: RestClient<CollectivoSchema>) {
-  const user = useCurrentUser();
-  // @ts-ignore
-  user.value.data = await directus.request(
-    readMe({
-      fields: ["id", "first_name", "last_name", "email"],
-    })
-  );
-}

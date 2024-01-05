@@ -1,14 +1,14 @@
 import pkg from "../../package.json";
-import m001_example_migration from "../migrations/001_example_migration";
-import exampleDataFn from "../exampleData/exampleData";
+import s001_example_migration from "../schemas/001_schema_example";
+import examples from "../examples/examples";
 
 // Register extension on startup
-export default defineNitroPlugin((nitroApp) => {
+export default defineNitroPlugin(() => {
   registerExtension({
     name: "example",
     description: pkg.description,
     version: pkg.version,
-    migrations: [m001_example_migration],
-    exampleDataFn: exampleDataFn,
+    schemas: [s001_example_migration],
+    examples: examples,
   });
 });

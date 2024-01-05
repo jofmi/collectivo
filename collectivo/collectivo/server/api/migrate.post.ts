@@ -5,39 +5,46 @@ export default defineEventHandler(async (event) => {
   await refreshDirectus();
 
   // Read parameters
-  const query = getQuery(event);
+  const query = getQuery(event) as { [key: string]: string };
   const extension = query["extension"];
-  const migrateAllParam = parseBoolean(query["all"], false);
-  const force = parseBoolean(query["force"], false);
-  const down = parseBoolean(query["down"], false);
-  const version = query["version"] as string;
-  const exampleData = parseBoolean(query["exampleData"], false);
+  const version = query["version"];
+  const isolated = parseBoolean(query["isolated"]);
+  const examples = parseBoolean(query["examples"]);
 
   // Get extension configs
   const exts = getRegisteredExtensions();
 
-  // Case 1: Migrate all extensions
-  if (migrateAllParam) {
-    migrateAll(exts, exampleData);
+  // Case 1: Apply all schemas
+  if (!extension && !version) {
+    migrateAll(exts, examples);
+    let response = "Applying schema (all extensions, latest";
+
+    if (examples) {
+      response += " , incl. example data";
+    }
+
+    response += "). Please check the nuxt logs for details.";
     return {
-      detail: "Running migrations for all extensions",
+      detail: response,
     };
   }
 
-  // Case 1.5: Only create example data
-  if (!extension && exampleData) {
+  // Case 2: Apply all example data
+  if (!extension && !version && isolated && examples) {
     for (const ext of exts) {
-      if (ext.exampleDataFn) {
-        await ext.exampleDataFn();
+      if (ext.examples) {
+        await ext.examples();
       }
     }
+
     return {
       detail: "Creating example data for all extensions",
     };
   }
 
-  // Case 2: Migrate a specific extension
-  const ext = exts.find((f: any) => f.name === extension);
+  // Case 3: Focus on a isolated extension
+  const ext = exts.find((f: ExtensionConfig) => f.name === extension);
+
   if (!ext) {
     throw createError({
       statusCode: 400,
@@ -45,17 +52,27 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  // Case 2-1: Force a single migration
-  if (force) {
-    migrateCustom(ext, version, down, exampleData);
-    const direction = down ? "down" : "up";
+  // Case 3-1: Apply example data
+  if (!version && isolated && examples) {
+    if (ext.examples) {
+      await ext.examples();
+    }
+
     return {
-      detail: `Running forced migration ${version} (${direction}) of ${ext.name}`,
+      detail: "Creating example data for extension " + extension,
     };
   }
 
-  // Case 2-2: Migrate extension to specified version
-  migrateExtension(ext, version, exampleData);
+  // Case 3-2: Apply a isolated schema individually
+  if (isolated && version) {
+    migrateCustom(ext, version, examples);
+    return {
+      detail: `Applying schema ${version} of ${ext.name} individually`,
+    };
+  }
+
+  // Case 3-3: Migrate extension to specified version
+  migrateExtension(ext, version, examples);
   return {
     detail: "Running migrations for extension " + extension,
   };

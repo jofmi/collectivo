@@ -3,18 +3,27 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev --dotenv ../../.env",
+    "dev": "nuxt dev --dotenv ../../.env --p 3000",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "format": "prettier --cache --check .",
+    "format:fix": "prettier --cache --check . --write",
+    "lint": "eslint --cache .",
+    "lint:fix": "eslint --cache . --fix"
   },
   "dependencies": {
     "@collectivo/collectivo": "workspace:*",
-    "@collectivo/memberships": "workspace:*",
-    "collectivo_mila": "workspace:*"
+    "@collectivo/memberships": "workspace:*"
   },
   "devDependencies": {
-    "@nuxt/devtools": "latest",
-    "nuxt": "^3.7.0"
+    "@nuxt/devtools": "^1.0.6",
+    "@typescript-eslint/eslint-plugin": "6.16.0",
+    "@typescript-eslint/parser": "6.16.0",
+    "eslint": "8.56.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-vue": "9.19.2",
+    "nuxt": "^3.9.0",
+    "prettier": "3.1.1"
   }
 }

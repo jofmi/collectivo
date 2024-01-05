@@ -1,0 +1,114 @@
+name: Check
+
+on:
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_OPTIONS: --max_old_space_size=6144
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v40
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare
+        uses: ./.github/utils/app
+        with:
+          build: false
+
+      - name: Run Linter
+        # run: pnpm exec eslint ${{ steps.changed-files.outputs.all_changed_files }}
+        run: pnpm lint
+
+  format:
+    name: Format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v40
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Prepare
+        uses: ./.github/utils/app
+        with:
+          build: false
+
+      - name: Run Formatter
+        # run: pnpm exec prettier --check --ignore-unknown ${{ steps.changed-files.outputs.all_changed_files }}
+        run: pnpm format
+  unit:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:15-3.4-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      directus:
+        image: directus/directus:10.7.2
+        env:
+          DB_CLIENT: pg
+          DB_HOST: postgres
+          DB_PORT: postgres
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          DB_DATABASE: postgres
+          LOG_LEVEL: debug
+          KEY: 0fda9121-269d-44bd-91f2-4ff05be14b4b
+          SECRET: 86cb4a76-a4c6-4ce7-8181-b0445d95675c
+          CACHE_ENABLED: false
+        ports:
+          - 8055:8055
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          # Vitest uses `git diff` under the hood to find the changed files in it's `--changed`
+          # option, which in turn means we need to fetch the full git history so git is able to diff
+          fetch-depth: 0
+
+      - name: Prepare
+        uses: ./.github/utils/app
+      
+      - name: Prepare env
+        run: cp .env.example .env
+        
+      - name: Run Tests
+        # run: pnpm test:ci <- includes the seed and run
+        run: pnpm test
+      
+      - name: Collect docker logs on failure
+        if: failure()
+        uses: jwalton/gh-docker-logs@v1
+        with:
+          dest: "./logs"
+      - name: Tar logs
+        if: failure()
+        run: tar cvzf ./logs.tgz ./logs
+      - name: Upload logs to GitHub
+        if: failure()
+        uses: actions/upload-artifact@master
+        with:
+          name: logs.tgz
+          path: ./logs.tgz

@@ -1,12 +1,32 @@
 import { readItems } from "@directus/sdk";
 
-export const useExtensions = () =>
-  useState<CollectivoExtension[] | null>("collectivo_extensions", () => null);
+export const useCollectivoExtensions = () =>
+  useState<CollectivoExtensionsStore>(
+    "collectivo_extensions",
+    () => new CollectivoExtensionsStore(),
+  );
 
-export const getExtensions = async () => {
-  const { $directus } = useNuxtApp();
-  const extensions = useExtensions();
-  extensions.value =
-    (await $directus?.request(readItems("collectivo_extensions"))) || null;
-  return extensions;
-};
+class CollectivoExtensionsStore {
+  data: CollectivoTile[] | null;
+  loading: boolean;
+  error: unknown;
+
+  constructor() {
+    this.data = null;
+    this.loading = false;
+    this.error = null;
+  }
+
+  async load() {
+    this.loading = true;
+    const directus = useDirectus();
+
+    try {
+      this.data = await directus.request(readItems("collectivo_extensions"));
+    } catch (error) {
+      this.error = error;
+    }
+
+    this.loading = false;
+  }
+}

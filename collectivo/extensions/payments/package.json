@@ -12,6 +12,7 @@
     "dev": "nuxt dev --p 3101",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
     "format": "prettier --cache --check .",
     "format:fix": "prettier --cache --check . --write",
     "lint": "eslint --cache .",

@@ -10,6 +10,7 @@ describe("basics", async () => {
 
   test("all services healthy", async () => {
     const res = await $fetch("/api/status/");
+
     expect(res).toStrictEqual({
       healthy: {
         collectivo: true,

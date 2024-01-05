@@ -66,7 +66,7 @@ jobs:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
       directus:
-        image: directus/directus:10.7.2
+        image: directus/directus:10.8.3
         env:
           DB_CLIENT: pg
           DB_HOST: postgres
@@ -78,6 +78,8 @@ jobs:
           KEY: 0fda9121-269d-44bd-91f2-4ff05be14b4b
           SECRET: 86cb4a76-a4c6-4ce7-8181-b0445d95675c
           CACHE_ENABLED: false
+          ADMIN_EMAIL: nuxt_api@example.com
+          ADMIN_PASSWORD: d1r3ctu5
         ports:
           - 8055:8055
     steps:
@@ -90,14 +92,14 @@ jobs:
 
       - name: Prepare
         uses: ./.github/utils/app
-      
+
       - name: Prepare env
         run: cp .env.example .env
-        
+
       - name: Run Tests
         # run: pnpm test:ci <- includes the seed and run
         run: pnpm test
-      
+
       - name: Collect docker logs on failure
         if: failure()
         uses: jwalton/gh-docker-logs@v1

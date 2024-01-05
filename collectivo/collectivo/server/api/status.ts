@@ -1,5 +1,6 @@
 export default defineEventHandler(async (_event) => {
   let directusHealthy = true;
+
   try {
     await useDirectusAdmin();
   } catch (e) {

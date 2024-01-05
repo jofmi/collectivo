@@ -12,45 +12,24 @@
     "dev": "nuxt dev --p 3101",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
     "format": "prettier --cache --check .",
     "format:fix": "prettier --cache --check . --write",
     "lint": "eslint --cache .",
     "lint:fix": "eslint --cache . --fix"
   },
   "dependencies": {
-    "@collectivo/collectivo": "workspace:*",
-    "@directus/sdk": "^14.0.0",
-    "@fullcalendar/core": "^6.1.10",
-    "@fullcalendar/daygrid": "^6.1.10",
-    "@fullcalendar/interaction": "^6.1.10",
-    "@fullcalendar/list": "^6.1.10",
-    "@fullcalendar/timegrid": "^6.1.10",
-    "@fullcalendar/vue3": "^6.1.10",
-    "@headlessui/vue": "^1.7.16",
-    "@heroicons/vue": "^2.1.1",
-    "@iconify/json": "^2.2.162",
-    "@nuxt/ui": "^2.11.1",
-    "@popperjs/core": "^2.11.8",
-    "@vuepic/vue-datepicker": "^7.4.0",
-    "compare-versions": "^6.1.0",
-    "marked": "^11.1.0",
-    "vue3-carousel-nuxt": "^1.1.0",
-    "winston": "^3.11.0"
+    "@collectivo/collectivo": "workspace:*"
   },
   "devDependencies": {
-    "@iconify/vue": "^4.1.1",
+    "nuxt": "^3.9.0",
     "@nuxt/devtools": "^1.0.6",
     "@nuxt/test-utils": "^3.9.0",
-    "@nuxtjs/i18n": "8.0.0",
-    "@nuxtjs/tailwindcss": "^6.10.3",
-    "@typescript-eslint/eslint-plugin": "6.16.0",
-    "@typescript-eslint/parser": "6.16.0",
+    "prettier": "3.1.1",
     "eslint": "8.56.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-vue": "9.19.2",
-    "nuxt": "^3.9.0",
-    "prettier": "3.1.1",
-    "sass": "^1.69.5",
-    "vitest": "^1.1.0"
+    "@typescript-eslint/eslint-plugin": "6.16.0",
+    "@typescript-eslint/parser": "6.16.0"
   }
 }

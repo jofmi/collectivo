@@ -12,6 +12,7 @@
     "dev": "nuxt dev --p 3001",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
     "test": "vitest run",
     "test:ui": "vitest --ui",
     "format": "prettier --cache --check .",

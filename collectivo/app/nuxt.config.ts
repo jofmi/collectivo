@@ -2,7 +2,11 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
-  extends: ["@collectivo/collectivo", "@collectivo/memberships"],
+  extends: [
+    "@collectivo/collectivo",
+    "@collectivo/memberships",
+    "@collectivo/payments",
+  ],
   i18n: {
     lazy: true,
     langDir: "./lang",

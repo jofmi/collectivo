@@ -73,9 +73,17 @@ schema.fields = [
 
 schema.relations = [];
 
-const editor_fields: string[] = [];
+const editor_fields: string[] = [
+  "payments_type",
+  "payments_account_iban",
+  "payments_account_owner",
+];
 
-const user_fields: string[] = [];
+const user_fields: string[] = [
+  "payments_type",
+  "payments_account_iban",
+  "payments_account_owner",
+];
 
 schema.permissions = [
   {

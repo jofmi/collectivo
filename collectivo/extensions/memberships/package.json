@@ -19,7 +19,8 @@
     "lint:fix": "eslint --cache . --fix"
   },
   "dependencies": {
-    "@collectivo/collectivo": "workspace:*"
+    "@collectivo/collectivo": "workspace:*",
+    "@collectivo/memberships": "workspace:*"
   },
   "devDependencies": {
     "nuxt": "^3.9.0",

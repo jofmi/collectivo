@@ -4,8 +4,8 @@ export default defineNuxtConfig({
   ssr: false,
   extends: [
     "@collectivo/collectivo",
-    "@collectivo/memberships",
     "@collectivo/payments",
+    "@collectivo/memberships",
   ],
   i18n: {
     lazy: true,

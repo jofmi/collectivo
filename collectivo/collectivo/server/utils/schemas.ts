@@ -17,22 +17,13 @@ import { createOrUpdateDirectusRole } from "./directusQueries";
 // A schema relates to a specific version of an extension
 // Non-breaking schemas will be skipped if there is a newer version
 // Migrations can be called before and after the schema is applied
-export function initSchema(
-  extension: string,
-  version: string,
-  options?: Partial<ExtensionSchemaOptions>,
-) {
-  return new ExtensionSchema(extension, version, options);
+export function initSchema(extension: string, version: string) {
+  return new ExtensionSchema(extension, version);
 }
 
 export interface ExtensionDependency {
   extension: string;
   version: string;
-}
-
-export interface ExtensionSchemaOptions {
-  breaking: boolean;
-  dependencies?: ExtensionDependency[];
 }
 
 export interface CollectivoFlow extends NestedPartial<DirectusFlow<any>> {
@@ -42,7 +33,7 @@ export interface CollectivoFlow extends NestedPartial<DirectusFlow<any>> {
 export class ExtensionSchema {
   extension: string;
   version: string;
-  options: ExtensionSchemaOptions;
+  dependencies: ExtensionDependency[];
   run_before: () => Promise<void>;
   run_after: () => Promise<void>;
 
@@ -55,19 +46,10 @@ export class ExtensionSchema {
   operations: NestedPartial<DirectusOperation<any>>[];
   translations: any[];
 
-  constructor(
-    extension: string,
-    version: string,
-    options?: Partial<ExtensionSchemaOptions>,
-  ) {
+  constructor(extension: string, version: string) {
     this.extension = extension;
     this.version = version;
-
-    this.options = {
-      breaking: false,
-      ...options,
-    };
-
+    this.dependencies = [];
     this.collections = [];
     this.fields = [];
     this.relations = [];
@@ -155,12 +137,12 @@ export class ExtensionSchema {
 export function combineSchemas(
   extension: string,
   version: string,
-  options: Partial<ExtensionSchemaOptions>,
   schemas: ExtensionSchema[],
 ) {
-  const combinedSchema = initSchema(extension, version, options);
+  const combinedSchema = initSchema(extension, version);
 
   for (const schema of schemas) {
+    combinedSchema.dependencies.push(...schema.dependencies);
     combinedSchema.collections.push(...schema.collections);
     combinedSchema.fields.push(...schema.fields);
     combinedSchema.roles.push(...schema.roles);

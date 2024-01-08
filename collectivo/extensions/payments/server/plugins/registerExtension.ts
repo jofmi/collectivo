@@ -9,9 +9,7 @@ export default defineNitroPlugin(() => {
     name: "payments",
     description: pkg.description,
     version: pkg.version,
-    schemas: [
-      combineSchemas("payments", "0.0.1", {}, [payments_01, profile_01]),
-    ],
+    schemas: [combineSchemas("payments", "0.0.1", [payments_01, profile_01])],
     examples: examples,
   });
 });

@@ -148,6 +148,9 @@ importers:
       '@collectivo/collectivo':
         specifier: workspace:*
         version: link:../../collectivo
+      '@collectivo/memberships':
+        specifier: workspace:*
+        version: 'link:'
     devDependencies:
       '@nuxt/devtools':
         specifier: ^1.0.6

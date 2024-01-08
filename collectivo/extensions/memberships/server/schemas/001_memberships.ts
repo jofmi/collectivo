@@ -2,6 +2,11 @@ const schema = initSchema("memberships", "0.0.1");
 
 export default schema;
 
+schema.dependencies = [
+  { extension: "collectivo", version: "0.0.1" },
+  { extension: "payments", version: "0.0.1" },
+];
+
 schema.collections = [
   {
     collection: "memberships",

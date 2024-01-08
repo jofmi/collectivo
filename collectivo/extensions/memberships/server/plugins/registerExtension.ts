@@ -10,10 +10,7 @@ export default defineNitroPlugin(() => {
     description: pkg.description,
     version: pkg.version,
     schemas: [
-      combineSchemas("memberships", "0.0.1", {}, [
-        m001_memberships,
-        m002_profile,
-      ]),
+      combineSchemas("memberships", "0.0.1", [m001_memberships, m002_profile]),
     ],
     examples: examples,
   });

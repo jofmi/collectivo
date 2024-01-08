@@ -1,9 +1,11 @@
 {
   "name": "@collectivo/shifts",
-  "description": "A module to create shifts that members can register to.",
   "version": "0.0.1",
+  "description": "A module to create shifts that members can register to.",
   "type": "module",
   "license": "Unlicense",
+  "author": "Théophile Madet",
+  "homepage": "https://collectivo.io",
   "main": "./nuxt.config.ts",
   "scripts": {
     "build": "nuxt build",

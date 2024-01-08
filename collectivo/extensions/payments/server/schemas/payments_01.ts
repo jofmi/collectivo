@@ -97,7 +97,6 @@ schema.collections = [
 schema.fields = [
   ...directusSystemFields("payments_items"),
   directusNameField("payments_items"),
-  directusStatusField("payments_items"),
 
   // Invoices out
   ...directusSystemFields("payments_invoices_out"),
@@ -112,12 +111,12 @@ schema.fields = [
       options: {
         enableSelect: false,
         template:
-          "{{payments_item.name}}:{{payments_amount}}*{{payments_price}}",
+          "{{payments_item.name}}:{{payments_quantity}}*{{payments_price}}",
       },
       display: "related-values",
       display_options: {
         template:
-          "{{payments_item.name}}: {{payments_amount}}*{{payments_price}}",
+          "{{payments_item.name}}: {{payments_quantity}}*{{payments_price}}",
       },
       translations: [
         { language: "de-DE", translation: "Posten" },
@@ -262,14 +261,15 @@ schema.fields = [
   },
   {
     collection: "payments_invoices_entries",
-    field: "payments_amount",
+    field: "payments_quantity",
     type: "integer",
     meta: {
       interface: "input",
+      required: true,
       width: "half",
       translations: [
         { language: "de-DE", translation: "Menge" },
-        { language: "en-US", translation: "Amount" },
+        { language: "en-US", translation: "Quantity" },
       ],
     },
   },
@@ -279,6 +279,7 @@ schema.fields = [
     type: "integer", // prices always in cents
     meta: {
       interface: "input",
+      required: true,
       width: "half",
       translations: [
         { language: "de-DE", translation: "Preis" },
@@ -321,9 +322,9 @@ schema.relations = [
     meta: {
       one_field: "payments_entries",
       sort_field: null,
-      one_deselect_action: "nullify",
+      one_deselect_action: "delete",
     },
-    schema: { on_delete: "SET NULL" },
+    schema: { on_delete: "CASCADE" },
   },
 ];
 

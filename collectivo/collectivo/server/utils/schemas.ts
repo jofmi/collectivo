@@ -35,6 +35,10 @@ export interface ExtensionSchemaOptions {
   dependencies?: ExtensionDependency[];
 }
 
+export interface CollectivoFlow extends NestedPartial<DirectusFlow<any>> {
+  collectivoEndpoint?: string;
+}
+
 export class ExtensionSchema {
   extension: string;
   version: string;
@@ -47,7 +51,7 @@ export class ExtensionSchema {
   relations: NestedPartial<DirectusRelation<any>>[];
   roles: NestedPartial<DirectusRole<any>>[];
   permissions: NestedPartial<DirectusPermission<any>>[];
-  flows: NestedPartial<DirectusFlow<any>>[];
+  flows: CollectivoFlow[];
   operations: NestedPartial<DirectusOperation<any>>[];
   translations: any[];
 

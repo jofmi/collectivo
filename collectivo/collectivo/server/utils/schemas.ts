@@ -178,6 +178,8 @@ export function combineSchemas(
 interface directusM2MSettings {
   field1?: NestedPartial<DirectusField<any>>;
   field2?: NestedPartial<DirectusField<any>> | boolean;
+  relation1?: NestedPartial<DirectusRelation<any>>;
+  relation2?: NestedPartial<DirectusRelation<any>>;
   m2mFieldType1?: string;
   m2mFieldType2?: string;
 }
@@ -195,6 +197,9 @@ function createM2MRelation(
     settings?.field2 && typeof settings?.field2 !== "boolean"
       ? settings?.field2
       : {};
+
+  const relation1 = settings?.relation1 || {};
+  const relation2 = settings?.relation2 || {};
 
   const field1Name = settings?.field1?.field || collection2;
   const field2Name = field2 ? field2.field || collection1 : null;
@@ -253,26 +258,30 @@ function createM2MRelation(
     collection: m2mCollectionName,
     field: `${collection1}_id`,
     related_collection: collection1,
+    ...relation1,
     meta: {
       one_field: field1Name,
       sort_field: null,
       one_deselect_action: "nullify",
       junction_field: `${collection2}_id`,
+      ...relation1?.meta,
     },
-    schema: { on_delete: "SET NULL" },
+    schema: { on_delete: "SET NULL", ...relation1?.schema },
   });
 
   schema.relations.push({
     collection: m2mCollectionName,
     field: `${collection2}_id`,
     related_collection: collection2,
+    ...relation2,
     meta: {
       one_field: field2Name,
       sort_field: null,
       one_deselect_action: "nullify",
       junction_field: `${collection1}_id`,
+      ...relation2?.meta,
     },
-    schema: { on_delete: "SET NULL" },
+    schema: { on_delete: "SET NULL", ...relation2?.schema },
   });
 }
 

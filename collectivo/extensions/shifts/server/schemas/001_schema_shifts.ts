@@ -56,14 +56,14 @@ schema.fields = [
     collection: "shifts_shifts",
     field: "shifts_start_datetime",
     type: "dateTime",
-    schema: {"is_nullable": false,},
+    schema: { is_nullable: false },
     meta: {},
   },
   {
     collection: "shifts_shifts",
     field: "shifts_end_datetime",
     type: "dateTime",
-    schema: {"is_nullable": false,},
+    schema: { is_nullable: false },
     meta: {},
   },
   ...directusSystemFields("shifts_slots"),
@@ -99,7 +99,17 @@ schema.fields = [
   },
 ];
 
-schema.createO2MRelation("shifts_slots", "shifts_shifts", "shifts_shift")
-schema.createM2MRelation("shifts_skills", "shifts_slots")
-schema.createO2MRelation("shifts_assignments", "shifts_slots", "shifts_slot")
-schema.createO2MRelation("shifts_assignments", "directus_users", "shifts_user", "uuid")
+schema.createO2MRelation("shifts_slots", "shifts_shifts", "shifts_shift");
+schema.createM2MRelation("shifts_skills", "shifts_slots");
+schema.createO2MRelation("shifts_assignments", "shifts_slots", "shifts_slot");
+
+schema.createO2MRelation(
+  "shifts_assignments",
+  "directus_users",
+  "shifts_user",
+  {
+    collectionManyFieldType: "uuid",
+    template:
+      "{{shifts_shifts.shifts_name}} {{shifts_shifts.shifts_start_datetime}}",
+  },
+);

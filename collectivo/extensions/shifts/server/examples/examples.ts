@@ -1,5 +1,11 @@
 // This function can be used to create shifts data for your extension
-import { createItem, createItems, deleteItems, readItems } from "@directus/sdk";
+import {
+  createItem,
+  createItems,
+  deleteItems,
+  readItems,
+  readUsers,
+} from "@directus/sdk";
 
 import { DateTime } from "luxon";
 
@@ -12,6 +18,7 @@ export default async function examples() {
   await createShifts();
   await createSlots();
   await createSkills();
+  await createAssignments();
 
   console.info("Example data for shifts created");
 }
@@ -118,4 +125,38 @@ async function createSkills() {
   }
 
   await directus.request(createItems("shifts_skills_shifts_slots", requests));
+}
+
+async function createAssignments() {
+  const directus = await useDirectusAdmin();
+
+  const slots = await directus.request(
+    readItems("shifts_slots", {
+      fields: ["id"],
+    }),
+  );
+
+  const users = await directus.request(
+    readUsers({
+      fields: ["id"],
+    }),
+  );
+
+  const assignments = [];
+
+  for (const user of users) {
+    const slot = slots.pop();
+
+    if (!slot) {
+      break;
+    }
+
+    assignments.push({
+      shifts_from: DateTime.now().toString(),
+      shifts_slot: slot["id"],
+      shifts_user: user["id"],
+    });
+  }
+
+  await directus.request(createItems("shifts_assignments", assignments));
 }

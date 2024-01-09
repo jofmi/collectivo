@@ -1,4 +1,3 @@
-// This function can be used to create shifts data for your extension
 import {
   createItem,
   createItems,
@@ -33,7 +32,6 @@ async function cleanShiftsData() {
     "shifts_assignments",
   ];
 
-  // Clean up old data
   for (const schema of schemas) {
     await directus.request(deleteItems(schema, { limit: 1000 }));
   }
@@ -42,21 +40,25 @@ async function cleanShiftsData() {
 async function createShifts() {
   const directus = await useDirectusAdmin();
 
-  const today = DateTime.now().startOf("day");
+  const monday = DateTime.now().toUTC().startOf("week");
   const shiftsRequests = [];
 
-  // Create some membership types
-  for (let delta_days = -10; delta_days < 10; delta_days++) {
-    const day = today.plus({ days: delta_days });
+  const nb_weeks = 3;
 
-    for (const time_of_day of times_of_day) {
-      const start_time = day.set({ hour: time_of_day });
+  for (let week = 0; week < nb_weeks; week++) {
+    for (let weekday = 0; weekday < 5; weekday++) {
+      const day = monday.plus({ days: weekday, week: week });
 
-      shiftsRequests.push({
-        shifts_name: "Shop",
-        shifts_start_datetime: start_time.toString(),
-        shifts_end_datetime: start_time.plus({ hours: 3 }).toString(),
-      });
+      for (const time_of_day of times_of_day) {
+        shiftsRequests.push({
+          shifts_name: "Shop (week " + ["A", "B", "C", "D"][week] + ")",
+          shifts_from: day.toString(),
+          shifts_duration:
+            time_of_day == times_of_day[times_of_day.length - 1] ? 150 : 180,
+          shifts_repeats_every: nb_weeks * 7,
+          shifts_time: time_of_day + ":00",
+        });
+      }
     }
   }
 
@@ -70,11 +72,7 @@ async function createSlots() {
   const slotsRequests = [];
 
   for (const shift of shifts) {
-    const hour = DateTime.fromISO(shift["shifts_start_datetime"], {
-      zone: "UTC",
-    }).toLocal().hour;
-
-    if (hour == times_of_day[times_of_day.length - 1]) {
+    if (shift["shifts_time"] == times_of_day[times_of_day.length - 1]) {
       for (let i = 0; i < 2; i++) {
         slotsRequests.push({
           shifts_name: "Cleaning",

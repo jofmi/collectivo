@@ -16,6 +16,7 @@ export default defineNuxtConfig({
     keycloakAdminClient: "admin-cli",
     keycloakAdminSecret: "**********",
     public: {
+      debug: false,
       collectivoUrl: "http://localhost:3000",
       authService: "keycloak",
       keycloakUrl: "http://keycloak:8080",

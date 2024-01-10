@@ -250,17 +250,14 @@ schema.permissions.push(
     permissions: { _and: [{ id: { _eq: "$CURRENT_USER" } }] },
     fields: user_fields,
   },
-  {
-    collection: "directus_users",
-    roleName: "collectivo_editor",
-    action: "read",
-    fields: ["id", ...editor_fields],
-  },
-  {
-    collection: "directus_users",
-    roleName: "collectivo_editor",
-    action: "update",
-    fields: editor_fields,
-    permissions: {},
-  },
 );
+
+for (const action of ["read", "update", "create", "delete"]) {
+  schema.permissions.push({
+    collection: "directus_users",
+    roleName: "collectivo_editor",
+    action: action,
+    fields: editor_fields,
+    permissions: { _and: [{ id: { _nnull: true } }] }, // = all users
+  });
+}

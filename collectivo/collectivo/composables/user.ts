@@ -76,6 +76,8 @@ class CollectivoUserStore {
 
   async logout() {
     const runtimeConfig = useRuntimeConfig();
+    const directus = useDirectus();
+    directus.logout();
 
     if (runtimeConfig.public.authService === "keycloak") {
       const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protocol/openid-connect/logout`;

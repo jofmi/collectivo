@@ -451,6 +451,10 @@ async function fillOutAll() {
   @apply form-field basis-full;
 }
 
+.form-field-half {
+  @apply form-field basis-full md:basis-1/2;
+}
+
 .form-field-xl {
   @apply form-field basis-full xl:basis-1/2;
 }

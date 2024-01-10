@@ -4,17 +4,7 @@ export default defineNuxtPlugin({
     const menu = useCollectivoMenus();
     const user = useCollectivoUser();
 
-    const publicItems: CollectivoMenuItem[] = [
-      {
-        label: "Register",
-        icon: "i-system-uicons-document-stack",
-        to: "/memberships/register",
-        order: 200,
-        filter: (_item) => {
-          return true;
-        },
-      },
-    ];
+    const publicItems: CollectivoMenuItem[] = [];
 
     menu.value.public.push(...publicItems);
 

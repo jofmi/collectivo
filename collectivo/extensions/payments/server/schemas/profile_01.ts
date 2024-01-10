@@ -10,7 +10,7 @@ schema.fields = [
     field: "payments_profile_group",
     type: "alias",
     meta: {
-      order: 200,
+      order: 500,
       interface: "group-detail",
       special: ["alias", "no-data", "group"],
       options: { title: "$t:person", headerIcon: "credit_card" },
@@ -74,12 +74,14 @@ schema.fields = [
 schema.relations = [];
 
 const editor_fields: string[] = [
+  "payments_profile_group",
   "payments_type",
   "payments_account_iban",
   "payments_account_owner",
 ];
 
 const user_fields: string[] = [
+  "payments_profile_group",
   "payments_type",
   "payments_account_iban",
   "payments_account_owner",
@@ -96,7 +98,6 @@ schema.permissions = [
     collection: "directus_users",
     roleName: "collectivo_editor",
     action: "update",
-
     fields: editor_fields,
   },
 ];

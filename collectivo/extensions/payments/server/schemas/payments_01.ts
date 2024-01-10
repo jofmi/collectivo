@@ -328,4 +328,17 @@ schema.relations = [
   },
 ];
 
-schema.permissions = [];
+for (const action of ["read", "update", "create", "delete"]) {
+  for (const collection of [
+    "payments_items",
+    "payments_invoices_entries",
+    "payments_invoices_out",
+  ]) {
+    schema.permissions.push({
+      collection: collection,
+      roleName: "collectivo_editor",
+      action: action,
+      fields: ["*"],
+    });
+  }
+}

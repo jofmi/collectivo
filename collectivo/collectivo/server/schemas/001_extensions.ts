@@ -255,12 +255,13 @@ schema.permissions.push(
     roleName: "collectivo_editor",
     action: "read",
     fields: ["id", ...editor_fields],
+    permissions: { _and: [{ id: { _nnull: true } }] }, // = all users
   },
   {
     collection: "directus_users",
     roleName: "collectivo_editor",
     action: "update",
     fields: editor_fields,
-    permissions: {},
+    permissions: { _and: [{ id: { _nnull: true } }] }, // = all users
   },
 );

@@ -46,24 +46,29 @@ export default defineNuxtPlugin(() => {
 
   const profileInputs: CollectivoFormField[] = [
     {
+      type: "section",
+      order: 100,
+      title: "Account details",
+    },
+    {
       label: "First name",
       key: "first_name",
       type: "text",
-      order: 1,
+      order: 101,
       disabled: true,
     },
     {
       label: "Last name",
       key: "last_name",
       type: "text",
-      order: 2,
+      order: 102,
       disabled: true,
     },
     {
       label: "Email",
       key: "email",
       type: "text",
-      order: 3,
+      order: 103,
       disabled: true,
     },
   ];

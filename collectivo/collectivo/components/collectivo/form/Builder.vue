@@ -13,7 +13,7 @@ import type { FormErrorEvent, FormSubmitEvent } from "#ui/types";
 
 const toast = useToast();
 const { t } = useI18n();
-const debug = true;
+const debug = useRuntimeConfig().public.debug;
 
 const props = defineProps({
   fields: Object as PropType<CollectivoFormField[]>,
@@ -22,6 +22,7 @@ const props = defineProps({
   submitLabel: String,
 });
 
+console.log("data", props.data);
 const form = { fields: props.fields ?? [] };
 const loading = ref(false);
 
@@ -178,6 +179,7 @@ for (const input of form.fields) {
     addInputToSchema(input.key, input, boolean());
   }
 
+  // Add passed data or default value to field
   if (props.data?.[input.key]) {
     state[input.key] = props.data[input.key];
   } else if ("default" in input && input.default) {
@@ -423,15 +425,16 @@ async function fillOutAll() {
     class="mx-2 my-10 p-6 rounded-lg bg-slate-100 flex flex-col gap-2"
   >
     <div>
-      DEBUG Tools. <br />
-      You are seeing this because NUXT_DEBUG=True
+      <h3>Debug Tools</h3>
+      <p>You are seeing this because NUXT_PUBLIC_DEBUG=True</p>
     </div>
     <div>
       <UButton class="btn" @click="fillOutAll">
         {{ t("Fill out all") }}
       </UButton>
     </div>
-    <div class="text-sm">Form state: {{ state }}</div>
+    <h4>Form state</h4>
+    <div class="text-sm">{{ state }}</div>
   </div>
 </template>
 

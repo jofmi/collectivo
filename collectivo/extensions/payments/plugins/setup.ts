@@ -20,11 +20,37 @@ export default defineNuxtPlugin({
 
     const profileInputs: CollectivoFormField[] = [
       {
-        label: "Another profile field",
-        key: "another",
+        type: "section",
+        order: 700,
+        title: "Payment details",
+      },
+      {
+        label: "Payment type",
+        key: "payments_type",
+        type: "select",
+        order: 710,
+        choices: [
+          {
+            value: "sepa",
+            label: "SEPA Direct Debit",
+          },
+          {
+            value: "transfer",
+            label: "Transfer",
+          },
+        ],
+      },
+      {
+        label: "Bank account IBAN",
+        key: "payments_account_iban",
         type: "text",
-        order: 4,
-        disabled: true,
+        order: 720,
+      },
+      {
+        label: "Bank account owner",
+        key: "payments_account_owner",
+        type: "text",
+        order: 730,
       },
     ];
 

@@ -48,6 +48,7 @@ async function saveProfile(data: CollectivoUser) {
       :data="user.data"
       :fields="user.fields"
       :submit="saveProfile"
+      submit-label="Save"
     />
   </CollectivoContainer>
   <CollectivoContainer>

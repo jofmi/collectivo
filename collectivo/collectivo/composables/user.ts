@@ -33,7 +33,7 @@ class CollectivoUserStore {
 
     this.data = (await $directus?.request(
       readMe({
-        fields: ["id", "first_name", "last_name", "email"],
+        // fields: ["id", "first_name", "last_name", "email"],
       }),
     )) as CollectivoUser;
 

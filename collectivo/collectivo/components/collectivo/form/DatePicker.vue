@@ -11,10 +11,6 @@ const props = defineProps({
 
 const emit = defineEmits(["update:model-value", "close"]);
 
-const colorMode = useColorMode();
-
-const isDark = computed(() => colorMode.value === "dark");
-
 const date = computed({
   get: () => props.modelValue,
   set: (value) => {

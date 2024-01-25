@@ -1,6 +1,6 @@
 #date-picker {
   .dp__input {
-    @apply bg-blue-50 border-0 outline outline-1 outline-transparent focus:outline-primary px-[18px] py-4 rounded-lg text-sm text-primary/50 font-medium font-urbanist tracking-[0.28px] leading-[18px] placeholder:text-sm;
+    @apply bg-blue-50 border-0 outline outline-1 outline-transparent focus:outline-primary px-[18px] py-4 rounded-lg text-sm text-primary/50 font-medium  tracking-[0.28px] leading-[18px] placeholder:text-sm;
   }
 
   .dp__instance_calendar {
@@ -20,7 +20,7 @@
     }
 
     .dp__calendar_item {
-      @apply text-sm font-semibold font-urbanist;
+      @apply text-sm font-semibold;
       .dp__today {
         @apply rounded-[50%] bg-gray-200 border-0;
       }
@@ -38,13 +38,7 @@
       .dp__month_year_wrap {
         @apply w-full justify-start gap-[6px] flex-1;
         .dp__month_year_select {
-          @apply font-urbanist justify-start text-xl text-primary font-semibold w-fit hover:bg-transparent;
-        }
-
-        .dp__overlay {
-          .dp__overlay_cell_pad {
-            @apply font-urbanist;
-          }
+          @apply justify-start text-xl text-primary font-semibold w-fit hover:bg-transparent;
         }
       }
     }

@@ -118,9 +118,6 @@ export default <Partial<Config>>{
         "3xl": ["1.625rem", { lineHeight: "32px" }],
         "4xl": ["1.875rem", { lineHeight: "36px" }],
       },
-      fontFamily: {
-        urbanist: '"Urbanist", sans-serif',
-      },
     },
   },
 };

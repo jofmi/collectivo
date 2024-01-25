@@ -31,10 +31,9 @@ class CollectivoUserStore {
     if (!force && this.data) return this;
     this.loading = true;
 
-    // @ts-ignore
     this.data = (await directus.request(
       readMe({
-        fields: ["*, role.*"],
+        fields: ["*", "role.*"],
       }),
     )) as CollectivoUser;
 

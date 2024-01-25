@@ -60,9 +60,6 @@ importers:
       '@nuxt/ui':
         specifier: ^2.11.1
         version: 2.11.1(nuxt@3.9.0)(rollup@3.29.4)(vite@5.0.10)(vue@3.3.13)
-      '@popperjs/core':
-        specifier: ^2.11.8
-        version: 2.11.8
       compare-versions:
         specifier: ^6.1.0
         version: 6.1.0

@@ -39,13 +39,10 @@ export default defineNuxtConfig({
       { code: "de", file: "de.json" },
     ],
   },
-  css: [
-    join(currentDir, "./assets/css/main.css"),
-    join(currentDir, "./assets/css/date-picker.scss"),
-  ],
+  css: [join(currentDir, "./assets/css/main.css")],
   ui: {
     global: true,
-    icons: ["system-uicons", "mi"],
+    icons: ["system-uicons", "mi", "heroicons"],
   },
   googleFonts: {
     download: true,

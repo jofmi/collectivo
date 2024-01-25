@@ -1,16 +1,28 @@
 <script setup lang="ts">
 const { t } = useI18n();
 
-defineProps({
+const props = defineProps({
   item: {
     type: Object as PropType<CollectivoMenuItem>,
     required: true,
   },
 });
+
+const visible = ref(false);
+filterItem(props.item);
+
+async function filterItem(item: CollectivoMenuItem) {
+  if (item.filter) {
+    visible.value = await item.filter(item);
+    return;
+  }
+
+  visible.value = true;
+}
 </script>
 
 <template>
-  <div v-if="!item.filter || item.filter(item)">
+  <div v-if="visible">
     <!-- IF item.to is function -->
     <div v-if="item.click">
       <a class="item cursor-pointer" @click="item.click()">

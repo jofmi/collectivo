@@ -25,7 +25,6 @@ export default defineNuxtPlugin(() => {
       order: 99,
       filter: async (_item) => {
         await user.value.load();
-        console.log(user.value.data);
         return user.value.data?.role?.app_access ?? false;
       },
     },

@@ -49,7 +49,7 @@ defineProps({
 .item {
   @apply flex flex-col items-center p-3 mb-1 rounded-xl transition-all;
   &__icon {
-    @apply block mb-1.5;
+    @apply block mb-1;
   }
 
   &__title {
@@ -58,27 +58,27 @@ defineProps({
   }
 
   &:hover {
-    @apply bg-[#ECF1FD];
+    @apply bg-primary-50;
     .item__title {
-      @apply text-primary;
+      @apply text-primary-900;
     }
 
     .item__icon {
       .link-icon {
-        @apply text-primary;
+        @apply text-primary-900;
       }
     }
   }
 
   &.router-link-exact-active {
-    @apply bg-[#ECF1FD];
+    @apply bg-primary-50;
     .item__title {
-      @apply text-primary;
+      @apply text-primary-900;
     }
 
     .item__icon {
       .link-icon {
-        @apply text-primary;
+        @apply text-primary-900;
       }
     }
   }
@@ -113,12 +113,12 @@ defineProps({
   &:hover {
     @apply bg-transparent;
     .item__title {
-      @apply text-primary;
+      @apply text-primary-900;
     }
 
     .item__icon {
       .link-icon {
-        @apply text-primary;
+        @apply text-primary-900;
       }
     }
   }

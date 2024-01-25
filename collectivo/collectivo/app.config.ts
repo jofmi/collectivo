@@ -2,10 +2,9 @@ export default defineAppConfig({
   projectName: "Collectivo",
   projectDescription:
     "Collectivo is an open-source platform for collaboration, participation, and data management.",
-  logoPath: "/img/logo.svg",
-  logoLabel: "COLLECTIVO",
+  logoPath: "/img/logo.png",
   ui: {
-    primary: "ui-primary",
+    primary: "meteorite",
     gray: "cool",
     button: {
       font: "font-semibold tracking-wider",

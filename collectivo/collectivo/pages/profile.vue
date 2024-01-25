@@ -48,8 +48,7 @@ async function saveProfile(data: CollectivoUser) {
       :data="user.data"
       :fields="user.fields"
       :submit="saveProfile"
-      submit-label="Save"
-    />
+      submit-label="Save" />
   </CollectivoContainer>
   <CollectivoContainer>
     <h2 class="text-primary font-semibold text-2xl leading-7 mb-6">
@@ -61,8 +60,7 @@ async function saveProfile(data: CollectivoUser) {
       color="red"
       size="md"
       icon="i-mi-log-out"
-      @click="user.logout"
-    >
+      @click="user.logout">
       {{ t("Logout") }}
     </UButton>
   </CollectivoContainer>

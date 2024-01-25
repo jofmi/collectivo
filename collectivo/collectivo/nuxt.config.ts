@@ -28,12 +28,7 @@ export default defineNuxtConfig({
     preference: "light",
   },
   hooks: {},
-  modules: [
-    "@nuxt/ui",
-    "@nuxtjs/i18n",
-    "@nuxtjs/google-fonts",
-    "vue3-carousel-nuxt",
-  ],
+  modules: ["@nuxt/ui", "@nuxtjs/i18n", "@nuxtjs/google-fonts"],
   i18n: {
     lazy: false, // TODO: Lazy loading does not work with current switch
     strategy: "no_prefix",

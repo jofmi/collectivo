@@ -181,7 +181,17 @@ for (const input of form.fields) {
 
   // Add passed data or default value to field
   if (props.data?.[input.key]) {
-    state[input.key] = props.data[input.key];
+    if (input.type === "date") {
+      console.log(
+        "date",
+        props.data[input.key],
+        new Date(props.data[input.key]),
+      );
+
+      state[input.key] = new Date(props.data[input.key]);
+    } else {
+      state[input.key] = props.data[input.key];
+    }
   } else if ("default" in input && input.default) {
     state[input.key] = input.default;
   }
@@ -237,14 +247,12 @@ async function fillOutAll() {
     :state="state"
     class="flex flex-wrap w-full"
     @submit="onSubmit"
-    @error="onError"
-  >
+    @error="onError">
     <template v-for="(input, i) in form.fields" :key="i">
       <template v-if="input._visible ?? true">
         <div
           v-if="input.type === 'section'"
-          class="form-field-full mt-10 first:mt-0"
-        >
+          class="form-field-full mt-10 first:mt-0">
           <h2 v-if="input.title">
             {{ t(input.title) }}
           </h2>
@@ -265,20 +273,17 @@ async function fillOutAll() {
           v-else-if="input.type === 'custom-layout'"
           :class="input.width ? `form-field-${input.width}` : 'form-field-full'"
           :input="input"
-          :state="state"
-        >
+          :state="state">
         </component>
         <div v-else-if="input.type === 'clear'" class="basis-full"></div>
         <div
           v-else
-          :class="input.width ? `form-field-${input.width}` : 'form-field-md'"
-        >
+          :class="input.width ? `form-field-${input.width}` : 'form-field-md'">
           <UFormGroup
             :label="input.label ? t(input.label) : undefined"
             :required="input.required"
             :description="input.description ? t(input.description) : undefined"
-            :name="input.key"
-          >
+            :name="input.key">
             <template #error="{ error }">
               <div v-if="error && typeof error === 'string'">
                 {{ t(error) }}
@@ -288,8 +293,7 @@ async function fillOutAll() {
               <UInput
                 v-model="state[input.key]"
                 :placeholder="input.placeholder"
-                :disabled="input.disabled"
-              >
+                :disabled="input.disabled">
                 <template v-if="input.icon" #trailing>
                   <UIcon :name="input.icon" />
                 </template>
@@ -298,8 +302,7 @@ async function fillOutAll() {
             <template v-else-if="input.type === 'email'">
               <UInput
                 v-model="state[input.key]"
-                :placeholder="input.placeholder"
-              >
+                :placeholder="input.placeholder">
                 <template v-if="input.icon" #trailing>
                   <UIcon :name="input.icon" />
                 </template>
@@ -310,8 +313,7 @@ async function fillOutAll() {
                 v-model="state[input.key]"
                 type="password"
                 :placeholder="input.placeholder"
-                :disabled="input.disabled"
-              >
+                :disabled="input.disabled">
                 <template v-if="input.icon" #trailing>
                   <UIcon :name="input.icon" />
                 </template>
@@ -322,16 +324,14 @@ async function fillOutAll() {
                 v-model="state[input.key]"
                 type="number"
                 :placeholder="input.placeholder"
-                :disabled="input.disabled"
-              />
+                :disabled="input.disabled" />
             </template>
             <template v-if="input.type === 'textarea'">
               <UTextarea
                 v-model="state[input.key]"
                 resize
                 :placeholder="input.placeholder"
-                :disabled="input.disabled"
-              />
+                :disabled="input.disabled" />
             </template>
             <template v-else-if="input.type === 'select'">
               <!-- Single choice -->
@@ -341,8 +341,7 @@ async function fillOutAll() {
                     v-model="state[input.key]"
                     :options="input.choices"
                     :disabled="input.disabled"
-                    value-attribute="value"
-                  >
+                    value-attribute="value">
                     <template #label>{{
                       t(
                         input.choices?.find(
@@ -360,8 +359,7 @@ async function fillOutAll() {
                   <URadioGroup
                     v-model="state[input.key]"
                     :options="input.choices"
-                    :disabled="input.disabled"
-                  >
+                    :disabled="input.disabled">
                     <template #label="{ option }">{{
                       t(option.label)
                     }}</template>
@@ -373,23 +371,20 @@ async function fillOutAll() {
               <template v-else>
                 <CollectivoFormCheckboxGroup
                   v-model="state[input.key]"
-                  :choices="input.choices"
-                />
+                  :choices="input.choices" />
               </template>
             </template>
             <template v-else-if="input.type === 'date'">
               <CollectivoFormDate
                 v-model="state[input.key]"
-                :disabled="input.disabled"
-              ></CollectivoFormDate>
+                :disabled="input.disabled"></CollectivoFormDate>
             </template>
             <template v-else-if="input.type === 'checkbox'">
               <div class="form-box flex flex-row">
                 <UToggle
                   v-model="state[input.key]"
                   :disabled="input.disabled"
-                  class="mt-0.5 mr-2"
-                />
+                  class="mt-0.5 mr-2" />
                 <span
                   v-if="input.content"
                   class="text-sm font-medium text-gray-500-700 dark:text-gray-500-200"
@@ -414,16 +409,14 @@ async function fillOutAll() {
         size="lg"
         icon="i-mi-circle-check"
         :loading="loading"
-        type="submit"
-      >
+        type="submit">
         {{ t(submitLabel ?? "Submit") }}
       </UButton>
     </div>
   </UForm>
   <div
     v-if="debug"
-    class="mx-2 my-10 p-6 rounded-lg bg-slate-100 flex flex-col gap-2"
-  >
+    class="mx-2 my-10 p-6 rounded-lg bg-slate-100 flex flex-col gap-2">
     <div>
       <h3>Debug Tools</h3>
       <p>You are seeing this because NUXT_PUBLIC_DEBUG=True</p>

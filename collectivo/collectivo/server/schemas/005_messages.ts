@@ -174,6 +174,9 @@ schema.createO2MRelation(
 
 schema.createM2MRelation("messages_campaigns", "directus_users", {
   m2mFieldType2: "uuid",
+  field1: {
+    field: "collectivo_recipients",
+  },
   field2: true,
 });
 

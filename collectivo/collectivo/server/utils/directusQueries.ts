@@ -20,7 +20,15 @@ import {
   createTranslation,
   updateTranslation,
   readTranslations,
+  readFlows,
+  createFlow,
+  updateFlow,
+  readOperations,
+  DirectusOperation,
+  createOperation,
+  updateOperation,
 } from "@directus/sdk";
+import { DirectusFlowWrapper } from "./schemas";
 
 export async function createOrUpdateDirectusCollection(
   collection: NestedPartial<DirectusCollection<any>>,
@@ -202,6 +210,102 @@ export async function createOrUpdateDirectusRole(
   //   await directus.request(updateRole(roleDb.ID, role));
   //   console.log(`Updated role "${role}"`);
   // }
+}
+
+export async function createOrUpdateDirectusFlow(flow: DirectusFlowWrapper) {
+  const directus = await useDirectusAdmin();
+  let flowId: string;
+
+  // See if flow already exists
+  const flowsDb = await directus.request(
+    readFlows({
+      filter: {
+        name: { _eq: flow.flow.name },
+      },
+    }),
+  );
+
+  // Create flow if it doesn't exist
+  if (flowsDb.length === 0) {
+    flowId = (await directus.request(createFlow(flow.flow))).id;
+  }
+
+  // Update flow if it exists
+  else {
+    flowId = flowsDb[0].id;
+    await directus.request(updateFlow(flowId, flow.flow));
+  }
+
+  // Add operation to flow
+  const operationIds: Record<string, string> = {};
+
+  for (const operation of flow.operations ?? []) {
+    operation.operation.flow = flowId;
+
+    const operationId = await createOrUpdateDirectusOperation(
+      operation.operation,
+    );
+
+    if (operation.operation.key) {
+      operationIds[operation.operation.key] = operationId;
+    }
+  }
+
+  // Connect operations to another
+  for (const operation of flow.operations ?? []) {
+    if (!operation.operation.key) {
+      continue;
+    }
+
+    if (operation.first) {
+      flow.flow.operation = operationIds[operation.operation.key];
+      await directus.request(updateFlow(flowId, flow.flow));
+    }
+
+    if (operation.reject) {
+      const payload = { reject: operationIds[operation.reject] };
+
+      await directus.request(
+        updateOperation(operationIds[operation.operation.key], payload),
+      );
+    }
+
+    if (operation.resolve) {
+      const payload = { resolve: operationIds[operation.resolve] };
+
+      await directus.request(
+        updateOperation(operationIds[operation.operation.key], payload),
+      );
+    }
+  }
+}
+
+export async function createOrUpdateDirectusOperation(
+  operation: Partial<DirectusOperation<any>>,
+): Promise<string> {
+  const directus = await useDirectusAdmin();
+
+  // See if operation already exists
+  const operationsDb = await directus.request(
+    readOperations({
+      filter: {
+        key: { _eq: operation.key },
+        flow: { _eq: operation.flow },
+      },
+    }),
+  );
+
+  // Create operation if it doesn't exist
+  if (operationsDb.length === 0) {
+    return (await directus.request(createOperation(operation))).id;
+  }
+
+  // Update operation if it exists
+  else {
+    const operationId = operationsDb[0].id;
+    await directus.request(updateOperation(operationId, operation));
+    return operationId;
+  }
 }
 
 export async function createOrUpdateDirectusTranslation(

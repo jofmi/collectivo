@@ -299,8 +299,7 @@ This class has the following attributes:
 - `relations: NestedPartial<DirectusRelation<any>>[]` -> Can be created with the methods below.
 - `roles: NestedPartial<DirectusRole<any>>[]`
 - `permissions: NestedPartial<DirectusPermission<any>>[]`
-- `flows: NestedPartial<DirectusFlow<any>>[]`
-- `operations: NestedPartial<DirectusOperation<any>>[]`
+- `flows: DirectusFlowWrapper[]`
 - `translations: any[]`
 
 And the following methods:
@@ -308,6 +307,26 @@ And the following methods:
 - `createO2MRelation()` - Utility method to create a [One-to-Many](https://docs.directus.io/app/data-model/relationships.html#one-to-many-o2m) relationship
 - `createM2MRelation()` - Utility method to create a [Many-to_many](https://docs.directus.io/app/data-model/relationships.html#many-to-many-m2m) relationship
 - `createM2ARelation()` - Utility method to create a [Many-to-Any](https://docs.directus.io/app/data-model/relationships.html#many-to-any-m2a) relationship
+
+### `DirectusFlowWrapper`
+
+This type can be used to construct directus flows in a schema.
+
+Attributes:
+
+- `flow: Partial<DirectusFlow<<any>>` - this will define the trigger
+- `operations: DirectusOperationWrapper[]` - define a list of connected operations
+
+### `DirectusOperationWrapper`
+
+This type can be used to define operations within a [directus flow](#directusflowwrapper).
+
+Attributes:
+
+- `operation: Partial<DirectusOperation<<any>>` - content of the operation
+- `first: boolean` - if true, will be executed first when the flow is triggered
+- `resolve: string` - key of the operation to execute when this one is resolved
+- `reject: string` - key of the operation to execute when this one is rejected
 
 ### `useDirectusAdmin`
 

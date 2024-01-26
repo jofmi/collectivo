@@ -270,6 +270,104 @@ schema.flows = [
       },
     ],
   },
+  {
+    flow: {
+      name: "messages_send_email_message",
+      icon: "outgoing_mail",
+      color: null,
+      description: "Send a message by email",
+      status: "active",
+      trigger: "event",
+      accountability: "all",
+      options: {
+        type: "action",
+        scope: ["items.create"],
+        collections: ["messages_messages"],
+      },
+    },
+    firstOperation: "read_campaign_data",
+    operations: [
+      {
+        operation: {
+          name: "Read campaign data",
+          key: "read_campaign_data",
+          type: "item-read",
+          position_x: 19,
+          position_y: 1,
+          options: {
+            collection: "messages_campaigns",
+            key: "{{$trigger.payload.messages_campaign}}",
+            query: null,
+          },
+        },
+        resolve: "read_template_data",
+        reject: "",
+      },
+      {
+        operation: {
+          name: "Read template data",
+          key: "read_template_data",
+          type: "item-read",
+          position_x: 37,
+          position_y: 1,
+          options: {
+            collection: "messages_templates",
+            key: "{{read_campaign_data.messages_template}}",
+          },
+        },
+        resolve: "read_recipient_data",
+        reject: "",
+      },
+      {
+        operation: {
+          name: "Read recipient data",
+          key: "read_recipient_data",
+          type: "item-read",
+          position_x: 55,
+          position_y: 1,
+          options: {
+            query: {
+              fields: ["first_name", "last_name", "email"],
+            },
+            collection: "directus_users",
+            key: "{{$trigger.payload.recipient}}",
+          },
+        },
+        resolve: "render_message",
+        reject: "",
+      },
+      {
+        operation: {
+          name: "Render message",
+          key: "render_message",
+          type: "exec",
+          position_x: 73,
+          position_y: 1,
+          options: {
+            code: 'module.exports = async function(data) {\n    template = data["read_template_data"].messages_content;\n    first_name = data["read_recipient_data"].first_name;\n    last_name = data["read_recipient_data"].last_name;\n    \n    rendered_message = template;\n    \n    rendered_message = rendered_message.replaceAll("{"+"{recipient_first_name}}", first_name);\n    rendered_message = rendered_message.replaceAll("{"+"{recipient_last_name}}", last_name);\n    \n\treturn {rendered_message};\n}',
+          },
+        },
+        resolve: "send_email",
+        reject: "",
+      },
+      {
+        operation: {
+          name: "Send email",
+          key: "send_email",
+          type: "mail",
+          position_x: 91,
+          position_y: 1,
+          options: {
+            subject: "{{read_template_data.messages_subject}}",
+            body: "{{render_message.rendered_message}}",
+            to: "{{read_recipient_data.email}}",
+          },
+        },
+        resolve: "",
+        reject: "",
+      },
+    ],
+  },
 ];
 
 function messageStatusField(collection: string) {

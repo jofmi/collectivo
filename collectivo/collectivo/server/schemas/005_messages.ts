@@ -6,7 +6,7 @@ schema.collections = [
   {
     collection: "messages",
     meta: {
-      sort: 90,
+      sort: 500,
       icon: "mail",
       translations: [
         {

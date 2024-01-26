@@ -22,7 +22,6 @@ const props = defineProps({
   submitLabel: String,
 });
 
-console.log("data", props.data);
 const form = { fields: props.fields ?? [] };
 const loading = ref(false);
 
@@ -181,7 +180,11 @@ for (const input of form.fields) {
 
   // Add passed data or default value to field
   if (props.data?.[input.key]) {
-    state[input.key] = props.data[input.key];
+    if (input.type === "date") {
+      state[input.key] = new Date(props.data[input.key]);
+    } else {
+      state[input.key] = props.data[input.key];
+    }
   } else if ("default" in input && input.default) {
     state[input.key] = input.default;
   }

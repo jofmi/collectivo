@@ -26,10 +26,12 @@ const publicMenuItems = Object.values(menus.value.public).sort(
               v-for="(item, i) in user.isAuthenticated
                 ? mainMenuItems
                 : publicMenuItems"
-              :key="i">
+              :key="i"
+            >
               <MenuItem
                 v-if="user.isAuthenticated || !user.isAuthenticated"
-                :item="item" />
+                :item="item"
+              />
             </div>
           </div>
           <div class="sidebar__inner__list__item__bottom">

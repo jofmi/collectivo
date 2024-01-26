@@ -41,7 +41,8 @@ const attrs = [
       borderless
       title-position="left"
       trim-weeks
-      :first-day-of-week="2" />
+      :first-day-of-week="2"
+    />
   </div>
 </template>
 

@@ -20,11 +20,13 @@ const publicMenuItems = Object.values(menus.value.public).sort(
         v-for="(item, i) in user.isAuthenticated
           ? mainMenuItems
           : publicMenuItems"
-        :key="i">
+        :key="i"
+      >
         <MenuItem
           v-if="!item.hideOnMobile == true"
           :item="item"
-          class="mobile-menu-item" />
+          class="mobile-menu-item"
+        />
       </div>
     </div>
   </div>

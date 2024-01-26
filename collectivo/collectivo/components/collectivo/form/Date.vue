@@ -34,7 +34,8 @@ const label = computed(() =>
       v-model="label"
       icon="i-heroicons-calendar-days-20-solid"
       trailing
-      class="w-full" />
+      class="w-full"
+    />
 
     <template #panel="{ close }">
       <CollectivoFormDatePicker v-model="date" @close="close" />

@@ -220,7 +220,7 @@ schema.flows = [
           position_x: 19,
           position_y: 1,
           options: {
-            code: 'module.exports = async function(data) {\n    campaign = data["$trigger"].payload;\n\tmessagesToCreate = [];\n    for (i in data["$trigger"].payload.recipients.create) {\n        recipient = data["$trigger"].payload.recipients.create[i]\n        messagesToCreate.push({\n            "messages_campaign": data["$trigger"].key,\n            "recipient": recipient.directus_users_id.id\n        });\n    }\n\treturn {messagesToCreate};\n}',
+            code: 'module.exports = async function(data) {\n    campaign = data["$trigger"].payload;\n\tmessagesToCreate = [];\n    for (i in data["$trigger"].payload.collectivo_recipients.create) {\n        recipient = data["$trigger"].payload.collectivo_recipients.create[i]\n        messagesToCreate.push({\n            "messages_campaign": data["$trigger"].key,\n            "recipient": recipient.directus_users_id.id\n        });\n    }\n\treturn {messagesToCreate};\n}',
           },
         },
         first: true,

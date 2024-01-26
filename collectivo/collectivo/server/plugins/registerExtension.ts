@@ -4,7 +4,6 @@ import m001_extensions from "../schemas/001_extensions";
 import m002_settings from "../schemas/002_settings";
 import m003_tags from "../schemas/003_tags";
 import m004_tiles from "../schemas/004_tiles";
-
 import examples from "../examples/examples";
 
 // Register extension on startup

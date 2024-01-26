@@ -10,7 +10,6 @@ import {
   DirectusRole,
   NestedPartial,
 } from "@directus/sdk";
-import { createOrUpdateDirectusRole } from "./directusQueries";
 
 // Create a new schema
 // This defines the database structure of an extension
@@ -26,8 +25,16 @@ export interface ExtensionDependency {
   version: string;
 }
 
-export interface CollectivoFlow extends NestedPartial<DirectusFlow<any>> {
-  collectivoEndpoint?: string;
+export interface DirectusOperationWrapper {
+  operation: Partial<DirectusOperation<any>>;
+  first?: boolean;
+  reject?: string;
+  resolve?: string;
+}
+
+export interface DirectusFlowWrapper {
+  flow: Partial<DirectusFlow<any>>;
+  operations?: DirectusOperationWrapper[];
 }
 
 export class ExtensionSchema {
@@ -41,9 +48,8 @@ export class ExtensionSchema {
   fields: NestedPartial<DirectusField<any>>[];
   relations: NestedPartial<DirectusRelation<any>>[];
   roles: NestedPartial<DirectusRole<any>>[];
-  permissions: NestedPartial<DirectusPermission<any>>[];
-  flows: CollectivoFlow[];
-  operations: NestedPartial<DirectusOperation<any>>[];
+  permissions: Partial<DirectusPermission<any>>[];
+  flows: DirectusFlowWrapper[];
   translations: any[];
 
   constructor(extension: string, version: string) {
@@ -56,7 +62,6 @@ export class ExtensionSchema {
     this.roles = [];
     this.permissions = [];
     this.flows = [];
-    this.operations = [];
     this.translations = [];
 
     this.run_before = () => Promise.resolve();
@@ -96,12 +101,7 @@ export class ExtensionSchema {
 
   apply = async () => {
     for (const collection of this.collections) {
-      await createOrUpdateDirectusCollection(
-        collection,
-        [],
-        [],
-        this.extension,
-      );
+      await createOrUpdateDirectusCollection(collection, [], []);
     }
 
     for (const field of this.fields) {
@@ -118,6 +118,10 @@ export class ExtensionSchema {
 
     for (const role of this.roles) {
       await createOrUpdateDirectusRole(role, this.extension);
+    }
+
+    for (const flow of this.flows) {
+      await createOrUpdateDirectusFlow(flow);
     }
 
     for (const permission of this.permissions) {
@@ -149,7 +153,6 @@ export function combineSchemas(
     combinedSchema.relations.push(...schema.relations);
     combinedSchema.permissions.push(...schema.permissions);
     combinedSchema.flows.push(...schema.flows);
-    combinedSchema.operations.push(...schema.operations);
     combinedSchema.translations.push(...schema.translations);
   }
 

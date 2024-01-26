@@ -111,6 +111,8 @@ schema.fields = [
   ...directusSystemFields("messages_messages"),
   ...directusSystemFields("messages_templates"),
   directusNameField("messages_templates", { width: "half" }),
+  messageStatusField("messages_messages"),
+  messageStatusField("messages_campaigns"),
   {
     collection: "messages_templates",
     field: "messages_method",
@@ -158,58 +160,6 @@ schema.fields = [
       ],
     },
   },
-  {
-    collection: "messages_messages",
-    field: "messages_status",
-    type: "string",
-    meta: {
-      sort: 10,
-      interface: "select-dropdown",
-      display: "labels",
-      display_options: {
-        choices: [
-          {
-            text: "$t:draft",
-            value: "draft",
-            foreground: "#FFFFFF",
-            background: "#666666",
-          },
-          {
-            text: "$t:pending",
-            value: "pending",
-            foreground: "#FFFFFF",
-            background: "#CC6600",
-          },
-          {
-            text: "$t:failed",
-            value: "failed",
-            foreground: "#FFFFFF",
-            background: "#800000",
-          },
-          {
-            text: "$t:sent",
-            value: "sent",
-            foreground: "#FFFFFF",
-            background: "#008000",
-          },
-        ],
-      },
-      width: "half",
-      options: {
-        choices: [
-          { text: "$t:draft", value: "draft" },
-          { text: "$t:pending", value: "pending" },
-          { text: "$t:failed", value: "failed" },
-          { text: "$t:sent", value: "sent" },
-        ],
-      },
-      translations: [
-        { language: "de-DE", translation: "Status" },
-        { language: "en-US", translation: "Status" },
-      ],
-    },
-    schema: { is_nullable: false, default_value: "draft" },
-  },
 ];
 
 for (const coll of ["messages_campaigns", "messages_messages"]) {
@@ -232,8 +182,7 @@ schema.createO2MRelation(
   {
     field1: {
       meta: {
-        display: "related-values",
-        display_options: { template: "{{messages_template.name}}" },
+        display: "raw",
         width: "half",
       },
     },
@@ -260,44 +209,6 @@ schema.createM2MRelation("messages_campaigns", "directus_users", {
   },
   field2: true,
 });
-
-const x = {
-  collection: "messages_campaigns",
-  field: "messages_recipients",
-  type: "alias",
-  schema: null,
-  meta: {
-    id: 138,
-    collection: "messages_campaigns",
-    field: "messages_recipients",
-    special: ["m2m"],
-    interface: "list-m2m",
-    options: {
-      enableCreate: false,
-      fields: [
-        "directus_users_id.first_name",
-        "directus_users_id.last_name",
-        "directus_users_id.email",
-      ],
-      layout: "table",
-      display: "related-values",
-      display_options: { template: "{{directus_users_id.email}}" },
-    },
-    display: "related-values",
-    display_options: { template: "{{directus_users_id.email}}" },
-    readonly: false,
-    hidden: false,
-    sort: 7,
-    width: "full",
-    translations: null,
-    note: null,
-    conditions: null,
-    required: false,
-    group: null,
-    validation: null,
-    validation_message: null,
-  },
-};
 
 // @ts-ignore
 const operation = {
@@ -360,3 +271,58 @@ schema.flows = [
     ],
   },
 ];
+
+function messageStatusField(collection: string) {
+  return {
+    collection: collection,
+    field: "messages_status",
+    type: "string",
+    meta: {
+      sort: 10,
+      interface: "select-dropdown",
+      display: "labels",
+      display_options: {
+        choices: [
+          {
+            text: "$t:draft",
+            value: "draft",
+            foreground: "#FFFFFF",
+            background: "#666666",
+          },
+          {
+            text: "$t:pending",
+            value: "pending",
+            foreground: "#FFFFFF",
+            background: "#CC6600",
+          },
+          {
+            text: "$t:failed",
+            value: "failed",
+            foreground: "#FFFFFF",
+            background: "#800000",
+          },
+          {
+            text: "$t:sent",
+            value: "sent",
+            foreground: "#FFFFFF",
+            background: "#008000",
+          },
+        ],
+      },
+      width: "half",
+      options: {
+        choices: [
+          { text: "$t:draft", value: "draft" },
+          { text: "$t:pending", value: "pending" },
+          { text: "$t:failed", value: "failed" },
+          { text: "$t:sent", value: "sent" },
+        ],
+      },
+      translations: [
+        { language: "de-DE", translation: "Status" },
+        { language: "en-US", translation: "Status" },
+      ],
+    },
+    schema: { is_nullable: false, default_value: "draft" },
+  };
+}

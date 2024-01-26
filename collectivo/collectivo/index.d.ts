@@ -1,4 +1,4 @@
-import { DirectusUser } from "@directus/sdk";
+import { DirectusUser, DirectusRole } from "@directus/sdk";
 
 declare global {
   // Database schema
@@ -21,6 +21,7 @@ declare global {
     first_name: string;
     last_name: string;
     email: string;
+    role?: DirectusRole;
     [key: string]: string | undefined;
   }
 
@@ -67,7 +68,7 @@ declare global {
     target?: string; // Default "_self"
     order?: number; // Default 100
     hideOnMobile?: boolean; // Default false
-    filter?: (item: CollectivoMenuItem) => boolean;
+    filter?: (item: CollectivoMenuItem) => Promise<boolean> | boolean;
   }
 
   // Forms

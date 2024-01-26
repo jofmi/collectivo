@@ -27,13 +27,13 @@ class CollectivoUserStore {
   }
 
   async load(force: boolean = false) {
-    const { $directus } = useNuxtApp();
+    const directus = useDirectus();
     if (!force && this.data) return this;
     this.loading = true;
 
-    this.data = (await $directus?.request(
+    this.data = (await directus.request(
       readMe({
-        fields: ["id", "first_name", "last_name", "email"],
+        fields: ["*", "role.*"],
       }),
     )) as CollectivoUser;
 
@@ -76,6 +76,8 @@ class CollectivoUserStore {
 
   async logout() {
     const runtimeConfig = useRuntimeConfig();
+    const directus = useDirectus();
+    await directus.logout();
 
     if (runtimeConfig.public.authService === "keycloak") {
       const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protocol/openid-connect/logout`;

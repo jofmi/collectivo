@@ -27,7 +27,7 @@ setCollectivoTitle(form.value.title);
         <p class="text-center">
           {{ t(form.successText ?? "t:memberships_form_success") }}
         </p>
-        <UButton icon="i-mi-log-in" @click="user.login()">{{
+        <UButton icon="i-mi-log-in" size="md" @click="user.login()">{{
           t("Login")
         }}</UButton>
       </div>

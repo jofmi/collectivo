@@ -1,0 +1,7 @@
+{
+  "Payment type": "Zahlungsart",
+  "Transfer": "Überweisung",
+  "SEPA Direct Debit": "SEPA Lastschrift",
+  "Bank account IBAN": "Bankkonto IBAN",
+  "Bank account owner": "Bankkonto Inhaber*in"
+}

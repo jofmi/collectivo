@@ -3,7 +3,7 @@ import type { FetchError } from "ofetch";
 
 const toast = useToast();
 const { t } = useI18n();
-const debug = true;
+const debug = useRuntimeConfig().public.debug;
 const submitted = ref(false);
 
 const props = defineProps({

@@ -91,7 +91,7 @@ schema.fields = [
     type: "string",
     meta: {
       width: "half",
-      readonly: true, // Remove this once there is a way to deactivate exts
+      readonly: true,
       sort: 2,
       options: {
         choices: [
@@ -171,51 +171,17 @@ schema.fields = [
   },
 ];
 
-schema.createM2ARelation(
-  "items",
-  "collectivo_extensions",
-  [
-    "directus_fields",
-    "directus_collections",
-    "directus_permissions",
-    "directus_translations",
-  ],
-  {
-    collection: "collectivo_extensions",
-    field: "items",
-    type: "alias",
-    meta: {
-      collection: "collectivo_extensions",
-      field: "items",
-      special: ["m2a"],
-      interface: "list-m2a",
-      options: { enableSelect: false, enableCreate: false },
-      display: "related-values",
-      display_options: {
-        template: "{{collection}}",
-      },
-      readonly: true,
-      hidden: false,
-      translations: [
-        { language: "en-US", translation: "Items" },
-        { language: "de-DE", translation: "Einträge" },
-      ],
-    },
-  },
-);
-
 for (const action of ["read"]) {
   for (const collection of [
     // "collectivo_settings",
     "collectivo_extensions",
-    "collectivo_extensions_items",
     "directus_roles",
   ]) {
     schema.permissions.push({
       collection: collection,
       roleName: "collectivo_editor",
       action: action,
-      fields: "*",
+      fields: ["*"],
     });
   }
 }
@@ -240,8 +206,7 @@ schema.permissions.push(
     roleName: "collectivo_user",
     action: "read",
     permissions: { _and: [{ id: { _eq: "$CURRENT_USER" } }] },
-    //@ts-ignore
-    fields: ["id", user_fields],
+    fields: ["id", ...user_fields],
   },
   {
     collection: "directus_users",
@@ -250,17 +215,14 @@ schema.permissions.push(
     permissions: { _and: [{ id: { _eq: "$CURRENT_USER" } }] },
     fields: user_fields,
   },
-  {
-    collection: "directus_users",
-    roleName: "collectivo_editor",
-    action: "read",
-    fields: ["id", ...editor_fields],
-  },
-  {
-    collection: "directus_users",
-    roleName: "collectivo_editor",
-    action: "update",
-    fields: editor_fields,
-    permissions: {},
-  },
 );
+
+for (const action of ["read", "update", "create", "delete"]) {
+  schema.permissions.push({
+    collection: "directus_users",
+    roleName: "collectivo_editor",
+    action: action,
+    fields: editor_fields,
+    permissions: { _and: [{ id: { _nnull: true } }] }, // = all users
+  });
+}

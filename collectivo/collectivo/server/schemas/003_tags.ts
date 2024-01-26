@@ -93,7 +93,7 @@ for (const action of ["read", "update", "create", "delete"]) {
       collection: collection,
       roleName: "collectivo_editor",
       action: action,
-      fields: "*",
+      fields: ["*"],
     });
   }
 }

@@ -68,9 +68,6 @@ async function registerMembership(body: any) {
     userData.external_identifier = userData.email;
   }
 
-  console.log("PASSWORD IS '" + password + "'");
-  console.log("TYPE OF PASSWORD IS " + typeof password);
-
   const user_id = await directus.request(createUser(userData));
 
   // Prepare membership

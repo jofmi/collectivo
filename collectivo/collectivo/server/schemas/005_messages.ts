@@ -237,6 +237,10 @@ schema.createM2MRelation("messages_campaigns", "directus_users", {
           "directus_users_id.email",
         ],
         layout: "table",
+        display: "related-values",
+        display_options: {
+          template: "{{directus_users_id.email}}",
+        },
       },
     },
   },

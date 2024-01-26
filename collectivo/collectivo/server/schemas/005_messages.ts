@@ -52,7 +52,7 @@ schema.collections = [
     },
   },
   {
-    collection: "messages_records",
+    collection: "messages_messages",
     schema: {
       name: "schema",
       comment: null,
@@ -64,9 +64,9 @@ schema.collections = [
       translations: [
         {
           language: "en-US",
-          translation: "Records",
-          singular: "Record",
-          plural: "Records",
+          translation: "Messages",
+          singular: "Message",
+          plural: "Messages",
         },
         {
           language: "de-DE",
@@ -108,7 +108,7 @@ schema.collections = [
 
 schema.fields = [
   ...directusSystemFields("messages_campaigns"),
-  ...directusSystemFields("messages_records"),
+  ...directusSystemFields("messages_messages"),
   ...directusSystemFields("messages_templates"),
   directusNameField("messages_templates", { width: "half" }),
   {
@@ -167,7 +167,7 @@ schema.createO2MRelation(
 );
 
 schema.createO2MRelation(
-  "messages_records",
+  "messages_messages",
   "messages_campaigns",
   "messages_campaign",
 );
@@ -217,23 +217,23 @@ schema.flows = [
           position_x: 19,
           position_y: 1,
           options: {
-            code: 'module.exports = async function(data) {\n    campaign = data["$trigger"].payload;\n\trecordsToCreate = [];\n    for (i in data["$trigger"].payload.recipients.create) {\n        recipient = data["$trigger"].payload.recipients.create[i]\n        recordsToCreate.push({\n            "messages_campaign": data["$trigger"].key,\n            "recipient": recipient.directus_users_id.id\n        });\n    }\n\treturn {recordsToCreate};\n}',
+            code: 'module.exports = async function(data) {\n    campaign = data["$trigger"].payload;\n\tmessagesToCreate = [];\n    for (i in data["$trigger"].payload.recipients.create) {\n        recipient = data["$trigger"].payload.recipients.create[i]\n        messagesToCreate.push({\n            "messages_campaign": data["$trigger"].key,\n            "recipient": recipient.directus_users_id.id\n        });\n    }\n\treturn {messagesToCreate};\n}',
           },
         },
         first: true,
-        resolve: "messages_store_individual_messages_in_records",
+        resolve: "messages_store_individual_messages_in_messages",
       },
       {
         operation: {
-          name: "messages_store_individual_messages_in_records",
-          key: "messages_store_individual_messages_in_records",
+          name: "messages_store_individual_messages_in_messages",
+          key: "messages_store_individual_messages_in_messages",
           type: "item-create",
           position_x: 37,
           position_y: 1,
           options: {
-            collection: "messages_records",
+            collection: "messages_messages",
             emitEvents: true,
-            payload: "{{$last.recordsToCreate}}",
+            payload: "{{$last.messagesToCreate}}",
           },
         },
       },

@@ -212,16 +212,32 @@ schema.fields = [
   },
 ];
 
-schema.createO2MRelation(
-  "messages_campaigns",
-  "messages_templates",
-  "messages_template",
-);
+for (const coll of ["messages_campaigns", "messages_messages"]) {
+  schema.createO2MRelation(coll, "messages_templates", "messages_template", {
+    field1: {
+      meta: {
+        required: true,
+        display: "related-values",
+        display_options: { template: "{{name}} ({{messages_method}})" },
+        width: "half",
+      },
+    },
+  });
+}
 
 schema.createO2MRelation(
   "messages_messages",
   "messages_campaigns",
   "messages_campaign",
+  {
+    field1: {
+      meta: {
+        display: "related-values",
+        display_options: { template: "{{messages_template.name}}" },
+        width: "half",
+      },
+    },
+  },
 );
 
 schema.createM2MRelation("messages_campaigns", "directus_users", {
@@ -237,15 +253,51 @@ schema.createM2MRelation("messages_campaigns", "directus_users", {
           "directus_users_id.email",
         ],
         layout: "table",
-        display: "related-values",
-        display_options: {
-          template: "{{directus_users_id.email}}",
-        },
       },
+      display: "related-values",
+      display_options: { template: "{{directus_users_id.email}}" },
     },
   },
   field2: true,
 });
+
+const x = {
+  collection: "messages_campaigns",
+  field: "messages_recipients",
+  type: "alias",
+  schema: null,
+  meta: {
+    id: 138,
+    collection: "messages_campaigns",
+    field: "messages_recipients",
+    special: ["m2m"],
+    interface: "list-m2m",
+    options: {
+      enableCreate: false,
+      fields: [
+        "directus_users_id.first_name",
+        "directus_users_id.last_name",
+        "directus_users_id.email",
+      ],
+      layout: "table",
+      display: "related-values",
+      display_options: { template: "{{directus_users_id.email}}" },
+    },
+    display: "related-values",
+    display_options: { template: "{{directus_users_id.email}}" },
+    readonly: false,
+    hidden: false,
+    sort: 7,
+    width: "full",
+    translations: null,
+    note: null,
+    conditions: null,
+    required: false,
+    group: null,
+    validation: null,
+    validation_message: null,
+  },
+};
 
 // @ts-ignore
 const operation = {

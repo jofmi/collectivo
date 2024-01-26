@@ -95,8 +95,15 @@ export class ExtensionSchema {
     CollectionOne: string,
     CollectionMany: string,
     ForeignKey: string,
+    settings?: directusO2MSettings,
   ) => {
-    createO2MRelation(this, CollectionOne, CollectionMany, ForeignKey);
+    createO2MRelation(
+      this,
+      CollectionOne,
+      CollectionMany,
+      ForeignKey,
+      settings,
+    );
   };
 
   apply = async () => {
@@ -274,18 +281,32 @@ function createM2MRelation(
   });
 }
 
+interface directusO2MSettings {
+  field1?: NestedPartial<DirectusField<any>>;
+  // field2?: NestedPartial<DirectusField<any>> | boolean;
+  relation?: NestedPartial<DirectusRelation<any>>;
+}
+
 export async function createO2MRelation(
   schema: ExtensionSchema,
   CollectionOne: string,
   CollectionMany: string,
-  ForeignKey: string,
+  ForeignKey: string, // TODO: Deprecate (can be set in field1)
+  settings?: directusO2MSettings,
 ) {
+  const field1 = settings?.field1 || {};
+
   schema.fields.push({
     collection: CollectionOne,
     field: ForeignKey,
     type: "integer",
     schema: {},
-    meta: { interface: "select-dropdown-m2o", special: ["m2o"] },
+    ...field1,
+    meta: {
+      interface: "select-dropdown-m2o",
+      special: ["m2o"],
+      ...field1?.meta,
+    },
   });
 
   schema.relations.push({

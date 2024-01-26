@@ -41,7 +41,7 @@ export class ExtensionSchema {
   fields: NestedPartial<DirectusField<any>>[];
   relations: NestedPartial<DirectusRelation<any>>[];
   roles: NestedPartial<DirectusRole<any>>[];
-  permissions: NestedPartial<DirectusPermission<any>>[];
+  permissions: Partial<DirectusPermission<any>>[];
   flows: CollectivoFlow[];
   operations: NestedPartial<DirectusOperation<any>>[];
   translations: any[];
@@ -96,12 +96,7 @@ export class ExtensionSchema {
 
   apply = async () => {
     for (const collection of this.collections) {
-      await createOrUpdateDirectusCollection(
-        collection,
-        [],
-        [],
-        this.extension,
-      );
+      await createOrUpdateDirectusCollection(collection, [], []);
     }
 
     for (const field of this.fields) {

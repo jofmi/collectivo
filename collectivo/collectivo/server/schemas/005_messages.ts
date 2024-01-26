@@ -158,6 +158,58 @@ schema.fields = [
       ],
     },
   },
+  {
+    collection: "messages_messages",
+    field: "messages_status",
+    type: "string",
+    meta: {
+      sort: 10,
+      interface: "select-dropdown",
+      display: "labels",
+      display_options: {
+        choices: [
+          {
+            text: "$t:draft",
+            value: "draft",
+            foreground: "#FFFFFF",
+            background: "#666666",
+          },
+          {
+            text: "$t:pending",
+            value: "pending",
+            foreground: "#FFFFFF",
+            background: "#CC6600",
+          },
+          {
+            text: "$t:failed",
+            value: "failed",
+            foreground: "#FFFFFF",
+            background: "#800000",
+          },
+          {
+            text: "$t:sent",
+            value: "sent",
+            foreground: "#FFFFFF",
+            background: "#008000",
+          },
+        ],
+      },
+      width: "half",
+      options: {
+        choices: [
+          { text: "$t:draft", value: "draft" },
+          { text: "$t:pending", value: "pending" },
+          { text: "$t:failed", value: "failed" },
+          { text: "$t:sent", value: "sent" },
+        ],
+      },
+      translations: [
+        { language: "de-DE", translation: "Status" },
+        { language: "en-US", translation: "Status" },
+      ],
+    },
+    schema: { is_nullable: false, default_value: "draft" },
+  },
 ];
 
 schema.createO2MRelation(
@@ -175,7 +227,7 @@ schema.createO2MRelation(
 schema.createM2MRelation("messages_campaigns", "directus_users", {
   m2mFieldType2: "uuid",
   field1: {
-    field: "collectivo_recipients",
+    field: "messages_recipients",
   },
   field2: true,
 });
@@ -220,7 +272,7 @@ schema.flows = [
           position_x: 19,
           position_y: 1,
           options: {
-            code: 'module.exports = async function(data) {\n    campaign = data["$trigger"].payload;\n\tmessagesToCreate = [];\n    for (i in data["$trigger"].payload.collectivo_recipients.create) {\n        recipient = data["$trigger"].payload.collectivo_recipients.create[i]\n        messagesToCreate.push({\n            "messages_campaign": data["$trigger"].key,\n            "recipient": recipient.directus_users_id.id\n        });\n    }\n\treturn {messagesToCreate};\n}',
+            code: 'module.exports = async function(data) {\n    campaign = data["$trigger"].payload;\n\tmessagesToCreate = [];\n    for (i in data["$trigger"].payload.messages_recipients.create) {\n        recipient = data["$trigger"].payload.messages_recipients.create[i]\n        messagesToCreate.push({\n            "messages_campaign": data["$trigger"].key,\n            "recipient": recipient.directus_users_id.id\n        });\n    }\n\treturn {messagesToCreate};\n}',
           },
         },
         first: true,

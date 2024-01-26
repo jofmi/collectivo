@@ -276,8 +276,7 @@ schema.flows = [
         collections: ["messages_campaigns"],
       },
     },
-    // @ts-ignore
-    first_operation: "messages_expaned_campaign_to_messages",
+    firstOperation: "messages_expaned_campaign_to_messages",
     operations: [
       {
         operation: {
@@ -290,7 +289,6 @@ schema.flows = [
             code: 'module.exports = async function(data) {\n    campaign = data["$trigger"].payload;\n\tmessagesToCreate = [];\n    for (i in data["$trigger"].payload.messages_recipients.create) {\n        recipient = data["$trigger"].payload.messages_recipients.create[i]\n        messagesToCreate.push({\n            "messages_campaign": data["$trigger"].key,\n            "recipient": recipient.directus_users_id.id\n        });\n    }\n\treturn {messagesToCreate};\n}',
           },
         },
-        first: true,
         resolve: "messages_store_individual_messages_in_messages",
       },
       {

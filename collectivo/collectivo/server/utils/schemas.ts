@@ -27,13 +27,13 @@ export interface ExtensionDependency {
 
 export interface DirectusOperationWrapper {
   operation: Partial<DirectusOperation<any>>;
-  first?: boolean;
   reject?: string;
   resolve?: string;
 }
 
 export interface DirectusFlowWrapper {
   flow: Partial<DirectusFlow<any>>;
+  firstOperation?: string;
   operations?: DirectusOperationWrapper[];
 }
 

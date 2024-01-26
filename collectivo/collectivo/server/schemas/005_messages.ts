@@ -228,6 +228,17 @@ schema.createM2MRelation("messages_campaigns", "directus_users", {
   m2mFieldType2: "uuid",
   field1: {
     field: "messages_recipients",
+    meta: {
+      options: {
+        enableCreate: false,
+        fields: [
+          "directus_users_id.first_name",
+          "directus_users_id.last_name",
+          "directus_users_id.email",
+        ],
+        layout: "table",
+      },
+    },
   },
   field2: true,
 });

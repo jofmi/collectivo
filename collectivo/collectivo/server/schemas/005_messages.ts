@@ -209,6 +209,7 @@ const flowToExpandCampaignToIndividualMessages = {
   operation: "56cc8889-4ae4-40c6-8417-b2b74c7bac49",
   date_created: "2024-01-07T11:26:02.827Z",
   user_created: "a0cf509f-8dd8-47a5-8bbe-d439e0cafc7b",
+  operations: [
     {
       id: "56cc8889-4ae4-40c6-8417-b2b74c7bac49",
       name: "messages_expaned_campaign_to_messages",

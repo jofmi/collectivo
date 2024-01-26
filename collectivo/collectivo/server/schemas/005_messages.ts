@@ -59,7 +59,7 @@ schema.collections = [
     },
     meta: {
       sort: 90,
-      icon: "inventory_2",
+      icon: "conveyor_belt",
       group: "messages",
       translations: [
         {

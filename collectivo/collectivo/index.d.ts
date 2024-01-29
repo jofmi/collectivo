@@ -31,10 +31,21 @@ declare global {
     collectivo_members: CollectivoMember[] | number[];
   }
 
+  interface CollectivoTileButton {
+    id: number;
+    collectivo_label: string;
+    collectivo_path: string;
+    collectivo_is_external: boolean;
+  }
+
   interface CollectivoTile {
     id: number;
     name: string;
     content: string;
+    status: "published" | "draft" | "archived";
+    sort: number;
+    collectivo_buttons: CollectivoTileButton[];
+    collectivo_color: string;
   }
 
   interface CollectivoExtension {

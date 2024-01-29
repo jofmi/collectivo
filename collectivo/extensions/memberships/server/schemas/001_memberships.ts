@@ -325,23 +325,22 @@ schema.relations = [
   },
 ];
 
-schema.flows = [
-  {
-    name: "memberships_shares_invoices",
-    icon: "receipt",
-    color: null,
-    description: null,
-    status: "active",
-    accountability: "all",
-    trigger: "event",
-    options: {
-      type: "filter",
-      scope: ["items.update", "items.create"],
-      collections: ["memberships"],
-    },
-    collectivoEndpoint: "/api/memberships/create-shares-invoice",
-  },
-];
+// schema.flows = [
+//   {
+//     name: "memberships_shares_invoices",
+//     icon: "receipt",
+//     color: null,
+//     description: null,
+//     status: "active",
+//     accountability: "all",
+//     trigger: "event",
+//     options: {
+//       type: "filter",
+//       scope: ["items.update", "items.create"],
+//       collections: ["memberships"],
+//     },
+//   },
+// ];
 
 schema.permissions = [
   {

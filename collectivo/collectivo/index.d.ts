@@ -177,10 +177,12 @@ declare global {
     | {
         type: "min" | "max" | "email" | "url" | "regex";
         value?: string | number | RegExp;
+        message?: string;
       }
     | {
-        type: "test";
+        type: "test" | "transform";
         value: string;
+        message?: string;
       };
 }
 

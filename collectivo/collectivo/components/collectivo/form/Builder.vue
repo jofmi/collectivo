@@ -11,10 +11,12 @@ import {
 } from "yup";
 import type { FormErrorEvent, FormSubmitEvent } from "#ui/types";
 
-const tests = useCollectivoFormTests();
+const customValidators = useCollectivoValidators();
 const toast = useToast();
 const { t } = useI18n();
 const debug = useRuntimeConfig().public.debug;
+const state: { [key: string]: any } = reactive({});
+let schema = object();
 
 const props = defineProps({
   fields: Object as PropType<CollectivoFormField[]>,
@@ -50,9 +52,6 @@ for (const field of form.fields) {
     });
   }
 }
-
-const state: { [key: string]: any } = reactive({});
-let schema = object();
 
 function addInputToSchema(
   key: string,
@@ -109,8 +108,18 @@ function valString(validators: FormValidator[] | undefined) {
     } else if (validator.type === "regex") {
       schema = schema.matches(validator.value as RegExp);
     } else if (validator.type === "test") {
-      const test = tests.value[validator.value];
-      schema = schema.test(validator.type, test.message, test.test);
+      const test = customValidators.value.tests[validator.value];
+
+      schema = schema.test(
+        validator.type,
+        validator.message ?? test.message ?? "Field is not valid",
+        (value, context) => {
+          return test.test(value, context, state);
+        },
+      );
+    } else if (validator.type === "transform") {
+      const transformer = customValidators.value.transformers[validator.value];
+      schema = schema.transform(transformer);
     }
   }
 

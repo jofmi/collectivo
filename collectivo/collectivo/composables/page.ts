@@ -17,16 +17,26 @@ export const useCollectivoMenus = () =>
     };
   });
 
-interface CollectivoFormTest {
+interface CollectivoValidator {
   message: string;
-  test: ((value, context) => boolean) | ((value, context) => Promise<boolean>);
+  test:
+    | ((value: any, context: any, state: { [key: string]: any }) => boolean)
+    | ((
+        value: any,
+        context: any,
+        state: { [key: string]: any },
+      ) => Promise<boolean>);
 }
 
-interface CollectivoFormTests {
-  [index: string]: CollectivoFormTest;
+interface CollectivoValidators {
+  tests: { [index: string]: CollectivoValidator };
+  transformers: { [index: string]: (value: any, originalValue: any) => any };
 }
 
-export const useCollectivoFormTests = () =>
-  useState<CollectivoFormTests>("collectivoFormTests", () => {
-    return {};
+export const useCollectivoValidators = () =>
+  useState<CollectivoValidators>("collectivoValidators", () => {
+    return {
+      tests: {},
+      transformers: {},
+    };
   });

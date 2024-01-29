@@ -91,18 +91,17 @@ export class ExtensionSchema {
     );
   };
 
-  createO2MRelation = (
-    CollectionOne: string,
-    CollectionMany: string,
-    ForeignKey: string,
+  createForeignKey = (
+    CollectionKey: string,
+    CollectionAlias: string,
     settings?: directusO2MSettings,
   ) => {
-    createO2MRelation(
-      this,
-      CollectionOne,
-      CollectionMany,
-      ForeignKey,
-      settings,
+    createForeignKey(this, CollectionKey, CollectionAlias, settings);
+  };
+
+  createO2MRelation = () => {
+    throw new Error(
+      "schema.createO2MRelation deprecated. pls use createForeignKey",
     );
   };
 
@@ -232,7 +231,7 @@ function createM2MRelation(
   schema.collections.push({
     collection: m2mCollectionName,
     meta: { hidden: true, icon: "import_export" },
-    schema: directusCollectionSchema(),
+    schema: { name: m2mCollectionName },
   });
 
   schema.fields.push({
@@ -282,40 +281,66 @@ function createM2MRelation(
 }
 
 interface directusO2MSettings {
-  field1?: NestedPartial<DirectusField<any>>;
-  // field2?: NestedPartial<DirectusField<any>> | boolean;
+  fieldKey?: NestedPartial<DirectusField<any>>;
+  fieldAlias?: NestedPartial<DirectusField<any>>;
   relation?: NestedPartial<DirectusRelation<any>>;
 }
 
-export async function createO2MRelation(
+// CollectionOne has the Alias Field - Can have many of CollectionAlias
+// CollectionAlias has the Foreign Key - Can have one of CollectionOne
+export async function createForeignKey(
   schema: ExtensionSchema,
-  CollectionOne: string,
-  CollectionMany: string,
-  ForeignKey: string, // TODO: Deprecate (can be set in field1)
+  CollectionKey: string,
+  CollectionAlias: string,
   settings?: directusO2MSettings,
 ) {
-  const field1 = settings?.field1 || {};
+  const fieldKeyName = settings?.fieldKey?.field || CollectionAlias;
+  const fieldKey = settings?.fieldKey || {};
 
   schema.fields.push({
-    collection: CollectionOne,
-    field: ForeignKey,
+    collection: CollectionKey,
+    field: fieldKeyName,
     type: "integer",
     schema: {},
-    ...field1,
+    ...fieldKey,
     meta: {
       interface: "select-dropdown-m2o",
-      special: ["m2o"],
-      ...field1?.meta,
+      ...fieldKey?.meta,
     },
   });
 
-  schema.relations.push({
-    collection: CollectionOne,
-    field: ForeignKey,
-    related_collection: CollectionMany,
-    meta: { sort_field: null },
-    schema: { on_delete: "SET NULL" },
-  });
+  const relation = {
+    collection: CollectionKey,
+    field: fieldKeyName,
+    related_collection: CollectionAlias,
+    ...settings?.relation,
+    meta: {
+      sort_field: null,
+      ...settings?.relation?.meta,
+    },
+    schema: { on_delete: "SET NULL", ...settings?.relation?.schema },
+  };
+
+  if (settings?.fieldAlias) {
+    const fieldAliasName = settings?.fieldAlias?.field || CollectionKey;
+    const fieldAlias = settings?.fieldAlias || {};
+
+    schema.fields.push({
+      collection: CollectionAlias,
+      field: fieldAliasName,
+      type: "alias",
+      ...fieldAlias,
+      meta: {
+        interface: "list-o2m",
+        special: ["o2m"],
+        ...fieldAlias?.meta,
+      },
+    });
+
+    relation.meta.one_field = fieldAliasName;
+  }
+
+  schema.relations.push(relation);
 }
 
 export async function createM2ARelation(

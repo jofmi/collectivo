@@ -1,4 +1,5 @@
 import {
+  createItem,
   createItems,
   createUser,
   deleteItems,
@@ -134,6 +135,13 @@ export default async function examples() {
   const tileNames = ["Tile 1", "Tile 2", "Tile 3", "Tile 4"];
   const tiles = [];
 
+  const tileButton = {
+    collectivo_label: "Example Button",
+    collectivo_path: "/some/path",
+    collectivo_tile: "",
+    status: "published",
+  };
+
   for (const tileName of tileNames) {
     tiles.push({
       name: tileName,
@@ -142,7 +150,17 @@ export default async function examples() {
   }
 
   try {
-    await directus.request(createItems("collectivo_tiles", tiles));
+    const tilesRes = await directus.request(
+      createItems("collectivo_tiles", tiles),
+    );
+
+    for (const tile of tilesRes) {
+      tileButton.collectivo_tile = tile.id;
+
+      await directus.request(
+        createItem("collectivo_tiles_buttons", tileButton),
+      );
+    }
   } catch (error) {
     console.info(error);
   }

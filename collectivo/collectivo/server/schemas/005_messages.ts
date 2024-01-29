@@ -163,8 +163,9 @@ schema.fields = [
 ];
 
 for (const coll of ["messages_campaigns", "messages_messages"]) {
-  schema.createO2MRelation(coll, "messages_templates", "messages_template", {
-    field1: {
+  schema.createForeignKey(coll, "messages_templates", {
+    fieldKey: {
+      field: "messages_template",
       meta: {
         required: true,
         display: "related-values",
@@ -175,19 +176,15 @@ for (const coll of ["messages_campaigns", "messages_messages"]) {
   });
 }
 
-schema.createO2MRelation(
-  "messages_messages",
-  "messages_campaigns",
-  "messages_campaign",
-  {
-    field1: {
-      meta: {
-        display: "raw",
-        width: "half",
-      },
+schema.createForeignKey("messages_messages", "messages_campaigns", {
+  fieldKey: {
+    field: "messages_campaign",
+    meta: {
+      display: "raw",
+      width: "half",
     },
   },
-);
+});
 
 schema.createM2MRelation("messages_campaigns", "directus_users", {
   m2mFieldType2: "uuid",

@@ -173,10 +173,17 @@ declare global {
     // TODO: Add operator?: "==" | "!=" | ">" | "<" | ">=" | "<=";
   }
 
-  interface FormValidator {
-    type: "min" | "max" | "email" | "url" | "regex";
-    value?: string | number | RegExp;
-  }
+  type FormValidator =
+    | {
+        type: "min" | "max" | "email" | "url" | "regex";
+        value?: string | number | RegExp;
+        message?: string;
+      }
+    | {
+        type: "test" | "transform";
+        value: string;
+        message?: string;
+      };
 }
 
 // Types for input of app.config.ts

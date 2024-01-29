@@ -324,6 +324,7 @@ This type can be used to construct directus flows in a schema.
 Attributes:
 
 - `flow: Partial<DirectusFlow<<any>>` - this will define the trigger, see [directus flow](https://docs.directus.io/reference/system/flows.html)
+- `firstOperation: string` - key of the initial operation to be performed
 - `operations: DirectusOperationWrapper[]` - define a list of connected operations
 
 ### `DirectusOperationWrapper`
@@ -333,7 +334,6 @@ This type can be used to define operations within [DirectusFlowWrapper](#directu
 Attributes:
 
 - `operation: Partial<DirectusOperation<<any>>` - see [directus operation](https://docs.directus.io/reference/system/operations.html)
-- `first: boolean` - if true, will be executed first when the flow is triggered
 - `resolve: string` - key of the operation to execute when this one is resolved
 - `reject: string` - key of the operation to execute when this one is rejected
 

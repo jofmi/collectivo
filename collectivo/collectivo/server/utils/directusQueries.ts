@@ -252,14 +252,14 @@ export async function createOrUpdateDirectusFlow(flow: DirectusFlowWrapper) {
   }
 
   // Connect operations to another
+  if (flow.firstOperation) {
+    flow.flow.operation = operationIds[flow.firstOperation];
+    await directus.request(updateFlow(flowId, flow.flow));
+  }
+
   for (const operation of flow.operations ?? []) {
     if (!operation.operation.key) {
       continue;
-    }
-
-    if (operation.first) {
-      flow.flow.operation = operationIds[operation.operation.key];
-      await directus.request(updateFlow(flowId, flow.flow));
     }
 
     if (operation.reject) {

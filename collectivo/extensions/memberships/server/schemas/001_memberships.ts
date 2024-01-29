@@ -407,3 +407,53 @@ schema.relations.push(
     },
   ],
 );
+
+schema.flows.push(
+  ...[
+    {
+      flow: {
+        name: "memberships_create_invoices",
+        icon: "receipt",
+        description: "Creates invoices for membership shares",
+        status: "active",
+        trigger: "event",
+        accountability: "all",
+        options: {
+          type: "action",
+          scope: ["items.create", "items.update"],
+          collections: ["messages_campaigns"],
+        },
+      },
+      firstOperation: "check_if_new_invoice_needed",
+      operations: [
+        {
+          operation: {
+            name: "check_if_new_invoice_needed",
+            key: "check_if_new_invoice_needed",
+            type: "exec",
+            position_x: 19,
+            position_y: 1,
+            options: {
+              code: "",
+            },
+          },
+          resolve: "create_invoice",
+        },
+        {
+          operation: {
+            name: "create_invoice",
+            key: "create_invoice",
+            type: "item-create",
+            position_x: 37,
+            position_y: 1,
+            options: {
+              collection: "payments_invoices_out",
+              emitEvents: true,
+              payload: "{{$last.invoicesToCreate}}",
+            },
+          },
+        },
+      ],
+    },
+  ],
+);

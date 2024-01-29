@@ -89,6 +89,30 @@ schema.fields = [
       },
     },
   },
+  {
+    field: "collectivo_color",
+    type: "string",
+    schema: { default_value: "primary" },
+    meta: {
+      interface: "select-dropdown",
+      special: null,
+      options: {
+        choices: [
+          { text: "$t:primary", value: "primary" },
+          { text: "$t:green", value: "green" },
+          { text: "$t:orange", value: "orange" },
+          { text: "$t:blue", value: "blue" },
+          { text: "$t:pink", value: "pink" },
+          { text: "$t:red", value: "red" },
+        ],
+      },
+      translations: [
+        { language: "en-US", translation: "Color" },
+        { language: "de-DE", translation: "Farbe" },
+      ],
+    },
+    collection: "collectivo_tiles",
+  },
 
   // Button fields
   {

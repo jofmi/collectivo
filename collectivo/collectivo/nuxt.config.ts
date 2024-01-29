@@ -43,6 +43,7 @@ export default defineNuxtConfig({
   ui: {
     global: true,
     icons: ["system-uicons", "mi", "heroicons"],
+    safelistColors: ["primary", "green", "orange", "blue", "pink", "red"],
   },
   googleFonts: {
     download: true,

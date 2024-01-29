@@ -132,7 +132,26 @@ export default async function examples() {
   // Create some tiles
   console.info("Creating tiles");
   await directus.request(deleteItems("collectivo_tiles", { limit: 1000 }));
-  const tileNames = ["Tile 1", "Tile 2", "Tile 3", "Tile 4"];
+
+  const tileData = [
+    {
+      name: "Tile 1",
+      color: "primary",
+    },
+    {
+      name: "Tile 2",
+      color: "green",
+    },
+    {
+      name: "Tile 3",
+      color: "orange",
+    },
+    {
+      name: "Tile 4",
+      color: "blue",
+    },
+  ];
+
   const tiles = [];
 
   const tileButton = {
@@ -142,10 +161,11 @@ export default async function examples() {
     status: "published",
   };
 
-  for (const tileName of tileNames) {
+  for (const td of tileData) {
     tiles.push({
-      name: tileName,
+      name: td.name,
       content: "Hello! I am an example tile!",
+      collectivo_color: td.color,
     });
   }
 

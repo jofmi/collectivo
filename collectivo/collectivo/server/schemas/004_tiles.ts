@@ -195,22 +195,24 @@ schema.createForeignKey("collectivo_tiles_buttons", "collectivo_tiles", {
   },
 });
 
-schema.permissions = [
-  {
-    roleName: "collectivo_user",
-    collection: "collectivo_tiles",
-    action: "read",
-    fields: ["*"],
-    permissions: {},
-    validation: {},
-  },
-];
+for (const collection of ["collectivo_tiles", "collectivo_tiles_buttons"]) {
+  schema.permissions = [
+    {
+      roleName: "collectivo_user",
+      collection: collection,
+      action: "read",
+      fields: ["*"],
+      permissions: {},
+      validation: {},
+    },
+  ];
 
-for (const action of ["read", "update", "create", "delete"]) {
-  schema.permissions.push({
-    collection: "collectivo_tiles",
-    roleName: "collectivo_editor",
-    action: action,
-    fields: ["*"],
-  });
+  for (const action of ["read", "update", "create", "delete"]) {
+    schema.permissions.push({
+      collection: collection,
+      roleName: "collectivo_editor",
+      action: action,
+      fields: ["*"],
+    });
+  }
 }

@@ -225,4 +225,19 @@ for (const action of ["read", "update", "create", "delete"]) {
     fields: editor_fields,
     permissions: { _and: [{ id: { _nnull: true } }] }, // = all users
   });
+
+  // Insights permissions for editors
+  schema.permissions.push({
+    collection: "directus_dashboards",
+    roleName: "collectivo_editor",
+    action: action,
+    fields: ["*"],
+  });
+
+  schema.permissions.push({
+    collection: "directus_panels",
+    roleName: "collectivo_editor",
+    action: action,
+    fields: ["*"],
+  });
 }

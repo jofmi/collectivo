@@ -1,3 +1,43 @@
+import { electronicFormatIBAN, isValidIBAN } from "ibantools";
+
+const europeanIBAN = [
+  "AD",
+  "AT",
+  "BE",
+  "BG",
+  "CH",
+  "CY",
+  "CZ",
+  "DE",
+  "DK",
+  "EE",
+  "ES",
+  "FI",
+  "FR",
+  "GB",
+  "GI",
+  "GR",
+  "HR",
+  "HU",
+  "IE",
+  "IS",
+  "IT",
+  "LI",
+  "LT",
+  "LU",
+  "LV",
+  "MC",
+  "MT",
+  "NL",
+  "NO",
+  "PL",
+  "PT",
+  "RO",
+  "SE",
+  "SI",
+  "SK",
+];
+
 export default defineNuxtPlugin({
   name: "memberships-setup",
   async setup() {
@@ -8,9 +48,15 @@ export default defineNuxtPlugin({
 
     menu.value.public.push(...publicItems);
 
-    tests.value.iban = {
-      message: "Please enter a valid IBAN",
-      test: () => {
+    tests.value.payments_iban_sepa = {
+      message: "IBAN not valid for SEPA",
+      test: (value: string) => {
+        const iban = electronicFormatIBAN(value);
+
+        if (iban && europeanIBAN.includes(iban.substring(0, 2))) {
+          return isValidIBAN(iban || "");
+        }
+
         return false;
       },
     };
@@ -42,7 +88,7 @@ export default defineNuxtPlugin({
         key: "payments_account_iban",
         type: "text",
         required: true,
-        validators: [{ type: "test", value: "iban" }],
+        validators: [{ type: "test", value: "payments_iban_sepa" }],
         order: 720,
       },
       {

@@ -19,7 +19,9 @@ export const useCollectivoMenus = () =>
 
 interface CollectivoFormTest {
   message: string;
-  test: (() => boolean) | (() => Promise<boolean>);
+  test:
+    | ((value: string, context: any) => boolean)
+    | ((value: string, context: any) => Promise<boolean>);
 }
 
 interface CollectivoFormTests {

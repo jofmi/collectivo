@@ -11,6 +11,7 @@ import {
 } from "yup";
 import type { FormErrorEvent, FormSubmitEvent } from "#ui/types";
 
+const tests = useCollectivoFormTests();
 const toast = useToast();
 const { t } = useI18n();
 const debug = useRuntimeConfig().public.debug;
@@ -107,6 +108,9 @@ function valString(validators: FormValidator[] | undefined) {
       schema = schema.url();
     } else if (validator.type === "regex") {
       schema = schema.matches(validator.value as RegExp);
+    } else if (validator.type === "test") {
+      const test = tests.value[validator.value];
+      schema = schema.test(validator.type, test.message, test.test);
     }
   }
 

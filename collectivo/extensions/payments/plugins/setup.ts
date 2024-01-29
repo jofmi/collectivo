@@ -3,10 +3,17 @@ export default defineNuxtPlugin({
   async setup() {
     const menu = useCollectivoMenus();
     const user = useCollectivoUser();
-
+    const tests = useCollectivoFormTests();
     const publicItems: CollectivoMenuItem[] = [];
 
     menu.value.public.push(...publicItems);
+
+    tests.value.iban = {
+      message: "Please enter a valid IBAN",
+      test: () => {
+        return false;
+      },
+    };
 
     const profileInputs: CollectivoFormField[] = [
       {
@@ -34,6 +41,8 @@ export default defineNuxtPlugin({
         label: "Bank account IBAN",
         key: "payments_account_iban",
         type: "text",
+        required: true,
+        validators: [{ type: "test", value: "iban" }],
         order: 720,
       },
       {

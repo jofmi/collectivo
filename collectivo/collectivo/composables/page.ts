@@ -16,3 +16,17 @@ export const useCollectivoMenus = () =>
       public: [],
     };
   });
+
+interface CollectivoFormTest {
+  message: string;
+  test: (() => boolean) | (() => Promise<boolean>);
+}
+
+interface CollectivoFormTests {
+  [index: string]: CollectivoFormTest;
+}
+
+export const useCollectivoFormTests = () =>
+  useState<CollectivoFormTests>("collectivoFormTests", () => {
+    return {};
+  });

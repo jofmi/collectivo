@@ -95,8 +95,23 @@ schema.collections = [
 ];
 
 schema.fields = [
+  // Payments items
   ...directusSystemFields("payments_items"),
   directusNameField("payments_items"),
+  {
+    collection: "payments_items",
+    field: "payments_price",
+    type: "integer",
+    meta: {
+      interface: "input",
+      required: true,
+      width: "half",
+      translations: [
+        { language: "de-DE", translation: "Preis" },
+        { language: "en-US", translation: "Price" },
+      ],
+    },
+  },
 
   // Invoices out
   ...directusSystemFields("payments_invoices_out"),

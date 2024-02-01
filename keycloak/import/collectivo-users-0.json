@@ -1,0 +1,111 @@
+{
+  "realm" : "collectivo",
+  "users" : [ {
+    "id" : "49bfa679-4393-4f51-b372-c12cc40ed085",
+    "createdTimestamp" : 1697096551946,
+    "username" : "admin@example.com",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : true,
+    "firstName" : "Admin",
+    "lastName" : "Example",
+    "email" : "admin@example.com",
+    "credentials" : [ {
+      "id" : "c082252b-8bb2-4882-93d6-911c6cf5320e",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1697096569039,
+      "secretData" : "{\"value\":\"zkatZx0E/bGR33MCsgo+ZjyFbaR9on8p1yxuDtwsMLM=\",\"salt\":\"OODcXFn3qUvbSYfrqiDe3g==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-collectivo" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "7c18a9d7-e508-41ef-8c15-191562fc6291",
+    "createdTimestamp" : 1700059405993,
+    "username" : "editor@example.com",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : true,
+    "firstName" : "Editor",
+    "lastName" : "Example",
+    "email" : "editor@example.com",
+    "credentials" : [ {
+      "id" : "7dc97ef7-08e5-40fb-a341-7536e36f2f00",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1700059417104,
+      "secretData" : "{\"value\":\"HT2OBSqKBz+GbrEypScJHlEZAVmIcjLy5hEyDhj81yk=\",\"salt\":\"1LNj+oXZOId69zHb/hIxxA==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-collectivo" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "beaf498c-a994-44ff-b4cb-cbf0710ca0d0",
+    "createdTimestamp" : 1703688693500,
+    "username" : "service-account-admin-cli",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "serviceAccountClientId" : "admin-cli",
+    "credentials" : [ ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "offline_access", "uma_authorization", "default-roles-collectivo" ],
+    "clientRoles" : {
+      "realm-management" : [ "view-realm", "manage-events", "manage-authorization", "query-clients", "view-users", "realm-admin", "view-events", "manage-realm", "create-client", "view-clients", "view-authorization", "view-identity-providers", "manage-identity-providers", "impersonation", "query-groups", "query-users", "manage-users", "manage-clients", "query-realms" ],
+      "broker" : [ "read-token" ],
+      "account" : [ "view-profile", "manage-account", "delete-account", "manage-consent", "view-applications", "view-groups", "view-consent", "manage-account-links" ]
+    },
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "f4ebccb6-2a55-459a-8e06-eb36ac049b04",
+    "createdTimestamp" : 1706698427649,
+    "username" : "service-account-directus",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "serviceAccountClientId" : "directus",
+    "credentials" : [ ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "uma_authorization", "default-roles-collectivo" ],
+    "clientRoles" : {
+      "realm-management" : [ "view-users", "query-groups", "query-users", "manage-users", "manage-realm" ],
+      "directus" : [ "uma_protection" ],
+      "account" : [ "view-groups" ]
+    },
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "1f0042d1-9a1b-4b41-b39e-4d135e60856c",
+    "createdTimestamp" : 1697096484471,
+    "username" : "user@example.com",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : true,
+    "firstName" : "User",
+    "lastName" : "Example",
+    "email" : "user@example.com",
+    "credentials" : [ {
+      "id" : "5b597453-edf7-42f6-b425-9cef425d41c2",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1697096532500,
+      "secretData" : "{\"value\":\"fgGniieuvQiWTebHCsbK1teYLljLdAkxqC342JoypVk=\",\"salt\":\"CsW3KFF8XZ9eW5KV0+W/QQ==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-collectivo" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  } ]
+}

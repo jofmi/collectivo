@@ -1,23 +1,57 @@
 {
   "realm" : "collectivo",
   "users" : [ {
-    "id" : "49bfa679-4393-4f51-b372-c12cc40ed085",
-    "createdTimestamp" : 1697096551946,
-    "username" : "admin@example.com",
+    "id" : "6ac63c7a-1990-4a3f-86dc-b11a86c955e0",
+    "createdTimestamp" : 1706780366509,
+    "username" : "aa@abs.de",
     "enabled" : true,
     "totp" : false,
-    "emailVerified" : true,
-    "firstName" : "Admin",
-    "lastName" : "Example",
-    "email" : "admin@example.com",
-    "credentials" : [ {
-      "id" : "c082252b-8bb2-4882-93d6-911c6cf5320e",
-      "type" : "password",
-      "userLabel" : "My password",
-      "createdDate" : 1697096569039,
-      "secretData" : "{\"value\":\"zkatZx0E/bGR33MCsgo+ZjyFbaR9on8p1yxuDtwsMLM=\",\"salt\":\"OODcXFn3qUvbSYfrqiDe3g==\",\"additionalParameters\":{}}",
-      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
-    } ],
+    "emailVerified" : false,
+    "firstName" : "a",
+    "lastName" : "a",
+    "email" : "aa@abs.de",
+    "attributes" : {
+      "directus_uuid" : [ "9eb761dd-3a62-4183-814c-365889a144c3" ]
+    },
+    "credentials" : [ ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-collectivo" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "62fa1f16-b186-4ec1-bee8-dedc1cca0c7b",
+    "createdTimestamp" : 1706780429939,
+    "username" : "as@as.at",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "firstName" : "as",
+    "lastName" : "as",
+    "email" : "as@as.at",
+    "attributes" : {
+      "directus_uuid" : [ "aedac03b-56ca-49da-8de6-829074d5f600" ]
+    },
+    "credentials" : [ ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-collectivo" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "a939efad-2f67-44bd-9c55-b82e83d88fb7",
+    "createdTimestamp" : 1706780658444,
+    "username" : "as@as.cc",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "firstName" : "as",
+    "lastName" : "as",
+    "email" : "as@as.cc",
+    "attributes" : {
+      "directus_uuid" : [ "4053ddb0-3762-4be8-89f6-7dada713288e" ]
+    },
+    "credentials" : [ ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
     "realmRoles" : [ "default-roles-collectivo" ],
@@ -78,9 +112,10 @@
     "requiredActions" : [ ],
     "realmRoles" : [ "uma_authorization", "default-roles-collectivo" ],
     "clientRoles" : {
-      "realm-management" : [ "view-users", "query-groups", "query-users", "manage-users", "manage-realm" ],
+      "realm-management" : [ "view-authorization", "view-identity-providers", "manage-identity-providers", "view-users", "query-groups", "query-users", "manage-users" ],
+      "broker" : [ "read-token" ],
       "directus" : [ "uma_protection" ],
-      "account" : [ "view-groups" ]
+      "account" : [ "view-profile", "view-applications", "manage-account", "delete-account", "view-groups", "view-consent", "manage-account-links", "manage-consent" ]
     },
     "notBefore" : 0,
     "groups" : [ ]

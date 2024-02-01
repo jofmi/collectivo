@@ -342,7 +342,15 @@
       } ]
     }
   },
-  "groups" : [ ],
+  "groups" : [ {
+    "id" : "f2517225-34df-4c09-9cfa-3946e28a4271",
+    "name" : "collectivo_admin",
+    "path" : "/collectivo_admin",
+    "subGroups" : [ ],
+    "attributes" : { },
+    "realmRoles" : [ ],
+    "clientRoles" : { }
+  } ],
   "defaultRole" : {
     "id" : "69c34d3e-72a4-41bf-acb1-bff2c8a85465",
     "name" : "default-roles-collectivo",
@@ -603,7 +611,7 @@
         "jsonType.label" : "String"
       }
     } ],
-    "defaultClientScopes" : [ "web-origins", "acr", "profile", "roles", "email" ],
+    "defaultClientScopes" : [ "web-origins", "directus_uuid", "acr", "profile", "roles", "email" ],
     "optionalClientScopes" : [ "address", "phone", "offline_access", "microprofile-jwt" ],
     "authorizationSettings" : {
       "allowRemoteResourceManagement" : true,
@@ -1198,6 +1206,33 @@
         "claim.name" : "realm_access.roles",
         "jsonType.label" : "String",
         "multivalued" : "true"
+      }
+    } ]
+  }, {
+    "id" : "c3a74f7c-c133-4e9c-99eb-9ca450f82e08",
+    "name" : "directus_uuid",
+    "description" : "",
+    "protocol" : "openid-connect",
+    "attributes" : {
+      "include.in.token.scope" : "true",
+      "display.on.consent.screen" : "true",
+      "gui.order" : "",
+      "consent.screen.text" : ""
+    },
+    "protocolMappers" : [ {
+      "id" : "c22c7129-c42a-4d5e-b2a5-829a9ada6403",
+      "name" : "directus_uuid",
+      "protocol" : "openid-connect",
+      "protocolMapper" : "oidc-usermodel-attribute-mapper",
+      "consentRequired" : false,
+      "config" : {
+        "introspection.token.claim" : "true",
+        "userinfo.token.claim" : "true",
+        "user.attribute" : "directus_uuid",
+        "id.token.claim" : "true",
+        "access.token.claim" : "true",
+        "claim.name" : "directus_uuid",
+        "jsonType.label" : "String"
       }
     } ]
   }, {

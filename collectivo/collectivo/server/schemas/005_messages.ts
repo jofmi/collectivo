@@ -395,6 +395,7 @@ function messageStatusField(collection: string) {
     type: "string",
     meta: {
       sort: 10,
+      required: true,
       interface: "select-dropdown",
       display: "labels",
       display_options: {

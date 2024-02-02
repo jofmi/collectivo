@@ -105,6 +105,7 @@ schema.fields = [
     collection: "payments_items",
     field: "payments_price",
     type: "integer",
+    schema: { default_value: 0, is_nullable: false },
     meta: {
       interface: "input",
       required: true,
@@ -119,6 +120,7 @@ schema.fields = [
     collection: "payments_items",
     field: "payments_archived",
     type: "boolean",
+    schema: { default_value: false, is_nullable: false },
     meta: {
       width: "half",
       translations: [

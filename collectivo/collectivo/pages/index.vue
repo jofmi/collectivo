@@ -4,6 +4,7 @@ definePageMeta({
 });
 
 setCollectivoTitle("Dashboard");
+
 import { parse } from "marked";
 
 const tiles = useCollectivoTiles();

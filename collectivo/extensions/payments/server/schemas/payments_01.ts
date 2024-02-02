@@ -19,8 +19,11 @@ schema.collections = [
     },
     meta: {
       group: "payments",
+      archive_field: "payments_archived",
+      archive_value: "true",
+      unarchive_value: "false",
       sort: 100,
-      icon: "bubble_chart",
+      icon: "category",
       translations: [
         {
           language: "en-US",
@@ -109,6 +112,18 @@ schema.fields = [
       translations: [
         { language: "de-DE", translation: "Preis" },
         { language: "en-US", translation: "Price" },
+      ],
+    },
+  },
+  {
+    collection: "payments_items",
+    field: "payments_archived",
+    type: "boolean",
+    meta: {
+      width: "half",
+      translations: [
+        { language: "de-DE", translation: "Archiviert" },
+        { language: "en-US", translation: "Archived" },
       ],
     },
   },
@@ -224,6 +239,7 @@ schema.fields = [
     meta: {
       interface: "datetime",
       width: "half",
+      special: ["date-created"],
       translations: [
         { language: "de-DE", translation: "Datum Ausgestellt" },
         { language: "en-US", translation: "Date Issued" },

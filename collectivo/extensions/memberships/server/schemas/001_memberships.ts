@@ -320,7 +320,103 @@ schema.relations.push(
   ],
 );
 
-// # Flows
+// ----------------------------------------------------------------------------
+// Flows ----------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+
+const x = {
+  path: "/trigger/0482fe3b-72b8-40f1-b188-3e0e5574bcfa",
+  query: {},
+  body: {
+    template: { key: 1, collection: "messages_templates" },
+    collection: "memberships",
+    keys: [13, 14, 15, 16, 17, 18],
+  },
+};
+
+const fl = {
+  operations: { create: [], update: [], delete: [] },
+  operation: {
+    id: "c57a48ea-d401-46b5-a150-d254aca17454",
+    flow: "0482fe3b-72b8-40f1-b188-3e0e5574bcfa",
+    name: "readMemberships",
+    key: "readMemberships",
+    type: "item-read",
+    options: {
+      collection: "memberships",
+      query: {
+        fields: ["memberships_user"],
+        filter: { id: { _in: "{{$trigger.body.keys}}" } },
+      },
+    },
+    resolve: {
+      id: "ee5381af-b084-41d9-ac35-90536e690f65",
+      flow: "0482fe3b-72b8-40f1-b188-3e0e5574bcfa",
+      resolve: {
+        flow: "0482fe3b-72b8-40f1-b188-3e0e5574bcfa",
+        position_x: 17,
+        position_y: 17,
+        name: "prepareRecipients",
+        key: "prepareRecipients",
+        type: "exec",
+        options: {
+          code: 'module.exports = async function(data) {\n\tconst recipients = []\n    for (r in data["readMemberships"]) {\n    \trecipients.push(r.memberships_user)\n    }\n\treturn { recipients };\n}',
+        },
+        resolve: {
+          flow: "0482fe3b-72b8-40f1-b188-3e0e5574bcfa",
+          position_x: 35,
+          position_y: 17,
+          name: "createCampaign",
+          key: "createCampaign",
+          type: "item-create",
+          options: {
+            collection: "messages_campaigns",
+            permissions: "$full",
+            emitEvents: true,
+            payload: {
+              messages_recipients: "{{prepareRecipients.recipients}}",
+              messages_template: "{{$trigger.body.template.key}}",
+              messages_status: "pending",
+            },
+          },
+        },
+      },
+      position_x: 1,
+      position_y: 17,
+    },
+  },
+};
+
+schema.flows.push({
+  flow: {
+    name: "memberships_messages",
+    icon: "conveyor_belt",
+    status: "active",
+    accountability: "all",
+    trigger: "manual",
+    options: {
+      collections: ["memberships"],
+      requireConfirmation: true,
+      fields: [
+        {
+          field: "template",
+          name: "Template",
+          type: "json",
+          meta: {
+            interface: "collection-item-dropdown",
+            options: {
+              selectedCollection: "messages_templates",
+              template: "{{name}}",
+            },
+          },
+          required: true,
+        },
+      ],
+      confirmationDescription: "Please choose a template",
+    },
+  },
+});
+
 schema.flows.push({
   flow: {
     name: "memberships_create_invoice_for_shares",

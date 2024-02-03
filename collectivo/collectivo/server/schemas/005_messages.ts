@@ -344,8 +344,9 @@ schema.flows = [
           },
         },
         resolve: "read_recipient_data",
-        reject: "",
+        reject: "set_message_status_failed_read_template_data_failure",
       },
+      setMessageStatusToFailedOperation("set_message_status_failed_read_template_data_failure", 55),
       {
         operation: {
           name: "Read recipient data",
@@ -362,8 +363,9 @@ schema.flows = [
           },
         },
         resolve: "render_message",
-        reject: "",
+        reject: "set_message_status_failed_read_recipient_data_failure",
       },
+      setMessageStatusToFailedOperation("set_message_status_failed_read_recipient_data_failure", 73),
       {
         operation: {
           name: "Render message",
@@ -376,8 +378,9 @@ schema.flows = [
           },
         },
         resolve: "send_email",
-        reject: "",
+        reject: "set_message_status_failed_render_message_failure",
       },
+      setMessageStatusToFailedOperation("set_message_status_failed_render_message_failure", 91),
       {
         operation: {
           name: "Send email",
@@ -392,8 +395,9 @@ schema.flows = [
           },
         },
         resolve: "set_message_status_to_sent",
-        reject: "",
+        reject: "set_message_status_failed_send_email_failure",
       },
+      setMessageStatusToFailedOperation("set_message_status_failed_send_email_failure", 109),
       {
         operation: {
           name: "Set message status to sent",
@@ -471,4 +475,26 @@ function messageStatusField(collection: string) {
     },
     schema: { is_nullable: false, default_value: "draft" },
   };
+}
+
+function setMessageStatusToFailedOperation(operationKey: string, position_x: number) {
+  return {
+    operation: {
+      name: "Set message status to failed",
+      key: operationKey,
+      type: "item-update",
+      position_x: position_x,
+      position_y: 17,
+      options: {
+        collection: "messages_messages",
+        emitEvents: true,
+        key: "{{$trigger.key}}",
+        payload: {
+          messages_status: "failed",
+        },
+      },
+    },
+    resolve: "",
+    reject: "",
+  }
 }

@@ -321,24 +321,8 @@ schema.flows = [
         collections: ["messages_messages"],
       },
     },
-    firstOperation: "read_campaign_data",
+    firstOperation: "read_template_data",
     operations: [
-      {
-        operation: {
-          name: "Read campaign data",
-          key: "read_campaign_data",
-          type: "item-read",
-          position_x: 19,
-          position_y: 1,
-          options: {
-            collection: "messages_campaigns",
-            key: "{{$trigger.payload.messages_campaign}}",
-            query: null,
-          },
-        },
-        resolve: "read_template_data",
-        reject: "",
-      },
       {
         operation: {
           name: "Read template data",
@@ -348,7 +332,7 @@ schema.flows = [
           position_y: 1,
           options: {
             collection: "messages_templates",
-            key: "{{read_campaign_data.messages_template}}",
+            key: "{{$trigger.payload.messages_template}}",
           },
         },
         resolve: "read_recipient_data",
@@ -461,3 +445,4 @@ function messageStatusField(collection: string) {
     schema: { is_nullable: false, default_value: "draft" },
   };
 }
+

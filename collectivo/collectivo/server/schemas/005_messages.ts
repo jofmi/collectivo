@@ -186,6 +186,22 @@ schema.createForeignKey("messages_messages", "messages_campaigns", {
   },
 });
 
+schema.createForeignKey("messages_messages", "directus_users", {
+  m2oFieldType: "uuid",
+  fieldKey: {
+    field: "messages_recipient",
+    meta: {
+      required: true,
+      options: {
+        enableCreate: false,
+        template: "{{first_name}} {{last_name}} ({{email}})))",
+      },
+      display: "related-values",
+      display_options: { template: "{{first_name}} {{last_name}} ({{email}})" },
+    },
+  },
+});
+
 schema.createM2MRelation("messages_campaigns", "directus_users", {
   m2mFieldType2: "uuid",
   field1: {
@@ -201,7 +217,10 @@ schema.createM2MRelation("messages_campaigns", "directus_users", {
         layout: "table",
       },
       display: "related-values",
-      display_options: { template: "{{directus_users_id.email}}" },
+      display_options: {
+        template:
+          "{{directus_users_id.first_name}} {{directus_users_id.last_name}} ({{directus_users_id.email}})",
+      },
     },
   },
   field2: true,
@@ -267,7 +286,7 @@ schema.flows = [
           position_x: 19,
           position_y: 1,
           options: {
-            code: 'module.exports = async function(data) {\n    campaign = data["$trigger"].payload;\n\tmessagesToCreate = [];\n    for (i in data["$trigger"].payload.messages_recipients.create) {\n        recipient = data["$trigger"].payload.messages_recipients.create[i]\n        messagesToCreate.push({\n            "messages_campaign": data["$trigger"].key,\n            "recipient": recipient.directus_users_id.id,\n            "messages_status": "pending"\n        });\n    }\n\treturn {messagesToCreate};\n}',
+            code: 'module.exports = async function(data) {\n    campaign = data["$trigger"].payload;\n\tmessagesToCreate = [];\n    for (i in data["$trigger"].payload.messages_recipients.create) {\n        recipient = data["$trigger"].payload.messages_recipients.create[i]\n        messagesToCreate.push({\n            "messages_campaign": data["$trigger"].key,\n            "messages_recipient": recipient.directus_users_id.id,\n            "messages_status": "pending",\n            "messages_template": data["$trigger"].payload.messages_template\n        });\n    }\n\treturn {messagesToCreate};\n}',
           },
         },
         resolve: "messages_store_individual_messages_in_messages",
@@ -348,7 +367,7 @@ schema.flows = [
               fields: ["first_name", "last_name", "email"],
             },
             collection: "directus_users",
-            key: "{{$trigger.payload.recipient}}",
+            key: "{{$trigger.payload.messages_recipient}}",
           },
         },
         resolve: "render_message",

@@ -162,20 +162,6 @@ schema.fields = [
   },
 ];
 
-for (const coll of ["messages_campaigns", "messages_messages"]) {
-  schema.createForeignKey(coll, "messages_templates", {
-    fieldKey: {
-      field: "messages_template",
-      meta: {
-        required: true,
-        display: "related-values",
-        display_options: { template: "{{name}} ({{messages_method}})" },
-        width: "half",
-      },
-    },
-  });
-}
-
 schema.createForeignKey("messages_messages", "messages_campaigns", {
   fieldKey: {
     field: "messages_campaign",
@@ -185,6 +171,19 @@ schema.createForeignKey("messages_messages", "messages_campaigns", {
     },
   },
 });
+
+for (const coll of ["messages_campaigns", "messages_messages"]) {
+  schema.createForeignKey(coll, "messages_templates", {
+    fieldKey: {
+      field: "messages_template",
+      meta: {
+        required: true,
+        display: "related-values",
+        display_options: { template: "{{name}} ({{messages_method}})" },
+      },
+    },
+  });
+}
 
 schema.createForeignKey("messages_messages", "directus_users", {
   m2oFieldType: "uuid",

@@ -321,8 +321,30 @@ schema.flows = [
         collections: ["messages_messages"],
       },
     },
-    firstOperation: "read_template_data",
+    firstOperation: "check_message_status_is_pending",
     operations: [
+      {
+        operation: {
+          name: "Check message status is pending",
+          key: "check_message_status_is_pending",
+          type: "condition",
+          position_x: 19,
+          position_y: 1,
+          options: {
+            filter: {
+              $trigger: {
+                payload: {
+                  messages_status: {
+                    _eq: "pending",
+                  },
+                },
+              },
+            },
+          },
+        },
+        resolve: "read_template_data",
+        reject: "",
+      },
       {
         operation: {
           name: "Read template data",
@@ -381,6 +403,25 @@ schema.flows = [
             subject: "{{read_template_data.messages_subject}}",
             body: "{{render_message.rendered_message}}",
             to: "{{read_recipient_data.email}}",
+          },
+        },
+        resolve: "set_message_status_to_sent",
+        reject: "",
+      },
+      {
+        operation: {
+          name: "Set message status to sent",
+          key: "set_message_status_to_sent",
+          type: "item-update",
+          position_x: 109,
+          position_y: 1,
+          options: {
+            collection: "messages_messages",
+            emitEvents: true,
+            key: "{{$trigger.key}}",
+            payload: {
+              messages_status: "sent",
+            },
           },
         },
         resolve: "",
@@ -445,4 +486,3 @@ function messageStatusField(collection: string) {
     schema: { is_nullable: false, default_value: "draft" },
   };
 }
-

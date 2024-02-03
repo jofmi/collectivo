@@ -225,20 +225,6 @@ schema.createM2MRelation("messages_campaigns", "directus_users", {
   field2: true,
 });
 
-// @ts-ignore
-const operation = {
-  id: "???",
-  flow: "???",
-  name: "Send email",
-  key: "send_email",
-  type: "mail",
-  options: {
-    body: "{{ template.messages_content }}",
-    subject: "{{ template.messages_subject }}",
-    to: ["{{ recipient.email }}"],
-  },
-};
-
 schema.flows = [
   {
     flow: {

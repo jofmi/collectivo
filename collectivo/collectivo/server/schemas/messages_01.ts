@@ -111,7 +111,6 @@ schema.fields = [
   ...directusSystemFields("messages_messages"),
   ...directusSystemFields("messages_templates"),
   messageStatusField("messages_messages"),
-  messageStatusField("messages_campaigns"),
   {
     collection: "messages_templates",
     field: "messages_name",
@@ -122,6 +121,7 @@ schema.fields = [
     },
     meta: {
       sort: 1,
+      width: "half",
       required: true,
       translations: [
         { language: "en-US", translation: "Name" },
@@ -462,12 +462,6 @@ function messageStatusField(collection: string) {
       display_options: {
         choices: [
           {
-            text: "$t:draft",
-            value: "draft",
-            foreground: "#FFFFFF",
-            background: "#666666",
-          },
-          {
             text: "$t:pending",
             value: "pending",
             foreground: "#FFFFFF",
@@ -490,7 +484,6 @@ function messageStatusField(collection: string) {
       width: "half",
       options: {
         choices: [
-          { text: "$t:draft", value: "draft" },
           { text: "$t:pending", value: "pending" },
           { text: "$t:failed", value: "failed" },
           { text: "$t:sent", value: "sent" },
@@ -501,7 +494,7 @@ function messageStatusField(collection: string) {
         { language: "en-US", translation: "Status" },
       ],
     },
-    schema: { is_nullable: false, default_value: "draft" },
+    schema: { is_nullable: false, default_value: "pending" },
   };
 }
 

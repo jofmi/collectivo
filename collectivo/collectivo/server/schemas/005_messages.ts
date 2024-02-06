@@ -491,14 +491,14 @@ function messageStatusField(collection: string) {
 
 function setMessageStatusToFailedOperation(
   operationKey: string,
-  position_x: number,
+  positionX: number,
 ) {
   return {
     operation: {
       name: "Set message status to failed",
       key: operationKey,
       type: "item-update",
-      position_x: position_x,
+      position_x: positionX,
       position_y: 17,
       options: {
         collection: "messages_messages",
@@ -513,4 +513,3 @@ function setMessageStatusToFailedOperation(
     reject: "",
   };
 }
-

@@ -34,12 +34,27 @@ schema.collections = [
 ];
 
 schema.fields = [
-  directusNameField(collection),
-  directusStatusField(collection),
   ...directusSystemFields(collection),
   {
     collection: collection,
-    field: "description",
+    field: "tags_name",
+    type: "string",
+    schema: {
+      is_nullable: false,
+      is_unique: true,
+    },
+    meta: {
+      sort: 1,
+      required: true,
+      translations: [
+        { language: "en-US", translation: "Name" },
+        { language: "de-DE", translation: "Name" },
+      ],
+    },
+  },
+  {
+    collection: collection,
+    field: "tags_description",
     type: "text",
     schema: {},
     meta: { interface: "input-multiline", sort: 20 },
@@ -60,7 +75,7 @@ schema.fields = [
 schema.createM2MRelation("collectivo_tags", "directus_users", {
   m2mFieldType2: "uuid",
   field1: {
-    field: "directus_users",
+    field: "tags_users",
     type: "alias",
     meta: {
       special: ["m2m"],

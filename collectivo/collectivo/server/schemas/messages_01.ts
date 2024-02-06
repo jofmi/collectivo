@@ -110,9 +110,25 @@ schema.fields = [
   ...directusSystemFields("messages_campaigns"),
   ...directusSystemFields("messages_messages"),
   ...directusSystemFields("messages_templates"),
-  directusNameField("messages_templates", { width: "half" }),
   messageStatusField("messages_messages"),
   messageStatusField("messages_campaigns"),
+  {
+    collection: "messages_templates",
+    field: "messages_name",
+    type: "string",
+    schema: {
+      is_nullable: false,
+      is_unique: true,
+    },
+    meta: {
+      sort: 1,
+      required: true,
+      translations: [
+        { language: "en-US", translation: "Name" },
+        { language: "de-DE", translation: "Name" },
+      ],
+    },
+  },
   {
     collection: "messages_templates",
     field: "messages_method",

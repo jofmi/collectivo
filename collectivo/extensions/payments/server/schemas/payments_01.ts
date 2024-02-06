@@ -100,7 +100,23 @@ schema.collections = [
 schema.fields = [
   // Payments items
   ...directusSystemFields("payments_items"),
-  directusNameField("payments_items"),
+  {
+    collection: "payments_items",
+    field: "payments_name",
+    type: "string",
+    schema: {
+      is_nullable: false,
+      is_unique: true,
+    },
+    meta: {
+      sort: 1,
+      required: true,
+      translations: [
+        { language: "en-US", translation: "Name" },
+        { language: "de-DE", translation: "Name" },
+      ],
+    },
+  },
   {
     collection: "payments_items",
     field: "payments_price",
@@ -148,7 +164,7 @@ schema.fields = [
       display: "related-values",
       display_options: {
         template:
-          "{{payments_item.name}}: {{payments_quantity}}*{{payments_price}}",
+          "{{payments_item.payments_name}}: {{payments_quantity}}*{{payments_price}}",
       },
       translations: [
         { language: "de-DE", translation: "Posten" },

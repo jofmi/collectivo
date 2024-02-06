@@ -10,12 +10,14 @@ export default async function examples() {
 
   await directus.request(
     deleteItems("payments_invoices_out", {
-      filter: { payments_entries: { payments_item: { name: "Shares" } } },
+      filter: {
+        payments_entries: { payments_item: { payments_name: "Shares" } },
+      },
     }),
   );
 
   await directus.request(
-    deleteItems("payments_items", { filter: { name: "Shares" } }),
+    deleteItems("payments_items", { filter: { payments_name: "Shares" } }),
   );
 
   await directus.request(deleteItems("memberships_types", { limit: 1000 }));
@@ -25,7 +27,7 @@ export default async function examples() {
 
   const sharesItem = await directus.request(
     createItem("payments_items", {
-      name: "Shares",
+      payments_name: "Shares",
       payments_price: 100,
     }),
   );
@@ -38,7 +40,7 @@ export default async function examples() {
   for (const type of types) {
     const type_response = await directus.request(
       createItem("memberships_types", {
-        name: type[0],
+        memberships_name: type[0],
         memberships_shares_item: sharesItem.id,
       }),
     );

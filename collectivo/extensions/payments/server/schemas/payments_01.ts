@@ -164,7 +164,7 @@ schema.fields = [
       display: "related-values",
       display_options: {
         template:
-          "{{payments_item.name}}: {{payments_quantity}}*{{payments_price}}",
+          "{{payments_item.payments_name}}: {{payments_quantity}}*{{payments_price}}",
       },
       translations: [
         { language: "de-DE", translation: "Posten" },

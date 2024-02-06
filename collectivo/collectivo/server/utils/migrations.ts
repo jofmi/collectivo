@@ -249,8 +249,9 @@ async function runMigrations(ext: ExtensionConfig, extsDb: any[], to?: string) {
 
         await directus.request(
           updateItem("collectivo_extensions", extensionDb.id, {
-            schema_version: ext.schemas[migrationStateIndex].version,
-            schema_is_latest: migrationStateIndex === ext.schemas.length - 1,
+            extensions_schema_version: ext.schemas[migrationStateIndex].version,
+            extensions_schema_is_latest:
+              migrationStateIndex === ext.schemas.length - 1,
           }),
         );
       } catch (e) {

@@ -9,7 +9,7 @@ schema.collections = [
     meta: {
       icon: "dashboard",
       sort: 520,
-      archive_field: "status",
+      archive_field: "tiles_status",
       archive_value: "archived",
       sort_field: "sort",
       unarchive_value: "published",

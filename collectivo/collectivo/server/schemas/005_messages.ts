@@ -346,7 +346,10 @@ schema.flows = [
         resolve: "read_recipient_data",
         reject: "set_message_status_failed_read_template_data_failure",
       },
-      setMessageStatusToFailedOperation("set_message_status_failed_read_template_data_failure", 55),
+      setMessageStatusToFailedOperation(
+        "set_message_status_failed_read_template_data_failure",
+        55,
+      ),
       {
         operation: {
           name: "Read recipient data",
@@ -365,7 +368,10 @@ schema.flows = [
         resolve: "render_message",
         reject: "set_message_status_failed_read_recipient_data_failure",
       },
-      setMessageStatusToFailedOperation("set_message_status_failed_read_recipient_data_failure", 73),
+      setMessageStatusToFailedOperation(
+        "set_message_status_failed_read_recipient_data_failure",
+        73,
+      ),
       {
         operation: {
           name: "Render message",
@@ -380,7 +386,10 @@ schema.flows = [
         resolve: "send_email",
         reject: "set_message_status_failed_render_message_failure",
       },
-      setMessageStatusToFailedOperation("set_message_status_failed_render_message_failure", 91),
+      setMessageStatusToFailedOperation(
+        "set_message_status_failed_render_message_failure",
+        91,
+      ),
       {
         operation: {
           name: "Send email",
@@ -397,7 +406,10 @@ schema.flows = [
         resolve: "set_message_status_to_sent",
         reject: "set_message_status_failed_send_email_failure",
       },
-      setMessageStatusToFailedOperation("set_message_status_failed_send_email_failure", 109),
+      setMessageStatusToFailedOperation(
+        "set_message_status_failed_send_email_failure",
+        109,
+      ),
       {
         operation: {
           name: "Set message status to sent",
@@ -477,7 +489,10 @@ function messageStatusField(collection: string) {
   };
 }
 
-function setMessageStatusToFailedOperation(operationKey: string, position_x: number) {
+function setMessageStatusToFailedOperation(
+  operationKey: string,
+  position_x: number,
+) {
   return {
     operation: {
       name: "Set message status to failed",
@@ -496,5 +511,6 @@ function setMessageStatusToFailedOperation(operationKey: string, position_x: num
     },
     resolve: "",
     reject: "",
-  }
+  };
 }
+

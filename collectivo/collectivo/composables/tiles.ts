@@ -22,6 +22,8 @@ class CollectivoTileStore {
     const directus = useDirectus();
 
     try {
+      // @ts-ignore
+      // directus typing seems to be faulty with "fields: ["*.*"]"
       this.data = await directus.request(
         readItems("collectivo_tiles", { fields: ["*.*"] }),
       );

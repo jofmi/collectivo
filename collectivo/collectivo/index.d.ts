@@ -100,7 +100,7 @@ declare global {
 
   interface CollectivoFormFieldBase {
     order: number;
-    width?: "full" | "xl" | "lg" | "md" | "sm" | "xs";
+    width?: "full" | "half" | "xl" | "lg" | "md" | "sm" | "xs";
     conditions?: FormCondition[];
     _visible?: Ref<boolean>;
   }

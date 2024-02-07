@@ -209,8 +209,30 @@ schema.fields = [
   },
 
   // Membership Types
-  directusNameField("memberships_types"),
-  directusDescriptionField("memberships_types"),
+  {
+    collection: "memberships_types",
+    field: "memberships_name",
+    type: "string",
+    schema: {
+      is_nullable: false,
+      is_unique: true,
+    },
+    meta: {
+      sort: 1,
+      required: true,
+      translations: [
+        { language: "en-US", translation: "Name" },
+        { language: "de-DE", translation: "Name" },
+      ],
+    },
+  },
+  {
+    collection: "memberships_types",
+    field: "memberships_description",
+    type: "text",
+    schema: {},
+    meta: { interface: "input-multiline", sort: 1 },
+  },
 
   // System fields for both collections
   ...directusSystemFields("memberships"),

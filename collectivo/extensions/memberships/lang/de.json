@@ -20,9 +20,14 @@
   "First name": "Vorname",
   "Last name": "Nachname",
   "Gender": "Geschlecht",
-  "Diverse": "Divers",
+
   "Female": "Weiblich",
   "Male": "Männlich",
+  "Diverse": "Divers",
+  "Inter": "Inter",
+  "Open": "Offen",
+  "No answer": "Keine Angabe",
+
   "Phone": "Telefon",
   "Birthday": "Geburtstag",
   "Occupation": "Beruf",

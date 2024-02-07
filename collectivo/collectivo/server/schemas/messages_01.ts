@@ -110,9 +110,25 @@ schema.fields = [
   ...directusSystemFields("messages_campaigns"),
   ...directusSystemFields("messages_messages"),
   ...directusSystemFields("messages_templates"),
-  directusNameField("messages_templates", { width: "half" }),
   messageStatusField("messages_messages"),
   messageStatusField("messages_campaigns"),
+  {
+    collection: "messages_templates",
+    field: "messages_name",
+    type: "string",
+    schema: {
+      is_nullable: false,
+      is_unique: true,
+    },
+    meta: {
+      sort: 1,
+      required: true,
+      translations: [
+        { language: "en-US", translation: "Name" },
+        { language: "de-DE", translation: "Name" },
+      ],
+    },
+  },
   {
     collection: "messages_templates",
     field: "messages_method",
@@ -162,6 +178,16 @@ schema.fields = [
   },
 ];
 
+schema.createForeignKey("messages_messages", "messages_campaigns", {
+  fieldKey: {
+    field: "messages_campaign",
+    meta: {
+      display: "raw",
+      width: "half",
+    },
+  },
+});
+
 for (const coll of ["messages_campaigns", "messages_messages"]) {
   schema.createForeignKey(coll, "messages_templates", {
     fieldKey: {
@@ -170,18 +196,23 @@ for (const coll of ["messages_campaigns", "messages_messages"]) {
         required: true,
         display: "related-values",
         display_options: { template: "{{name}} ({{messages_method}})" },
-        width: "half",
       },
     },
   });
 }
 
-schema.createForeignKey("messages_messages", "messages_campaigns", {
+schema.createForeignKey("messages_messages", "directus_users", {
+  m2oFieldType: "uuid",
   fieldKey: {
-    field: "messages_campaign",
+    field: "messages_recipient",
     meta: {
-      display: "raw",
-      width: "half",
+      required: true,
+      options: {
+        enableCreate: false,
+        template: "{{first_name}} {{last_name}} ({{email}})))",
+      },
+      display: "related-values",
+      display_options: { template: "{{first_name}} {{last_name}} ({{email}})" },
     },
   },
 });
@@ -201,25 +232,14 @@ schema.createM2MRelation("messages_campaigns", "directus_users", {
         layout: "table",
       },
       display: "related-values",
-      display_options: { template: "{{directus_users_id.email}}" },
+      display_options: {
+        template:
+          "{{directus_users_id.first_name}} {{directus_users_id.last_name}} ({{directus_users_id.email}})",
+      },
     },
   },
   field2: true,
 });
-
-// @ts-ignore
-const operation = {
-  id: "???",
-  flow: "???",
-  name: "Send email",
-  key: "send_email",
-  type: "mail",
-  options: {
-    body: "{{ template.messages_content }}",
-    subject: "{{ template.messages_subject }}",
-    to: ["{{ recipient.email }}"],
-  },
-};
 
 schema.flows = [
   {
@@ -236,8 +256,29 @@ schema.flows = [
         collections: ["messages_campaigns"],
       },
     },
-    firstOperation: "messages_expaned_campaign_to_messages",
+    firstOperation: "messages_check_status_is_pending",
     operations: [
+      {
+        operation: {
+          name: "messages_check_status_is_pending",
+          key: "messages_check_status_is_pending",
+          type: "condition",
+          position_x: 5,
+          position_y: 19,
+          options: {
+            filter: {
+              $trigger: {
+                payload: {
+                  messages_status: {
+                    _eq: "pending",
+                  },
+                },
+              },
+            },
+          },
+        },
+        resolve: "messages_expaned_campaign_to_messages",
+      },
       {
         operation: {
           name: "messages_expaned_campaign_to_messages",
@@ -246,7 +287,7 @@ schema.flows = [
           position_x: 19,
           position_y: 1,
           options: {
-            code: 'module.exports = async function(data) {\n    campaign = data["$trigger"].payload;\n\tmessagesToCreate = [];\n    for (i in data["$trigger"].payload.messages_recipients.create) {\n        recipient = data["$trigger"].payload.messages_recipients.create[i]\n        messagesToCreate.push({\n            "messages_campaign": data["$trigger"].key,\n            "recipient": recipient.directus_users_id.id\n        });\n    }\n\treturn {messagesToCreate};\n}',
+            code: 'module.exports = async function(data) {\n    campaign = data["$trigger"].payload;\n\tmessagesToCreate = [];\n    for (i in data["$trigger"].payload.messages_recipients.create) {\n        recipient = data["$trigger"].payload.messages_recipients.create[i]\n        messagesToCreate.push({\n            "messages_campaign": data["$trigger"].key,\n            "messages_recipient": recipient.directus_users_id.id,\n            "messages_status": "pending",\n            "messages_template": data["$trigger"].payload.messages_template\n        });\n    }\n\treturn {messagesToCreate};\n}',
           },
         },
         resolve: "messages_store_individual_messages_in_messages",
@@ -282,19 +323,25 @@ schema.flows = [
         collections: ["messages_messages"],
       },
     },
-    firstOperation: "read_campaign_data",
+    firstOperation: "check_message_status_is_pending",
     operations: [
       {
         operation: {
-          name: "Read campaign data",
-          key: "read_campaign_data",
-          type: "item-read",
+          name: "Check message status is pending",
+          key: "check_message_status_is_pending",
+          type: "condition",
           position_x: 19,
           position_y: 1,
           options: {
-            collection: "messages_campaigns",
-            key: "{{$trigger.payload.messages_campaign}}",
-            query: null,
+            filter: {
+              $trigger: {
+                payload: {
+                  messages_status: {
+                    _eq: "pending",
+                  },
+                },
+              },
+            },
           },
         },
         resolve: "read_template_data",
@@ -309,12 +356,16 @@ schema.flows = [
           position_y: 1,
           options: {
             collection: "messages_templates",
-            key: "{{read_campaign_data.messages_template}}",
+            key: "{{$trigger.payload.messages_template}}",
           },
         },
         resolve: "read_recipient_data",
-        reject: "",
+        reject: "set_message_status_failed_read_template_data_failure",
       },
+      setMessageStatusToFailedOperation(
+        "set_message_status_failed_read_template_data_failure",
+        55,
+      ),
       {
         operation: {
           name: "Read recipient data",
@@ -327,12 +378,16 @@ schema.flows = [
               fields: ["first_name", "last_name", "email"],
             },
             collection: "directus_users",
-            key: "{{$trigger.payload.recipient}}",
+            key: "{{$trigger.payload.messages_recipient}}",
           },
         },
         resolve: "render_message",
-        reject: "",
+        reject: "set_message_status_failed_read_recipient_data_failure",
       },
+      setMessageStatusToFailedOperation(
+        "set_message_status_failed_read_recipient_data_failure",
+        73,
+      ),
       {
         operation: {
           name: "Render message",
@@ -345,8 +400,12 @@ schema.flows = [
           },
         },
         resolve: "send_email",
-        reject: "",
+        reject: "set_message_status_failed_render_message_failure",
       },
+      setMessageStatusToFailedOperation(
+        "set_message_status_failed_render_message_failure",
+        91,
+      ),
       {
         operation: {
           name: "Send email",
@@ -358,6 +417,29 @@ schema.flows = [
             subject: "{{read_template_data.messages_subject}}",
             body: "{{render_message.rendered_message}}",
             to: "{{read_recipient_data.email}}",
+          },
+        },
+        resolve: "set_message_status_to_sent",
+        reject: "set_message_status_failed_send_email_failure",
+      },
+      setMessageStatusToFailedOperation(
+        "set_message_status_failed_send_email_failure",
+        109,
+      ),
+      {
+        operation: {
+          name: "Set message status to sent",
+          key: "set_message_status_to_sent",
+          type: "item-update",
+          position_x: 109,
+          position_y: 1,
+          options: {
+            collection: "messages_messages",
+            emitEvents: true,
+            key: "{{$trigger.key}}",
+            payload: {
+              messages_status: "sent",
+            },
           },
         },
         resolve: "",
@@ -374,6 +456,7 @@ function messageStatusField(collection: string) {
     type: "string",
     meta: {
       sort: 10,
+      required: true,
       interface: "select-dropdown",
       display: "labels",
       display_options: {
@@ -419,5 +502,30 @@ function messageStatusField(collection: string) {
       ],
     },
     schema: { is_nullable: false, default_value: "draft" },
+  };
+}
+
+function setMessageStatusToFailedOperation(
+  operationKey: string,
+  positionX: number,
+) {
+  return {
+    operation: {
+      name: "Set message status to failed",
+      key: operationKey,
+      type: "item-update",
+      position_x: positionX,
+      position_y: 17,
+      options: {
+        collection: "messages_messages",
+        emitEvents: true,
+        key: "{{$trigger.key}}",
+        payload: {
+          messages_status: "failed",
+        },
+      },
+    },
+    resolve: "",
+    reject: "",
   };
 }

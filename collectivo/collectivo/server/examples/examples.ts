@@ -106,7 +106,7 @@ export default async function examples() {
 
   for (const tagName of tagNames) {
     tags.push({
-      name: tagName,
+      tags_name: tagName,
     });
   }
 
@@ -155,17 +155,16 @@ export default async function examples() {
   const tiles = [];
 
   const tileButton = {
-    collectivo_label: "Example Button",
-    collectivo_path: "/some/path",
-    collectivo_tile: "",
-    status: "published",
+    tiles_label: "Example Button",
+    tiles_path: "/some/path",
+    tiles_tile: "",
   };
 
   for (const td of tileData) {
     tiles.push({
-      name: td.name,
-      content: "Hello! I am an example tile!",
-      collectivo_color: td.color,
+      tiles_name: td.name,
+      tiles_content: "Hello! I am an example tile!",
+      tiles_color: td.color,
     });
   }
 
@@ -175,7 +174,7 @@ export default async function examples() {
     );
 
     for (const tile of tilesRes) {
-      tileButton.collectivo_tile = tile.id;
+      tileButton.tiles_tile = tile.id;
 
       await directus.request(
         createItem("collectivo_tiles_buttons", tileButton),

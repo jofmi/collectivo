@@ -481,11 +481,11 @@ async function fillOutAll() {
 </template>
 
 <style lang="scss" scoped>
-::v-deep .md-small > p {
+:deep(.md-small > p) {
   @apply text-sm;
 }
 
-::v-deep .md-description > p > a {
+:deep(.md-description > p > a) {
   @apply font-bold;
 }
 .form-box {

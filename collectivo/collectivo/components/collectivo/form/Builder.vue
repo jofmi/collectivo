@@ -10,6 +10,19 @@ import {
   date,
 } from "yup";
 import type { FormErrorEvent, FormSubmitEvent } from "#ui/types";
+import { parse, marked, type RendererObject } from "marked";
+
+const renderer = {
+  link(href: string, title: string, text: string) {
+    const link = marked.Renderer.prototype.link.call(this, href, title, text);
+    return link.replace("<a", "<a target='_blank' style='font-weight:600' ");
+  },
+};
+
+marked.use({
+  // @ts-ignore
+  renderer,
+});
 
 const customValidators = useCollectivoValidators();
 const toast = useToast();
@@ -251,7 +264,7 @@ async function fillOutAll() {
   <UForm
     :schema="schema"
     :state="state"
-    class="flex flex-wrap w-full"
+    class="cv-form flex flex-wrap w-full"
     @submit="onSubmit"
     @error="onError"
   >
@@ -264,16 +277,22 @@ async function fillOutAll() {
           <h2 v-if="input.title">
             {{ t(input.title) }}
           </h2>
-          <div v-if="input.description" class="leading-5 py-2">
-            {{ t(input.description) }}
-          </div>
+          <div
+            v-if="input.description"
+            class="leading-5 py-2"
+            v-html="parse(t(input.description))"
+          ></div>
         </div>
         <div v-else-if="input.type === 'description'" class="form-field-full">
           <UFormGroup :label="input.label ? t(input.label) : undefined">
             <div v-if="input.boxed" class="form-box text-sm">
               {{ t(input.description) }}
             </div>
-            <div v-else class="text-sm">{{ t(input.description) }}</div>
+            <div
+              v-else
+              class="text-sm"
+              v-html="parse(t(input.description))"
+            ></div>
           </UFormGroup>
         </div>
         <component
@@ -295,6 +314,13 @@ async function fillOutAll() {
             :description="input.description ? t(input.description) : undefined"
             :name="input.key"
           >
+            <template #description>
+              <div
+                v-if="input.description"
+                class="text-sm"
+                v-html="parse(t(input.description))"
+              ></div>
+            </template>
             <template #error="{ error }">
               <div v-if="error && typeof error === 'string'">
                 {{ t(error) }}
@@ -409,8 +435,8 @@ async function fillOutAll() {
                 <span
                   v-if="input.content"
                   class="text-sm font-medium text-gray-500-700 dark:text-gray-500-200"
-                  >{{ t(input.content) }}</span
-                >
+                  v-html="parse(t(input.content))"
+                ></span>
               </div>
             </template>
             <template v-else-if="input.type === 'custom-input'">
@@ -452,6 +478,7 @@ async function fillOutAll() {
     <h4>Form state</h4>
     <div class="text-sm">{{ state }}</div>
   </div>
+  <div class="md-link">X</div>
 </template>
 
 <style lang="scss" scoped>

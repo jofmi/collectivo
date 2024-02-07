@@ -342,7 +342,101 @@ schema.relations.push(
   ],
 );
 
-// # Flows
+// ----------------------------------------------------------------------------
+// Flows ----------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+
+const x = {
+  path: "/trigger/0482fe3b-72b8-40f1-b188-3e0e5574bcfa",
+  query: {},
+  body: {
+    template: { key: 1, collection: "messages_templates" },
+    collection: "memberships",
+    keys: [13, 14, 15, 16, 17, 18],
+  },
+};
+
+schema.flows.push({
+  flow: {
+    name: "memberships_send_messages",
+    icon: "conveyor_belt",
+    status: "active",
+    accountability: "all",
+    trigger: "manual",
+    options: {
+      collections: ["memberships"],
+      requireConfirmation: true,
+      fields: [
+        {
+          field: "template",
+          name: "Template",
+          type: "json",
+          meta: {
+            interface: "collection-item-dropdown",
+            options: {
+              selectedCollection: "messages_templates",
+              template: "{{name}}",
+            },
+            required: true,
+          },
+        },
+      ],
+      confirmationDescription: "Please choose a template",
+    },
+  },
+  firstOperation: "readMemberships",
+  operations: [
+    {
+      operation: {
+        name: "readMemberships",
+        key: "readMemberships",
+        type: "item-read",
+        position_x: 1,
+        position_y: 17,
+        options: {
+          collection: "memberships",
+          query: {
+            fields: ["memberships_user"],
+            filter: { id: { _in: "{{$trigger.body.keys}}" } },
+          },
+        },
+      },
+      resolve: "prepareRecipients",
+    },
+    {
+      operation: {
+        name: "prepareRecipients",
+        key: "prepareRecipients",
+        type: "exec",
+        position_x: 17,
+        position_y: 17,
+        options: {
+          code: 'module.exports = async function(data) {\n\tconst recipients = []\n    for (i in data["readMemberships"]) {\n        console.log("user", r)\n    \trecipients.push(\n            {\n                messages_campaigns_id: "+",\n           \t\tdirectus_users_id: { id: data["readMemberships"][i].memberships_user }\n            }\n        )\n    }\n\treturn { recipients };\n}',
+        },
+      },
+      resolve: "createCampaign",
+    },
+    {
+      operation: {
+        name: "createCampaign",
+        key: "createCampaign",
+        type: "item-create",
+        position_x: 35,
+        position_y: 17,
+        options: {
+          collection: "messages_campaigns",
+          permissions: "$full",
+          emitEvents: true,
+          payload: {
+            messages_recipients: "{{prepareRecipients.recipients}}",
+            messages_template: "{{$trigger.body.template.key}}",
+          },
+        },
+      },
+    },
+  ],
+});
+
 schema.flows.push({
   flow: {
     name: "memberships_create_invoice_for_shares",

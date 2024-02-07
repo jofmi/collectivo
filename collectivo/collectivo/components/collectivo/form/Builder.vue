@@ -12,10 +12,11 @@ import {
 import type { FormErrorEvent, FormSubmitEvent } from "#ui/types";
 import { parse, marked, type RendererObject } from "marked";
 
+// style='font-weight:600'
 const renderer = {
   link(href: string, title: string, text: string) {
     const link = marked.Renderer.prototype.link.call(this, href, title, text);
-    return link.replace("<a", "<a target='_blank' style='font-weight:600' ");
+    return link.replace("<a", "<a target='_blank' ");
   },
 };
 
@@ -279,7 +280,7 @@ async function fillOutAll() {
           </h2>
           <div
             v-if="input.description"
-            class="leading-5 py-2"
+            class="leading-5 py-2 md-description"
             v-html="parse(t(input.description))"
           ></div>
         </div>
@@ -290,7 +291,7 @@ async function fillOutAll() {
             </div>
             <div
               v-else
-              class="text-sm"
+              class="md-description"
               v-html="parse(t(input.description))"
             ></div>
           </UFormGroup>
@@ -317,7 +318,7 @@ async function fillOutAll() {
             <template #description>
               <div
                 v-if="input.description"
-                class="text-sm"
+                class="md-description md-small"
                 v-html="parse(t(input.description))"
               ></div>
             </template>
@@ -434,7 +435,7 @@ async function fillOutAll() {
                 />
                 <span
                   v-if="input.content"
-                  class="text-sm font-medium text-gray-500-700 dark:text-gray-500-200"
+                  class="md-description md-small"
                   v-html="parse(t(input.content))"
                 ></span>
               </div>
@@ -478,10 +479,16 @@ async function fillOutAll() {
     <h4>Form state</h4>
     <div class="text-sm">{{ state }}</div>
   </div>
-  <div class="md-link">X</div>
 </template>
 
 <style lang="scss" scoped>
+::v-deep .md-small > p {
+  @apply text-sm;
+}
+
+::v-deep .md-description > p > a {
+  @apply font-bold;
+}
 .form-box {
   @apply bg-blue-50 shadow-sm rounded-lg  px-4 py-3 flex flex-row gap-2;
 }

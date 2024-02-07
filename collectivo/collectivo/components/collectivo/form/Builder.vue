@@ -290,7 +290,7 @@ async function fillOutAll() {
             </div>
             <div
               v-else
-              class="md-description"
+              class="md-description md-small"
               v-html="parse(t(input.description))"
             ></div>
           </UFormGroup>

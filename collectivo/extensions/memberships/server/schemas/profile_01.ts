@@ -114,9 +114,12 @@ schema.fields = [
       width: "half",
       options: {
         choices: [
-          { text: "$t:diverse", value: "diverse" },
           { text: "$t:female", value: "female" },
           { text: "$t:male", value: "male" },
+          { text: "$t:diverse", value: "diverse" },
+          { text: "$t:inter", value: "inter" },
+          { text: "$t:open", value: "open" },
+          { text: "$t:no-answer", value: "no-answer" },
         ],
       },
       translations: [

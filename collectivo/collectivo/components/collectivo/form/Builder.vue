@@ -10,9 +10,8 @@ import {
   date,
 } from "yup";
 import type { FormErrorEvent, FormSubmitEvent } from "#ui/types";
-import { parse, marked, type RendererObject } from "marked";
+import { parse, marked } from "marked";
 
-// style='font-weight:600'
 const renderer = {
   link(href: string, title: string, text: string) {
     const link = marked.Renderer.prototype.link.call(this, href, title, text);

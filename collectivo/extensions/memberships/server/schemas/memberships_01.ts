@@ -356,62 +356,9 @@ const x = {
   },
 };
 
-const fl = {
-  operations: { create: [], update: [], delete: [] },
-  operation: {
-    id: "c57a48ea-d401-46b5-a150-d254aca17454",
-    flow: "0482fe3b-72b8-40f1-b188-3e0e5574bcfa",
-    name: "readMemberships",
-    key: "readMemberships",
-    type: "item-read",
-    options: {
-      collection: "memberships",
-      query: {
-        fields: ["memberships_user"],
-        filter: { id: { _in: "{{$trigger.body.keys}}" } },
-      },
-    },
-    resolve: {
-      id: "ee5381af-b084-41d9-ac35-90536e690f65",
-      flow: "0482fe3b-72b8-40f1-b188-3e0e5574bcfa",
-      resolve: {
-        flow: "0482fe3b-72b8-40f1-b188-3e0e5574bcfa",
-        position_x: 17,
-        position_y: 17,
-        name: "prepareRecipients",
-        key: "prepareRecipients",
-        type: "exec",
-        options: {
-          code: 'module.exports = async function(data) {\n\tconst recipients = []\n    for (r in data["readMemberships"]) {\n    \trecipients.push(r.memberships_user)\n    }\n\treturn { recipients };\n}',
-        },
-        resolve: {
-          flow: "0482fe3b-72b8-40f1-b188-3e0e5574bcfa",
-          position_x: 35,
-          position_y: 17,
-          name: "createCampaign",
-          key: "createCampaign",
-          type: "item-create",
-          options: {
-            collection: "messages_campaigns",
-            permissions: "$full",
-            emitEvents: true,
-            payload: {
-              messages_recipients: "{{prepareRecipients.recipients}}",
-              messages_template: "{{$trigger.body.template.key}}",
-              messages_status: "pending",
-            },
-          },
-        },
-      },
-      position_x: 1,
-      position_y: 17,
-    },
-  },
-};
-
 schema.flows.push({
   flow: {
-    name: "memberships_messages",
+    name: "memberships_send_messages",
     icon: "conveyor_belt",
     status: "active",
     accountability: "all",
@@ -430,13 +377,64 @@ schema.flows.push({
               selectedCollection: "messages_templates",
               template: "{{name}}",
             },
+            required: true,
           },
-          required: true,
         },
       ],
       confirmationDescription: "Please choose a template",
     },
   },
+  firstOperation: "readMemberships",
+  operations: [
+    {
+      operation: {
+        name: "readMemberships",
+        key: "readMemberships",
+        type: "item-read",
+        position_x: 1,
+        position_y: 17,
+        options: {
+          collection: "memberships",
+          query: {
+            fields: ["memberships_user"],
+            filter: { id: { _in: "{{$trigger.body.keys}}" } },
+          },
+        },
+      },
+      resolve: "prepareRecipients",
+    },
+    {
+      operation: {
+        name: "prepareRecipients",
+        key: "prepareRecipients",
+        type: "exec",
+        position_x: 17,
+        position_y: 17,
+        options: {
+          code: 'module.exports = async function(data) {\n\tconst recipients = []\n    for (i in data["readMemberships"]) {\n        console.log("user", r)\n    \trecipients.push(\n            {\n                messages_campaigns_id: "+",\n           \t\tdirectus_users_id: { id: data["readMemberships"][i].memberships_user }\n            }\n        )\n    }\n\treturn { recipients };\n}',
+        },
+      },
+      resolve: "createCampaign",
+    },
+    {
+      operation: {
+        name: "createCampaign",
+        key: "createCampaign",
+        type: "item-create",
+        position_x: 35,
+        position_y: 17,
+        options: {
+          collection: "messages_campaigns",
+          permissions: "$full",
+          emitEvents: true,
+          payload: {
+            messages_recipients: "{{prepareRecipients.recipients}}",
+            messages_template: "{{$trigger.body.template.key}}",
+          },
+        },
+      },
+    },
+  ],
 });
 
 schema.flows.push({

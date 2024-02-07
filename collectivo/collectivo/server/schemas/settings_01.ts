@@ -188,3 +188,51 @@ for (const action of ["read", "update", "create", "delete"]) {
     fields: ["*"],
   });
 }
+
+schema.flows.push({
+  flow: {
+    name: "collectivo_assign_default_role_to_new_users",
+    icon: "supervised_user_circle",
+    color: null,
+    description: null,
+    status: "active",
+    accountability: "all",
+    trigger: "event",
+    options: {
+      type: "action",
+      scope: ["items.create"],
+      collections: ["directus_users"],
+    },
+  },
+  firstOperation: "readRole",
+  operations: [
+    {
+      operation: {
+        name: "readRole",
+        key: "readRole",
+        type: "item-read",
+        position_x: 3,
+        position_y: 21,
+        options: {
+          collection: "directus_roles",
+          query: { filter: { name: { _eq: "collectivo_user" } } },
+        },
+      },
+      resolve: "assignRole",
+    },
+    {
+      operation: {
+        name: "assignRole",
+        key: "assignRole",
+        type: "item-update",
+        position_x: 23,
+        position_y: 21,
+        options: {
+          collection: "directus_users",
+          key: ["{{$trigger.key}}"],
+          payload: { role: "{{readRole[0].id}}" },
+        },
+      },
+    },
+  ],
+});

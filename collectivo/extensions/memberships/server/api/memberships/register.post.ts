@@ -1,4 +1,10 @@
-import { createItem, createUser } from "@directus/sdk";
+import {
+  createItem,
+  createUser,
+  readUsers,
+  deleteUser,
+  deleteItem,
+} from "@directus/sdk";
 import KcAdminClient from "@keycloak/keycloak-admin-client";
 
 // Register a new membership
@@ -28,6 +34,10 @@ async function registerMembership(body: any) {
     "Received membership application: " + body["directus_users.email"],
   );
 
+  await refreshDirectus();
+  const directus = await useDirectusAdmin();
+  const config = useRuntimeConfig();
+
   const userData: any = {};
   const membershipData: any = {};
 
@@ -39,9 +49,7 @@ async function registerMembership(body: any) {
     }
   }
 
-  await refreshDirectus();
-  const directus = await useDirectusAdmin();
-  const config = useRuntimeConfig();
+  const user_password = userData.password;
 
   // Connect to keycloak
   const keycloak = new KcAdminClient({
@@ -58,67 +66,101 @@ async function registerMembership(body: any) {
   // Random call to test connection
   await keycloak.users.find({ first: 0, max: 1 });
 
-  // Create user
-  let password = "";
+  // Check if user exists
+  if (!userData.email) {
+    throw new Error("Email is required.");
+  }
 
+  const usersRes = await directus.request(
+    readUsers({
+      fields: ["id"],
+      filter: {
+        email: {
+          _eq: userData.email,
+        },
+      },
+    }),
+  );
+
+  if (usersRes.length > 0) {
+    throw new Error("User already exists (Directus).");
+  }
+
+  // Check if keycloak user exists and extract password
   if (config.public.authService == "keycloak") {
-    password = userData.password;
+    const kcUser = await keycloak.users.find({ email: userData.email });
+
+    if (kcUser.length > 0) {
+      throw new Error("User already exists (Keycloak).");
+    }
+
     delete userData.password;
     userData.provider = "keycloak";
     userData.external_identifier = userData.email;
   }
 
-  const user_id = await directus.request(createUser(userData));
+  // All good from here - start registration
 
-  // Prepare membership
-  membershipData.memberships_user = user_id;
+  // Create directus user
+  const user = await directus.request(createUser(userData));
+
+  // Create directus membership
+  membershipData.memberships_user = user.id;
   membershipData.memberships_status = "applied";
   membershipData.memberships_date_applied = new Date().toISOString();
-  // TODO: ADD ROLE
 
-  // Create membership
-  const membership_id = await directus.request(
-    createItem("memberships", membershipData),
-  );
+  let membership = undefined;
 
-  // Create keycloak user & send verification mail
+  try {
+    membership = await directus.request(
+      createItem("memberships", membershipData),
+    );
+  } catch (e) {
+    await directus.request(deleteUser(user.id));
+    throw e;
+  }
+
+  // Create keycloak user & set password
   if (config.public.authService == "keycloak") {
-    const kcUser = await keycloak.users.create({
-      enabled: true,
-      username: userData.email,
-      email: userData.email,
-      firstName: userData.first_name,
-      lastName: userData.last_name,
-      emailVerified: false,
-    });
+    let kcUser = undefined;
 
-    await keycloak.users.resetPassword({
-      id: kcUser.id,
-      credential: {
-        temporary: false,
-        type: "password",
-        value: password,
-      },
-    });
+    try {
+      kcUser = await keycloak.users.create({
+        enabled: true,
+        username: userData.email,
+        email: userData.email,
+        firstName: userData.first_name,
+        lastName: userData.last_name,
+        emailVerified: false,
+      });
+    } catch (e) {
+      await directus.request(deleteItem("memberships", membership.id));
+      await directus.request(deleteUser(user.id));
+      throw e;
+    }
 
-    // await keycloak.users.sendVerifyEmail({
-    //   id: kcUser.id,
-    //   clientId: "directus",
-    //   redirectUri: config.public.collectivoUrl,
-    // });
-    // await keycloak.users.executeActionsEmail({
-    //   id: kcUser.id,
-    //   clientId: "directus",
-    //   redirectUri: config.public.collectivoUrl,
-    //   actions: ["VERIFY_EMAIL"],
-    // });
+    try {
+      await keycloak.users.resetPassword({
+        id: kcUser.id,
+        credential: {
+          temporary: false,
+          type: "password",
+          value: user_password,
+        },
+      });
+    } catch (e) {
+      await directus.request(deleteItem("memberships", membership.id));
+      await directus.request(deleteUser(user.id));
+      await keycloak.users.del({ id: kcUser.id });
+      throw e;
+    }
   }
 
   return {
     status: 201,
     body: {
-      // user: user_id,
-      // membership: membership_id,
+      user: user.id,
+      membership: membership.id,
     },
   };
 }

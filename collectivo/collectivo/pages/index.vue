@@ -21,8 +21,6 @@ tiles.value.load();
       :color="tile.tiles_color"
     >
       <template #content>
-        <!-- v-html is safe, as it is parsed from markdown -->
-        <!-- eslint-disable-next-line -->
         <div v-html="parse(tile.tiles_content)"></div>
 
         <div v-if="tile.tiles_buttons" class="flex flex-wrap gap-2 pt-3">

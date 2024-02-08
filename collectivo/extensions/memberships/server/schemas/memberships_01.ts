@@ -18,9 +18,6 @@ schema.collections = [
     meta: {
       sort: 100,
       icon: "switch_account",
-      archive_field: "memberships_status",
-      archive_value: "ended",
-      unarchive_value: "draft",
       display_template: "{{memberships_user}} - {{memberships_type}}",
       translations: [
         {

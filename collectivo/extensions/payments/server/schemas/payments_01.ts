@@ -24,15 +24,15 @@ schema.collections = [
       translations: [
         {
           language: "en-US",
-          translation: "Items",
-          singular: "Item",
-          plural: "Item",
+          translation: "Invoice Items",
+          singular: "Invoice Item",
+          plural: "Invoice Item",
         },
         {
           language: "de-DE",
-          translation: "Artikel",
-          singular: "Artikel",
-          plural: "Artikel",
+          translation: "Rechnungsartikel",
+          singular: "Rechnungsartikel",
+          plural: "Rechnungsartikel",
         },
       ],
     },

@@ -11,10 +11,7 @@ schema.collections = [
     meta: {
       icon: "sell",
       sort: 510,
-      archive_field: "status",
-      archive_value: "archived",
-      unarchive_value: "published",
-      display_template: "{{name}}",
+      display_template: "{{tags_name}}",
       translations: [
         {
           language: "en-US",

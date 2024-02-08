@@ -19,23 +19,20 @@ schema.collections = [
     },
     meta: {
       group: "payments",
-      archive_field: "payments_archived",
-      archive_value: "true",
-      unarchive_value: "false",
       sort: 100,
       icon: "category",
       translations: [
         {
           language: "en-US",
-          translation: "Items",
-          singular: "Item",
-          plural: "Item",
+          translation: "Invoice Items",
+          singular: "Invoice Item",
+          plural: "Invoice Item",
         },
         {
           language: "de-DE",
-          translation: "Artikel",
-          singular: "Artikel",
-          plural: "Artikel",
+          translation: "Rechnungsartikel",
+          singular: "Rechnungsartikel",
+          plural: "Rechnungsartikel",
         },
       ],
     },
@@ -129,19 +126,6 @@ schema.fields = [
       translations: [
         { language: "de-DE", translation: "Preis" },
         { language: "en-US", translation: "Price" },
-      ],
-    },
-  },
-  {
-    collection: "payments_items",
-    field: "payments_archived",
-    type: "boolean",
-    schema: { default_value: false, is_nullable: false },
-    meta: {
-      width: "half",
-      translations: [
-        { language: "de-DE", translation: "Archiviert" },
-        { language: "en-US", translation: "Archived" },
       ],
     },
   },
@@ -274,6 +258,18 @@ schema.fields = [
       translations: [
         { language: "de-DE", translation: "Datum Bezahlt" },
         { language: "en-US", translation: "Date Paid" },
+      ],
+    },
+  },
+  {
+    collection: "payments_invoices_out",
+    field: "payments_notes",
+    type: "text",
+    meta: {
+      interface: "input-multiline",
+      translations: [
+        { language: "de-DE", translation: "Notizen" },
+        { language: "en-US", translation: "Notes" },
       ],
     },
   },

@@ -18,9 +18,6 @@ schema.collections = [
     meta: {
       sort: 100,
       icon: "switch_account",
-      archive_field: "memberships_status",
-      archive_value: "ended",
-      unarchive_value: "draft",
       display_template: "{{memberships_user}} - {{memberships_type}}",
       translations: [
         {
@@ -45,7 +42,7 @@ schema.collections = [
       sort: 10,
       group: "collectivo_settings",
       icon: "switch_account",
-      display_template: "{{name}}",
+      display_template: "{{memberships_name}}",
       translations: [
         {
           language: "en-US",
@@ -345,16 +342,6 @@ schema.relations.push(
 // ----------------------------------------------------------------------------
 // Flows ----------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-
-const x = {
-  path: "/trigger/0482fe3b-72b8-40f1-b188-3e0e5574bcfa",
-  query: {},
-  body: {
-    template: { key: 1, collection: "messages_templates" },
-    collection: "memberships",
-    keys: [13, 14, 15, 16, 17, 18],
-  },
-};
 
 schema.flows.push({
   flow: {

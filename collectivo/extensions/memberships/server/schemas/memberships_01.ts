@@ -42,7 +42,7 @@ schema.collections = [
       sort: 10,
       group: "collectivo_settings",
       icon: "switch_account",
-      display_template: "{{name}}",
+      display_template: "{{memberships_name}}",
       translations: [
         {
           language: "en-US",

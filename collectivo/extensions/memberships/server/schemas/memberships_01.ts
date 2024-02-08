@@ -343,16 +343,6 @@ schema.relations.push(
 // Flows ----------------------------------------------------------------------
 // ----------------------------------------------------------------------------
 
-const x = {
-  path: "/trigger/0482fe3b-72b8-40f1-b188-3e0e5574bcfa",
-  query: {},
-  body: {
-    template: { key: 1, collection: "messages_templates" },
-    collection: "memberships",
-    keys: [13, 14, 15, 16, 17, 18],
-  },
-};
-
 schema.flows.push({
   flow: {
     name: "memberships_send_messages",

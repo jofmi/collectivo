@@ -261,6 +261,18 @@ schema.fields = [
       ],
     },
   },
+  {
+    collection: "payments_invoices_out",
+    field: "payments_notes",
+    type: "text",
+    meta: {
+      interface: "input-multiline",
+      translations: [
+        { language: "de-DE", translation: "Notizen" },
+        { language: "en-US", translation: "Notes" },
+      ],
+    },
+  },
 
   // Invoice entries
   {

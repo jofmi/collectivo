@@ -34,7 +34,7 @@ schema.collections = [
     schema: { name: "collectivo_tiles_buttons" },
     meta: {
       hidden: true,
-      display_template: "{{collectivo_label}}",
+      display_template: "{{tiles_label}}",
       sort_field: "sort",
       translations: [
         {
@@ -185,7 +185,7 @@ schema.createForeignKey("collectivo_tiles_buttons", "collectivo_tiles", {
     },
   },
   fieldAlias: {
-    field: "collectivo_buttons",
+    field: "tiles_buttons",
     meta: {
       options: {
         enableSelect: false,
@@ -213,16 +213,14 @@ schema.createForeignKey("collectivo_tiles_buttons", "collectivo_tiles", {
 });
 
 for (const collection of ["collectivo_tiles", "collectivo_tiles_buttons"]) {
-  schema.permissions = [
-    {
-      roleName: "collectivo_user",
-      collection: collection,
-      action: "read",
-      fields: ["*"],
-      permissions: {},
-      validation: {},
-    },
-  ];
+  schema.permissions.push({
+    roleName: "collectivo_user",
+    collection: collection,
+    action: "read",
+    fields: ["*"],
+    permissions: {},
+    validation: {},
+  });
 
   for (const action of ["read", "update", "create", "delete"]) {
     schema.permissions.push({

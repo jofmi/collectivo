@@ -87,7 +87,7 @@ schema.collections = [
       sort: 90,
       icon: "sticky_note_2",
       group: "messages",
-      display_template: "{{name}}",
+      display_template: "{{messages_name}}",
       translations: [
         {
           language: "en-US",
@@ -528,4 +528,20 @@ function setMessageStatusToFailedOperation(
     resolve: "",
     reject: "",
   };
+}
+
+for (const action of ["read", "update", "create", "delete"]) {
+  for (const collection of [
+    "messages",
+    "messages_campaigns",
+    "messages_messages",
+    "messages_templates",
+  ]) {
+    schema.permissions.push({
+      collection: collection,
+      roleName: "collectivo_editor",
+      action: action,
+      fields: ["*"],
+    });
+  }
 }

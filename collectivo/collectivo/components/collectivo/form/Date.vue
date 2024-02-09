@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const props = defineProps({
   modelValue: {
     type: Date,
@@ -9,7 +9,11 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue"]);
 const { locale } = useI18n();
 
-const date = ref(new Date(props.modelValue));
+const date: Ref<Date | undefined> = ref();
+
+if (props.modelValue) {
+  date.value = new Date(props.modelValue);
+}
 
 watch(
   () => date.value,
@@ -18,14 +22,18 @@ watch(
   },
 );
 
-const label = computed(() =>
-  date.value.toLocaleDateString(locale.value, {
+const label = computed(() => {
+  if (!date.value) {
+    return "";
+  }
+
+  return date.value.toLocaleDateString(locale.value, {
     weekday: "long",
     year: "numeric",
     month: "short",
     day: "numeric",
-  }),
-);
+  });
+});
 </script>
 
 <template>

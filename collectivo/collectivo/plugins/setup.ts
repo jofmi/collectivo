@@ -49,7 +49,7 @@ export default defineNuxtPlugin(() => {
     {
       type: "section",
       order: 100,
-      title: "Account details",
+      title: "User account",
     },
     {
       label: "First name",

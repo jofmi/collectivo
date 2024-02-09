@@ -75,6 +75,8 @@ services:
       POSTGRES_USER: "directus"
       POSTGRES_PASSWORD: ${DIRECTUS_DB_PASSWORD}
       POSTGRES_DB: "directus"
+    ports:
+      - 5432:5432
 
   directus-cache:
     image: redis:6

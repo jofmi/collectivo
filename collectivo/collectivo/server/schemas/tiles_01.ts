@@ -34,7 +34,7 @@ schema.collections = [
     schema: { name: "collectivo_tiles_buttons" },
     meta: {
       hidden: true,
-      display_template: "{{collectivo_label}}",
+      display_template: "{{tiles_label}}",
       sort_field: "sort",
       translations: [
         {

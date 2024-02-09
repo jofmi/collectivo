@@ -316,7 +316,7 @@ const editor_fields = [
   "memberships_gender",
   "memberships_birthday",
   "memberships_phone",
-  "memberships_is_organization",
+  "memberships_person_type",
 
   "memberships_organization_group",
   "memberships_organization_name",
@@ -325,7 +325,7 @@ const editor_fields = [
 
   "memberships_address_group",
   "memberships_street",
-  "memberships_number",
+  "memberships_streetnumber",
   "memberships_stair",
   "memberships_door",
   "memberships_postcode",
@@ -339,7 +339,7 @@ const user_fields = [
   "memberships_gender",
   "memberships_birthday",
   "memberships_phone",
-  "memberships_is_organization",
+  "memberships_person_type",
 
   "memberships_organization_group",
   "memberships_organization_name",
@@ -348,7 +348,7 @@ const user_fields = [
 
   "memberships_address_group",
   "memberships_street",
-  "memberships_number",
+  "memberships_streetnumber",
   "memberships_stair",
   "memberships_door",
   "memberships_postcode",
@@ -361,14 +361,24 @@ schema.permissions = [
     collection: "directus_users",
     roleName: "collectivo_editor",
     action: "read",
-    // @ts-ignore
     fields: user_fields,
   },
   {
     collection: "directus_users",
     roleName: "collectivo_editor",
     action: "update",
-    // @ts-ignore
     fields: editor_fields,
+  },
+  {
+    collection: "directus_users",
+    roleName: "collectivo_user",
+    action: "read",
+    fields: user_fields,
+  },
+  {
+    collection: "directus_users",
+    roleName: "collectivo_user",
+    action: "update",
+    fields: user_fields,
   },
 ];

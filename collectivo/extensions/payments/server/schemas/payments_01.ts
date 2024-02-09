@@ -21,6 +21,7 @@ schema.collections = [
       group: "payments",
       sort: 100,
       icon: "category",
+      display_template: "{{payments_name}}",
       translations: [
         {
           language: "en-US",
@@ -49,6 +50,7 @@ schema.collections = [
       hidden: true,
       sort: 100,
       icon: "receipt",
+      display_template: "{{payments_quantity}} {{payments_item.payments_name}}",
       translations: [
         {
           language: "en-US",
@@ -76,6 +78,7 @@ schema.collections = [
       group: "payments",
       sort: 100,
       icon: "receipt",
+      display_template: "{{payments_entries}}",
       translations: [
         {
           language: "en-US",
@@ -122,6 +125,7 @@ schema.fields = [
     meta: {
       interface: "input",
       required: true,
+      note: "Price is in cents.",
       width: "half",
       translations: [
         { language: "de-DE", translation: "Preis" },
@@ -143,7 +147,7 @@ schema.fields = [
       options: {
         enableSelect: false,
         template:
-          "{{payments_item.name}}:{{payments_quantity}}*{{payments_price}}",
+          "{{payments_item.payments_name}}:{{payments_quantity}}*{{payments_price}}",
       },
       display: "related-values",
       display_options: {
@@ -321,10 +325,11 @@ schema.fields = [
   {
     collection: "payments_invoices_entries",
     field: "payments_price",
-    type: "integer", // prices always in cents
+    type: "integer",
     meta: {
       interface: "input",
       required: true,
+      note: "Price is in cents.",
       width: "half",
       translations: [
         { language: "de-DE", translation: "Preis" },

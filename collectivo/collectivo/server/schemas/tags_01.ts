@@ -96,6 +96,27 @@ schema.createM2MRelation("collectivo_tags", "directus_users", {
   },
 });
 
+schema.permissions.push(
+  {
+    collection: "directus_users",
+    roleName: "collectivo_user",
+    action: "read",
+    fields: ["collectivo_tags"],
+  },
+  {
+    collection: "directus_users",
+    roleName: "collectivo_editor",
+    action: "read",
+    fields: ["collectivo_tags"],
+  },
+  {
+    collection: "directus_users",
+    roleName: "collectivo_editor",
+    action: "update",
+    fields: ["collectivo_tags"],
+  },
+);
+
 for (const action of ["read", "update", "create", "delete"]) {
   for (const collection of [
     "collectivo_tags",

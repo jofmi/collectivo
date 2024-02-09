@@ -228,7 +228,14 @@ schema.fields = [
     field: "memberships_description",
     type: "text",
     schema: {},
-    meta: { interface: "input-multiline", sort: 1 },
+    meta: {
+      interface: "input-multiline",
+      sort: 1,
+      translations: [
+        { language: "en-US", translation: "Description" },
+        { language: "de-DE", translation: "Beschreibung" },
+      ],
+    },
   },
 
   // System fields for both collections
@@ -398,7 +405,7 @@ schema.flows.push({
         position_x: 17,
         position_y: 17,
         options: {
-          code: 'module.exports = async function(data) {\n\tconst recipients = []\n    for (i in data["readMemberships"]) {\n        console.log("user", r)\n    \trecipients.push(\n            {\n                messages_campaigns_id: "+",\n           \t\tdirectus_users_id: { id: data["readMemberships"][i].memberships_user }\n            }\n        )\n    }\n\treturn { recipients };\n}',
+          code: 'module.exports = async function(data) {\n\tconst recipients = []\n    for (i in data["readMemberships"]) {\n \trecipients.push(\n            {\n                messages_campaigns_id: "+",\n           \t\tdirectus_users_id: { id: data["readMemberships"][i].memberships_user }\n            }\n        )\n    }\n\treturn { recipients };\n}',
         },
       },
       resolve: "createCampaign",
@@ -616,26 +623,22 @@ schema.flows.push({
 // Permissions ----------------------------------------------------------------
 // ----------------------------------------------------------------------------
 
-schema.permissions = [
-  {
-    collection: "memberships",
-    roleName: "collectivo_editor",
-    action: "read",
-    fields: ["*"],
-  },
-  {
-    collection: "memberships",
-    roleName: "collectivo_editor",
-    action: "update",
-    fields: ["*"],
-  },
-  {
-    collection: "memberships_types",
-    roleName: "collectivo_editor",
-    action: "read",
-    fields: ["*"],
-  },
-];
+for (const action of ["create", "read", "update", "delete"]) {
+  schema.permissions = [
+    {
+      collection: "memberships",
+      roleName: "collectivo_editor",
+      action: action,
+      fields: ["*"],
+    },
+    {
+      collection: "memberships_types",
+      roleName: "collectivo_editor",
+      action: action,
+      fields: ["*"],
+    },
+  ];
+}
 
 // ----------------------------------------------------------------------------
 // Translations ---------------------------------------------------------------

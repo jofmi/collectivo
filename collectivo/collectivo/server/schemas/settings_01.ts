@@ -112,10 +112,6 @@ const editor_fields = [
   "email",
   "title",
   "description",
-
-  "admin_divider",
-  "role",
-  "status",
 ];
 
 schema.roles = [
@@ -188,6 +184,13 @@ for (const action of ["read", "update", "create", "delete"]) {
     fields: ["*"],
   });
 }
+
+schema.permissions.push({
+  collection: "directus_flows",
+  roleName: "collectivo_editor",
+  action: "read",
+  fields: ["*"],
+});
 
 schema.flows.push({
   flow: {

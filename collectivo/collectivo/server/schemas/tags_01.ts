@@ -78,6 +78,13 @@ schema.createM2MRelation("collectivo_tags", "directus_users", {
       special: ["m2m"],
       sort: 30,
       interface: "list-m2m",
+      options: {
+        layout: "table",
+        fields: ["directus_users_id.first_name", "directus_users_id.last_name"],
+        enableCreate: false,
+        enableSearchFilter: true,
+        enableLink: true,
+      },
       translations: [
         { language: "en-US", translation: "Users" },
         { language: "de-DE", translation: "Benutzer*innen" },

@@ -1,10 +1,9 @@
 export default defineAppConfig({
   collectivo: {
-    projectName: (val: string) => val || "Collectivo",
-    projectDescription: (val: string) =>
-      val ||
+    projectName: "Collectivo",
+    projectDescription:
       "Collectivo is an open-source platform for collaboration, participation, and data management.",
-    logoPath: (val: string) => val || "/img/logo.png",
+    logoPath: "/img/logo.png",
   },
   ui: {
     primary: "meteorite",

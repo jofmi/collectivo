@@ -110,8 +110,112 @@ schema.fields = [
   ...directusSystemFields("messages_campaigns"),
   ...directusSystemFields("messages_messages"),
   ...directusSystemFields("messages_templates"),
-  messageStatusField("messages_messages"),
-  messageStatusField("messages_campaigns"),
+  {
+    collection: "messages_campaigns",
+    field: "messages_campaign_status",
+    type: "string",
+    meta: {
+      sort: 10,
+      required: true,
+      interface: "select-dropdown",
+      display: "labels",
+      display_options: {
+        choices: [
+          {
+            text: "$t:draft",
+            value: "draft",
+            foreground: "#FFFFFF",
+            background: "#666666",
+          },
+          {
+            text: "$t:pending",
+            value: "pending",
+            foreground: "#FFFFFF",
+            background: "#CC6600",
+          },
+          {
+            text: "$t:partially_failed",
+            value: "partially failed",
+            foreground: "#FFFFFF",
+            background: "#800000",
+          },
+          {
+            text: "$t:completely_failed",
+            value: "completely failed",
+            foreground: "#FFFFFF",
+            background: "#800000",
+          },
+          {
+            text: "$t:sent",
+            value: "sent",
+            foreground: "#FFFFFF",
+            background: "#008000",
+          },
+        ],
+      },
+      width: "half",
+      options: {
+        choices: [
+          { text: "$t:draft", value: "draft" },
+          { text: "$t:pending", value: "pending" },
+          { text: "$t:partially_failed", value: "partially failed" },
+          { text: "$t:completely_failed", value: "completely failed" },
+          { text: "$t:sent", value: "sent" },
+        ],
+      },
+      translations: [
+        { language: "de-DE", translation: "Status" },
+        { language: "en-US", translation: "Status" },
+      ],
+    },
+    schema: { is_nullable: false, default_value: "draft" },
+  },
+  {
+    collection: "messages_messages",
+    field: "messages_message_status",
+    type: "string",
+    meta: {
+      sort: 10,
+      required: true,
+      interface: "select-dropdown",
+      display: "labels",
+      display_options: {
+        choices: [
+          {
+            text: "$t:pending",
+            value: "pending",
+            foreground: "#FFFFFF",
+            background: "#CC6600",
+          },
+          {
+            text: "$t:failed",
+            value: "failed",
+            foreground: "#FFFFFF",
+            background: "#800000",
+          },
+          {
+            text: "$t:sent",
+            value: "sent",
+            foreground: "#FFFFFF",
+            background: "#008000",
+          },
+        ],
+      },
+      width: "half",
+      options: {
+        choices: [
+          { text: "$t:pending", value: "pending" },
+          { text: "$t:failed", value: "failed" },
+          { text: "$t:sent", value: "sent" },
+        ],
+      },
+      translations: [
+        { language: "de-DE", translation: "Status" },
+        { language: "en-US", translation: "Status" },
+      ],
+    },
+    schema: { is_nullable: false, default_value: "pending" },
+  },
   {
     collection: "messages_templates",
     field: "messages_name",
@@ -448,62 +552,6 @@ schema.flows = [
     ],
   },
 ];
-
-function messageStatusField(collection: string) {
-  return {
-    collection: collection,
-    field: "messages_status",
-    type: "string",
-    meta: {
-      sort: 10,
-      required: true,
-      interface: "select-dropdown",
-      display: "labels",
-      display_options: {
-        choices: [
-          {
-            text: "$t:draft",
-            value: "draft",
-            foreground: "#FFFFFF",
-            background: "#666666",
-          },
-          {
-            text: "$t:pending",
-            value: "pending",
-            foreground: "#FFFFFF",
-            background: "#CC6600",
-          },
-          {
-            text: "$t:failed",
-            value: "failed",
-            foreground: "#FFFFFF",
-            background: "#800000",
-          },
-          {
-            text: "$t:sent",
-            value: "sent",
-            foreground: "#FFFFFF",
-            background: "#008000",
-          },
-        ],
-      },
-      width: "half",
-      options: {
-        choices: [
-          { text: "$t:draft", value: "draft" },
-          { text: "$t:pending", value: "pending" },
-          { text: "$t:failed", value: "failed" },
-          { text: "$t:sent", value: "sent" },
-        ],
-      },
-      translations: [
-        { language: "de-DE", translation: "Status" },
-        { language: "en-US", translation: "Status" },
-      ],
-    },
-    schema: { is_nullable: false, default_value: "draft" },
-  };
-}
 
 function setMessageStatusToFailedOperation(
   operationKey: string,

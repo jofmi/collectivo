@@ -268,7 +268,9 @@ export async function createOrUpdateDirectusFlow(flow: DirectusFlowWrapper) {
       }
 
       if (!operation.operation.options) {
-        throw new Error("operation.options must be defined for flows of type 'Trigger Flow'");
+        throw new Error(
+          "operation.options must be defined for flows of type 'Trigger Flow'",
+        );
       }
 
       operation.operation.options.flow = flowToTriggerInDb[0].id;

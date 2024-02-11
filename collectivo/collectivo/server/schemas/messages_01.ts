@@ -34,7 +34,8 @@ schema.collections = [
       sort: 90,
       group: "messages",
       icon: "campaign",
-      display_template: "{{messages_template.messages_name}} ({{messages_template.messages_method}})",
+      display_template:
+        "{{messages_template.messages_name}} ({{messages_template.messages_method}})",
       translations: [
         {
           language: "en-US",
@@ -299,7 +300,9 @@ for (const coll of ["messages_campaigns", "messages_messages"]) {
       meta: {
         required: true,
         display: "related-values",
-        display_options: { template: "{{messages_name}} ({{messages_method}})" },
+        display_options: {
+          template: "{{messages_name}} ({{messages_method}})",
+        },
       },
     },
   });
@@ -721,13 +724,3 @@ for (const action of ["read", "update", "create", "delete"]) {
     });
   }
 }
-
-
-
-
-
-
-
-
-
-

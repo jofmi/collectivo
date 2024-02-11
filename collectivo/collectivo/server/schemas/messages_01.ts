@@ -348,72 +348,6 @@ schema.createM2MRelation("messages_campaigns", "directus_users", {
 schema.flows = [
   {
     flow: {
-      name: "messages_create_messages_from_campaign",
-      icon: "conveyor_belt",
-      description: "Creates the individual messages to execute a campaign",
-      status: "active",
-      trigger: "event",
-      accountability: "all",
-      options: {
-        type: "action",
-        scope: ["items.create"],
-        collections: ["messages_campaigns"],
-      },
-    },
-    firstOperation: "messages_check_status_is_pending",
-    operations: [
-      {
-        operation: {
-          name: "messages_check_status_is_pending",
-          key: "messages_check_status_is_pending",
-          type: "condition",
-          position_x: 5,
-          position_y: 19,
-          options: {
-            filter: {
-              $trigger: {
-                payload: {
-                  messages_status: {
-                    _eq: "pending",
-                  },
-                },
-              },
-            },
-          },
-        },
-        resolve: "messages_expaned_campaign_to_messages",
-      },
-      {
-        operation: {
-          name: "messages_expaned_campaign_to_messages",
-          key: "messages_expaned_campaign_to_messages",
-          type: "exec",
-          position_x: 19,
-          position_y: 1,
-          options: {
-            code: 'module.exports = async function(data) {\n    campaign = data["$trigger"].payload;\n\tmessagesToCreate = [];\n    for (i in data["$trigger"].payload.messages_recipients.create) {\n        recipient = data["$trigger"].payload.messages_recipients.create[i]\n        messagesToCreate.push({\n            "messages_campaign": data["$trigger"].key,\n            "messages_recipient": recipient.directus_users_id.id,\n            "messages_status": "pending",\n            "messages_template": data["$trigger"].payload.messages_template\n        });\n    }\n\treturn {messagesToCreate};\n}',
-          },
-        },
-        resolve: "messages_store_individual_messages_in_messages",
-      },
-      {
-        operation: {
-          name: "messages_store_individual_messages_in_messages",
-          key: "messages_store_individual_messages_in_messages",
-          type: "item-create",
-          position_x: 37,
-          position_y: 1,
-          options: {
-            collection: "messages_messages",
-            emitEvents: true,
-            payload: "{{$last.messagesToCreate}}",
-          },
-        },
-      },
-    ],
-  },
-  {
-    flow: {
       name: "messages_send_message",
       icon: "send",
       description:
@@ -570,6 +504,72 @@ schema.flows = [
         "set_message_status_to_failed_send_email_failure",
         109,
       ),
+    ],
+  },
+  {
+    flow: {
+      name: "messages_create_messages_from_campaign",
+      icon: "conveyor_belt",
+      description: "Creates the individual messages to execute a campaign",
+      status: "active",
+      trigger: "event",
+      accountability: "all",
+      options: {
+        type: "action",
+        scope: ["items.create"],
+        collections: ["messages_campaigns"],
+      },
+    },
+    firstOperation: "messages_check_status_is_pending",
+    operations: [
+      {
+        operation: {
+          name: "messages_check_status_is_pending",
+          key: "messages_check_status_is_pending",
+          type: "condition",
+          position_x: 5,
+          position_y: 19,
+          options: {
+            filter: {
+              $trigger: {
+                payload: {
+                  messages_status: {
+                    _eq: "pending",
+                  },
+                },
+              },
+            },
+          },
+        },
+        resolve: "messages_expaned_campaign_to_messages",
+      },
+      {
+        operation: {
+          name: "messages_expaned_campaign_to_messages",
+          key: "messages_expaned_campaign_to_messages",
+          type: "exec",
+          position_x: 19,
+          position_y: 1,
+          options: {
+            code: 'module.exports = async function(data) {\n    campaign = data["$trigger"].payload;\n\tmessagesToCreate = [];\n    for (i in data["$trigger"].payload.messages_recipients.create) {\n        recipient = data["$trigger"].payload.messages_recipients.create[i]\n        messagesToCreate.push({\n            "messages_campaign": data["$trigger"].key,\n            "messages_recipient": recipient.directus_users_id.id,\n            "messages_status": "pending",\n            "messages_template": data["$trigger"].payload.messages_template\n        });\n    }\n\treturn {messagesToCreate};\n}',
+          },
+        },
+        resolve: "messages_store_individual_messages_in_messages",
+      },
+      {
+        operation: {
+          name: "messages_store_individual_messages_in_messages",
+          key: "messages_store_individual_messages_in_messages",
+          type: "item-create",
+          position_x: 37,
+          position_y: 1,
+          options: {
+            collection: "messages_messages",
+            emitEvents: true,
+            payload: "{{$last.messagesToCreate}}",
+          },
+        },
+      },
     ],
   },
 ];

@@ -29,6 +29,7 @@ export interface DirectusOperationWrapper {
   operation: Partial<DirectusOperation<any>>;
   reject?: string;
   resolve?: string;
+  flowToTrigger?: string; // Only for operations of type "trigger". For those this field is required.
 }
 
 export interface DirectusFlowWrapper {

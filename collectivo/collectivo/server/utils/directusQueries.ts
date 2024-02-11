@@ -242,6 +242,38 @@ export async function createOrUpdateDirectusFlow(flow: DirectusFlowWrapper) {
   for (const operation of flow.operations ?? []) {
     operation.operation.flow = flowId;
 
+    if (operation.operation.type == "trigger") {
+      if (!operation.flowToTrigger) {
+        throw new Error(
+          "flowToTrigger must be set for operations of type 'Trigger Flow'",
+        );
+      }
+
+      // Get the flow that should be triggered
+      const flowToTriggerInDb = await directus.request(
+        readFlows({
+          filter: {
+            name: { _eq: operation.flowToTrigger },
+          },
+        }),
+      );
+
+      if (flowToTriggerInDb.length === 0) {
+        throw new Error(
+          "flowToTrigger " +
+            operation.flowToTrigger +
+            " must be created before it can be referenced by another flow. " +
+            " Make sure it appears first in the list of flows in the schema.",
+        );
+      }
+
+      if (!operation.operation.options) {
+        throw new Error("operation.options must be defined for flows of type 'Trigger Flow'");
+      }
+
+      operation.operation.options.flow = flowToTriggerInDb[0].id;
+    }
+
     const operationId = await createOrUpdateDirectusOperation(
       operation.operation,
     );

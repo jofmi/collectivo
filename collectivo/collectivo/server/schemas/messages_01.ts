@@ -508,67 +508,160 @@ schema.flows = [
   },
   {
     flow: {
-      name: "messages_create_messages_from_campaign",
-      icon: "conveyor_belt",
-      description: "Creates the individual messages to execute a campaign",
+      name: "messages_execute_campaign",
+      icon: "campaign",
+      description: "Executes a campaign by sending the corresponding messages",
       status: "active",
-      trigger: "event",
+      trigger: "operation",
       accountability: "all",
       options: {
-        type: "action",
-        scope: ["items.create"],
-        collections: ["messages_campaigns"],
+        return: "$last",
       },
     },
-    firstOperation: "messages_check_status_is_pending",
+    firstOperation: "read_campaign_data",
     operations: [
       {
         operation: {
-          name: "messages_check_status_is_pending",
-          key: "messages_check_status_is_pending",
+          name: "read_campaign_data",
+          key: "read_campaign_data",
+          type: "item-read",
+          position_x: 19,
+          position_y: 1,
+          options: {
+            collection: "messages_campaigns",
+            key: "{{$trigger.messages_campaign_id}}",
+            query: {
+              fields: [
+                "id",
+                "messages_campaign_status",
+                "messages_template",
+                "messages_recipients.directus_users_id",
+              ],
+            },
+          },
+        },
+        resolve: "check_status_is_pending",
+      },
+      {
+        operation: {
+          name: "check_status_is_pending",
+          key: "check_status_is_pending",
           type: "condition",
-          position_x: 5,
-          position_y: 19,
+          position_x: 37,
+          position_y: 1,
           options: {
             filter: {
-              $trigger: {
-                payload: {
-                  messages_status: {
-                    _eq: "pending",
-                  },
+              read_campaign_data: {
+                messages_campaign_status: {
+                  _eq: "pending",
                 },
               },
             },
           },
         },
-        resolve: "messages_expaned_campaign_to_messages",
+        resolve: "expand_campaign_to_individual_messages",
       },
       {
         operation: {
-          name: "messages_expaned_campaign_to_messages",
-          key: "messages_expaned_campaign_to_messages",
+          name: "expand_campaign_to_individual_messages",
+          key: "expand_campaign_to_individual_messages",
+          type: "exec",
+          position_x: 55,
+          position_y: 1,
+          options: {
+            code: 'module.exports = async function(data) {\n    campaign = data["read_campaign_data"]\n\tmessagesToSend = [];\n    for (i in campaign.messages_recipients) {\n        recipient = campaign.messages_recipients[i]\n        messagesToSend.push({\n            "recipient_id": recipient.directus_users_id,\n            "template_id": campaign.messages_template,\n            "campaign_id": campaign.id,\n        });\n    }\n\treturn messagesToSend;\n}',
+          },
+        },
+        resolve: "send_messages",
+      },
+      {
+        operation: {
+          name: "send_messages",
+          key: "send_messages",
+          type: "trigger",
+          position_x: 73,
+          position_y: 1,
+          options: {
+            payload: "{{$last}}",
+          },
+        },
+        flowToTrigger: "messages_send_message",
+        resolve: "determine_outcome",
+      },
+      {
+        operation: {
+          name: "Determine outcome",
+          key: "determine_outcome",
+          type: "exec",
+          position_x: 91,
+          position_y: 1,
+          options: {
+            code: 'module.exports = async function(data) {\n  if (data["$last"].every((output) => output.status == "sent")) {\n  \treturn "sent";\n  } else if (data["$last"].every((output) => output.status == "failed")) {\n    return "completely_failed";\n  } else {\n    return "partially_failed";\n  }\n}',
+          },
+        },
+        resolve: "update_campaign_status",
+      },
+      {
+        operation: {
+          name: "update_campaign_status",
+          key: "update_campaign_status",
+          type: "item-update",
+          position_x: 109,
+          position_y: 1,
+          options: {
+            collection: "messages_campaigns",
+            key: "{{$trigger.messages_campaign_id}}",
+            payload: {
+              messages_campaign_status: "{{$last}}",
+            },
+          },
+        },
+      },
+    ],
+  },
+  {
+    flow: {
+      name: "messages_handle_campaign_changes",
+      icon: "campaign",
+      color: null,
+      description:
+        'Triggers the execute_campaign flow when a campaign is added or updated with with status "pending"',
+      status: "active",
+      trigger: "event",
+      accountability: "all",
+      options: {
+        type: "action",
+        scope: ["items.create", "items.update"],
+        collections: ["messages_campaigns"],
+      },
+    },
+    firstOperation: "create_modified_keys_array",
+    operations: [
+      {
+        operation: {
+          name: "create_modified_keys_array",
+          key: "create_modified_keys_array",
           type: "exec",
           position_x: 19,
           position_y: 1,
           options: {
-            code: 'module.exports = async function(data) {\n    campaign = data["$trigger"].payload;\n\tmessagesToCreate = [];\n    for (i in data["$trigger"].payload.messages_recipients.create) {\n        recipient = data["$trigger"].payload.messages_recipients.create[i]\n        messagesToCreate.push({\n            "messages_campaign": data["$trigger"].key,\n            "messages_recipient": recipient.directus_users_id.id,\n            "messages_status": "pending",\n            "messages_template": data["$trigger"].payload.messages_template\n        });\n    }\n\treturn {messagesToCreate};\n}',
+            code: 'module.exports = async function(data) {    \n\tmodified_keys = [];\n    if (data["$trigger"].key) {\n        modified_keys.push({"messages_campaign_id": data["$trigger"].key});\n    }\n    for (i in data["$trigger"].keys) {\n        modified_keys.push({"messages_campaign_id": data["$trigger"].keys[i]});\n    }\n    return modified_keys;\n}',
           },
         },
-        resolve: "messages_store_individual_messages_in_messages",
+        resolve: "trigger_execute_campaign_flow",
       },
       {
         operation: {
-          name: "messages_store_individual_messages_in_messages",
-          key: "messages_store_individual_messages_in_messages",
-          type: "item-create",
+          name: "Trigger execute campaign flow",
+          key: "trigger_execute_campaign_flow",
+          type: "trigger",
           position_x: 37,
           position_y: 1,
           options: {
-            collection: "messages_messages",
-            emitEvents: true,
-            payload: "{{$last.messagesToCreate}}",
+            payload: "{{$last}}",
           },
         },
+        flowToTrigger: "messages_execute_campaign",
       },
     ],
   },
@@ -628,6 +721,9 @@ for (const action of ["read", "update", "create", "delete"]) {
     });
   }
 }
+
+
+
 
 
 

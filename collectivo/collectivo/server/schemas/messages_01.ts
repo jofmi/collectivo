@@ -414,42 +414,52 @@ schema.flows = [
   },
   {
     flow: {
-      name: "messages_send_email_message",
-      icon: "outgoing_mail",
-      color: null,
-      description: "Send a message by email",
+      name: "messages_send_message",
+      icon: "send",
+      description:
+        "Sends a message based on the provided data. The input must contain the following fields: recipient_id (directus user UID), template_id (integer, pointing to an entry of the messages_templates collection). The following inputs are optional: campaign_id (integer, pointing to an entry of the messages_campaigns collection).",
       status: "active",
-      trigger: "event",
+      trigger: "operation",
       accountability: "all",
       options: {
-        type: "action",
-        scope: ["items.create"],
-        collections: ["messages_messages"],
+        return: "$last",
       },
     },
-    firstOperation: "check_message_status_is_pending",
+    firstOperation: "create_message_record",
     operations: [
       {
         operation: {
-          name: "Check message status is pending",
-          key: "check_message_status_is_pending",
-          type: "condition",
+          name: "Create message record",
+          key: "create_message_record",
+          type: "item-create",
           position_x: 19,
           position_y: 1,
           options: {
-            filter: {
-              $trigger: {
-                payload: {
-                  messages_status: {
-                    _eq: "pending",
-                  },
-                },
-              },
+            collection: "messages_messages",
+            payload: {
+              messages_status: "pending",
+              messages_template: "{{$trigger.template_id}}",
+              messages_recipient: "{{$trigger.recipient_id}}",
+              messages_campaign: "{{$trigger.campaign_id}}",
             },
           },
         },
         resolve: "read_template_data",
-        reject: "",
+        reject: "populate_response_failure_create_message_record_failure",
+      },
+      {
+        operation: {
+          name: "Populate response failure",
+          key: "populate_response_failure_create_message_record_failure",
+          type: "transform",
+          position_x: 37,
+          position_y: 17,
+          options: {
+            json: {
+              status: "failed",
+            },
+          },
+        },
       },
       {
         operation: {
@@ -460,16 +470,12 @@ schema.flows = [
           position_y: 1,
           options: {
             collection: "messages_templates",
-            key: "{{$trigger.payload.messages_template}}",
+            key: "{{$trigger.template_id}}",
           },
         },
         resolve: "read_recipient_data",
-        reject: "set_message_status_failed_read_template_data_failure",
+        reject: "set_message_status_to_failed_read_template_data_failure",
       },
-      setMessageStatusToFailedOperation(
-        "set_message_status_failed_read_template_data_failure",
-        55,
-      ),
       {
         operation: {
           name: "Read recipient data",
@@ -478,20 +484,16 @@ schema.flows = [
           position_x: 55,
           position_y: 1,
           options: {
+            collection: "directus_users",
             query: {
               fields: ["first_name", "last_name", "email"],
             },
-            collection: "directus_users",
-            key: "{{$trigger.payload.messages_recipient}}",
+            key: "{{$trigger.recipient_id}}",
           },
         },
         resolve: "render_message",
-        reject: "set_message_status_failed_read_recipient_data_failure",
+        reject: "set_message_status_to_failed_read_recipient_data_failure",
       },
-      setMessageStatusToFailedOperation(
-        "set_message_status_failed_read_recipient_data_failure",
-        73,
-      ),
       {
         operation: {
           name: "Render message",
@@ -504,12 +506,8 @@ schema.flows = [
           },
         },
         resolve: "send_email",
-        reject: "set_message_status_failed_render_message_failure",
+        reject: "set_message_status_to_failed_render_message_failure",
       },
-      setMessageStatusToFailedOperation(
-        "set_message_status_failed_render_message_failure",
-        91,
-      ),
       {
         operation: {
           name: "Send email",
@@ -520,16 +518,11 @@ schema.flows = [
           options: {
             subject: "{{read_template_data.messages_subject}}",
             body: "{{render_message.rendered_message}}",
-            to: "{{read_recipient_data.email}}",
           },
         },
         resolve: "set_message_status_to_sent",
-        reject: "set_message_status_failed_send_email_failure",
+        reject: "set_message_status_to_failed_send_email_failure",
       },
-      setMessageStatusToFailedOperation(
-        "set_message_status_failed_send_email_failure",
-        109,
-      ),
       {
         operation: {
           name: "Set message status to sent",
@@ -539,43 +532,85 @@ schema.flows = [
           position_y: 1,
           options: {
             collection: "messages_messages",
-            emitEvents: true,
-            key: "{{$trigger.key}}",
             payload: {
-              messages_status: "sent",
+              messages_message_status: "sent",
+            },
+            key: "{{create_message_record[0]}}",
+          },
+        },
+        resolve: "populate_response_sent",
+      },
+      {
+        operation: {
+          name: "Populate response sent",
+          key: "populate_response_sent",
+          type: "transform",
+          position_x: 127,
+          position_y: 1,
+          options: {
+            json: {
+              status: "sent",
             },
           },
         },
-        resolve: "",
-        reject: "",
       },
+      ...addFailureHandlingOperationsForSendMessagesFlow(
+        "set_message_status_to_failed_read_template_data_failure",
+        55,
+      ),
+      ...addFailureHandlingOperationsForSendMessagesFlow(
+        "set_message_status_to_failed_read_recipient_data_failure",
+        73,
+      ),
+      ...addFailureHandlingOperationsForSendMessagesFlow(
+        "set_message_status_to_failed_render_message_failure",
+        91,
+      ),
+      ...addFailureHandlingOperationsForSendMessagesFlow(
+        "set_message_status_to_failed_send_email_failure",
+        109,
+      ),
     ],
   },
 ];
 
-function setMessageStatusToFailedOperation(
+function addFailureHandlingOperationsForSendMessagesFlow(
   operationKey: string,
   positionX: number,
 ) {
-  return {
-    operation: {
-      name: "Set message status to failed",
-      key: operationKey,
-      type: "item-update",
-      position_x: positionX,
-      position_y: 17,
-      options: {
-        collection: "messages_messages",
-        emitEvents: true,
-        key: "{{$trigger.key}}",
-        payload: {
-          messages_status: "failed",
+  return [
+    {
+      operation: {
+        name: "Set message status to failed",
+        key: operationKey,
+        type: "item-update",
+        position_x: positionX,
+        position_y: 17,
+        options: {
+          collection: "messages_messages",
+          key: "{{create_message_record[0]}}",
+          payload: {
+            messages_message_status: "failed",
+          },
+        },
+      },
+      resolve: "populate_response_failure_" + operationKey,
+    },
+    {
+      operation: {
+        name: "Populate response failure",
+        key: "populate_response_failure_" + operationKey,
+        type: "transform",
+        position_x: positionX + 18,
+        position_y: 33,
+        options: {
+          json: {
+            status: "failed",
+          },
         },
       },
     },
-    resolve: "",
-    reject: "",
-  };
+  ];
 }
 
 for (const action of ["read", "update", "create", "delete"]) {
@@ -593,3 +628,10 @@ for (const action of ["read", "update", "create", "delete"]) {
     });
   }
 }
+
+
+
+
+
+
+

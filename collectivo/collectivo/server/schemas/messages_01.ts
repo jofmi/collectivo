@@ -723,6 +723,7 @@ for (const action of ["read", "update", "create", "delete"]) {
     "messages",
     "messages_campaigns",
     "messages_templates",
+    "messages_campaigns_directus_users",
   ]) {
     schema.permissions.push({
       collection: collection,

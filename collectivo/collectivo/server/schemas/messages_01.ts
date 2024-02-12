@@ -617,6 +617,7 @@ schema.flows = [
             payload: {
               messages_campaign_status: "{{$last}}",
             },
+            permissions: "$full",
           },
         },
       },
@@ -763,7 +764,11 @@ schema.permissions.push({
 });
 
 for (const action of ["read", "update", "create", "delete"]) {
-  for (const collection of ["messages", "messages_templates"]) {
+  for (const collection of [
+    "messages",
+    "messages_templates",
+    "messages_campaigns_directus_users",
+  ]) {
     schema.permissions.push({
       collection: collection,
       roleName: "collectivo_editor",
@@ -771,4 +776,13 @@ for (const action of ["read", "update", "create", "delete"]) {
       fields: ["*"],
     });
   }
+}
+
+for (const action of ["read", "update", "create"]) {
+  schema.permissions.push({
+    collection: "directus_users",
+    roleName: "collectivo_editor",
+    action: action,
+    fields: ["messages_campaigns"],
+  });
 }

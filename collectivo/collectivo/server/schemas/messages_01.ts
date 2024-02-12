@@ -718,13 +718,52 @@ for (const action of ["read", "delete"]) {
   });
 }
 
+for (const action of ["read", "delete"]) {
+  schema.permissions.push({
+    collection: "messages_campaigns",
+    roleName: "collectivo_editor",
+    action: action,
+    fields: ["*"],
+  });
+}
+
+schema.permissions.push({
+  collection: "messages_campaigns",
+  roleName: "collectivo_editor",
+  action: "update",
+  permissions: { _and: [{ messages_campaign_status: { _eq: "draft" } }] },
+  validation: {
+    _and: [
+      {
+        _or: [
+          { messages_campaign_status: { _eq: "draft" } },
+          { messages_campaign_status: { _eq: "pending" } },
+        ],
+      },
+    ],
+  },
+  fields: ["*"],
+});
+
+schema.permissions.push({
+  collection: "messages_campaigns",
+  roleName: "collectivo_editor",
+  action: "create",
+  validation: {
+    _and: [
+      {
+        _or: [
+          { messages_campaign_status: { _eq: "draft" } },
+          { messages_campaign_status: { _eq: "pending" } },
+        ],
+      },
+    ],
+  },
+  fields: ["*"],
+});
+
 for (const action of ["read", "update", "create", "delete"]) {
-  for (const collection of [
-    "messages",
-    "messages_campaigns",
-    "messages_templates",
-    "messages_campaigns_directus_users",
-  ]) {
+  for (const collection of ["messages", "messages_templates"]) {
     schema.permissions.push({
       collection: collection,
       roleName: "collectivo_editor",

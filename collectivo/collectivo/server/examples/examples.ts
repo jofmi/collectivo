@@ -129,6 +129,33 @@ export default async function examples() {
     console.info(error);
   }
 
+  // Create email templates
+  console.info("Creating email templates");
+  await directus.request(deleteItems("messages_templates", { limit: 1000 }));
+  const templates = [];
+
+  for (const i in [1, 2, 3]) {
+    templates.push({
+      messages_name: `Example Template ${i}`,
+      messages_method: "email",
+      messages_subject: `Example Subject ${i}`,
+      messages_content:
+        "Hello {{recipient_first_name}} {{recipient_last_name}}. \n This is a second line.",
+    });
+  }
+
+  const templateIds = [];
+
+  try {
+    const ids = await directus.request(
+      createItems("messages_templates", templates),
+    );
+
+    templateIds.push(...ids);
+  } catch (error) {
+    console.info(error);
+  }
+
   // Create some tiles
   console.info("Creating tiles");
   await directus.request(deleteItems("collectivo_tiles", { limit: 1000 }));

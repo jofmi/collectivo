@@ -14,6 +14,7 @@ export const useCollectivoMenus = () =>
     return {
       main: [],
       public: [],
+      profile: [],
     };
   });
 

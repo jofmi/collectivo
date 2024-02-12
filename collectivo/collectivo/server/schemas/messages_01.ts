@@ -709,11 +709,19 @@ function addFailureHandlingOperationsForSendMessagesFlow(
   ];
 }
 
+for (const action of ["read", "delete"]) {
+  schema.permissions.push({
+    collection: "messages_messages",
+    roleName: "collectivo_editor",
+    action: action,
+    fields: ["*"],
+  });
+}
+
 for (const action of ["read", "update", "create", "delete"]) {
   for (const collection of [
     "messages",
     "messages_campaigns",
-    "messages_messages",
     "messages_templates",
   ]) {
     schema.permissions.push({

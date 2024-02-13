@@ -42,8 +42,17 @@ export default defineNuxtPlugin(() => {
     },
   ];
 
+  const profileItems: CollectivoMenuItem[] = [
+    {
+      label: "General",
+      to: "/profile",
+      order: 1,
+    },
+  ];
+
   menu.value.main.push(...items);
   menu.value.public.push(...publicItems);
+  menu.value.profile.push(...profileItems);
 
   const profileInputs: CollectivoFormField[] = [
     {

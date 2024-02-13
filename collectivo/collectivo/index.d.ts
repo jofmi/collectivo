@@ -68,6 +68,7 @@ declare global {
   interface CollectivoMenus {
     main: CollectivoMenuItem[];
     public: CollectivoMenuItem[];
+    profile: CollectivoMenuItem[];
   }
 
   interface CollectivoMenuItem {

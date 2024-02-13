@@ -16,7 +16,16 @@ export default defineNuxtPlugin({
       },
     ];
 
+    const profileItems: CollectivoMenuItem[] = [
+      {
+        label: "Membership",
+        to: "/memberships/membership",
+        order: 1,
+      },
+    ];
+
     menu.value.public.push(...publicItems);
+    menu.value.profile.push(...profileItems);
 
     const is_legal = [
       {

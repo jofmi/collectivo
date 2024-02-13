@@ -1,17 +1,12 @@
-import { fileURLToPath } from "node:url";
+import axios from "axios";
 import { describe, expect, test } from "vitest";
-import { setup, $fetch } from "@nuxt/test-utils/e2e";
 
 describe("basics", async () => {
-  await setup({
-    rootDir: fileURLToPath(new URL("..", import.meta.url)),
-    server: true,
-  });
+  test("Status healthy", async () => {
+    const response = await axios.get("http://localhost:3000/api/status");
+    expect(response.status).toBe(200);
 
-  test("all services healthy", async () => {
-    const res = await $fetch("/api/status/");
-
-    expect(res).toStrictEqual({
+    expect(response.data).toStrictEqual({
       healthy: {
         collectivo: true,
         directus: true,

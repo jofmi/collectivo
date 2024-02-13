@@ -15,9 +15,6 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event);
     return await registerMembership(body);
   } catch (e: any) {
-    // TODO: Use logger
-    console.log(e);
-
     if (
       e &&
       "response" in e &&
@@ -29,12 +26,33 @@ export default defineEventHandler(async (event) => {
       setResponseStatus(event, 500);
     }
 
-    return e;
+    if ("message" in e) {
+      logger.error(e.message);
+    } else if (
+      "errors" in e &&
+      Array.isArray(e.errors) &&
+      e.errors.length > 0
+    ) {
+      for (const error of e.errors) {
+        logger.error(error.message);
+      }
+
+      throw createError({
+        statusCode: 400,
+        statusMessage: e.errors[0].message,
+      });
+    } else {
+      logger.error("Unknown error");
+    }
+
+    throw e;
   }
 });
 
 async function registerMembership(body: any) {
-  logger.info("Received membership application: " + body);
+  logger.info(
+    "Received membership application: " + body["directus_users.email"],
+  );
 
   await refreshDirectus();
   const directus = await useDirectusAdmin();
@@ -87,7 +105,10 @@ async function registerMembership(body: any) {
 
   // Check if user exists
   if (!userData.email) {
-    throw new Error("Email is required.");
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Email is required.",
+    });
   }
 
   const usersRes = await directus.request(
@@ -102,7 +123,10 @@ async function registerMembership(body: any) {
   );
 
   if (usersRes.length > 0) {
-    throw new Error("User already exists (Directus).");
+    throw createError({
+      statusCode: 400,
+      statusMessage: "User already exists (Directus)",
+    });
   }
 
   // Check if keycloak user exists and extract password
@@ -110,7 +134,10 @@ async function registerMembership(body: any) {
     const kcUser = await keycloak.users.find({ email: userData.email });
 
     if (kcUser.length > 0) {
-      throw new Error("User already exists (Keycloak).");
+      throw createError({
+        statusCode: 400,
+        statusMessage: "User already exists (Keycloak)",
+      });
     }
 
     delete userData.password;

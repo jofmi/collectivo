@@ -1,5 +1,6 @@
 import {
   createItem,
+  readItems,
   createUser,
   readUsers,
   deleteUser,
@@ -14,6 +15,9 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event);
     return await registerMembership(body);
   } catch (e: any) {
+    // TODO: Use logger
+    console.log(e);
+
     if (
       e &&
       "response" in e &&
@@ -30,9 +34,7 @@ export default defineEventHandler(async (event) => {
 });
 
 async function registerMembership(body: any) {
-  logger.info(
-    "Received membership application: " + body["directus_users.email"],
-  );
+  logger.info("Received membership application: " + body);
 
   await refreshDirectus();
   const directus = await useDirectusAdmin();
@@ -50,6 +52,23 @@ async function registerMembership(body: any) {
   }
 
   const user_password = userData.password;
+
+  // Get membership type
+  if (typeof membershipData.memberships_type === "string") {
+    const types = await directus.request(
+      readItems("memberships_types", {
+        filter: { memberships_name: membershipData.memberships_type },
+      }),
+    );
+
+    if (types.length === 0) {
+      throw new Error(
+        "Membership type not found: " + membershipData.memberships_type,
+      );
+    }
+
+    membershipData.memberships_type = types[0].id;
+  }
 
   // Connect to keycloak
   const keycloak = new KcAdminClient({

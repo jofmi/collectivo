@@ -252,7 +252,7 @@ async function fillOutAll() {
     } else if (input.type === "checkbox") {
       state[input.key] = true;
     } else if (input.type === "date") {
-      state[input.key] = "2021-01-01";
+      state[input.key] = new Date();
     } else if ("key" in input) {
       state[input.key] = "test";
     }

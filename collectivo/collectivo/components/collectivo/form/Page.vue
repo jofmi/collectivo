@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { FetchError } from "ofetch";
-
 const toast = useToast();
 const { t } = useI18n();
 const debug = useRuntimeConfig().public.debug;
@@ -12,21 +10,6 @@ const props = defineProps({
     required: true,
   },
 });
-
-function extractErrorMessages(err: FetchError | null) {
-  if (!(err && err.data && err.data?.errors)) {
-    return;
-  }
-
-  for (const subErr of err.data.errors) {
-    if (
-      subErr.message ==
-      'Value for field "email" in collection "directus_users" has to be unique.'
-    ) {
-      errorMessage.value = t("This email is already in use");
-    }
-  }
-}
 
 async function onSubmitNuxt(data: any) {
   if (!props.form.submitPath) {
@@ -42,7 +25,7 @@ async function onSubmitNuxt(data: any) {
   });
 
   if (res.status.value === "error") {
-    extractErrorMessages(res.error.value);
+    errorMessage.value = res.error.value?.message ?? "";
     throw res.error.value;
   }
 }

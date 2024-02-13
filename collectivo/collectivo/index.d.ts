@@ -150,9 +150,14 @@ declare global {
         expand?: boolean;
       }
     | {
-        type: "text" | "number" | "email" | "password" | "textarea" | "date";
+        type: "text" | "number" | "email" | "password" | "textarea";
         placeholder?: string;
         icon?: string;
+      }
+    | {
+        type: "date";
+        datepicker?: boolean;
+        birthdate?: boolean;
       }
     | {
         type: "checkbox";

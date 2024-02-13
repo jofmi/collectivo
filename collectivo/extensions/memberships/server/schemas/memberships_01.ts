@@ -18,7 +18,8 @@ schema.collections = [
     meta: {
       sort: 100,
       icon: "switch_account",
-      display_template: "{{memberships_user}} - {{memberships_type}}",
+      display_template:
+        "{{memberships_user}} - {{memberships_type.memberships_name}}",
       translations: [
         {
           language: "en-US",

@@ -37,9 +37,7 @@ const months = [
 if (props.modelValue) {
   date.value = new Date(props.modelValue);
   day.value = date.value.getUTCDate().toString().padStart(2, "0");
-  // Month from months array
   month.value = months[date.value.getUTCMonth()];
-
   year.value = date.value.getUTCFullYear().toString();
 }
 

@@ -1,4 +1,10 @@
 {
+  "No memberships found": "Keine Mitgliedschaften gefunden",
+  "Membership": "Mitgliedschaft",
+  "Type": "Art",
+  "Status": "Status",
+  "Shares": "Anteile",
+
   "Register": "Registrieren",
   "Membership application form": "Mitgliedschaftsantrag",
   "Application submitted!": "Antrag gesendet!",
@@ -11,7 +17,6 @@
   "Organization ID": "Organisations ID",
   "Organization contact person": "Organisation Kontaktperson",
   "Organization address": "Organisation Adresse",
-  "Membership": "Mitgliedschaft",
   "Payment details": "Zahlungsweise",
   "Conditions": "Konditionen",
   "Survey": "Umfrage",

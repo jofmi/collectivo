@@ -422,6 +422,7 @@ async function fillOutAll() {
             <template v-else-if="input.type === 'date'">
               <CollectivoFormDate
                 v-model="state[input.key]"
+                :birthdate="input.birthdate"
                 :disabled="input.disabled"
               ></CollectivoFormDate>
             </template>

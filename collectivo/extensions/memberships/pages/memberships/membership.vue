@@ -40,25 +40,39 @@ getMemberships();
 
 <template>
   <CollectivoMenuTabs :items="profileMenu" />
-  <CollectivoContainer>
-    <div v-if="loaded">
-      <div v-if="memberships.length == 0">
-        {{ t("No memberships found") }}
-      </div>
-      <div v-else>
-        <div
-          v-for="membership in memberships"
-          :key="membership.id"
-          class="flex flex-col"
-        >
+
+  <div v-if="loaded">
+    <div v-if="memberships.length == 0">
+      {{ t("No memberships found") }}
+    </div>
+    <div v-else>
+      <CollectivoContainer
+        v-for="membership in memberships"
+        :key="membership.id"
+      >
+        <div class="flex flex-col">
           <div>{{ t("ID") }}: {{ membership.id }}</div>
           <div>
-            {{ t("Type") }}: {{ membership.memberships_type.memberships_name }}
+            {{ t("Type") }}:
+            {{ membership.memberships_type.memberships_name }}
           </div>
-          <div>{{ t("Status") }}: {{ membership.memberships_status }}</div>
+          <div>
+            {{ t("Status") }}: {{ t(membership.memberships_status ?? "") }}
+          </div>
           <div>{{ t("Shares") }}: {{ membership.memberships_shares }}</div>
         </div>
-      </div>
+      </CollectivoContainer>
     </div>
-  </CollectivoContainer>
+  </div>
 </template>
+
+<i18n lang="json">
+{
+  "de": {
+    "applied": "Beantragt",
+    "approved": "Angenommen",
+    "ended": "Beendet",
+    "No memberships found": "Keine Mitgliedschaften gefunden"
+  }
+}
+</i18n>

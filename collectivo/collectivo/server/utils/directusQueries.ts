@@ -408,7 +408,10 @@ export async function createOrUpdateDirectusPermission(
       console.warn("Override not implemented yet");
     } else if (permissionDB.fields == "*") {
       permission.fields = ["*"];
-    } else if (permissionDB.fields[0] !== "*") {
+    } else if (
+      Array.isArray(permissionDB.fields) &&
+      permissionDB.fields[0] !== "*"
+    ) {
       if (typeof permission.fields == "string") {
         permission.fields = [permission.fields];
       }

@@ -625,21 +625,35 @@ schema.flows.push({
 // ----------------------------------------------------------------------------
 
 for (const action of ["create", "read", "update", "delete"]) {
-  schema.permissions = [
-    {
-      collection: "memberships",
-      roleName: "collectivo_editor",
-      action: action,
-      fields: ["*"],
-    },
-    {
-      collection: "memberships_types",
-      roleName: "collectivo_editor",
-      action: action,
-      fields: ["*"],
-    },
-  ];
+  schema.permissions.push({
+    collection: "memberships",
+    roleName: "collectivo_editor",
+    action: action,
+    fields: ["*"],
+  });
+
+  schema.permissions.push({
+    collection: "memberships_types",
+    roleName: "collectivo_editor",
+    action: action,
+    fields: ["*"],
+  });
 }
+
+schema.permissions.push({
+  collection: "memberships",
+  roleName: "collectivo_user",
+  permissions: { _and: [{ memberships_user: { _eq: "$CURRENT_USER" } }] },
+  action: "read",
+  fields: ["*"],
+});
+
+schema.permissions.push({
+  collection: "memberships_types",
+  roleName: "collectivo_user",
+  action: "read",
+  fields: ["*"],
+});
 
 // ----------------------------------------------------------------------------
 // Translations ---------------------------------------------------------------

@@ -58,6 +58,7 @@ export default async function examples() {
     ["Bob", [type_ids[1]], "approved"],
     ["Charlie", type_ids, "approved"],
     ["Dave", type_ids, "in-cancellation"],
+    ["User", type_ids, "approved"],
   ];
 
   for (const user of users) {

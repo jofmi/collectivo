@@ -455,6 +455,7 @@ schema.flows = [
           options: {
             subject: "{{read_template_data.messages_subject}}",
             body: "{{render_message.rendered_message}}",
+            to: ["{{read_recipient_data.email}}"],
           },
         },
         resolve: "set_message_status_to_sent",

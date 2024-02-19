@@ -420,9 +420,15 @@ async function fillOutAll() {
               </template>
             </template>
             <template v-else-if="input.type === 'date'">
-              <CollectivoFormDate
+              <CollectivoFormDatePicker
+                v-if="input.useDatePicker"
                 v-model="state[input.key]"
-                :birthdate="input.birthdate"
+              ></CollectivoFormDatePicker>
+              <CollectivoFormDate
+                v-else
+                v-model="state[input.key]"
+                :max-years-future="input.maxYearsFuture"
+                :max-years-past="input.maxYearsPast"
                 :disabled="input.disabled"
               ></CollectivoFormDate>
             </template>

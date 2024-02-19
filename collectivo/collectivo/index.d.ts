@@ -156,8 +156,9 @@ declare global {
       }
     | {
         type: "date";
-        datepicker?: boolean;
-        birthdate?: boolean;
+        useDatePicker?: boolean;
+        maxYearsFuture?: number;
+        maxYearsPast?: number;
       }
     | {
         type: "checkbox";

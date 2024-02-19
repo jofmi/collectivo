@@ -4,9 +4,13 @@ const props = defineProps({
     type: Date,
     default: null,
   },
-  birthdate: {
-    type: Boolean,
-    default: false,
+  maxYearsFuture: {
+    type: Number,
+    default: 0,
+  },
+  maxYearsPast: {
+    type: Number,
+    default: 150,
   },
 });
 
@@ -38,8 +42,9 @@ const months = [
   "December",
 ];
 
-const years = Array.from({ length: 150 }, (_, i) =>
-  (new Date().getFullYear() - i).toString(),
+const years = Array.from(
+  { length: props.maxYearsPast + props.maxYearsFuture },
+  (_, i) => (new Date().getFullYear() + props.maxYearsFuture - i).toString(),
 );
 
 if (props.modelValue) {
@@ -63,36 +68,31 @@ watch([day, month, year], ([day, month, year]) => {
 </script>
 
 <template>
-  <div class="flex flex-row gap-2">
-    <USelectMenu
-      v-model="day"
-      :options="days"
-      class="w-1/3"
-      :placeholder="t('Day')"
-    />
-
-    <USelectMenu
-      v-model="month"
-      :options="months"
-      class="w-1/3"
-      :placeholder="t('Month')"
-    >
-      <template #label>
-        {{ t(month ?? "Month") }}
-      </template>
-      <template #option="{ option }">
-        {{ t(option) }}
-      </template>
-    </USelectMenu>
-
-    <USelectMenu
-      v-model="year"
-      :options="years"
-      class="w-1/3"
-      :placeholder="t('Year')"
-    />
+  <div class="flex flex-wrap gap-2">
+    <div class="w-third-with-gap min-w-24">
+      <USelectMenu v-model="day" :options="days" :placeholder="t('Day')" />
+    </div>
+    <div class="w-third-with-gap min-w-24">
+      <USelectMenu v-model="month" :options="months" :placeholder="t('Month')">
+        <template #label>
+          {{ t(month ?? "Month") }}
+        </template>
+        <template #option="{ option }">
+          {{ t(option) }}
+        </template>
+      </USelectMenu>
+    </div>
+    <div class="w-1/3 min-w-24">
+      <USelectMenu v-model="year" :options="years" :placeholder="t('Year')" />
+    </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+.w-third-with-gap {
+  width: calc(33.333333% - 0.5rem);
+}
+</style>
 
 <i18n lang="json">
 {

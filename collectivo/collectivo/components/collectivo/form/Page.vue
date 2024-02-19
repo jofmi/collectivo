@@ -16,11 +16,23 @@ async function onSubmitNuxt(data: any) {
     throw new Error("Invalid form configuration");
   }
 
+  const directus = useDirectus();
+
+  const headers: { [key: string]: string } = {
+    Accept: "application/json",
+  };
+
+  try {
+    // Add token to header if exists
+    const token = await directus.refresh();
+    headers["Authorization"] = `${token.access_token}`;
+  } catch (err) {
+    // do nothing
+  }
+
   const res = await useFetch(props.form.submitPath, {
     method: "POST",
-    headers: {
-      Accept: "application/json",
-    },
+    headers: headers,
     body: JSON.stringify(data),
   });
 

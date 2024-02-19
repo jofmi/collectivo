@@ -3,10 +3,26 @@ const form = useMembershipsRegistrationForm();
 const { t } = useI18n();
 const user = useCollectivoUser();
 setCollectivoTitle(form.value.title);
+const ready = ref(false);
+const data: any = ref({});
+
+async function prepare() {
+  await user.value.load();
+
+  data.value["directus_users__first_name"] = user.value.data!["first_name"];
+  data.value["directus_users__last_name"] = user.value.data!["last_name"];
+
+  data.value["directus_users__memberships_person_type"] =
+    user.value.data!["memberships_person_type"];
+
+  ready.value = true;
+}
+
+prepare();
 </script>
 
 <template>
-  <CollectivoFormPage :form="form">
+  <CollectivoFormPage v-if="ready" :form="form" :data="data">
     <template #success>
       <div class="flex flex-col items-center justify-center space-y-4">
         <UIcon

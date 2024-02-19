@@ -149,6 +149,7 @@ async function registerMembership(body: any, userID: string | undefined) {
   // Check if user exists
   if (isAuthenticated) {
     delete userData.password;
+    delete userData.email;
   } else {
     console.log("start is not authenticated loop");
 

@@ -9,6 +9,10 @@ const props = defineProps({
     type: Object as PropType<CollectivoForm>,
     required: true,
   },
+  data: {
+    type: Object as PropType<Record<string, any>>,
+    required: false,
+  },
 });
 
 async function onSubmitNuxt(data: any) {
@@ -78,6 +82,7 @@ async function onSubmit(data: any) {
       :fields="form.fields"
       :submit="onSubmit"
       :submit-label="form.submitLabel"
+      :data="data"
     />
     <template v-else>
       <slot name="success">

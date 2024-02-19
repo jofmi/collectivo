@@ -7,7 +7,12 @@ const ready = ref(false);
 const data: any = ref({});
 
 async function prepare() {
-  await user.value.load();
+  try {
+    await user.value.load();
+  } catch (e) {
+    ready.value = true;
+    return;
+  }
 
   data.value["directus_users__first_name"] = user.value.data!["first_name"];
   data.value["directus_users__last_name"] = user.value.data!["last_name"];

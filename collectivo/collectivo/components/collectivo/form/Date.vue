@@ -4,9 +4,13 @@ const props = defineProps({
     type: Date,
     default: null,
   },
-  birthdate: {
-    type: Boolean,
-    default: false,
+  maxYearsFuture: {
+    type: Number,
+    default: 0,
+  },
+  maxYearsPast: {
+    type: Number,
+    default: 150,
   },
 });
 
@@ -18,6 +22,10 @@ const date: Ref<Date | string | undefined> = ref();
 const day = ref();
 const month = ref();
 const year = ref();
+
+const days = Array.from({ length: 31 }, (_, i) =>
+  (i + 1).toString().padStart(2, "0"),
+);
 
 const months = [
   "January",
@@ -34,6 +42,11 @@ const months = [
   "December",
 ];
 
+const years = Array.from(
+  { length: props.maxYearsPast + props.maxYearsFuture },
+  (_, i) => (new Date().getFullYear() + props.maxYearsFuture - i).toString(),
+);
+
 if (props.modelValue) {
   date.value = new Date(props.modelValue);
   day.value = date.value.getUTCDate().toString().padStart(2, "0");
@@ -49,40 +62,37 @@ watch(
 );
 
 watch([day, month, year], ([day, month, year]) => {
-  if (day && month && year) {
-    const thisYear = new Date().getFullYear();
-
-    if (
-      props.birthdate &&
-      (Number(year) < thisYear - 150 || Number(year) > thisYear)
-    ) {
-      date.value = new Date("invalid");
-    } else {
-      date.value = new Date(`${year}-${month}-${day} UTC`);
-    }
-  }
+  if (day && month && year)
+    date.value = new Date(`${year}-${month}-${day} UTC`);
 });
 </script>
 
 <template>
-  <div class="flex flex-row gap-2">
-    <USelectMenu
-      v-model="month"
-      :options="months"
-      class="w-1/3"
-      :placeholder="t('Month')"
-    >
-      <template #label>
-        {{ t(month ?? "Month") }}
-      </template>
-      <template #option="{ option }">
-        {{ t(option) }}
-      </template>
-    </USelectMenu>
-    <UInput v-model="day" class="w-1/3" :placeholder="t('Day')" />
-    <UInput v-model="year" class="w-1/3" :placeholder="t('Year')" />
+  <div class="flex flex-wrap gap-2">
+    <div class="w-third-with-gap min-w-24">
+      <USelectMenu v-model="day" :options="days" :placeholder="t('Day')" />
+    </div>
+    <div class="w-third-with-gap min-w-24">
+      <USelectMenu v-model="month" :options="months" :placeholder="t('Month')">
+        <template #label>
+          {{ t(month ?? "Month") }}
+        </template>
+        <template #option="{ option }">
+          {{ t(option) }}
+        </template>
+      </USelectMenu>
+    </div>
+    <div class="w-1/3 min-w-24">
+      <USelectMenu v-model="year" :options="years" :placeholder="t('Year')" />
+    </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+.w-third-with-gap {
+  width: calc(33.333333% - 0.5rem);
+}
+</style>
 
 <i18n lang="json">
 {

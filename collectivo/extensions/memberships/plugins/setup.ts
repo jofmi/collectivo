@@ -111,6 +111,7 @@ export default defineNuxtPlugin({
         key: "memberships_birthday",
         type: "date",
         order: 450,
+        width: "lg",
         required: true,
         conditions: is_natural,
       },

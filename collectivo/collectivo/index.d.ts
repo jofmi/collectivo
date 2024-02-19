@@ -174,6 +174,7 @@ declare global {
   }
 
   interface FormCondition {
+    type?: "==" | "authenticated" | "notAuthenticated";
     key: string;
     value: string | number | boolean;
     // TODO: Add operator?: "==" | "!=" | ">" | "<" | ">=" | "<=";

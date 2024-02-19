@@ -6,15 +6,7 @@ setCollectivoTitle(form.value.title);
 </script>
 
 <template>
-  <CollectivoContainer v-if="user.isAuthenticated">
-    <div class="flex flex-col items-center justify-center space-y-4">
-      <div>{{ t("t:memberships_form_logout") }}</div>
-      <UButton icon="i-mi-log-out" @click="user.logout()">{{
-        t("Logout")
-      }}</UButton>
-    </div>
-  </CollectivoContainer>
-  <CollectivoFormPage v-else :form="form">
+  <CollectivoFormPage :form="form">
     <template #success>
       <div class="flex flex-col items-center justify-center space-y-4">
         <UIcon

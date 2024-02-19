@@ -25,6 +25,7 @@ marked.use({
 });
 
 const customValidators = useCollectivoValidators();
+const user = useCollectivoUser();
 const toast = useToast();
 const { t } = useI18n();
 const debug = useRuntimeConfig().public.debug;
@@ -49,7 +50,11 @@ function checkConditions(conditions: FormCondition[] | undefined) {
   }
 
   for (const condition of conditions) {
-    if (state[condition.key] !== condition.value) {
+    if (condition.type == "authenticated") {
+      return user.value.isAuthenticated;
+    } else if (condition.type == "notAuthenticated") {
+      return !user.value.isAuthenticated;
+    } else if (state[condition.key] !== condition.value) {
       return false;
     }
   }
@@ -90,7 +95,8 @@ function addInputToSchema(
   // If the condition is not met, use a hidden schema field
   if (input.conditions && input.conditions.length > 0) {
     const schema_field_with_conditions = object().when(
-      input.conditions.map((c) => c.key),
+      input.conditions.map((c) => c.key ?? c.type),
+
       (_, schema_field_hidden) => {
         if (checkConditions(input.conditions)) {
           return schema_field;

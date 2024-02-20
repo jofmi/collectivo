@@ -63,7 +63,7 @@ watch(
 
 watch([day, month, year], ([day, month, year]) => {
   if (day && month && year)
-    date.value = new Date(`${year}-${month}-${day} UTC`);
+    date.value = new Date(`${year}/${months.indexOf(month) + 1}/${day} UTC`);
 });
 </script>
 

@@ -2,18 +2,55 @@ import {
   createItem,
   readItems,
   createUser,
+  updateUser,
   readUsers,
   deleteUser,
   deleteItem,
 } from "@directus/sdk";
+import {
+  createDirectus,
+  readMe,
+  withToken,
+  authentication,
+  rest,
+  DirectusClient,
+  AuthenticationClient,
+  RestClient,
+} from "@directus/sdk";
 import KcAdminClient from "@keycloak/keycloak-admin-client";
+
+async function getUserID(event: any) {
+  const token = getHeader(event, "Authorization");
+  const config = useRuntimeConfig();
+  const directusUser = createDirectus(config.public.directusUrl).with(rest());
+
+  if (token) {
+    try {
+      const user = await directusUser.request(
+        withToken(
+          token,
+          readMe({
+            fields: ["id"],
+          }),
+        ),
+      );
+
+      return user.id;
+    } catch (e) {
+      return undefined;
+    }
+  }
+
+  return undefined;
+}
 
 // Register a new membership
 // Receives input from /memberships/register
 export default defineEventHandler(async (event) => {
   try {
+    const userID = await getUserID(event);
     const body = await readBody(event);
-    return await registerMembership(body);
+    return await registerMembership(body, userID);
   } catch (e: any) {
     if (
       e &&
@@ -49,13 +86,16 @@ export default defineEventHandler(async (event) => {
   }
 });
 
-async function registerMembership(body: any) {
+async function registerMembership(body: any, userID: string | undefined) {
   logger.info(
     "Received membership application: " + body["directus_users.email"],
   );
 
+  console.log("Register membership");
+  const isAuthenticated = userID !== undefined;
   await refreshDirectus();
   const directus = await useDirectusAdmin();
+  console.log("Directus refreshed");
   const config = useRuntimeConfig();
 
   const userData: any = {};
@@ -88,6 +128,8 @@ async function registerMembership(body: any) {
     membershipData.memberships_type = types[0].id;
   }
 
+  console.log("Membership types loaded");
+
   // Connect to keycloak
   const keycloak = new KcAdminClient({
     baseUrl: config.public.keycloakUrl,
@@ -102,56 +144,70 @@ async function registerMembership(body: any) {
 
   // Random call to test connection
   await keycloak.users.find({ first: 0, max: 1 });
+  console.log("Keycloak connection successful");
 
   // Check if user exists
-  if (!userData.email) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "Email is required.",
-    });
-  }
+  if (isAuthenticated) {
+    delete userData.password;
+    delete userData.email;
+  } else {
+    console.log("start is not authenticated loop");
 
-  const usersRes = await directus.request(
-    readUsers({
-      fields: ["id"],
-      filter: {
-        email: {
-          _eq: userData.email,
-        },
-      },
-    }),
-  );
-
-  if (usersRes.length > 0) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: "User already exists (Directus)",
-    });
-  }
-
-  // Check if keycloak user exists and extract password
-  if (config.public.authService == "keycloak") {
-    const kcUser = await keycloak.users.find({ email: userData.email });
-
-    if (kcUser.length > 0) {
+    if (!userData.email) {
       throw createError({
         statusCode: 400,
-        statusMessage: "User already exists (Keycloak)",
+        statusMessage: "Email is required.",
       });
     }
 
-    delete userData.password;
-    userData.provider = "keycloak";
-    userData.external_identifier = userData.email;
+    const usersRes = await directus.request(
+      readUsers({
+        fields: ["id"],
+        filter: {
+          email: {
+            _eq: userData.email,
+          },
+        },
+      }),
+    );
+
+    if (usersRes.length > 0) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "User already exists (Directus)",
+      });
+    }
+
+    // Check if keycloak user exists and extract password
+    if (config.public.authService == "keycloak") {
+      const kcUser = await keycloak.users.find({ email: userData.email });
+
+      if (kcUser.length > 0) {
+        throw createError({
+          statusCode: 400,
+          statusMessage: "User already exists (Keycloak)",
+        });
+      }
+
+      delete userData.password;
+      userData.provider = "keycloak";
+      userData.external_identifier = userData.email;
+    }
   }
 
   // All good from here - start registration
 
   // Create directus user
-  const user = await directus.request(createUser(userData));
+  if (isAuthenticated) {
+    await directus.request(updateUser(userID!, userData));
+  } else {
+    const user = await directus.request(createUser(userData));
+    userID = user.id;
+    console.log("User created: " + userID);
+  }
 
   // Create directus membership
-  membershipData.memberships_user = user.id;
+  membershipData.memberships_user = userID;
   membershipData.memberships_status = "applied";
   membershipData.memberships_date_applied = new Date().toISOString();
 
@@ -162,7 +218,7 @@ async function registerMembership(body: any) {
       createItem("memberships", membershipData),
     );
   } catch (e) {
-    await directus.request(deleteUser(user.id));
+    await directus.request(deleteUser(userID!));
     throw e;
   }
 
@@ -181,7 +237,7 @@ async function registerMembership(body: any) {
       });
     } catch (e) {
       await directus.request(deleteItem("memberships", membership.id));
-      await directus.request(deleteUser(user.id));
+      await directus.request(deleteUser(userID!));
       throw e;
     }
 
@@ -196,7 +252,7 @@ async function registerMembership(body: any) {
       });
     } catch (e) {
       await directus.request(deleteItem("memberships", membership.id));
-      await directus.request(deleteUser(user.id));
+      await directus.request(deleteUser(userID!));
       await keycloak.users.del({ id: kcUser.id });
       throw e;
     }
@@ -205,7 +261,7 @@ async function registerMembership(body: any) {
   return {
     status: 201,
     body: {
-      user: user.id,
+      user: userID,
       membership: membership.id,
     },
   };

@@ -9,6 +9,10 @@ const props = defineProps({
     type: Object as PropType<CollectivoForm>,
     required: true,
   },
+  data: {
+    type: Object as PropType<Record<string, any>>,
+    required: false,
+  },
 });
 
 async function onSubmitNuxt(data: any) {
@@ -16,11 +20,23 @@ async function onSubmitNuxt(data: any) {
     throw new Error("Invalid form configuration");
   }
 
+  const directus = useDirectus();
+
+  const headers: { [key: string]: string } = {
+    Accept: "application/json",
+  };
+
+  try {
+    // Add token to header if exists
+    const token = await directus.refresh();
+    headers["Authorization"] = `${token.access_token}`;
+  } catch (err) {
+    // do nothing
+  }
+
   const res = await useFetch(props.form.submitPath, {
     method: "POST",
-    headers: {
-      Accept: "application/json",
-    },
+    headers: headers,
     body: JSON.stringify(data),
   });
 
@@ -66,6 +82,7 @@ async function onSubmit(data: any) {
       :fields="form.fields"
       :submit="onSubmit"
       :submit-label="form.submitLabel"
+      :data="data"
     />
     <template v-else>
       <slot name="success">

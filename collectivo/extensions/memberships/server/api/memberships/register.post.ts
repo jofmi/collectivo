@@ -144,6 +144,15 @@ async function registerMembership(body: any, userID: string | undefined) {
   await keycloak.users.find({ first: 0, max: 1 });
   console.log("Keycloak connection successful");
 
+  // Disable security fields
+  delete userData.provider;
+  delete userData.external_identifier;
+  delete userData.id;
+  delete userData.token;
+  delete userData.status;
+  delete userData.role;
+  delete userData.auth_data;
+
   // Check if user exists
   if (isAuthenticated) {
     delete userData.password;

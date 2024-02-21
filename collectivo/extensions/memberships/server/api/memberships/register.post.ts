@@ -7,16 +7,7 @@ import {
   deleteUser,
   deleteItem,
 } from "@directus/sdk";
-import {
-  createDirectus,
-  readMe,
-  withToken,
-  authentication,
-  rest,
-  DirectusClient,
-  AuthenticationClient,
-  RestClient,
-} from "@directus/sdk";
+import { createDirectus, readMe, withToken, rest } from "@directus/sdk";
 import KcAdminClient from "@keycloak/keycloak-admin-client";
 
 async function getUserID(event: any) {
@@ -87,12 +78,19 @@ export default defineEventHandler(async (event) => {
 });
 
 async function registerMembership(body: any, userID: string | undefined) {
+  const isAuthenticated = userID !== undefined;
+
   logger.info(
-    "Received membership application: " + body["directus_users.email"],
+    "Received membership application: " +
+      body["directus_users.email"] +
+      "(authenticated: " +
+      isAuthenticated +
+      ")",
   );
 
   console.log("Register membership");
-  const isAuthenticated = userID !== undefined;
+
+  console.log("Is authenticated: " + isAuthenticated);
   await refreshDirectus();
   const directus = await useDirectusAdmin();
   console.log("Directus refreshed");
@@ -199,14 +197,17 @@ async function registerMembership(body: any, userID: string | undefined) {
 
   // Create directus user
   if (isAuthenticated) {
+    console.log("Updating user: " + userID);
     await directus.request(updateUser(userID!, userData));
   } else {
+    console.log("Creating user");
     const user = await directus.request(createUser(userData));
     userID = user.id;
     console.log("User created: " + userID);
   }
 
   // Create directus membership
+  console.log("Creating membership");
   membershipData.memberships_user = userID;
   membershipData.memberships_status = "applied";
   membershipData.memberships_date_applied = new Date().toISOString();
@@ -222,8 +223,10 @@ async function registerMembership(body: any, userID: string | undefined) {
     throw e;
   }
 
+  console.log("Membership created: " + membership.id);
+
   // Create keycloak user & set password
-  if (config.public.authService == "keycloak") {
+  if (!isAuthenticated && config.public.authService == "keycloak") {
     let kcUser = undefined;
 
     try {

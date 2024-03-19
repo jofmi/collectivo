@@ -54,11 +54,11 @@ export default async function examples() {
   console.info("Creating memberships");
 
   const users = [
-    ["Alice", [type_ids[0]], "applied"],
-    ["Bob", [type_ids[1]], "approved"],
-    ["Charlie", type_ids, "approved"],
-    ["Dave", type_ids, "in-cancellation"],
-    ["User", type_ids, "approved"],
+    ["Alice", type_ids[0], "applied"],
+    ["Bob", type_ids[1], "approved"],
+    ["Charlie", type_ids[0], "approved"],
+    ["Dave", type_ids[1], "in-cancellation"],
+    ["User", type_ids[0], "approved"],
   ];
 
   for (const user of users) {
@@ -68,15 +68,14 @@ export default async function examples() {
     )[0];
 
     // Create membership
-    for (const membership_type of user[1]) {
-      await directus.request(
-        createItem("memberships", {
-          memberships_user: user_id,
-          memberships_type: membership_type,
-          memberships_status: user[2],
-          memberships_shares: "3",
-        }),
-      );
-    }
+
+    await directus.request(
+      createItem("memberships", {
+        memberships_user: user_id,
+        memberships_type: user[1],
+        memberships_status: user[2],
+        memberships_shares: "3",
+      }),
+    );
   }
 }

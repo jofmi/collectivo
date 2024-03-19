@@ -250,6 +250,7 @@ schema.createForeignKey("memberships", "directus_users", {
     type: "uuid",
     schema: {
       is_nullable: false,
+      is_unique: true,
     },
     meta: {
       interface: "select-dropdown-m2o",

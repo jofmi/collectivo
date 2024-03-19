@@ -486,6 +486,7 @@ schema.flows = [
               messages_message_status: "sent",
             },
             key: "{{create_message_record[0]}}",
+            permissions: "$full",
           },
         },
         resolve: "populate_response_sent",
@@ -702,6 +703,7 @@ function addFailureHandlingOperationsForSendMessagesFlow(
           payload: {
             messages_message_status: "failed",
           },
+          permissions: "$full",
         },
       },
       resolve: "populate_response_failure_" + operationKey,

@@ -3,53 +3,7 @@ import Sidebar from "./components/Sidebar.vue";
 import PageTitle from "./components/PageTitle.vue";
 import MobileHeader from "./components/MobileHeader.vue";
 import MobileMenu from "./components/MobileMenu.vue";
-
-const { setLocale, t } = useI18n();
-const user = useCollectivoUser();
-const router = useRouter();
-
-const topRightMenuNoAuthItems: any = ref([[]]);
-
-const topRightMenuItems: any = ref([
-  [
-    {
-      label: "Profile",
-      click: () => {
-        router.push({ name: "profile" });
-      },
-    },
-    {
-      label: "Logout",
-      click: () => {
-        user.value.logout();
-      },
-    },
-  ],
-  [
-    // for languages items
-  ],
-]);
-
-const locales = {
-  de: "Deutsch",
-  en: "English",
-};
-
-for (const [key, value] of Object.entries(locales)) {
-  topRightMenuNoAuthItems.value[0].push({
-    label: value,
-    click: () => {
-      setLocale(key);
-    },
-  });
-
-  topRightMenuItems.value[1].push({
-    label: value,
-    click: () => {
-      setLocale(key);
-    },
-  });
-}
+import ProfileMenu from "./components/ProfileMenu.vue";
 </script>
 
 <template>
@@ -94,41 +48,7 @@ for (const [key, value] of Object.entries(locales)) {
         </div>
 
         <div class="main__top__right">
-          <!-- <a :href="logoutPath">
-            <UIcon
-              name="i-system-uicons-exit-left"
-              class="main__top__right__icon"
-          /></a> -->
-          <template v-if="!user.isAuthenticated">
-            <UDropdown
-              :items="topRightMenuNoAuthItems"
-              :popper="{ placement: 'bottom-start' }"
-            >
-              <UIcon
-                class="main__top__right__icon"
-                name="i-system-uicons-translate"
-              ></UIcon>
-
-              <template #item="{ item }">
-                <span>{{ t(item.label) }}</span>
-              </template>
-            </UDropdown>
-          </template>
-          <template v-else>
-            <UDropdown
-              :items="topRightMenuItems"
-              :popper="{ placement: 'bottom-start' }"
-            >
-              <UIcon
-                class="main__top__right__icon"
-                name="i-system-uicons-user-male-circle"
-              />
-
-              <template #item="{ item }">
-                <span>{{ t(item.label) }}</span>
-              </template>
-            </UDropdown>
-          </template>
+          <ProfileMenu />
         </div>
       </div>
       <slot></slot>
@@ -154,12 +74,6 @@ for (const [key, value] of Object.entries(locales)) {
 
   &__top {
     @apply hidden md:flex justify-between items-center mb-11;
-
-    &__right {
-      &__icon {
-        @apply w-7 h-7;
-      }
-    }
   }
 
   &__table {

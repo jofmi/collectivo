@@ -250,6 +250,7 @@ schema.createForeignKey("memberships", "directus_users", {
     type: "uuid",
     schema: {
       is_nullable: false,
+      is_unique: true,
     },
     meta: {
       interface: "select-dropdown-m2o",
@@ -265,6 +266,26 @@ schema.createForeignKey("memberships", "directus_users", {
         { language: "en-US", translation: "Person" },
       ],
     },
+  },
+  fieldAlias: {
+    field: "memberships",
+    type: "alias",
+    meta: {
+      special: ["o2m"],
+      interface: "list-o2m",
+      display: "related-values",
+      options: {
+        layout: "list",
+        enableCreate: false,
+        enableSelect: false,
+        enableLink: true,
+      },
+      translations: [
+        { language: "de-DE", translation: "Mitgliedschaften" },
+        { language: "en-US", translation: "Memberships" },
+      ],
+    },
+    collection: "directus_users",
   },
 });
 
@@ -639,6 +660,20 @@ for (const action of ["create", "read", "update", "delete"]) {
     fields: ["*"],
   });
 }
+
+schema.permissions.push({
+  collection: "directus_users",
+  roleName: "collectivo_user",
+  action: "read",
+  fields: ["memberships"],
+});
+
+schema.permissions.push({
+  collection: "directus_users",
+  roleName: "collectivo_editor",
+  action: "read",
+  fields: ["memberships"],
+});
 
 schema.permissions.push({
   collection: "memberships",

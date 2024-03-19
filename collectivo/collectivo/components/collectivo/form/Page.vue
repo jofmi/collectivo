@@ -41,19 +41,16 @@ async function onSubmitNuxt(data: any) {
   });
 
   if (res.status.value === "error") {
-    errorMessage.value = res.error.value?.message ?? "";
     throw res.error.value;
   }
 }
 
-const errorMessage: Ref<string> = ref("");
-
 async function onSubmit(data: any) {
-  const dataReady = props.form.beforeSubmit
-    ? await props.form.beforeSubmit(data)
-    : data;
-
   try {
+    const dataReady = props.form.beforeSubmit
+      ? await props.form.beforeSubmit(data)
+      : data;
+
     if (props.form.submitMode === "postNuxt") {
       await onSubmitNuxt(dataReady);
     } else {
@@ -62,11 +59,9 @@ async function onSubmit(data: any) {
 
     submitted.value = true;
   } catch (err) {
-    console.error(err);
-
     toast.add({
       title: t("There was an error"),
-      description: errorMessage.value,
+      description: err instanceof Error ? err.message : undefined,
       icon: "i-mi-warning",
       color: "red",
       timeout: 0,

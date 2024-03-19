@@ -1,6 +1,6 @@
 {
   "name": "@collectivo/memberships",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "An extension of collectivo to manage memberships.",
   "type": "module",
   "license": "AGPL-3.0",

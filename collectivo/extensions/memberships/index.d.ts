@@ -5,6 +5,10 @@ declare global {
     memberships: MembershipsMembership[];
   }
 
+  interface CollectivoUser {
+    memberships: MembershipsMembership[] | number[];
+  }
+
   interface MembershipsMembership {
     id: number;
     name: string;

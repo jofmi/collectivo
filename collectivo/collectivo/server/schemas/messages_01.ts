@@ -338,6 +338,10 @@ schema.createM2MRelation("messages_campaigns", "directus_users", {
         ],
         layout: "table",
       },
+      translations: [
+        { language: "en-US", translation: "Recipients" },
+        { language: "de-DE", translation: "Empfänger*innen" },
+      ],
       display: "related-values",
       display_options: {
         template:
@@ -345,7 +349,15 @@ schema.createM2MRelation("messages_campaigns", "directus_users", {
       },
     },
   },
-  field2: true,
+  field2: {
+    field: "messages_campaigns",
+    meta: {
+      translations: [
+        { language: "en-US", translation: "Campaigns" },
+        { language: "de-DE", translation: "Kampagnen" },
+      ],
+    },
+  },
 });
 
 schema.flows = [
@@ -474,6 +486,7 @@ schema.flows = [
               messages_message_status: "sent",
             },
             key: "{{create_message_record[0]}}",
+            permissions: "$full",
           },
         },
         resolve: "populate_response_sent",
@@ -690,6 +703,7 @@ function addFailureHandlingOperationsForSendMessagesFlow(
           payload: {
             messages_message_status: "failed",
           },
+          permissions: "$full",
         },
       },
       resolve: "populate_response_failure_" + operationKey,

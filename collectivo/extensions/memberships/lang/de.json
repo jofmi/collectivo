@@ -56,5 +56,5 @@
   "t:memberships_form_mtype": "Welche Art der Mitgliedschaft wählst du?",
   "t:memberships_form_intro": "Bitte fülle das Formular aus, um Mitglied zu werden.",
   "t:memberships_form_success": "Bitte melde dich an, um deine Email Adresse zu bestätigen.",
-  "t:memberships_form_logout": "Bitte melde dich ab, um eine Mitgliedschaft zu beantragen."
+  "t:memberships_form_logout": "Du bist bereits Mitglied. Bitte melde dich ab, um eine weitere Mitgliedschaft zu beantragen."
 }

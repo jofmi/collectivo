@@ -176,8 +176,8 @@ schema.fields = [
       interface: "input",
       width: "half",
       translations: [
-        { language: "de-DE", translation: "Nummer" },
-        { language: "en-US", translation: "Number" },
+        { language: "de-DE", translation: "Hausnummer" },
+        { language: "en-US", translation: "Street number" },
       ],
     },
   },

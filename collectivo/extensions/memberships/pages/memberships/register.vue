@@ -3,14 +3,15 @@ const form = useMembershipsRegistrationForm();
 const { t } = useI18n();
 const user = useCollectivoUser();
 setCollectivoTitle(form.value.title);
-const ready = ref(false);
+const showForm = ref(false);
+const alreadyMemberError = ref(false);
 const data: any = ref({});
 
 async function prepare() {
   try {
     await user.value.load();
   } catch (e) {
-    ready.value = true;
+    showForm.value = true;
     return;
   }
 
@@ -20,14 +21,21 @@ async function prepare() {
   data.value["directus_users__memberships_person_type"] =
     user.value.data!["memberships_person_type"];
 
-  ready.value = true;
+  if (user.value.data?.memberships && user.value.data?.memberships.length > 0) {
+    alreadyMemberError.value = true;
+  } else {
+    showForm.value = true;
+  }
 }
 
 prepare();
 </script>
 
 <template>
-  <CollectivoFormPage v-if="ready" :form="form" :data="data">
+  <div v-if="alreadyMemberError">
+    {{ t("t:memberships_form_logout") }}
+  </div>
+  <CollectivoFormPage v-if="showForm" :form="form" :data="data">
     <template #success>
       <div class="flex flex-col items-center justify-center space-y-4">
         <UIcon

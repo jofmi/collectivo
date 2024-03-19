@@ -298,6 +298,7 @@ export async function createForeignKey(
 ) {
   const fieldKeyName = settings?.fieldKey?.field || CollectionAlias;
   const fieldKey = settings?.fieldKey || {};
+  const fieldAliasName = settings?.fieldAlias?.field || null;
 
   schema.fields.push({
     collection: CollectionKey,
@@ -318,6 +319,8 @@ export async function createForeignKey(
     ...settings?.relation,
     meta: {
       sort_field: null,
+      one_field: fieldAliasName,
+      one_deselect_action: "nullify",
       ...settings?.relation?.meta,
     },
     schema: { on_delete: "SET NULL", ...settings?.relation?.schema },

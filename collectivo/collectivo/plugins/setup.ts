@@ -21,7 +21,7 @@ export default defineNuxtPlugin(() => {
       icon: "i-system-uicons-cubes",
       to: runtimeConfig.public.directusUrl,
       external: true,
-      hideOnMobile: true,
+      // hideOnMobile: true,
       order: 99,
       filter: async (_item) => {
         await user.value.load();

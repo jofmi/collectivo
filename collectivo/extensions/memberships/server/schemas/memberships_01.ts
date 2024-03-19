@@ -266,6 +266,25 @@ schema.createForeignKey("memberships", "directus_users", {
       ],
     },
   },
+  fieldAlias: {
+    field: "memberships",
+    type: "alias",
+    meta: {
+      special: ["o2m"],
+      interface: "list-o2m",
+      display: "related-values",
+      options: {
+        layout: "list",
+        enableCreate: false,
+        enableSelect: false,
+      },
+      translations: [
+        { language: "de-DE", translation: "Mitgliedschaften" },
+        { language: "en-US", translation: "Memberships" },
+      ],
+    },
+    collection: "directus_users",
+  },
 });
 
 schema.createForeignKey("memberships", "memberships_types", {

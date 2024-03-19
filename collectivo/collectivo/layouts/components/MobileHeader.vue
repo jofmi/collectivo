@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import Logo from "./Logo.vue";
+import ProfileMenu from "./ProfileMenu.vue";
 import PageTitle from "./PageTitle.vue";
 </script>
 
 <template>
   <div class="mobile-header">
     <PageTitle />
+    <ProfileMenu />
   </div>
 </template>
 

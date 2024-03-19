@@ -277,6 +277,7 @@ schema.createForeignKey("memberships", "directus_users", {
         layout: "list",
         enableCreate: false,
         enableSelect: false,
+        enableLink: true,
       },
       translations: [
         { language: "de-DE", translation: "Mitgliedschaften" },
@@ -658,6 +659,20 @@ for (const action of ["create", "read", "update", "delete"]) {
     fields: ["*"],
   });
 }
+
+schema.permissions.push({
+  collection: "directus_users",
+  roleName: "collectivo_user",
+  action: "read",
+  fields: ["memberships"],
+});
+
+schema.permissions.push({
+  collection: "directus_users",
+  roleName: "collectivo_editor",
+  action: "read",
+  fields: ["memberships"],
+});
 
 schema.permissions.push({
   collection: "memberships",

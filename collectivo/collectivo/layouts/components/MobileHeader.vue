@@ -32,7 +32,7 @@ const headerClass = computed(() =>
     </div>
     <ProfileMenu />
   </div>
-  <div class="h-16 w-full"></div>
+  <div class="h-header"></div>
 </template>
 
 <style lang="scss" scoped>
@@ -41,10 +41,14 @@ const headerClass = computed(() =>
 }
 
 .border-bottom {
-  @apply border-b-[1px] border-gray-200;
+  @apply border-b-[1px] bg-white border-gray-200;
+}
+
+.h-header {
+  @apply h-[60px];
 }
 
 .mobile-header {
-  @apply h-[66px] px-[25px] bg-white pt-[19px] md:hidden flex items-start justify-between transition fixed top-0 w-full z-10;
+  @apply h-[68px] px-[25px]  pt-[20px] md:hidden flex items-start justify-between transition fixed top-0 w-full z-10;
 }
 </style>

@@ -21,7 +21,7 @@
     "lint:fix": "eslint --cache . --fix"
   },
   "dependencies": {
-    "@directus/sdk": "^15.0.0",
+    "@directus/sdk": "^15.0.3",
     "@keycloak/keycloak-admin-client": "^23.0.6",
     "@nuxt/ui": "^2.13.0",
     "compare-versions": "^6.1.0",

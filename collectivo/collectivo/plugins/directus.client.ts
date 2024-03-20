@@ -1,4 +1,10 @@
-import { createDirectus, authentication, rest } from "@directus/sdk";
+import {
+  createDirectus,
+  authentication,
+  rest,
+  refresh,
+  withOptions,
+} from "@directus/sdk";
 
 // Set up directus client or redirect to keycloak if not authenticated
 export default defineNuxtPlugin({
@@ -14,7 +20,7 @@ export default defineNuxtPlugin({
       directus = createDirectus<CollectivoSchema>(
         runtimeConfig.public.directusUrl as string,
       )
-        .with(authentication("cookie", { credentials: "include" }))
+        .with(authentication("session", { credentials: "include" }))
         .with(rest({ credentials: "include" }));
     } catch (e) {
       console.error("Possible invalid env var: NUXT_PUBLIC_DIRECTUS_URL");
@@ -28,6 +34,7 @@ export default defineNuxtPlugin({
     // Try to refresh token and set user to authenticated if successful
     try {
       await directus.refresh();
+
       user.value.isAuthenticated = true;
     } catch (e: any) {
       // If error is not auth-related, throw error

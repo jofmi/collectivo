@@ -30,7 +30,7 @@ const headerClass = computed(() =>
     <div class="mobile-page-title">
       {{ t(pageTitle) }}
     </div>
-    <ProfileMenu />
+    <div class="pt-[1px]"><ProfileMenu /></div>
   </div>
   <div class="h-header"></div>
 </template>

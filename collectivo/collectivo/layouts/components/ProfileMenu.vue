@@ -65,7 +65,7 @@ for (const [key, value] of Object.entries(locales)) {
       :items="topRightMenuItems"
       :popper="{ placement: 'bottom-start' }"
     >
-      <UIcon class="icon" name="i-system-uicons-grid" />
+      <UIcon class="icon" name="i-heroicons-bars-3-16-solid" />
 
       <template #item="{ item }">
         <span>{{ t(item.label) }}</span>

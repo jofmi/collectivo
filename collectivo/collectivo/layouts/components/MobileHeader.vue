@@ -45,7 +45,7 @@ const headerClass = computed(() =>
 }
 
 .h-header {
-  @apply h-[60px];
+  @apply h-[60px] md:hidden;
 }
 
 .mobile-header {

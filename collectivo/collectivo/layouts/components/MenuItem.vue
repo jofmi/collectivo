@@ -97,13 +97,18 @@ async function filterItem(item: CollectivoMenuItem) {
 }
 
 .link-icon {
-  @apply h-7 w-7 md:h-6 lg:h-[30px] md:w-6 lg:w-[30px];
+  @apply h-6 w-6 lg:h-[30px] lg:w-[30px];
 }
 
 .mobile-menu-item {
   @apply p-0 mb-0;
+
+  .item {
+    @apply py-2 px-0 mb-0;
+  }
+
   .item__icon {
-    @apply mb-[7px];
+    @apply mb-0;
   }
 
   .item__title {

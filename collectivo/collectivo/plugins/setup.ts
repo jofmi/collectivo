@@ -6,7 +6,7 @@ export default defineNuxtPlugin(() => {
   const items: CollectivoMenuItem[] = [
     {
       label: "Home",
-      icon: "i-system-uicons-grid",
+      icon: "i-system-uicons-home-door",
       to: "/",
       order: 0,
     },

@@ -185,6 +185,7 @@ export default async function examples() {
     tiles_label: "Example Button",
     tiles_path: "/some/path",
     tiles_tile: "",
+    tiles_status: "published",
   };
 
   for (const td of tileData) {

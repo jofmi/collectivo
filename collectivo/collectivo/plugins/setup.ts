@@ -10,12 +10,12 @@ export default defineNuxtPlugin(() => {
       to: "/",
       order: 0,
     },
-    {
-      label: "Profile",
-      icon: "i-system-uicons-user-male-circle",
-      to: "/profile",
-      order: 0,
-    },
+    // {
+    //   label: "Profile",
+    //   icon: "i-system-uicons-user-male-circle",
+    //   to: "/profile",
+    //   order: 0,
+    // },
     {
       label: "Studio",
       icon: "i-system-uicons-cubes",

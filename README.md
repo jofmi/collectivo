@@ -258,6 +258,19 @@ export default defineNuxtPlugin(() => {
 }
 ```
 
+### `CollectivoFormBuilder`
+
+This component can be used to build forms.
+
+Attributes:
+
+- `data: Record<string, any>`: Data to populate the initial form
+- `fields: CollectivoFormField[]`: Defines the structure of the form
+- `submit: (data: Record<string, any>) => Promise<void>`: Function to be called when form is submitted
+- `submit-label: string`: Label of the submit button
+
+To see the different possible form fields, check out the available types of `CollectivoFormField` in `index.d.ts`.
+
 ## Backend
 
 The following utility functions can be used for server-side scripts (within `/my-extension/server/`)

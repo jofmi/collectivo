@@ -8,6 +8,7 @@ setCollectivoTitle("Dashboard");
 import { parse } from "marked";
 
 const tiles = useCollectivoTiles();
+
 tiles.value.load();
 </script>
 
@@ -22,7 +23,6 @@ tiles.value.load();
     >
       <template #content>
         <div v-if="tile.tiles_content" v-html="parse(tile.tiles_content)"></div>
-
         <div v-if="tile.tiles_buttons" class="flex flex-wrap gap-2 pt-3">
           <template v-for="button in tile.tiles_buttons" :key="button.id">
             <a
@@ -46,6 +46,9 @@ tiles.value.load();
               />
             </NuxtLink>
           </template>
+        </div>
+        <div v-if="tile.tiles_component">
+          <component :is="tile.tiles_component" />
         </div>
       </template>
     </CollectivoCard>

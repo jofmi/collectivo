@@ -83,7 +83,7 @@ schema.fields = [
     type: "text",
     schema: {},
     meta: {
-      sort: 3,
+      sort: 20,
       interface: "input-rich-text-md",
       options: {
         toolbar: [
@@ -112,6 +112,7 @@ schema.fields = [
     type: "string",
     schema: { default_value: "primary" },
     meta: {
+      sort: 30,
       interface: "select-dropdown",
       special: null,
       options: {
@@ -130,14 +131,25 @@ schema.fields = [
       ],
     },
   },
-
+  {
+    collection: "collectivo_tiles",
+    field: "tiles_component",
+    type: "string",
+    meta: {
+      sort: 40,
+      translations: [
+        { language: "en-US", translation: "Component" },
+        { language: "de-DE", translation: "Komponente" },
+      ],
+    },
+  },
   // Button fields
   {
     collection: "collectivo_tiles_buttons",
     field: "tiles_label",
     type: "string",
     meta: {
-      sort: 2,
+      sort: 1,
       required: true,
       translations: [
         { language: "en-US", translation: "Label" },
@@ -164,7 +176,7 @@ schema.fields = [
     field: "tiles_is_external",
     type: "boolean",
     meta: {
-      sort: 2,
+      sort: 3,
       required: true,
       translations: [
         { language: "en-US", translation: "Path is external" },

@@ -42,7 +42,7 @@ export default defineNuxtConfig({
   css: [join(currentDir, "./assets/css/main.css")],
   ui: {
     global: true,
-    icons: ["system-uicons", "mi", "heroicons"],
+    icons: ["heroicons"],
     safelistColors: ["primary", "green", "orange", "blue", "pink", "red"],
   },
   googleFonts: {

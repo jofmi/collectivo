@@ -7,7 +7,10 @@ const error = useError();
     <div
       class="flex flex-row items-center gap-5 rounded-xl p-[25px] bg-white shadow-lg"
     >
-      <UIcon name="i-system-uicons-warning-hex" class="text-6xl text-red-500" />
+      <UIcon
+        name="i-heroicons-exclamation-triangle"
+        class="text-6xl text-red-500"
+      />
       <div v-if="!error">
         <h2>Unknown Error</h2>
         <p>Something went wrong.</p>

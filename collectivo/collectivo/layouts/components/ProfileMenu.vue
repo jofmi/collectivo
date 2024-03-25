@@ -48,30 +48,16 @@ for (const [key, value] of Object.entries(locales)) {
 </script>
 
 <template>
-  <template v-if="!user.isAuthenticated">
-    <UDropdown
-      :items="topRightMenuNoAuthItems"
-      :popper="{ placement: 'bottom-start' }"
-    >
-      <UIcon class="icon" name="i-system-uicons-translate"></UIcon>
+  <UDropdown
+    :items="user.isAuthenticated ? topRightMenuItems : topRightMenuNoAuthItems"
+    :popper="{ placement: 'bottom-start' }"
+  >
+    <UIcon class="icon" name="i-heroicons-bars-3-16-solid" />
 
-      <template #item="{ item }">
-        <span>{{ t(item.label) }}</span>
-      </template>
-    </UDropdown>
-  </template>
-  <template v-else>
-    <UDropdown
-      :items="topRightMenuItems"
-      :popper="{ placement: 'bottom-start' }"
-    >
-      <UIcon class="icon" name="i-system-uicons-user-male-circle" />
-
-      <template #item="{ item }">
-        <span>{{ t(item.label) }}</span>
-      </template>
-    </UDropdown>
-  </template>
+    <template #item="{ item }">
+      <span>{{ t(item.label) }}</span>
+    </template>
+  </UDropdown>
 </template>
 
 <style lang="scss" scoped>

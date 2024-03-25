@@ -162,7 +162,6 @@ export const useMembershipsRegistrationForm = () =>
       //   order: 460,
       //   required: true,
       //   conditions: is_natural,
-      //   icon: "i-system-uicons-briefcase",
       // },
       // section_address: {
       //   type: "section",

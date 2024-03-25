@@ -192,6 +192,7 @@ export default async function examples() {
       tiles_name: td.name,
       tiles_content: "Hello! I am an example tile!",
       tiles_color: td.color,
+      tiles_status: "published",
     });
   }
 

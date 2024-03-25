@@ -180,16 +180,41 @@ definePageMeta({
 });
 ```
 
+## Types
+
+To add types to the database schema of the directus client, add a file `your-extension/index.d.ts` with the following content:
+
+```ts
+declare global {
+  interface CollectivoSchema {
+    example_collection: ExampleCollection[];
+  }
+
+  interface ExampleCollection {
+    id: number;
+    example_field: string;
+  }
+}
+
+export {};
+```
+
+You can then enjoy type checking when using directus:
+
+```ts
+const directus = useDirectus();
+const data = await directus.request(readItems("example_collection"));
+```
+
+Typescript will then know that data is a `ExampleCollection[]` and that `data[0].example_field` is a string.
+
 ## Icons
 
-Collectivo uses [`nuxt-ui`](https://ui.nuxt.com/getting-started/theming#icons) and [`Iconify`](https://iconify.design/) to load icons. They have to be defined as `i-{collection_name}-{icon_name}`.
+Collectivo uses [`nuxt-ui`](https://ui.nuxt.com/getting-started/theming#icons) and [`Iconify`](https://iconify.design/) to load icons. They have to be defined as `i-{collection_name}-{icon_name}`. By default, Collectivo uses the [HeroIcons](https://icones.js.org/collection/heroicons) library. Additional libraries can be loaded in [`nuxt.config.ts`](https://ui.nuxt.com/getting-started/theming#icons).
 
-By default, Collectivo loads the following to icon libraries:
+## Dashboard
 
-- [System UIcons](https://icones.js.org/collection/system-uicons) for the UI
-- [Mono Icons](https://icones.js.org/collection/mi) for form components
-
-Additional libraries can be loaded in `nuxt.config.ts`.
+You can create custom components that can be displayed inside a dashboard tile. To do so, create a new component file `components/global/`. Then, add a new dashboard tile to your database and set the field `Component` to the name of your tile.
 
 # API Reference
 
@@ -254,12 +279,25 @@ export default defineNuxtPlugin(() => {
   const menu = useCollectivoMenus();
   menu.value.main.push({
     label: "My menu item",
-    icon: "i-system-uicons-cubes",
+    icon: "i-heroicons-star",
     to: "/my/path",
     order: 100
   });
 }
 ```
+
+### `CollectivoFormBuilder`
+
+This component can be used to build forms.
+
+Attributes:
+
+- `data: Record<string, any>`: Data to populate the initial form
+- `fields: CollectivoFormField[]`: Defines the structure of the form
+- `submit: (data: Record<string, any>) => Promise<void>`: Function to be called when form is submitted
+- `submit-label: string`: Label of the submit button
+
+To see the different possible form fields, check out the available types of `CollectivoFormField` in `index.d.ts`.
 
 ## Backend
 

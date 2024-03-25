@@ -33,11 +33,8 @@ const publicMenuItems = Object.values(menus.value.public).sort(
 </template>
 
 <style lang="scss" scoped>
-.mobile-menu-item {
-  @apply w-20;
-}
 .mobile-menu {
-  @apply bg-white px-3 pt-2 pb-1 fixed bottom-0 w-full z-10 md:hidden border-t-2 border-gray-500;
+  @apply bg-white px-3 py-[5px] fixed bottom-0 w-full z-10 md:hidden border-t-[1px] border-gray-200;
   box-shadow: 4px 0px 48px 0px rgba(220, 226, 239, 0.5);
 
   &__inner {

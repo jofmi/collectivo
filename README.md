@@ -184,12 +184,7 @@ definePageMeta({
 
 Collectivo uses [`nuxt-ui`](https://ui.nuxt.com/getting-started/theming#icons) and [`Iconify`](https://iconify.design/) to load icons. They have to be defined as `i-{collection_name}-{icon_name}`.
 
-By default, Collectivo loads the following to icon libraries:
-
-- [System UIcons](https://icones.js.org/collection/system-uicons) for the UI
-- [Mono Icons](https://icones.js.org/collection/mi) for form components
-
-Additional libraries can be loaded in `nuxt.config.ts`.
+By default, Collectivo uses the [HeroIcons](https://icones.js.org/collection/heroicons) library. Additional libraries can be loaded in `nuxt.config.ts`.
 
 # API Reference
 
@@ -254,7 +249,7 @@ export default defineNuxtPlugin(() => {
   const menu = useCollectivoMenus();
   menu.value.main.push({
     label: "My menu item",
-    icon: "i-system-uicons-cubes",
+    icon: "i-heroicons-star",
     to: "/my/path",
     order: 100
   });

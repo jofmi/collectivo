@@ -62,7 +62,7 @@ async function onSubmit(data: any) {
     toast.add({
       title: t("There was an error"),
       description: err instanceof Error ? err.message : undefined,
-      icon: "i-mi-warning",
+      icon: "i-heroicons-exclamation-triangle",
       color: "red",
       timeout: 0,
     });
@@ -83,7 +83,7 @@ async function onSubmit(data: any) {
       <slot name="success">
         <div class="flex flex-col items-center justify-center space-y-4">
           <UIcon
-            name="i-system-uicons-check"
+            name="i-heroicons-check-16-solid"
             class="w-[64px] h-[64px] text-primary"
           />
           <h1 class="text-2xl font-bold text-center">

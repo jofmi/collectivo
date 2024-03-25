@@ -39,7 +39,7 @@ prepare();
     <template #success>
       <div class="flex flex-col items-center justify-center space-y-4">
         <UIcon
-          name="i-system-uicons-check"
+          name="i-heroicons-check-16-solid"
           class="w-[64px] h-[64px] text-primary"
         />
         <h1 class="text-2xl font-bold text-center">
@@ -57,9 +57,12 @@ prepare();
           <p class="text-center">
             {{ t(form.successText ?? "t:memberships_form_success") }}
           </p>
-          <UButton icon="i-mi-log-in" size="md" @click="user.login()">{{
-            t("Login")
-          }}</UButton>
+          <UButton
+            icon="i-heroicons-arrow-right-end-on-rectangle-16-solid"
+            size="md"
+            @click="user.login()"
+            >{{ t("Login") }}</UButton
+          >
         </div>
       </div>
     </template>

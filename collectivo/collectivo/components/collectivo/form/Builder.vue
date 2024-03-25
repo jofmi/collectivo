@@ -234,7 +234,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 async function onError(event: FormErrorEvent) {
   toast.add({
     title: t("Some fields are not filled in correctly"),
-    icon: "i-mi-warning",
+    icon: "i-heroicons-exclamation-triangle",
     color: "red",
     timeout: 0,
   });
@@ -467,7 +467,7 @@ async function fillOutAll() {
         variant="solid"
         color="green"
         size="lg"
-        icon="i-mi-circle-check"
+        icon="i-heroicons-check-16-solid"
         :loading="loading"
         type="submit"
       >

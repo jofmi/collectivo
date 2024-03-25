@@ -7,7 +7,7 @@ export default defineNuxtPlugin({
     const publicItems: CollectivoMenuItem[] = [
       {
         label: "Register",
-        icon: "i-system-uicons-document-stack",
+        icon: "i-heroicons-document-text",
         to: "/memberships/register",
         order: 200,
         filter: (_item) => {
@@ -122,7 +122,7 @@ export default defineNuxtPlugin({
         order: 460,
         required: true,
         conditions: is_natural,
-        icon: "i-system-uicons-briefcase",
+        icon: "i-heroicons-briefcase",
       },
       {
         type: "section",

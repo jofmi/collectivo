@@ -185,7 +185,6 @@ export default async function examples() {
     tiles_label: "Example Button",
     tiles_path: "/some/path",
     tiles_tile: "",
-    tiles_status: "published",
   };
 
   for (const td of tileData) {
@@ -193,6 +192,7 @@ export default async function examples() {
       tiles_name: td.name,
       tiles_content: "Hello! I am an example tile!",
       tiles_color: td.color,
+      tiles_status: "published",
     });
   }
 

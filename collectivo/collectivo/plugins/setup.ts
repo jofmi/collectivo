@@ -6,19 +6,13 @@ export default defineNuxtPlugin(() => {
   const items: CollectivoMenuItem[] = [
     {
       label: "Home",
-      icon: "i-system-uicons-home-door",
+      icon: "i-heroicons-home",
       to: "/",
       order: 0,
     },
-    // {
-    //   label: "Profile",
-    //   icon: "i-system-uicons-user-male-circle",
-    //   to: "/profile",
-    //   order: 0,
-    // },
     {
       label: "Studio",
-      icon: "i-system-uicons-cubes",
+      icon: "i-heroicons-wrench-screwdriver",
       to: runtimeConfig.public.directusUrl,
       external: true,
       // hideOnMobile: true,
@@ -33,7 +27,7 @@ export default defineNuxtPlugin(() => {
   const publicItems: CollectivoMenuItem[] = [
     {
       label: "Login",
-      icon: "i-system-uicons-enter",
+      icon: "i-heroicons-arrow-right-on-rectangle-solid",
       click: user.value.login,
       order: 100,
       filter: (_item) => {

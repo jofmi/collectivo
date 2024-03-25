@@ -180,6 +180,34 @@ definePageMeta({
 });
 ```
 
+## Types
+
+To add types to the database schema of the directus client, add a file `your-extension/index.d.ts` with the following content:
+
+```ts
+declare global {
+  interface CollectivoSchema {
+    example_collection: ExampleCollection[];
+  }
+
+  interface ExampleCollection {
+    id: number;
+    example_field: string;
+  }
+}
+
+export {};
+```
+
+You can then enjoy type checking when using directus:
+
+```ts
+const directus = useDirectus();
+const data = await directus.request(readItems("example_collection"));
+```
+
+Typescript will then know that data is a `ExampleCollection[]` and that `data[0].example_field` is a string.
+
 ## Icons
 
 Collectivo uses [`nuxt-ui`](https://ui.nuxt.com/getting-started/theming#icons) and [`Iconify`](https://iconify.design/) to load icons. They have to be defined as `i-{collection_name}-{icon_name}`. By default, Collectivo uses the [HeroIcons](https://icones.js.org/collection/heroicons) library. Additional libraries can be loaded in [`nuxt.config.ts`](https://ui.nuxt.com/getting-started/theming#icons).

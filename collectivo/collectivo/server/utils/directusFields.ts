@@ -21,6 +21,10 @@ export function directusStatusField(
           { text: "$t:archived", value: "archived" },
         ],
       },
+      translations: [
+        { language: "en-US", translation: "Status" },
+        { language: "de-DE", translation: "Status" },
+      ],
       sort: 10,
       interface: "select-dropdown",
       display: "labels",

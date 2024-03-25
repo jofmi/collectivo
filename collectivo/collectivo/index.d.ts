@@ -31,13 +31,6 @@ declare global {
     tags_users: CollectivoUser[] | number[];
   }
 
-  interface CollectivoTileButton {
-    id: number;
-    tiles_label: string;
-    tiles_path: string;
-    tiles_is_external: boolean;
-  }
-
   interface CollectivoTile {
     id: number;
     sort: number;
@@ -46,6 +39,14 @@ declare global {
     tiles_status: "published" | "draft" | "archived";
     tiles_buttons: CollectivoTileButton[];
     tiles_color: string;
+    tiles_component: string;
+  }
+
+  interface CollectivoTileButton {
+    id: number;
+    tiles_label: string;
+    tiles_path: string;
+    tiles_is_external: boolean;
   }
 
   interface CollectivoExtension {

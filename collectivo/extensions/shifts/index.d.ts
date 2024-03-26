@@ -16,7 +16,7 @@ declare global {
     id: string;
     shifts_name: string;
     shifts_shift: ShiftsShift;
-    shifts_skills: string[];
+    shifts_skills: ShiftsSkillSlotLink[];
   }
 
   export interface ShiftsSkill {
@@ -54,6 +54,7 @@ declare global {
     shifts_to?: string;
     shifts_duration: number;
     shifts_repeats_every: number;
+    shifts_slots: ShiftsSlot[];
   }
 
   export interface ShiftsSkillUserLink {

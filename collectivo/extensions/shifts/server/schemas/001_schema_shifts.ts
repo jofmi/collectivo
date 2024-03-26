@@ -182,9 +182,13 @@ schema.fields = [
 
 schema.createForeignKey("shifts_slots", "shifts_shifts", {
   fieldKey: { field: "shifts_shift" },
+  fieldAlias: { field: "shifts_slots" },
 });
 
-schema.createM2MRelation("shifts_skills", "shifts_slots");
+schema.createM2MRelation("shifts_skills", "shifts_slots", {
+  field1: { field: "shifts_slots", type: "alias" },
+  field2: { field: "shifts_skills", type: "alias" },
+});
 
 schema.createForeignKey("shifts_assignments", "shifts_slots", {
   fieldKey: { field: "shifts_slot" },

@@ -9,90 +9,94 @@ const directus = useDirectus();
 const user = useCollectivoUser();
 user.value.load();
 const shift = ref<ShiftsShift>();
-const slots = ref<ShiftsSlot[] | undefined>(undefined);
 const nextOccurrences: Ref<ShiftOccurrence[]> = ref([]);
 const shift_start = ref<DateTime>();
 const shift_end = ref<DateTime>();
-const slotsLoading = ref(true);
 const skillNames = ref<Map<string, string>>();
 
-loadShift();
+loadFirstLevelFields_noRelatedFields();
+loadRelatedFields_cannotAssign();
+
+function loadFirstLevelFields_noRelatedFields() {
+  directus
+    .request(
+      readItem("shifts_shifts", route.params.id as string, {
+        fields: ["*"],
+      }),
+    )
+    .then((item) => {
+      console.log(item);
+      const canAssign: ShiftsShift = item;
+    });
+}
+
+function loadRelatedFields_cannotAssign() {
+  directus
+    .request(
+      readItem("shifts_shifts", route.params.id as string, {
+        fields: [
+          "*",
+          {
+            shifts_slots: [{ shifts_skills: ["*"] }],
+          },
+        ],
+      }),
+    )
+    .then((item) => {
+      console.log(item);
+      const cannotAssign: ShiftsShift = item;
+      const sourceError: ShiftsSlot[] = item.shifts_slots!;
+    });
+}
 
 function loadShift() {
   directus
-    .request(readItem("shifts_shifts", route.params.id as string))
+    .request(
+      readItem("shifts_shifts", route.params.id as string, {
+        fields: [
+          "*",
+          {
+            shifts_slots: [{ shifts_skills: ["*"] }],
+          },
+        ],
+      }),
+    )
     .then((item) => {
       shift.value = item;
-      loadSlots();
+      getSlotSkillNames(item.shifts_slots!);
     })
     .catch((error) => showShiftToast("Shift data could not be loaded", error));
 }
 
-function loadSlots() {
-  directus
-    .request(
-      readItems("shifts_slots", {
-        filter: { shifts_shift: { id: { _eq: shift.value!.id } } },
-      }),
-    )
-    .then((items) => {
-      slots.value = items;
-      getSlotSkillNames(items);
-    })
-    .catch((error) => showShiftToast("Slot data could not be loaded", error))
-    .finally(() => {
-      slotsLoading.value = false;
-    });
-}
-
 function getSlotSkillNames(slots: ShiftsSlot[]) {
-  const linkIds = [];
+  const skillIds = [];
 
   for (const slot of slots) {
     for (const link of slot.shifts_skills) {
-      linkIds.push(link);
+      skillIds.push(link.shifts_skills_id);
     }
   }
 
   directus
     .request(
-      readItems("shifts_skills_shifts_slots", {
+      readItems("shifts_skills", {
         filter: {
           id: {
-            _in: linkIds,
+            _in: skillIds,
           },
         },
+        fields: ["id", "shifts_name"],
       }),
     )
-    .then((links) => {
-      directus
-        .request(
-          readItems("shifts_skills", {
-            filter: {
-              id: {
-                _in: links.map((link) => link.shifts_skills_id),
-              },
-            },
-          }),
-        )
-        .then((skills) => {
-          skillNames.value = new Map<string, string>();
+    .then((skills) => {
+      skillNames.value = new Map<string, string>();
 
-          for (const skill of skills) {
-            for (const linkId of skill.shifts_slots) {
-              skillNames.value.set(linkId, skill.shifts_name);
-            }
-          }
-        })
-        .catch((error) => {
-          showShiftToast("Failed to load skill names names", error);
-          slotsLoading.value = false;
-        })
-        .finally(() => (slotsLoading.value = false));
+      for (const skill of skills) {
+        skillNames.value.set(skill.id, skill.shifts_name);
+      }
     })
     .catch((error) => {
-      showShiftToast("Failed to load slots<->skills links", error);
-      slotsLoading.value = false;
+      showShiftToast("Failed to load skill names", error);
     });
 }
 
@@ -142,16 +146,15 @@ function setDetails(shift: ShiftsShift) {
 
   <CollectivoContainer>
     <h1>Slots</h1>
-    <ul v-if="slots != undefined">
-      <li v-for="(slot, index) in slots" :key="slot.id">
+    <ul v-if="shift">
+      <li v-for="(slot, index) in shift.shifts_slots" :key="slot.id">
         {{ slot["shifts_name"] }}
         <span v-if="skillNames && slot.shifts_skills.length > 0">
           (required skills:
-          <span v-for="skillLinkId in slot.shifts_skills" :key="skillLinkId"
+          <span v-for="link in slot.shifts_skills" :key="link.id"
             ><span v-if="index > 0">, </span>
-            {{ skillNames.get(skillLinkId) }}</span
-          >
-          )
+            {{ skillNames.get(link.shifts_skills_id!) }} </span
+          >)
         </span>
       </li>
     </ul>

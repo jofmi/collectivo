@@ -1,8 +1,8 @@
 ![Collectivo](docs/collectivo_rgb_header.png)
 
-Collectivo is an open-source platform for collaboration, participation, and data management. The software is specifically designed to promote the active engagement and self-organization of members in community projects and organizations. With a modular structure, it can be easily customized to meet the needs of different users.
+Collectivo is an open-source platform for collaboration, participation, and data management. The software is designed to promote the active engagement and self-organization of members in community projects and organizations. With a modular structure, it can be easily customized to meet the needs of different users.
 
-Collectivo is build on [Nuxt](https://nuxt.com/docs/), [Directus](https://directus.io/), and (optionally) [Keycloak](https://www.keycloak.org/). Features of the plattform are split into separate extensions, using [Nuxt Layers](https://nuxt.com/docs/guide/going-further/layers). The software is designed to make it as easy as possible to develop additional extensions and integrate existing tools into the plattform.
+Collectivo is build on [Nuxt](https://nuxt.com/docs/), [Directus](https://directus.io/), and [Keycloak](https://www.keycloak.org/). Features of the plattform are split into separate extensions, using [Nuxt Layers](https://nuxt.com/docs/guide/going-further/layers). The software is designed to make it as easy as possible to develop additional extensions and integrate existing tools into the plattform.
 
 If you are interested in using Collectivo or contributing to its development, please join our Discord server: https://discord.gg/42MWureAYW
 
@@ -10,45 +10,7 @@ If you are interested in using Collectivo or contributing to its development, pl
 
 ## Installation
 
-Install the following requirements:
-
-- [Docker](https://docs.docker.com/get-docker/)
-- [pnpm](https://pnpm.io/installation)
-
-Add the following to your [`etc/hosts`](https://www.howtogeek.com/27350/beginner-geek-how-to-edit-your-hosts-file/) file:
-
-```
-127.0.0.1 keycloak
-```
-
-Prepare the environment and start up a development server:
-
-```sh
-cp .env.example .env
-pnpm install
-docker compose up -d
-pnpm dev
-```
-
-In a separate terminal, run the following to apply migrations and example data:
-
-```sh
-pnpm seed
-```
-
-Go back to the previous terminal (from `pnpm dev`) to see the migration logs.
-
-The following services should now be available:
-
-- Collectivo (user app): http://localhost:3000/
-- Directus (data studio): http://localhost:8055/
-- Keycloak (access control): http://localhost:8080/admin/master/console/
-
-Log in with the following example users:
-
-- Admin: admin@example.com / admin (Collectivo, Directus, Keycloak)
-- Editor: editor@example.com / editor (Collectivo, Directus)
-- User: user@example.com / user (Collectivo)
+Follow the instructions under [Collectivo Quickstart](https://github.com/collectivo-dev/collectivo-quickstart).
 
 ## Configuration
 
@@ -100,25 +62,7 @@ The repository is structured as follows:
 
 ## Creating an extension
 
-- Decide on a name for your extension, e.g. `my-extension`.
-- Create a fork of this repository
-- Create a new extension in `collectivo/extensions/my-extension/`.
-  - Option 1: Copy the example from `collectivo/extensions/example/`.
-  - Option 2: Create a new [Nuxt Layer](https://nuxt.com/docs/guide/going-further/layers).
-- Configure `my-extension/package.json`.
-  - Define a package name for your extension. We recommend to start the name with `collectivo` to make it easier to find, e.g. `collectivo-my-extension`.
-  - Adding `"@collectivo/collectivo": "workspace:*"` to your dependencies gives you access to the types and functions of collectivo. (see [workspace](#workspace))
-- Configure `my-extension/nuxt.config.ts`.
-  - To add collectivo, add `extends: ["@collectivo/collectivo"]` (see [Nuxt Layer](https://nuxt.com/docs/guide/going-further/layers)).
-- Register your extension on the backend (see [registerExtension](#registerextension))
-  - Here, you can set the name of your extension that should be used in the database. The name should not include underscores, e.g. `myExtension`.
-- Add your package to the development app
-  - Add your package name to `dependencies` in `collectivo/app/package.json`, with the version being `"workspace:*"`
-  - Add the package name to `extends` in `collectivo/app/nuxt.config.ts`.
-  - Run `pnpm i` to connect the packages.
-- Create a database schema for your extension (see [initschema](#initschema)).
-- Create frontend components for your extension (see [Frontend API](#frontend-api))
-- Follow [installation](#installation) to start the development app.
+To get started, create a fork of the [Collectivo Quickstart](https://github.com/collectivo-dev/collectivo-quickstart) repository.
 
 ## Adding a database schema
 

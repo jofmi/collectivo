@@ -118,6 +118,7 @@ schema.fields = [
     meta: {
       sort: 10,
       required: true,
+      readonly: true,
       interface: "select-dropdown",
       display: "labels",
       display_options: {
@@ -680,6 +681,58 @@ schema.flows = [
           },
         },
         flowToTrigger: "messages_execute_campaign",
+      },
+    ],
+  },
+
+  {
+    flow: {
+      name: "messages_manual_send_campaign_button",
+      icon: "play_arrow",
+      description:
+        "Flow implementing a button to manually start the execution of campaigns in draft mode. Ignores any campaigns with another status.",
+      status: "active",
+      trigger: "manual",
+      accountability: "all",
+      options: {
+        collections: ["messages_campaigns"],
+      },
+    },
+    firstOperation: "set_status_to_pending",
+    operations: [
+      {
+        operation: {
+          name: "set_status_to_pending",
+          key: "set_status_to_pending",
+          type: "item-update",
+          position_x: 19,
+          position_y: 1,
+          options: {
+            collection: "messages_campaigns",
+            key: null,
+            payload: {
+              messages_campaign_status: "pending",
+            },
+            query: {
+              filter: {
+                _and: [
+                  {
+                    messages_campaign_status: {
+                      _eq: "draft",
+                    },
+                  },
+                  {
+                    id: {
+                      _in: "{{$trigger.body.keys}}",
+                    },
+                  },
+                ],
+              },
+            },
+            emitEvents: true,
+            permissions: "$full",
+          },
+        },
       },
     ],
   },

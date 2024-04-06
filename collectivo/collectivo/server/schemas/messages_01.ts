@@ -687,7 +687,7 @@ schema.flows = [
 
   {
     flow: {
-      name: "messages_manual_send_campaign_button",
+      name: "messages_launch_campaign",
       icon: "play_arrow",
       description:
         "Flow implementing a button to manually start the execution of campaigns in draft mode. Ignores any campaigns with another status.",

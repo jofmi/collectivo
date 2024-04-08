@@ -18,12 +18,7 @@ async function getMemberships() {
 
   memberships.value = await directus.request(
     readItems("memberships", {
-      fields: [
-        "id",
-        "memberships_type.memberships_name",
-        "memberships_shares",
-        "memberships_status",
-      ],
+      fields: ["id", "memberships_shares", "memberships_status"],
       filter: {
         memberships_user: {
           _eq: user.value.data?.id,
@@ -52,10 +47,6 @@ getMemberships();
       >
         <div class="flex flex-col">
           <div>{{ t("ID") }}: {{ membership.id }}</div>
-          <div>
-            {{ t("Type") }}:
-            {{ membership.memberships_type.memberships_name }}
-          </div>
           <div>
             {{ t("Status") }}: {{ t(membership.memberships_status ?? "") }}
           </div>

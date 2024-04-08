@@ -194,23 +194,6 @@ schema.fields = [
       ],
     },
   },
-  {
-    collection: "memberships",
-    field: "memberships_shares",
-    type: "integer",
-    schema: {
-      is_nullable: false,
-      default_value: 0,
-    },
-    meta: {
-      interface: "input",
-      width: "half",
-      translations: [
-        { language: "de-DE", translation: "Anteile" },
-        { language: "en-US", translation: "Shares" },
-      ],
-    },
-  },
 
   ...directusSystemFields("memberships"),
 ];

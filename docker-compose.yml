@@ -17,11 +17,12 @@ services:
       directus-db:
         condition: service_healthy
     environment:
-      KEY: "0fda9121-269d-44bd-91f2-4ff05be14b4b"
-      SECRET: "86cb4a76-a4c6-4ce7-8181-b0445d95675c"
+      PUBLIC_URL: ${DIRECTUS_URL}
+      KEY: ${DIRECTUS_KEY}
+      SECRET: ${DIRECTUS_SECRET}
 
-      ADMIN_EMAIL: ${NUXT_DIRECTUS_ADMIN_EMAIL}
-      ADMIN_PASSWORD: ${NUXT_DIRECTUS_ADMIN_PASSWORD}
+      ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD}
 
       CORS_ENABLED: "true"
       CORS_ORIGIN: "true"
@@ -38,16 +39,13 @@ services:
       CACHE_STORE: "redis"
       REDIS: "redis://directus-cache:6379"
 
-      PUBLIC_URL: "http://localhost:8055"
-
       AUTH_PROVIDERS: "keycloak"
       AUTH_KEYCLOAK_DRIVER: "openid"
-      AUTH_KEYCLOAK_CLIENT_ID: "directus"
-      AUTH_KEYCLOAK_CLIENT_SECRET: "**********"
-      AUTH_KEYCLOAK_ISSUER_URL: "http://keycloak:8080/realms/collectivo/.well-known/openid-configuration"
+      AUTH_KEYCLOAK_CLIENT_ID: ${KEYCLOAK_DIRECTUS_CLIENT}
+      AUTH_KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_DIRECTUS_SECRET}
+      AUTH_KEYCLOAK_ISSUER_URL: "${KEYCLOAK_URL}/realms/collectivo/.well-known/openid-configuration"
       AUTH_KEYCLOAK_IDENTIFIER_KEY: "email"
       AUTH_KEYCLOAK_ALLOW_PUBLIC_REGISTRATION: "true"
-      # AUTH_KEYCLOAK_DEFAULT_ROLE_ID:
 
       SESSION_COOKIE_SECURE: "false"
       SESSION_COOKIE_SAME_SITE: "lax"
@@ -57,9 +55,12 @@ services:
       EMAIL_FROM: ${DIRECTUS_EMAIL_FROM}
       EMAIL_TRANSPORT: ${DIRECTUS_EMAIL_TRANSPORT}
       EMAIL_SMTP_HOST: ${DIRECTUS_EMAIL_SMTP_HOST}
-      EMAIL_SMTP_PORT: ${DIRECTUS_EMAIL_SMTP_PORT}
       EMAIL_SMTP_USER: ${DIRECTUS_EMAIL_SMTP_USER}
       EMAIL_SMTP_PASSWORD: ${DIRECTUS_EMAIL_SMTP_PASSWORD}
+
+      COLLECTIVO_API_URL: ${COLLECTIVO_API_URL}
+      COLLECTIVO_API_KEY: ${COLLECTIVO_API_TOKEN}
+      FLOWS_ENV_ALLOW_LIST: "COLLECTIVO_API_URL, COLLECTIVO_API_TOKEN"
 
   directus-db:
     image: postgis/postgis:15-3.4-alpine
@@ -80,20 +81,6 @@ services:
   directus-cache:
     image: redis:6
 
-  keycloak-db:
-    image: postgres:15.4-alpine
-    volumes:
-      - keycloak-db-data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: keycloak
-      POSTGRES_USER: keycloak
-      POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   keycloak:
     build:
       context: ./keycloak
@@ -109,13 +96,13 @@ services:
       KC_DB_URL_DATABASE: "keycloak"
       KC_DB_URL_HOST: "keycloak-db"
       KC_DB_URL_PORT: 5432
-      KC_HOSTNAME: ${KEYCLOAK_HOSTNAME}
+      KC_HOSTNAME: ${KEYCLOAK_DOMAIN}
     volumes:
       - ./keycloak/import:/opt/keycloak/data/import:ro
       - ./keycloak/export:/tmp/export
     command: start-dev --import-realm --health-enabled true
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ready"]
+      test: ["CMD", "curl", "-f", "${KEYCLOAK_URL}/health/ready"]
       interval: 5s
       timeout: 5s
       retries: 20
@@ -123,6 +110,20 @@ services:
       - keycloak-db
     ports:
       - "8080:8080"
+
+  keycloak-db:
+    image: postgres:15.4-alpine
+    volumes:
+      - keycloak-db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   directus-db-data:

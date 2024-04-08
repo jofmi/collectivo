@@ -83,12 +83,12 @@ schema.fields = [
       options: {
         enableSelect: false,
         template:
-          "{{payments_item.payments_name}}:{{payments_quantity}}*{{payments_price}}",
+          "{{payments_description}}:{{payments_quantity}}*{{payments_price}}",
       },
       display: "related-values",
       display_options: {
         template:
-          "{{payments_item.payments_name}}: {{payments_quantity}}*{{payments_price}}",
+          "{{payments_description}}: {{payments_quantity}}*{{payments_price}}",
       },
       translations: [
         { language: "de-DE", translation: "Posten" },
@@ -223,8 +223,8 @@ schema.fields = [
     meta: { interface: "select-dropdown-m2o", hidden: true },
   },
   {
-    field: "payments_invoices_entries",
-    collection: "payments_description",
+    collection: "payments_invoices_entries",
+    field: "payments_description",
     type: "string",
     meta: {
       sort: 3,

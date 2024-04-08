@@ -119,8 +119,8 @@ schema.fields = [
         choices: [{ text: "$t:Normal membership", value: "normal" }],
       },
       translations: [
-        { language: "de-DE", translation: "Typ" },
-        { language: "en-US", translation: "Art" },
+        { language: "de-DE", translation: "Art" },
+        { language: "en-US", translation: "Type" },
       ],
     },
 

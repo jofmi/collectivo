@@ -33,7 +33,7 @@ prepare();
 
 <template>
   <div v-if="alreadyMemberError">
-    {{ t("t:memberships_form_logout") }}
+    {{ t("t:memberships_form_already_member") }}
   </div>
   <CollectivoFormPage v-if="showForm" :form="form" :data="data">
     <template #success>

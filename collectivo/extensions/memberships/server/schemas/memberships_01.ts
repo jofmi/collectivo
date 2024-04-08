@@ -98,6 +98,36 @@ schema.fields = [
   },
   {
     collection: "memberships",
+    field: "memberships_type",
+    type: "string",
+    meta: {
+      sort: 10,
+      interface: "select-dropdown",
+      display: "labels",
+      display_options: {
+        choices: [
+          {
+            text: "$t:Normal membership",
+            value: "normal",
+            foreground: "#FFFFFF",
+            background: "#2CB3A5",
+          },
+        ],
+      },
+      width: "half",
+      options: {
+        choices: [{ text: "$t:Normal membership", value: "normal" }],
+      },
+      translations: [
+        { language: "de-DE", translation: "Typ" },
+        { language: "en-US", translation: "Art" },
+      ],
+    },
+
+    schema: { is_nullable: false, default_value: "normal" },
+  },
+  {
+    collection: "memberships",
     field: "memberships_date_applied",
     type: "date",
     meta: {

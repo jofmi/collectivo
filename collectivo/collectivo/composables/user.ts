@@ -62,9 +62,10 @@ class CollectivoUserStore {
     // If user is not authenticated, log out of directus and redirect to keycloak
     directus.logout();
 
+    // TODO: This could be extended to ${route.path}, but directus will block it
     if (runtimeConfig.public.authService === "keycloak") {
       return navigateTo(
-        `${runtimeConfig.public.directusUrl}/auth/login/keycloak?redirect=${runtimeConfig.public.collectivoUrl}${route.path}`,
+        `${runtimeConfig.public.directusUrl}/auth/login/keycloak?redirect=${runtimeConfig.public.collectivoUrl}`,
         { external: true },
       );
     } else {

@@ -11,34 +11,6 @@ schema.collections = [
     },
   },
   {
-    collection: "payments_items",
-    schema: {
-      schema: "schema",
-      name: "schema",
-      comment: null,
-    },
-    meta: {
-      group: "payments",
-      sort: 100,
-      icon: "category",
-      display_template: "{{payments_name}}",
-      translations: [
-        {
-          language: "en-US",
-          translation: "Invoice Items",
-          singular: "Invoice Item",
-          plural: "Invoice Item",
-        },
-        {
-          language: "de-DE",
-          translation: "Rechnungsartikel",
-          singular: "Rechnungsartikel",
-          plural: "Rechnungsartikel",
-        },
-      ],
-    },
-  },
-  {
     collection: "payments_invoices_entries",
     schema: {
       schema: "schema",
@@ -98,42 +70,6 @@ schema.collections = [
 ];
 
 schema.fields = [
-  // Payments items
-  ...directusSystemFields("payments_items"),
-  {
-    collection: "payments_items",
-    field: "payments_name",
-    type: "string",
-    schema: {
-      is_nullable: false,
-      is_unique: true,
-    },
-    meta: {
-      sort: 1,
-      required: true,
-      translations: [
-        { language: "en-US", translation: "Name" },
-        { language: "de-DE", translation: "Name" },
-      ],
-    },
-  },
-  {
-    collection: "payments_items",
-    field: "payments_price",
-    type: "integer",
-    schema: { default_value: 0, is_nullable: false },
-    meta: {
-      interface: "input",
-      required: true,
-      note: "Price is in cents.",
-      width: "half",
-      translations: [
-        { language: "de-DE", translation: "Preis" },
-        { language: "en-US", translation: "Price" },
-      ],
-    },
-  },
-
   // Invoices out
   ...directusSystemFields("payments_invoices_out"),
   ...directusSystemFields("payments_invoices_entries"),
@@ -287,24 +223,15 @@ schema.fields = [
     meta: { interface: "select-dropdown-m2o", hidden: true },
   },
   {
-    collection: "payments_invoices_entries",
-    field: "payments_item",
-    type: "integer",
+    field: "payments_invoices_entries",
+    collection: "payments_description",
+    type: "string",
     meta: {
-      interface: "select-dropdown-m2o",
-      special: ["m2o"],
-      display: "related-values",
-      display_options: {
-        template: "{{name}}",
-      },
-      options: {
-        enableSelect: true,
-        template: "{{name}}",
-      },
-      width: "half",
+      sort: 3,
+      hidden: false,
       translations: [
-        { language: "de-DE", translation: "Artikel" },
-        { language: "en-US", translation: "Item" },
+        { language: "en-US", translation: "Description" },
+        { language: "de-DE", translation: "Bezeichnung" },
       ],
     },
   },
@@ -360,13 +287,6 @@ schema.relations = [
   },
   {
     collection: "payments_invoices_entries",
-    field: "payments_item",
-    related_collection: "payments_items",
-    meta: { sort_field: null },
-    schema: { on_delete: "NO ACTION" }, // Cannot delete items that have been used in invoices
-  },
-  {
-    collection: "payments_invoices_entries",
     field: "payments_invoice",
     related_collection: "payments_invoices_out",
     meta: {
@@ -380,7 +300,6 @@ schema.relations = [
 
 for (const action of ["read", "update", "create", "delete"]) {
   for (const collection of [
-    "payments_items",
     "payments_invoices_entries",
     "payments_invoices_out",
   ]) {

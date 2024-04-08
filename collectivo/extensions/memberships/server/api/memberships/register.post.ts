@@ -11,7 +11,7 @@ import { createDirectus, readMe, withToken, rest } from "@directus/sdk";
 import KcAdminClient from "@keycloak/keycloak-admin-client";
 
 async function getUserID(event: any) {
-  const token = getHeader(event, "Authorization");
+  const token = getHeader(event, "Cookie");
   const config = useRuntimeConfig();
   const directusUser = createDirectus(config.public.directusUrl).with(rest());
 
@@ -19,13 +19,14 @@ async function getUserID(event: any) {
     try {
       const user = await directusUser.request(
         withToken(
-          token,
+          token.replace("directus_session_token=", ""),
           readMe({
-            fields: ["id"],
+            fields: ["id", "email"],
           }),
         ),
       );
 
+      console.log("Existing user: " + user.email);
       return user.id;
     } catch (e) {
       return undefined;
@@ -80,20 +81,10 @@ export default defineEventHandler(async (event) => {
 async function registerMembership(body: any, userID: string | undefined) {
   const isAuthenticated = userID !== undefined;
 
-  logger.info(
-    "Received membership application: " +
-      body["directus_users.email"] +
-      "(authenticated: " +
-      isAuthenticated +
-      ")",
-  );
+  logger.info("Received membership application");
 
-  console.log("Register membership");
-
-  console.log("Is authenticated: " + isAuthenticated);
   await refreshDirectus();
   const directus = await useDirectusAdmin();
-  console.log("Directus refreshed");
   const config = useRuntimeConfig();
 
   const userData: any = {};
@@ -109,25 +100,6 @@ async function registerMembership(body: any, userID: string | undefined) {
 
   const user_password = userData.password;
 
-  // Get membership type
-  if (typeof membershipData.memberships_type === "string") {
-    const types = await directus.request(
-      readItems("memberships_types", {
-        filter: { memberships_name: membershipData.memberships_type },
-      }),
-    );
-
-    if (types.length === 0) {
-      throw new Error(
-        "Membership type not found: " + membershipData.memberships_type,
-      );
-    }
-
-    membershipData.memberships_type = types[0].id;
-  }
-
-  console.log("Membership types loaded");
-
   // Connect to keycloak
   const keycloak = new KcAdminClient({
     baseUrl: config.public.keycloakUrl,
@@ -142,7 +114,6 @@ async function registerMembership(body: any, userID: string | undefined) {
 
   // Random call to test connection
   await keycloak.users.find({ first: 0, max: 1 });
-  console.log("Keycloak connection successful");
 
   // Disable security fields
   delete userData.provider;
@@ -158,7 +129,7 @@ async function registerMembership(body: any, userID: string | undefined) {
     delete userData.password;
     delete userData.email;
   } else {
-    console.log("start is not authenticated loop");
+    console.log("New user: " + userData.email);
 
     if (!userData.email) {
       throw createError({
@@ -228,7 +199,11 @@ async function registerMembership(body: any, userID: string | undefined) {
       createItem("memberships", membershipData),
     );
   } catch (e) {
-    await directus.request(deleteUser(userID!));
+    if (!isAuthenticated) {
+      // If user was just created, delete again
+      await directus.request(deleteUser(userID!));
+    }
+
     throw e;
   }
 

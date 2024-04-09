@@ -308,6 +308,7 @@ And the following methods:
 - `createO2MRelation()` - Utility method to create a [One-to-Many](https://docs.directus.io/app/data-model/relationships.html#one-to-many-o2m) relationship
 - `createM2MRelation()` - Utility method to create a [Many-to_many](https://docs.directus.io/app/data-model/relationships.html#many-to-many-m2m) relationship
 - `createM2ARelation()` - Utility method to create a [Many-to-Any](https://docs.directus.io/app/data-model/relationships.html#many-to-any-m2a) relationship
+- `createNuxtHook()` - Utility method to create a flow that will send a post request to a Nuxt API endpoint when it is triggered.
 
 ### `ExtensionDependency`
 

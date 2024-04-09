@@ -1,7 +1,6 @@
 import { readItems } from "@directus/sdk";
 import { DateTime } from "luxon";
 import { datetime, RRule } from "rrule";
-import type { CollectivoShift, ShiftOccurrence } from "~/composables/types";
 
 export const getAllShiftOccurrences = async (
   from: DateTime,
@@ -9,9 +8,9 @@ export const getAllShiftOccurrences = async (
 ): Promise<ShiftOccurrence[]> => {
   const directus = useDirectus();
 
-  const shifts: CollectivoShift[] = await directus.request(
+  const shifts: ShiftsShift[] = (await directus.request(
     readItems("shifts_shifts"),
-  );
+  )) as ShiftsShift[];
 
   const occurrences = [];
 
@@ -27,7 +26,7 @@ export const getAllShiftOccurrences = async (
 };
 
 export const getNextOccurrences = (
-  shift: CollectivoShift,
+  shift: ShiftsShift,
   maxOccurrences: number,
   after?: DateTime,
 ) => {
@@ -42,7 +41,7 @@ export const getNextOccurrences = (
   return nextOccurrences;
 };
 
-export const getNextOccurrence = (shift: CollectivoShift, after?: DateTime) => {
+export const getNextOccurrence = (shift: ShiftsShift, after?: DateTime) => {
   const date = shiftToRRule(shift).after(
     luxonDateTimeToRruleDatetime(after ?? DateTime.now()),
   );
@@ -51,7 +50,7 @@ export const getNextOccurrence = (shift: CollectivoShift, after?: DateTime) => {
 };
 
 export const getOccurrencesForShift = (
-  shift: CollectivoShift,
+  shift: ShiftsShift,
   from: DateTime,
   to: DateTime,
 ): ShiftOccurrence[] => {
@@ -71,7 +70,7 @@ export const getOccurrencesForShift = (
 };
 
 const rruleDateToShiftOccurrence = (
-  shift: CollectivoShift,
+  shift: ShiftsShift,
   date: Date,
 ): ShiftOccurrence => {
   const start = DateTime.fromJSDate(date);
@@ -83,7 +82,7 @@ const rruleDateToShiftOccurrence = (
   };
 };
 
-export const shiftToRRule = (shift: CollectivoShift): RRule => {
+export const shiftToRRule = (shift: ShiftsShift): RRule => {
   return new RRule({
     freq: RRule.DAILY,
     interval: shift.shifts_repeats_every,
@@ -142,4 +141,14 @@ export const isNextOccurrenceWithinAssignment = (
     !!nextOccurrence &&
     isShiftDurationModelActive(assignment, nextOccurrence.start)
   );
+};
+
+export const getActiveAssignment = (
+  assignments: ShiftsAssignment[],
+): ShiftsAssignment | null => {
+  for (const assignment of assignments) {
+    if (isShiftDurationModelActive(assignment)) return assignment;
+  }
+
+  return null;
 };

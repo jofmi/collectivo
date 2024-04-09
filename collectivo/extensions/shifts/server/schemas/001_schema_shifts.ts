@@ -192,6 +192,7 @@ schema.createM2MRelation("shifts_skills", "shifts_slots", {
 
 schema.createForeignKey("shifts_assignments", "shifts_slots", {
   fieldKey: { field: "shifts_slot" },
+  fieldAlias: { field: "shifts_assignments" },
 });
 
 schema.createForeignKey("shifts_logs", "directus_users", {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { readItem, readItems } from "@directus/sdk";
 import { DateTime } from "luxon";
-import { getNextOccurrences } from "~/composables/shifts";
+import { getActiveAssignment, getNextOccurrences } from "~/composables/shifts";
 import showShiftToast from "~/composables/toast";
 
 const route = useRoute();
@@ -23,14 +23,23 @@ function loadShift() {
         fields: [
           "*",
           {
-            shifts_slots: ["*", { shifts_skills: ["*"] }],
+            shifts_slots: [
+              "*",
+              {
+                shifts_skills: ["*"],
+                shifts_assignments: [
+                  "*",
+                  { shifts_user: ["first_name", "last_name"] },
+                ],
+              },
+            ],
           },
         ],
       }),
     )
     .then((item) => {
       shift.value = item as ShiftsShift;
-      getSlotSkillNames(shift.value.shifts_slots);
+      getSlotSkillNames(shift.value.shifts_slots!);
     })
     .catch((error) => showShiftToast("Shift data could not be loaded", error));
 }
@@ -91,6 +100,19 @@ function setDetails(shift: ShiftsShift) {
 
   nextOccurrences.value = getNextOccurrences(shift, 5);
 }
+
+function getAssigneeName(assignments: ShiftsAssignment[]) {
+  const assignment = getActiveAssignment(assignments);
+
+  if (!assignment) return "No currently assigned";
+
+  return (
+    assignment.shifts_user.first_name +
+    " " +
+    assignment.shifts_user.last_name[0] +
+    "."
+  );
+}
 </script>
 
 <template>
@@ -115,14 +137,19 @@ function setDetails(shift: ShiftsShift) {
     <h1>Slots</h1>
     <ul v-if="shift">
       <li v-for="(slot, index) in shift.shifts_slots" :key="slot.id">
-        {{ slot.shifts_name }}
-        <span v-if="skillNames && slot.shifts_skills.length > 0">
-          (required skills:
-          <span v-for="link in slot.shifts_skills" :key="link.id"
-            ><span v-if="index > 0">, </span>
-            {{ skillNames.get(link.shifts_skills_id!) }} </span
-          >)
-        </span>
+        <CollectivoCard :title="slot.shifts_name">
+          <template #content>
+            <p v-if="skillNames">
+              Required skills:
+              <span v-if="slot.shifts_skills.length == 0">None</span>
+              <span v-for="link in slot.shifts_skills" :key="link.id"
+                ><span v-if="index > 0">, </span>
+                {{ skillNames.get(link.shifts_skills_id!) }}
+              </span>
+            </p>
+            <p>Assigned to: {{ getAssigneeName(slot.shifts_assignments) }}</p>
+          </template>
+        </CollectivoCard>
       </li>
     </ul>
     <span v-else>Loading...</span>

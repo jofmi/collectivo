@@ -1,0 +1,74 @@
+site_name: Collectivo Docs
+
+theme:
+  name: "material"
+  logo: "assets/collectivo_rgb_icon_white.png"
+  favicon: "assets/favicon.ico"
+  icon:
+    repo: fontawesome/brands/github
+
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: purple
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+
+  features:
+    - content.code.copy
+    - navigation.sections
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - def_list
+  - attr_list
+
+plugins:
+  - search
+  - glightbox
+
+nav:
+  - Home: index.md
+  - "quickstart.md"
+  - "guide.md"
+  # - "development.md"
+  - "reference.md"
+  # - "contact.md"
+  # - Core extensions:
+  #     - "extensions/core.md"
+  #     - "extensions/keycloak.md"
+  #     - "extensions/extensions.md"
+  #     - "extensions/components.md"
+  #     - "extensions/menus.md"
+  #     - "extensions/dashboard.md"
+  # - Feature extensions:
+  #     - "extensions/profiles.md"
+  #     - "extensions/tags.md"
+  #     - "extensions/emails.md"
+  #     - "extensions/memberships.md"
+  #     - "extensions/payments.md"
+  #     - "extensions/shifts.md"
+
+repo_name: MILA-Wien/collectivo
+repo_url: https://github.com/MILA-Wien/collectivo

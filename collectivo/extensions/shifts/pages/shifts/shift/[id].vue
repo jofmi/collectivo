@@ -14,40 +14,7 @@ const shift_start = ref<DateTime>();
 const shift_end = ref<DateTime>();
 const skillNames = ref<Map<string, string>>();
 
-loadFirstLevelFields_noRelatedFields();
-loadRelatedFields_cannotAssign();
-
-function loadFirstLevelFields_noRelatedFields() {
-  directus
-    .request(
-      readItem("shifts_shifts", route.params.id as string, {
-        fields: ["*"],
-      }),
-    )
-    .then((item) => {
-      console.log(item);
-      const canAssign: ShiftsShift = item;
-    });
-}
-
-function loadRelatedFields_cannotAssign() {
-  directus
-    .request(
-      readItem("shifts_shifts", route.params.id as string, {
-        fields: [
-          "*",
-          {
-            shifts_slots: [{ shifts_skills: ["*"] }],
-          },
-        ],
-      }),
-    )
-    .then((item) => {
-      console.log(item);
-      const cannotAssign: ShiftsShift = item;
-      const sourceError: ShiftsSlot[] = item.shifts_slots!;
-    });
-}
+loadShift();
 
 function loadShift() {
   directus
@@ -56,14 +23,14 @@ function loadShift() {
         fields: [
           "*",
           {
-            shifts_slots: [{ shifts_skills: ["*"] }],
+            shifts_slots: ["*", { shifts_skills: ["*"] }],
           },
         ],
       }),
     )
     .then((item) => {
-      shift.value = item;
-      getSlotSkillNames(item.shifts_slots!);
+      shift.value = item as ShiftsShift;
+      getSlotSkillNames(shift.value.shifts_slots);
     })
     .catch((error) => showShiftToast("Shift data could not be loaded", error));
 }
@@ -148,7 +115,7 @@ function setDetails(shift: ShiftsShift) {
     <h1>Slots</h1>
     <ul v-if="shift">
       <li v-for="(slot, index) in shift.shifts_slots" :key="slot.id">
-        {{ slot["shifts_name"] }}
+        {{ slot.shifts_name }}
         <span v-if="skillNames && slot.shifts_skills.length > 0">
           (required skills:
           <span v-for="link in slot.shifts_skills" :key="link.id"

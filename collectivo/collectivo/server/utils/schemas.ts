@@ -2,8 +2,6 @@ import {
   DirectusFlow,
   DirectusOperation,
   DirectusPermission,
-} from "@directus/sdk";
-import {
   DirectusCollection,
   DirectusField,
   DirectusRelation,
@@ -100,10 +98,8 @@ export class ExtensionSchema {
     createForeignKey(this, CollectionKey, CollectionAlias, settings);
   };
 
-  createO2MRelation = () => {
-    throw new Error(
-      "schema.createO2MRelation deprecated. pls use createForeignKey",
-    );
+  createNuxtHook = async (trigger: DirectusFlow<any>, path: string) => {
+    createNuxtHook(this, trigger, path);
   };
 
   apply = async () => {
@@ -418,5 +414,38 @@ export async function createM2ARelation(
       junction_field: "item",
     },
     schema: { on_delete: "SET NULL" },
+  });
+}
+
+async function createNuxtHook(
+  schema: ExtensionSchema,
+  trigger: DirectusFlow<any>,
+  path: string,
+) {
+  schema.flows.push({
+    flow: trigger,
+    firstOperation: "postToNuxtAPI",
+    operations: [
+      {
+        operation: {
+          position_x: 19,
+          position_y: 1,
+          name: "postToNuxtAPI",
+          key: "postToNuxtAPI",
+          type: "request",
+          options: {
+            method: "POST",
+            url: "{{$env.COLLECTIVO_API_URL}}/" + path,
+            headers: [
+              {
+                header: "Authorization",
+                value: "Bearer {{$env.COLLECTIVO_API_TOKEN}}",
+              },
+            ],
+            body: "{{$trigger}}",
+          },
+        },
+      },
+    ],
   });
 }

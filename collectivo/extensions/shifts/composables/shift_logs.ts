@@ -27,18 +27,27 @@ export const getUserScore = async (
 export const getUserLogs = async (
   user: CollectivoUser,
   at?: DateTime,
+  limit?: number,
 ): Promise<ShiftsLog[]> => {
   const directus = useDirectus();
 
   const query = {
-    filter: { shifts_user: { id: { _eq: user.id } } },
+    filter: {
+      shifts_user: { id: { _eq: user.id } },
+      shifts_type: { _neq: ShiftLogType.CANCELLED },
+    },
     fields: ["*"],
+    sort: ["-shifts_datetime"],
   };
 
   if (at) {
     query.filter["shifts_datetime"] = {
       _lte: at.toString(),
     };
+  }
+
+  if (limit) {
+    query["limit"] = limit;
   }
 
   return (await directus.request(

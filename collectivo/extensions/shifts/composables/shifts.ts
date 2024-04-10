@@ -154,10 +154,10 @@ export const getActiveAssignment = (
   return null;
 };
 
-export function getAssigneeName(
+export const getAssigneeName = (
   assignments: ShiftsAssignment[],
   atDate?: DateTime,
-) {
+) => {
   if (!atDate) {
     atDate = DateTime.now();
   }
@@ -173,4 +173,4 @@ export function getAssigneeName(
     assignment.shifts_user.last_name[0] +
     "."
   );
-}
+};

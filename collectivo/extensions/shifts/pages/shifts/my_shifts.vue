@@ -80,7 +80,7 @@ function loadUserShiftDetails(user: CollectivoUser) {
     })
     .catch((error) => showShiftToast("Failed to load score", error));
 
-  getUserLogs(user, DateTime.now())
+  getUserLogs(user, DateTime.now(), 10)
     .then((items) => {
       logs.value.push(...items);
     })
@@ -158,7 +158,7 @@ function getUserSkillNames() {
   <CollectivoContainer v-if="logs.length">
     <h2>Last score updates</h2>
     <ul>
-      <li v-for="log in logs.slice(0, 10)" :key="log.id">
+      <li v-for="log in logs" :key="log.id">
         <strong>
           <span v-if="log.shifts_type == ShiftLogType.ATTENDED">+1</span>
           <span v-if="log.shifts_type == ShiftLogType.MISSED">-2</span>

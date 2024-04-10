@@ -38,7 +38,6 @@ declare global {
     id: string;
     shifts_type: ShiftLogType;
     shifts_datetime: string;
-    shifts_user: CollectivoUser;
     shifts_assignment: ShiftsAssignment;
   }
 

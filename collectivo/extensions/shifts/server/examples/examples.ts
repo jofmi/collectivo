@@ -8,6 +8,8 @@ import {
 
 import { DateTime } from "luxon";
 
+import { getRandomInt } from "../utils/getRandomInt";
+
 const times_of_day = [10, 13, 16, 19];
 
 export default async function examples() {
@@ -19,6 +21,7 @@ export default async function examples() {
   await createSkills();
   await createAssignments();
   await addSkillsToUsers();
+  await createLogs();
 
   console.info("Example data for shifts created");
 }
@@ -195,4 +198,37 @@ async function addSkillsToUsers() {
   });
 
   await directus.request(createItems("shifts_skills_directus_users", links));
+}
+
+async function createLogs() {
+  const directus = await useDirectusAdmin();
+
+  const assignments = await directus.request(
+    readItems("shifts_assignments", {
+      fields: ["*"],
+    }),
+  );
+
+  const requests = [];
+
+  for (const assignment of assignments) {
+    const nbLogs = getRandomInt(5, 20);
+
+    for (let i = 0; i < nbLogs; i++) {
+      const types = [
+        ShiftLogType.ATTENDED,
+        ShiftLogType.ATTENDED,
+        ShiftLogType.MISSED,
+        ShiftLogType.CANCELLED,
+      ];
+
+      requests.push({
+        shifts_type: types[getRandomInt(0, types.length)],
+        shifts_datetime: DateTime.now().plus({ days: getRandomInt(-10, 10) }),
+        shifts_assignment: assignment.id,
+      });
+    }
+  }
+
+  await directus.request(createItems("shifts_logs", requests));
 }

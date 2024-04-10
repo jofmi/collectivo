@@ -195,11 +195,6 @@ schema.createForeignKey("shifts_assignments", "shifts_slots", {
   fieldAlias: { field: "shifts_assignments" },
 });
 
-schema.createForeignKey("shifts_logs", "directus_users", {
-  m2oFieldType: "uuid",
-  fieldKey: { field: "shifts_user" },
-});
-
 schema.createForeignKey("shifts_logs", "shifts_assignments", {
   fieldKey: { field: "shifts_assignment" },
 });

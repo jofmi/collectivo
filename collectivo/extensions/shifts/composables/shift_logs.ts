@@ -31,8 +31,8 @@ export const getUserLogs = async (
   const directus = useDirectus();
 
   const query = {
-    filter: { shifts_user: { _eq: user.id } },
-    fields: "*",
+    filter: { shifts_user: { id: { _eq: user.id } } },
+    fields: ["*"],
   };
 
   if (at) {
@@ -41,9 +41,7 @@ export const getUserLogs = async (
     };
   }
 
-  const logs: ShiftsLog[] = await directus.request(
+  return (await directus.request(
     readItems("shifts_logs", query),
-  );
-
-  return logs;
+  )) as ShiftsLog[];
 };

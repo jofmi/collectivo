@@ -145,10 +145,32 @@ export const isNextOccurrenceWithinAssignment = (
 
 export const getActiveAssignment = (
   assignments: ShiftsAssignment[],
+  atDate?: DateTime,
 ): ShiftsAssignment | null => {
   for (const assignment of assignments) {
-    if (isShiftDurationModelActive(assignment)) return assignment;
+    if (isShiftDurationModelActive(assignment, atDate)) return assignment;
   }
 
   return null;
 };
+
+export function getAssigneeName(
+  assignments: ShiftsAssignment[],
+  atDate?: DateTime,
+) {
+  if (!atDate) {
+    atDate = DateTime.now();
+  }
+
+  const assignment = getActiveAssignment(assignments, atDate);
+
+  if (!assignment)
+    return "No assignee on " + atDate.toLocaleString(DateTime.DATE_SHORT);
+
+  return (
+    assignment.shifts_user.first_name +
+    " " +
+    assignment.shifts_user.last_name[0] +
+    "."
+  );
+}

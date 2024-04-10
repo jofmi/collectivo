@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DateTime } from "luxon";
-import type { ShiftOccurrence } from "~/composables/types";
+import { getAssigneeName } from "~/composables/shifts";
 
 const props = defineProps({
   shiftOccurrence: {
@@ -25,7 +25,12 @@ const end_time = props.shiftOccurrence.end.toLocaleString(DateTime.TIME_SIMPLE);
     :title="`${props.shiftOccurrence.shift.shifts_name} on ${date} from ${start_time} to ${end_time}`"
   >
     <template #content>
-      <p>WIP</p>
+      <ul>
+        <li v-for="slot in shiftOccurrence.shift.shifts_slots" :key="slot.id">
+          {{ slot.shifts_name }} :
+          {{ getAssigneeName(slot.shifts_assignments, shiftOccurrence.start) }}
+        </li>
+      </ul>
     </template>
   </CollectivoCard>
 </template>

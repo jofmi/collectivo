@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { readItem, readItems } from "@directus/sdk";
 import { DateTime } from "luxon";
-import { getActiveAssignment, getNextOccurrences } from "~/composables/shifts";
+import { getAssigneeName, getNextOccurrences } from "~/composables/shifts";
 import showShiftToast from "~/composables/toast";
 
 const route = useRoute();
@@ -99,19 +99,6 @@ function setDetails(shift: ShiftsShift) {
   );
 
   nextOccurrences.value = getNextOccurrences(shift, 5);
-}
-
-function getAssigneeName(assignments: ShiftsAssignment[]) {
-  const assignment = getActiveAssignment(assignments);
-
-  if (!assignment) return "No currently assigned";
-
-  return (
-    assignment.shifts_user.first_name +
-    " " +
-    assignment.shifts_user.last_name[0] +
-    "."
-  );
 }
 </script>
 

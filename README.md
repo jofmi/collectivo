@@ -1,4 +1,4 @@
-![Collectivo](docs/collectivo_rgb_header.png)
+![Collectivo](docs/assets/collectivo_rgb_header.png)
 
 Collectivo is an open-source platform for collaboration, participation, and data management. The software is designed to promote the active engagement and self-organization of members in community projects and organizations. With a modular structure, it can be easily customized to meet the needs of different users.
 

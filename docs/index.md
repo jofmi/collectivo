@@ -14,32 +14,37 @@ If you are interested in using Collectivo or contributing to its development, pl
 
 Collectivo consists of three key applications:
 
-- **Community app**: The heart of Collectivo, a digital plattform for your community - built with [Nuxt](https://nuxt.com/). It is easy to customize and extend, multilingual, and mobile-friendly.
+-   **Community app**: The heart of Collectivo, a digital plattform for your community - built with [Nuxt](https://nuxt.com/). It is easy to customize and extend, multilingual, and mobile-friendly.
 
-- **Data studio**: Collectivo uses [Directus](https://directus.io/) on the backend. This offers you a modern data studio to manage content, create visualizations, track changes, and automate workflows.
+-   **Data studio**: Collectivo uses [Directus](https://directus.io/) on the backend. This offers you a modern data studio to manage content, create visualizations, track changes, and automate workflows.
 
-- **Single sign-on**: Collectivo uses [Keycloak](https://www.keycloak.org/) for identity and access management. This makes it possible for users to have only one account for multiple applications.
+-   **Single sign-on**: Collectivo uses [Keycloak](https://www.keycloak.org/) for identity and access management. This makes it possible for users to have only one account for multiple applications.
+
+## Screenshots
+
+![Screenshot Community App](assets/screenshots/app_1.png){ width="49%" }
+![Screenshot Data Studio](assets/screenshots/studio_1.png){ width="49%" }
 
 ## Features / Extensions
 
-- **Messages**: Create templates, send email campaigns, and schedule automated notifications to communicate with your users.
-- **Memberships**: Create custom application forms, manage memberships, and let members manage their own data.
-- **Payments**: Create and manage invoices.
-- **Your own ideas?** Start [creating your own custom features](development.md) or [get in touch](#get-in-touch).
+-   **Messages**: Create templates, send email campaigns, and schedule automated notifications to communicate with your users.
+-   **Memberships**: Create custom application forms, manage memberships, and let members manage their own data.
+-   **Payments**: Create and manage invoices.
+-   **Your own ideas?** Start [creating your own custom features](development.md) or [get in touch](#get-in-touch).
 
 Currently under construction:
 
-- **Shifts**: Coordinate working shifts within your community.
-- **Organizational structures**: Represent working groups and roles of your organizations.
-- **Decision-making**: Use the plattform for voting and collective decision-making processes.
+-   **Shifts**: Coordinate working shifts within your community.
+-   **Organizational structures**: Represent working groups and roles of your organizations.
+-   **Decision-making**: Use the plattform for voting and collective decision-making processes.
 
 ## Documentation structure
 
 The rest of this documentation is structured as follows:
 
-- [**Installation & configuration**](configuration.md): This guide is for administrators who want to install, configure, and publish a Collectivo platform for their community.
-- [**Extension development**](development.md): This guide is for developers who want to create custom extensions for the Collectivo platform.
-- [**API Reference**](reference.md): Detailed technical documention.
+-   [**Installation & configuration**](configuration.md): This guide is for administrators who want to install, configure, and publish a Collectivo platform for their community.
+-   [**Extension development**](development.md): This guide is for developers who want to create custom extensions for the Collectivo platform.
+-   [**API Reference**](reference.md): Detailed technical documention.
 
 ## About
 

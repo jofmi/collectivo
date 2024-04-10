@@ -1,4 +1,4 @@
-site_name: Collectivo Docs
+site_name: Collectivo
 
 theme:
   name: "material"
@@ -49,26 +49,10 @@ plugins:
   - glightbox
 
 nav:
-  - Home: index.md
-  - "quickstart.md"
-  - "guide.md"
-  # - "development.md"
+  - Overview: index.md
+  - "configuration.md"
+  - "development.md"
   - "reference.md"
-  # - "contact.md"
-  # - Core extensions:
-  #     - "extensions/core.md"
-  #     - "extensions/keycloak.md"
-  #     - "extensions/extensions.md"
-  #     - "extensions/components.md"
-  #     - "extensions/menus.md"
-  #     - "extensions/dashboard.md"
-  # - Feature extensions:
-  #     - "extensions/profiles.md"
-  #     - "extensions/tags.md"
-  #     - "extensions/emails.md"
-  #     - "extensions/memberships.md"
-  #     - "extensions/payments.md"
-  #     - "extensions/shifts.md"
 
 repo_name: MILA-Wien/collectivo
 repo_url: https://github.com/MILA-Wien/collectivo

@@ -53,4 +53,4 @@ the Austrian cooperative [MILA Mitmach-Supermarkt](https://mila.wien/) and the I
 [convive\*](http://convive.io/). It has received funding by the
 [AK Wien Digifonds](https://wien.arbeiterkammer.at/digifonds) in 2022.
 
-[![Funded by AK Digifond](assets/digifonds2.jpg){ width="30%" }](https://wien.arbeiterkammer.at/digifonds)
+[![Funded by AK Digifond](assets/digifonds3.jpg){ width="30%" }](https://wien.arbeiterkammer.at/digifonds)

@@ -6,4 +6,4 @@ Collectivo is build on [Nuxt](https://nuxt.com/docs/), [Directus](https://direct
 
 If you are interested in using Collectivo or contributing to its development, please join our Discord server: https://discord.gg/42MWureAYW
 
-The documentation can be found under: docs.collectivo.io
+The documentation can be found under: https://docs.collectivo.io

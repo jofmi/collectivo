@@ -13,14 +13,14 @@ function addMenuItems() {
 
   menu.value.main.push({
     label: "My shifts",
-    icon: "i-system-uicons-calendar-days",
+    icon: "i-heroicons-building-storefront",
     to: "/shifts/my_shifts",
     order: 90,
   });
 
   menu.value.main.push({
     label: "Shift calendar",
-    icon: "i-system-uicons-calendar-month",
+    icon: "i-heroicons-calendar-days",
     to: "/shifts/shift_calendar",
     order: 95,
   });

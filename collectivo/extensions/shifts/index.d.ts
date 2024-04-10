@@ -30,7 +30,7 @@ declare global {
     id: string;
     shifts_from: string;
     shifts_to?: string;
-    shifts_slot: ShiftsSlot;
+    shifts_slot: ShiftsSlot | int;
     shifts_user: CollectivoUser;
   }
 

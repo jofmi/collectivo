@@ -34,7 +34,7 @@ function loadAssignments(user: CollectivoUser) {
     .request(
       readItems("shifts_assignments", {
         filter: { shifts_user: { id: { _eq: user.id } } },
-        fields: ["*", "shifts_slot", { shifts_slot: ["shifts_shift"] }],
+        fields: ["*", { shifts_slot: ["*", { shifts_shift: ["*"] }] }],
       }),
     )
     .then((assignments) => {
@@ -51,9 +51,9 @@ function loadAssignments(user: CollectivoUser) {
         const from = DateTime.fromISO(assignment.shifts_from);
 
         if (isShiftDurationModelActive(assignment) || from > DateTime.now()) {
-          //activeAndFutureAssignments.value.push(assignment);
+          activeAndFutureAssignments.value.push(assignment);
         } else {
-          //pastAssignments.value.push(assignment);
+          pastAssignments.value.push(assignment);
         }
       }
     })

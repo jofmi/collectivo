@@ -22,18 +22,26 @@ const to = props.shiftAssignment.shifts_to
 const nextOccurrence = getNextOccurrence(
   props.shiftAssignment.shifts_slot.shifts_shift,
 );
+
+const shiftName = props.shiftAssignment.shifts_slot.shifts_shift.shifts_name;
+
+let title = `${shiftName}, no coming occurrence`;
+
+if (nextOccurrence) {
+  const weekday = nextOccurrence.start.toLocaleString(
+    DateTime.DATE_MED_WITH_WEEKDAY,
+  );
+
+  const fromString = nextOccurrence.start.toLocaleString(DateTime.TIME_SIMPLE);
+
+  const toString = nextOccurrence.end.toLocaleString(DateTime.TIME_SIMPLE);
+
+  title = `${shiftName}, ${weekday} from ${fromString} to ${toString}`;
+}
 </script>
 
 <template>
-  <CollectivoCard
-    :title="`${
-      shiftAssignment.shifts_slot.shifts_shift.shifts_name
-    }, ${nextOccurrence.start.toLocaleString(
-      DateTime.DATE_MED_WITH_WEEKDAY,
-    )} from ${nextOccurrence.start.toLocaleString(
-      DateTime.TIME_SIMPLE,
-    )} to ${nextOccurrence.end.toLocaleString(DateTime.TIME_SIMPLE)}`"
-  >
+  <CollectivoCard :title="`${title}`">
     <template #content>
       <p>
         <span

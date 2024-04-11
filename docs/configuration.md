@@ -87,10 +87,11 @@ The main settings of Collectivo can be configured in `app.config.ts`.
 ```ts title="collectivo/app.config.ts"
 export default defineAppConfig({
     collectivo: {
-        projectName: "My Project",
+        projectName: "My project",
         projectDescription: "Py project description",
         logoPath: "/img/logo.png",
-        sidebarWidth: 130, // Given in pixels
+        sidebarWidth: 130, // Pixels
+        locales: ["de", "en"],
     },
 });
 ```

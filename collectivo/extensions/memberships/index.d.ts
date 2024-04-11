@@ -14,9 +14,7 @@ declare global {
     name: string;
     memberships_user: DirectusUser | number;
     memberships_status: string;
-    memberships_type: {
-      memberships_name: string;
-    };
+    memberships_type: string;
     memberships_shares: number;
   }
 }

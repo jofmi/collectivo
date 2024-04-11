@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import Sidebar from "./components/Sidebar.vue";
-import PageTitle from "./components/PageTitle.vue";
 import MobileHeader from "./components/MobileHeader.vue";
 import MobileMenu from "./components/MobileMenu.vue";
 import ProfileMenu from "./components/ProfileMenu.vue";
 
+const { t } = useI18n();
 const config = useAppConfig();
+const pageTitle = useCollectivoTitle();
 const sidebarWidthMd = String(config.collectivo.sidebarWidth + 65) + "px";
 const sidebarWidthLg = String(config.collectivo.sidebarWidth + 90) + "px";
 </script>
@@ -48,7 +49,9 @@ const sidebarWidthLg = String(config.collectivo.sidebarWidth + 90) + "px";
     <div class="main">
       <div class="main__top">
         <div class="main__top__left">
-          <PageTitle />
+          <h1>
+            {{ t(pageTitle) }}
+          </h1>
         </div>
 
         <div class="main__top__right">

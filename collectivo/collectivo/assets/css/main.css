@@ -3,7 +3,7 @@ html {
 }
 
 h1 {
-  @apply font-semibold text-4xl tracking-[0.6px];
+  @apply font-bold text-4xl tracking-[0.6px];
 }
 
 h2 {

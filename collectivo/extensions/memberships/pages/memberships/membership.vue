@@ -6,18 +6,20 @@ definePageMeta({
 });
 
 const { t } = useI18n();
-setCollectivoTitle("Profile");
+setCollectivoTitle("Mitgliedschaft");
 const user = useCollectivoUser();
 const directus = useDirectus();
 const memberships: Ref<MembershipsMembership[]> = ref([]);
 const loaded = ref(false);
+const isMember = ref(false);
+const membership = ref<MembershipsMembership | null>(null);
 
 async function getMemberships() {
   await user.value.load();
 
   memberships.value = await directus.request(
     readItems("memberships", {
-      fields: ["id", "memberships_shares", "memberships_status"],
+      fields: ["id", "memberships_status", "memberships_type"],
       filter: {
         memberships_user: {
           _eq: user.value.data?.id,
@@ -26,6 +28,11 @@ async function getMemberships() {
     }),
   );
 
+  if (memberships.value.length > 0) {
+    isMember.value = true;
+    membership.value = memberships.value[0];
+  }
+
   loaded.value = true;
 }
 
@@ -33,27 +40,23 @@ getMemberships();
 </script>
 
 <template>
-  <!-- <CollectivoMenuTabs :items="profileMenu" /> -->
-
-  <div v-if="loaded">
-    <div v-if="memberships.length == 0">
-      {{ t("No memberships found") }}
+  <CollectivoContainer v-if="loaded">
+    <div v-if="membership" class="flex flex-col">
+      <h2>{{ t("Membership details") }}</h2>
+      <div>{{ t("Membership number") }}: {{ membership.id }}</div>
+      <div>
+        {{ t("Membership type") }}:
+        {{ t(membership.memberships_type ?? "") }}
+      </div>
+      <div>
+        {{ t("Membership status") }}:
+        {{ t(membership.memberships_status ?? "") }}
+      </div>
     </div>
     <div v-else>
-      <CollectivoContainer
-        v-for="membership in memberships"
-        :key="membership.id"
-      >
-        <div class="flex flex-col">
-          <div>{{ t("ID") }}: {{ membership.id }}</div>
-          <div>
-            {{ t("Status") }}: {{ t(membership.memberships_status ?? "") }}
-          </div>
-          <div>{{ t("Shares") }}: {{ membership.memberships_shares }}</div>
-        </div>
-      </CollectivoContainer>
+      {{ t("No memberships found") }}
     </div>
-  </div>
+  </CollectivoContainer>
 </template>
 
 <i18n lang="json">

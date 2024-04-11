@@ -54,7 +54,7 @@ async function filterItem(item: CollectivoMenuItem) {
 
 <style lang="scss">
 .item {
-  @apply flex flex-col items-center px-3 py-4 mb-2 rounded-xl transition-all cursor-pointer min-w-20;
+  @apply flex flex-col items-center px-3 py-4 mb-2 rounded-xl transition-all cursor-pointer;
   &__icon {
     @apply h-5 w-5 lg:h-6 lg:w-6 mb-2;
   }
@@ -74,7 +74,7 @@ async function filterItem(item: CollectivoMenuItem) {
   @apply p-0 mb-0;
 
   .item {
-    @apply py-2.5 px-2.5 mb-0 mx-0;
+    @apply py-2.5 px-2.5 mb-0 mx-0 min-w-20;
 
     &__icon {
       @apply mb-1;

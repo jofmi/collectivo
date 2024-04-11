@@ -5,7 +5,7 @@ const { t } = useI18n();
 
 <template>
   <div>
-    <h1>
+    <h1 class="font-bold">
       {{ t(pageTitle) }}
     </h1>
   </div>

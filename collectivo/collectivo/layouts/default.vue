@@ -73,7 +73,7 @@ import ProfileMenu from "./components/ProfileMenu.vue";
   @apply mt-3;
 
   &__top {
-    @apply hidden md:flex justify-between items-center mb-11;
+    @apply hidden md:flex justify-between items-center mb-7;
   }
 
   &__table {

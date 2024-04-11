@@ -10,7 +10,7 @@ const mainMenuItems = Object.values(menus.value.main).sort(
   (a, b) => (a.order ?? 100) - (b.order ?? 100),
 );
 
-const publicMenuItems = Object.values(menus.value.public).sort(
+const publicMenuItems = Object.values(menus.value.main_public).sort(
   (a, b) => (a.order ?? 100) - (b.order ?? 100),
 );
 </script>

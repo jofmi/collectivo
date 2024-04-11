@@ -2,28 +2,30 @@
 const { setLocale, t } = useI18n();
 const user = useCollectivoUser();
 const router = useRouter();
+const menus = useCollectivoMenus();
 
-const topRightMenuNoAuthItems: any = ref([[]]);
-
-const topRightMenuItems: any = ref([
-  [
-    {
-      label: "Profile",
-      click: () => {
-        router.push({ name: "profile" });
-      },
-    },
-    {
-      label: "Logout",
-      click: () => {
-        user.value.logout();
-      },
-    },
-  ],
+const menuItems: any = ref([
+  [],
   [
     // for languages items
   ],
 ]);
+
+const menuItemsStore = user.value.isAuthenticated
+  ? menus.value.profile
+  : menus.value.profile_public;
+
+for (const item of menuItemsStore) {
+  menuItems.value[0].push({
+    label: item.label,
+    icon: item.icon,
+    click:
+      item.click ||
+      (() => {
+        router.push({ name: item.to });
+      }),
+  });
+}
 
 const locales = {
   de: "Deutsch",
@@ -31,14 +33,7 @@ const locales = {
 };
 
 for (const [key, value] of Object.entries(locales)) {
-  topRightMenuNoAuthItems.value[0].push({
-    label: value,
-    click: () => {
-      setLocale(key);
-    },
-  });
-
-  topRightMenuItems.value[1].push({
+  menuItems.value[1].push({
     label: value,
     click: () => {
       setLocale(key);
@@ -48,13 +43,11 @@ for (const [key, value] of Object.entries(locales)) {
 </script>
 
 <template>
-  <UDropdown
-    :items="user.isAuthenticated ? topRightMenuItems : topRightMenuNoAuthItems"
-    :popper="{ placement: 'bottom-start' }"
-  >
-    <UIcon class="icon" name="i-heroicons-bars-3-16-solid" />
+  <UDropdown :items="menuItems" :popper="{ placement: 'bottom-start' }">
+    <UIcon class="icon" name="i-heroicons-user-circle" />
 
     <template #item="{ item }">
+      <UIcon class="icon" :name="item.icon" />
       <span>{{ t(item.label) }}</span>
     </template>
   </UDropdown>
@@ -62,6 +55,6 @@ for (const [key, value] of Object.entries(locales)) {
 
 <style lang="scss" scoped>
 .icon {
-  @apply w-7 h-7;
+  @apply h-5 w-5;
 }
 </style>

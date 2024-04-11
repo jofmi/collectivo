@@ -24,7 +24,7 @@ export default defineNuxtPlugin({
       },
     ];
 
-    menu.value.public.push(...publicItems);
+    menu.value.main_public.push(...publicItems);
     menu.value.profile.push(...profileItems);
 
     const is_legal = [

@@ -4,6 +4,10 @@ import PageTitle from "./components/PageTitle.vue";
 import MobileHeader from "./components/MobileHeader.vue";
 import MobileMenu from "./components/MobileMenu.vue";
 import ProfileMenu from "./components/ProfileMenu.vue";
+
+const config = useAppConfig();
+const sidebarWidthMd = String(config.collectivo.sidebarWidth + 65) + "px";
+const sidebarWidthLg = String(config.collectivo.sidebarWidth + 90) + "px";
 </script>
 
 <template>
@@ -59,13 +63,13 @@ import ProfileMenu from "./components/ProfileMenu.vue";
 
 <style lang="scss" scoped>
 .layout {
-  @apply md:pr-8 md:py-8 h-full;
+  @apply md:py-8 h-full;
 
   &__bg {
     @apply hidden md:block fixed top-0 left-0 -z-10;
   }
   .main {
-    @apply md:pl-[195px] lg:pl-[226px] h-full w-full lg:pr-10 px-[25px] md:px-0 pb-28 md:pb-0;
+    @apply h-full w-full lg:pl-[v-bind("sidebarWidthLg")] md:pl-[v-bind("sidebarWidthMd")] px-6 md:pr-8 lg:pr-14 pb-28 md:pb-0;
   }
 }
 

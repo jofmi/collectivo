@@ -5,7 +5,8 @@ import pkg from "../../package.json";
 
 const menus = useCollectivoMenus();
 const user = useCollectivoUser();
-const sidebarWidth = "124" + "px";
+const config = useAppConfig();
+const sidebarWidth = String(config.collectivo.sidebarWidth) + "px";
 
 const mainMenuItems = Object.values(menus.value.main).sort(
   (a, b) => (a.order ?? 100) - (b.order ?? 100),
@@ -58,7 +59,7 @@ const publicMenuItems = Object.values(menus.value.main_public).sort(
     @apply h-full flex flex-col bg-white shadow-sidebar overflow-y-auto px-3 py-4 rounded-xl;
 
     &__top {
-      @apply flex justify-center items-center mb-4;
+      @apply flex justify-center items-center mb-3 p-1;
     }
 
     &__middle {

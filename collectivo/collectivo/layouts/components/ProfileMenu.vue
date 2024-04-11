@@ -3,7 +3,7 @@ const { setLocale, t } = useI18n();
 const user = useCollectivoUser();
 const router = useRouter();
 const menus = useCollectivoMenus();
-
+const config = useAppConfig();
 const profileMenu: any = ref([[]]);
 const languageMenu: any = ref([[]]);
 
@@ -41,9 +41,11 @@ const locales = {
   en: "English",
 };
 
-for (const [key, value] of Object.entries(locales)) {
+for (const i in config.collectivo.locales) {
+  const key = config.collectivo.locales[i];
+
   languageMenu.value[0].push({
-    label: value,
+    label: locales[key],
     click: () => {
       setLocale(key);
     },

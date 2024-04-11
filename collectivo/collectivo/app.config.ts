@@ -4,6 +4,8 @@ export default defineAppConfig({
     projectDescription:
       "Collectivo is an open-source platform for collaboration, participation, and data management.",
     logoPath: "/img/logo.png",
+    sidebarWidth: 140,
+    locales: () => ["de", "en"],
   },
   ui: {
     primary: "meteorite",

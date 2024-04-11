@@ -278,7 +278,7 @@ async function fillOutAll() {
       <template v-if="input._visible ?? true">
         <div
           v-if="input.type === 'section'"
-          class="form-field-full mt-10 first:mt-0"
+          class="form-field-lg mt-10 first:mt-0"
         >
           <h2 v-if="input.title">
             {{ t(input.title) }}
@@ -289,7 +289,7 @@ async function fillOutAll() {
             v-html="parse(t(input.description))"
           ></div>
         </div>
-        <div v-else-if="input.type === 'description'" class="form-field-full">
+        <div v-else-if="input.type === 'description'" class="form-field-lg">
           <UFormGroup :label="input.label ? t(input.label) : undefined">
             <div v-if="input.boxed" class="form-box text-sm">
               {{ t(input.description) }}
@@ -304,7 +304,7 @@ async function fillOutAll() {
         <component
           :is="input.component"
           v-else-if="input.type === 'custom-layout'"
-          :class="input.width ? `form-field-${input.width}` : 'form-field-full'"
+          :class="input.width ? `form-field-${input.width}` : 'form-field-lg'"
           :input="input"
           :state="state"
         >
@@ -494,6 +494,10 @@ async function fillOutAll() {
 </template>
 
 <style lang="scss" scoped>
+.cv-form {
+  @apply max-w-2xl;
+}
+
 :deep(.md-small > p) {
   @apply text-sm;
 }
@@ -509,30 +513,15 @@ async function fillOutAll() {
   @apply p-2;
 }
 
-.form-field-full {
+.form-field-lg {
   @apply form-field basis-full;
 }
 
-.form-field-half {
+.form-field-md {
   @apply form-field basis-full md:basis-1/2;
 }
 
-.form-field-xl {
-  @apply form-field basis-full xl:basis-1/2;
-}
-
-.form-field-lg {
-  @apply form-field basis-full lg:basis-1/2 xl:basis-1/3;
-}
-.form-field-md {
-  @apply form-field basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4;
-}
-
 .form-field-sm {
-  @apply form-field basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5;
-}
-
-.form-field-xs {
-  @apply form-field basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6;
+  @apply form-field basis-1/2 md:basis-1/4;
 }
 </style>

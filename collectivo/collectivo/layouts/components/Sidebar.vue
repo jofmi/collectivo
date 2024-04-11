@@ -18,10 +18,13 @@ const publicMenuItems = Object.values(menus.value.main_public).sort(
 <template>
   <div class="sidebar">
     <div class="sidebar__inner">
+      <div class="sidebar__inner__above"></div>
       <div class="sidebar__inner__list">
         <div class="sidebar__inner__list__item">
-          <div class="sidebar__inner__list__item__top">
+          <div>
             <Logo />
+          </div>
+          <div class="sidebar__inner__list__item__top">
             <div
               v-for="(item, i) in user.isAuthenticated
                 ? mainMenuItems
@@ -51,12 +54,13 @@ const publicMenuItems = Object.values(menus.value.main_public).sort(
   letter-spacing: 0.24px;
 }
 .sidebar {
-  @apply hidden md:block md:w-[100px] lg:w-[124px] rounded-xl bg-white shadow-sidebar px-3 py-4 fixed h-[calc(100vh-60px)] ml-8 overflow-y-auto;
+  @apply hidden md:block md:w-[100px] lg:w-[124px] fixed h-[calc(100vh-60px)] ml-8;
 
   &__inner {
-    @apply h-full;
+    @apply h-full flex flex-col;
+
     &__list {
-      @apply h-full;
+      @apply h-full bg-white shadow-sidebar overflow-y-auto px-3 py-4 rounded-xl;
       &__item {
         @apply flex flex-col h-full;
 

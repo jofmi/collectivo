@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import Logo from "./Logo.vue";
 import ProfileMenu from "./ProfileMenu.vue";
-import PageTitle from "./PageTitle.vue";
 
 const pageTitle = useCollectivoTitle();
 const { t } = useI18n();

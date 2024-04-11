@@ -5,6 +5,7 @@ import pkg from "../../package.json";
 
 const menus = useCollectivoMenus();
 const user = useCollectivoUser();
+const sidebarWidth = "124" + "px";
 
 const mainMenuItems = Object.values(menus.value.main).sort(
   (a, b) => (a.order ?? 100) - (b.order ?? 100),
@@ -17,31 +18,27 @@ const publicMenuItems = Object.values(menus.value.main_public).sort(
 
 <template>
   <div class="sidebar">
-    <div class="sidebar__inner">
-      <div class="sidebar__inner__above"></div>
-      <div class="sidebar__inner__list">
-        <div class="sidebar__inner__list__item">
-          <div>
-            <Logo />
-          </div>
-          <div class="sidebar__inner__list__item__top">
-            <div
-              v-for="(item, i) in user.isAuthenticated
-                ? mainMenuItems
-                : publicMenuItems"
-              :key="i"
-            >
-              <MenuItem
-                v-if="user.isAuthenticated || !user.isAuthenticated"
-                :item="item"
-              />
-            </div>
-          </div>
-          <div class="sidebar__inner__list__item__bottom">
-            <div class="about">
-              <span>Collectivo v{{ pkg.version }}</span>
-            </div>
-          </div>
+    <div class="sidebar__above"></div>
+    <div class="sidebar__main">
+      <div class="sidebar__main__top">
+        <Logo />
+      </div>
+      <div class="sidebar__main__middle">
+        <div
+          v-for="(item, i) in user.isAuthenticated
+            ? mainMenuItems
+            : publicMenuItems"
+          :key="i"
+        >
+          <MenuItem
+            v-if="user.isAuthenticated || !user.isAuthenticated"
+            :item="item"
+          />
+        </div>
+      </div>
+      <div class="sidebar__main__bottom">
+        <div class="about">
+          <span>Collectivo v{{ pkg.version }}</span>
         </div>
       </div>
     </div>
@@ -54,28 +51,26 @@ const publicMenuItems = Object.values(menus.value.main_public).sort(
   letter-spacing: 0.24px;
 }
 .sidebar {
-  @apply hidden md:block md:w-[100px] lg:w-[124px] fixed h-[calc(100vh-60px)] ml-8;
+  width: v-bind("sidebarWidth");
+  @apply hidden md:flex flex-col fixed h-[calc(100vh-60px)] ml-8;
 
-  &__inner {
-    @apply h-full flex flex-col;
+  &__main {
+    @apply h-full flex flex-col bg-white shadow-sidebar overflow-y-auto px-3 py-4 rounded-xl;
 
-    &__list {
-      @apply h-full bg-white shadow-sidebar overflow-y-auto px-3 py-4 rounded-xl;
-      &__item {
-        @apply flex flex-col h-full;
+    &__top {
+      @apply flex justify-center items-center mb-4;
+    }
 
-        &__top {
-          @apply flex-1;
-        }
+    &__middle {
+      @apply flex-1;
+    }
 
-        &__bottom {
-          .avatar-image-wrapper {
-            @apply md:h-10 md:w-10 lg:h-[54px] lg:w-[54px] rounded-full overflow-hidden ml-auto mr-auto mt-6;
+    &__bottom {
+      .avatar-image-wrapper {
+        @apply md:h-10 md:w-10 lg:h-[54px] lg:w-[54px] rounded-full overflow-hidden ml-auto mr-auto mt-6;
 
-            .avatar-image {
-              @apply object-cover h-full w-full cursor-pointer;
-            }
-          }
+        .avatar-image {
+          @apply object-cover h-full w-full cursor-pointer;
         }
       }
     }

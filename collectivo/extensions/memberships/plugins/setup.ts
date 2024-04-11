@@ -20,7 +20,8 @@ export default defineNuxtPlugin({
       {
         label: "Membership",
         to: "/memberships/membership",
-        order: 1,
+        icon: "i-heroicons-identification",
+        order: 20,
       },
     ];
 

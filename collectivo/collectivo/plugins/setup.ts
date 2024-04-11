@@ -51,6 +51,7 @@ export default defineNuxtPlugin(() => {
     },
     {
       label: "Logout",
+      icon: "i-heroicons-arrow-left-on-rectangle-solid",
       click: () => {
         user.value.logout();
       },

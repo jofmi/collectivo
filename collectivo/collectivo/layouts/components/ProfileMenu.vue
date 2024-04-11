@@ -4,19 +4,28 @@ const user = useCollectivoUser();
 const router = useRouter();
 const menus = useCollectivoMenus();
 
-const menuItems: any = ref([
-  [],
-  [
-    // for languages items
-  ],
+const profileMenu: any = ref([[]]);
+const languageMenu: any = ref([[]]);
+
+const topRightMenus = ref([
+  {
+    label: "Language",
+    icon: "i-heroicons-language",
+    items: languageMenu,
+  },
+  {
+    label: "Profile",
+    icon: "i-heroicons-user-circle",
+    items: profileMenu,
+  },
 ]);
 
-const menuItemsStore = user.value.isAuthenticated
-  ? menus.value.profile
-  : menus.value.profile_public;
+const menuItemsStore = Object.values(
+  user.value.isAuthenticated ? menus.value.profile : menus.value.profile_public,
+).sort((a, b) => (a.order ?? 100) - (b.order ?? 100));
 
 for (const item of menuItemsStore) {
-  menuItems.value[0].push({
+  profileMenu.value[0].push({
     label: item.label,
     icon: item.icon,
     click:
@@ -33,7 +42,7 @@ const locales = {
 };
 
 for (const [key, value] of Object.entries(locales)) {
-  menuItems.value[1].push({
+  languageMenu.value[0].push({
     label: value,
     click: () => {
       setLocale(key);
@@ -43,18 +52,18 @@ for (const [key, value] of Object.entries(locales)) {
 </script>
 
 <template>
-  <UDropdown :items="menuItems" :popper="{ placement: 'bottom-start' }">
-    <UIcon class="icon" name="i-heroicons-user-circle" />
+  <div class="flex flex-row gap-2">
+    <div v-for="menu in topRightMenus" :key="menu.label">
+      <UDropdown :items="menu.items" :popper="{ placement: 'bottom-start' }">
+        <UIcon class="h-7 w-7" :name="menu.icon" />
 
-    <template #item="{ item }">
-      <UIcon class="icon" :name="item.icon" />
-      <span>{{ t(item.label) }}</span>
-    </template>
-  </UDropdown>
+        <template #item="{ item }">
+          <UIcon v-if="item.icon" class="h-5 w-5" :name="item.icon" />
+          <span>{{ t(item.label) }}</span>
+        </template>
+      </UDropdown>
+    </div>
+  </div>
 </template>
 
-<style lang="scss" scoped>
-.icon {
-  @apply h-5 w-5;
-}
-</style>
+<style lang="scss" scoped></style>

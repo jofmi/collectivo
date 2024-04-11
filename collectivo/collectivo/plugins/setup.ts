@@ -11,12 +11,6 @@ export default defineNuxtPlugin(() => {
       order: 0,
     },
     {
-      label: "Profil",
-      icon: "i-heroicons-user-circle",
-      to: "/profile/",
-      order: 1,
-    },
-    {
       label: "Studio",
       icon: "i-heroicons-chart-bar-square",
       to: runtimeConfig.public.directusUrl,

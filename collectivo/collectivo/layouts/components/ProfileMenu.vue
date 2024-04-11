@@ -31,7 +31,7 @@ for (const item of menuItemsStore) {
     click:
       item.click ||
       (() => {
-        router.push({ name: item.to });
+        router.push(item.to);
       }),
   });
 }

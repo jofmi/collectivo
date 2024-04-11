@@ -7,7 +7,6 @@ definePageMeta({
 
 const { t } = useI18n();
 setCollectivoTitle("Profile");
-const profileMenu = useCollectivoMenus().value.profile;
 const user = useCollectivoUser();
 const directus = useDirectus();
 const memberships: Ref<MembershipsMembership[]> = ref([]);
@@ -34,7 +33,7 @@ getMemberships();
 </script>
 
 <template>
-  <CollectivoMenuTabs :items="profileMenu" />
+  <!-- <CollectivoMenuTabs :items="profileMenu" /> -->
 
   <div v-if="loaded">
     <div v-if="memberships.length == 0">

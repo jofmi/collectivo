@@ -44,7 +44,7 @@ import ProfileMenu from "./components/ProfileMenu.vue";
     <div class="main">
       <div class="main__top">
         <div class="main__top__left">
-          <PageTitle class="mb-1.5" />
+          <PageTitle />
         </div>
 
         <div class="main__top__right">

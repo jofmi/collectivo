@@ -74,7 +74,7 @@ async function filterItem(item: CollectivoMenuItem) {
   @apply p-0 mb-0;
 
   .item {
-    @apply py-2.5 px-2.5 mb-0 mx-0 min-w-20;
+    @apply pt-2.5 pb-2 px-2.5 mb-0 mx-0 min-w-16;
 
     &__icon {
       @apply mb-1;

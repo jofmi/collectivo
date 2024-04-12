@@ -82,12 +82,28 @@ Log in with the following example users:
 
 ## Configuration
 
-The main settings of Collectivo can be configured in `collectivo/app.config.ts`.
+The main settings of Collectivo can be configured in `app.config.ts`.
+
+```ts title="collectivo/app.config.ts"
+export default defineAppConfig({
+    collectivo: {
+        projectName: "My project",
+        projectDescription: "Py project description",
+        logoPath: "/img/logo.png",
+        sidebarWidth: 130, // Pixels
+        locales: ["de", "en"],
+    },
+});
+```
 
 The following settings can be configured in `collectivo/nuxt.config.ts`.
 
 -   Internationalization (see [nuxt/i18n](https://i18n.nuxtjs.org/))
     -   Change the default language: add `i18n: {defaultLocale: 'en'}` to `nuxt.config.ts`.
+
+## Add your own logo
+
+To add your own logo, place it in `collectivo/public/img/logo.png`. If you want to use a different path or filename, add the new path to `logoPath` in `collectivo/app.config.ts.`. The favicon can be defined in `collectivo/public/favicon.ico`.
 
 ## Add an extension
 

@@ -8,14 +8,14 @@ const mainMenuItems = Object.values(menus.value.main).sort(
   (a, b) => (a.order ?? 100) - (b.order ?? 100),
 );
 
-const publicMenuItems = Object.values(menus.value.public).sort(
+const publicMenuItems = Object.values(menus.value.main_public).sort(
   (a, b) => (a.order ?? 100) - (b.order ?? 100),
 );
 </script>
 
 <template>
   <div class="mobile-menu">
-    <div class="mobile-menu__inner space-x-1">
+    <div class="mobile-menu__inner space-x-2">
       <div
         v-for="(item, i) in user.isAuthenticated
           ? mainMenuItems

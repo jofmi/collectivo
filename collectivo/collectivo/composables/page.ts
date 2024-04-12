@@ -13,8 +13,9 @@ export const useCollectivoMenus = () =>
   useState<CollectivoMenus>("collectivoMenus", () => {
     return {
       main: [],
-      public: [],
+      main_public: [],
       profile: [],
+      profile_public: [],
     };
   });
 

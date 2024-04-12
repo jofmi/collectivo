@@ -37,10 +37,12 @@ Store for data of the currently authenticated user, with the following attribute
 
 This composable can be used to add or adapt menu items.
 
-There are two menus in `CollectivoMenus`:
+There are four menus in `CollectivoMenus`:
 
--   `main`: Shown for authenticated users.
--   `public`: Shown for unauthenticated users.
+-   `main`: Left sidebar, shown for authenticated users.
+-   `main_public`: Left sidebar, shown for public users.
+-   `profile`: Top right profile icon, shown for authenticated users.
+-   `profile_public`: Top right profile icon, shown for public users.
 
 Attributes:
 

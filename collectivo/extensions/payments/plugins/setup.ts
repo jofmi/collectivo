@@ -46,7 +46,7 @@ export default defineNuxtPlugin({
     const validators = useCollectivoValidators();
     const publicItems: CollectivoMenuItem[] = [];
 
-    menu.value.public.push(...publicItems);
+    menu.value.main_public.push(...publicItems);
 
     validators.value.tests.payments_iban_sepa = {
       message: "IBAN not valid for SEPA",

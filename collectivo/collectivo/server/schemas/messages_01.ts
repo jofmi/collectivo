@@ -219,6 +219,22 @@ schema.fields = [
     schema: { is_nullable: false, default_value: "pending" },
   },
   {
+    collection: "messages_messages",
+    field: "messages_error_message",
+    type: "string",
+    schema: {
+      is_nullable: true,
+    },
+    meta: {
+      sort: 1,
+      required: true,
+      translations: [
+        { language: "en-US", translation: "Error message" },
+        { language: "de-DE", translation: "Fehlermeldung" },
+      ],
+    },
+  },
+  {
     collection: "messages_templates",
     field: "messages_name",
     type: "string",
@@ -854,3 +870,4 @@ for (const action of ["read", "update", "create"]) {
     fields: ["messages_campaigns"],
   });
 }
+

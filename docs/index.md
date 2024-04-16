@@ -4,7 +4,7 @@
 
 ## A modular platform for your community
 
-Collectivo is an open-source framework to build your own custom platform for collaboration, participation, and self-organization. The software is designed to make it as easy as possible customize to the needs of different communities and organizations, develop additional extensions, and integrate existing tools into the plattform. Good software for all :)
+Collectivo is an open-source framework for buildig community platforms. It allows you to create a digital space, where users can interact with each other and organize together. Thanks to its modular design, the platform is completely flexible and can include [many different features](#features). Good software for all! :)
 
 ## Get in touch
 
@@ -25,8 +25,9 @@ Collectivo consists of three key applications:
 ![Screenshot Community App](assets/screenshots/app_1.png){ width="49%" }
 ![Screenshot Data Studio](assets/screenshots/studio_1.png){ width="49%" }
 
-## Features / Extensions
+## Features
 
+-   **Dashboard**: Add dynamic tiles to the landing page of your platform.
 -   **Messages**: Create templates, send email campaigns, and schedule automated notifications to communicate with your users.
 -   **Memberships**: Create custom application forms, manage memberships, and let members manage their own data.
 -   **Payments**: Create and manage invoices.

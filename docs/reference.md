@@ -143,6 +143,10 @@ Attributes:
 
 Access the [directus client](https://docs.directus.io/guides/sdk/getting-started.html) with admin access.
 
+### `verifyCollectivoApiToken`
+
+Function to protect API endpoints. Requests need to attach the API token from `.env` in the authorization header.
+
 ### `logger`
 
 You can use winston to write information to the nuxt logs (`console.log` will not appear in production), e.g.:

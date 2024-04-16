@@ -117,6 +117,46 @@ export default async function examples() {
 }
 ```
 
+### Create hooks
+
+A hook is an automated workflow that can be used to trigger a Nuxt endpoint when a certain database event occures.
+
+To set up a hook, add a directus flow trigger to your schema:
+
+```ts title="collectivo/server/schemas/my_schema.ts"
+const schema = initSchema("example", "0.0.1");
+schema.createNuxtHook(
+    {
+        name: "example_flow",
+        status: "active",
+        accountability: "all",
+        trigger: "event",
+        options: {
+            type: "action",
+            scope: ["items.update"],
+            collections: ["example_collection"],
+        },
+    },
+    "api/example",
+);
+```
+
+The following flow will call the `api/example` script whenever an item in the `example_collection` is updated.
+
+For more information on directus flows, see [Directus Flows](https://docs.directus.io/reference/system/flows.html).
+
+Then, create a correspondig Nuxt endpoint:
+
+```ts title="collectivo/server/api/example.post.s"
+export default defineEventHandler(async (event) => {
+    // Protect this route with the .env variable COLLECTIVO_API_TOKEN
+    verifyCollectivoApiToken(event);
+    // Run your script here
+});
+```
+
+For more information on nuxt endpoints, see [Nuxt API](https://nuxt.com/docs/guide/directory-structure/server).
+
 ## Frontend
 
 ### Adjust the theme

@@ -31,7 +31,7 @@ export interface DirectusOperationWrapper {
 }
 
 export interface DirectusFlowWrapper {
-  flow: Partial<DirectusFlow<any>>;
+  flow: NestedPartial<DirectusFlow<any>>;
   firstOperation?: string;
   operations?: DirectusOperationWrapper[];
 }
@@ -98,7 +98,10 @@ export class ExtensionSchema {
     createForeignKey(this, CollectionKey, CollectionAlias, settings);
   };
 
-  createNuxtHook = async (trigger: DirectusFlow<any>, path: string) => {
+  createNuxtHook = async (
+    trigger: NestedPartial<DirectusFlow<any>>,
+    path: string,
+  ) => {
     createNuxtHook(this, trigger, path);
   };
 
@@ -419,7 +422,7 @@ export async function createM2ARelation(
 
 async function createNuxtHook(
   schema: ExtensionSchema,
-  trigger: DirectusFlow<any>,
+  trigger: NestedPartial<DirectusFlow<any>>,
   path: string,
 ) {
   schema.flows.push({

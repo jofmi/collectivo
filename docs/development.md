@@ -157,6 +157,8 @@ export default defineEventHandler(async (event) => {
 
 For more information on nuxt endpoints, see [Nuxt API](https://nuxt.com/docs/guide/directory-structure/server).
 
+If Directus cannot reach Nuxt in development mode, make sure that the Nuxt dev server is called with `dev --host`.
+
 ## Frontend
 
 ### Adjust the theme

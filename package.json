@@ -4,7 +4,7 @@
   "description": "Collectivo packages & development environment.",
   "main": "index.js",
   "scripts": {
-    "dev": "pnpm -F=@collectivo/app run dev",
+    "dev": "pnpm -F=@collectivo/app run dev --host",
     "dev:all": "pnpm run -r --parallel dev",
     "test": "pnpm run -r --parallel test",
     "test:ci": "concurrently --raw --kill-others \"pnpm preview\" \"sleep 5 && pnpm seed && pnpm run -r --parallel test\"",

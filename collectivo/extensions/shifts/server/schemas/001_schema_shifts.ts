@@ -210,3 +210,18 @@ schema.createForeignKey("shifts_assignments", "directus_users", {
 schema.createM2MRelation("shifts_skills", "directus_users", {
   m2mFieldType2: "uuid",
 });
+
+schema.createNuxtHook(
+  {
+    name: "updateScoreOnCycleStartFlow",
+    status: "active",
+    accountability: "all",
+    trigger: "schedule",
+    options: {
+      type: "action",
+      interval: "*/10 * * * * *",
+      cron: "*/10 * * * * *",
+    },
+  },
+  "api/updateScoreOnCycleStartFlow",
+);

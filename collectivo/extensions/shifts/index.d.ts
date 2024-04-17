@@ -1,5 +1,6 @@
 import type { ShiftLogType } from "~/server/utils/ShiftLogType";
 import { DateTime } from "luxon";
+import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
 
 declare global {
   interface CollectivoSchema {
@@ -15,9 +16,10 @@ declare global {
   export interface ShiftsSlot {
     id: string;
     shifts_name: string;
-    shifts_shift: ShiftsShift | int;
-    shifts_skills: ShiftsSkillSlotLink[] | int[];
-    shifts_assignments: ShiftsAssignment[] | int[];
+    shifts_shift: ShiftsShift | number;
+    shifts_skills: ShiftsSkillSlotLink[] | number[];
+    shifts_assignments: ShiftsAssignment[] | number[];
+    shifts_status: ItemStatus;
   }
 
   export interface ShiftsSkill {
@@ -30,8 +32,9 @@ declare global {
     id: string;
     shifts_from: string;
     shifts_to?: string;
-    shifts_slot: ShiftsSlot | int;
+    shifts_slot: ShiftsSlot | number;
     shifts_user: CollectivoUser;
+    shifts_status: ItemStatus;
   }
 
   export interface ShiftsLog {
@@ -54,7 +57,8 @@ declare global {
     shifts_to?: string;
     shifts_duration: number;
     shifts_repeats_every: number;
-    shifts_slots?: ShiftsSlot[] | int[];
+    shifts_slots?: ShiftsSlot[] | number[];
+    shifts_status: ItemStatus;
   }
 
   export interface ShiftsSkillUserLink {

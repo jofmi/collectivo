@@ -69,6 +69,9 @@ schema.collections = [
 
 schema.fields = [
   ...directusSystemFields("shifts_shifts"),
+  directusStatusField("shifts_shifts", "shifts_status"),
+  directusStatusField("shifts_slots", "shifts_status"),
+  directusStatusField("shifts_assignments", "shifts_status"),
   {
     collection: "shifts_shifts",
     field: "shifts_name",

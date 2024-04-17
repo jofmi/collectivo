@@ -1,6 +1,7 @@
 import { readItems } from "@directus/sdk";
 import { DateTime } from "luxon";
 import { datetime, RRule } from "rrule";
+import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
 
 export const getAllShiftOccurrences = async (
   from: DateTime,
@@ -9,7 +10,9 @@ export const getAllShiftOccurrences = async (
   const directus = useDirectus();
 
   const shifts: ShiftsShift[] = (await directus.request(
-    readItems("shifts_shifts"),
+    readItems("shifts_shifts", {
+      filter: { shifts_status: { _eq: ItemStatus.PUBLISHED } },
+    }),
   )) as ShiftsShift[];
 
   const occurrences = [];

@@ -9,6 +9,7 @@ import {
 import { DateTime } from "luxon";
 
 import { getRandomInt } from "../utils/getRandomInt";
+import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
 
 const times_of_day = [10, 13, 16, 19];
 
@@ -61,6 +62,7 @@ async function createShifts() {
           shifts_duration:
             time_of_day == times_of_day[times_of_day.length - 1] ? 150 : 180,
           shifts_repeats_every: nb_weeks * 7,
+          shifts_status: ItemStatus.PUBLISHED,
         });
       }
     }
@@ -81,18 +83,21 @@ async function createSlots() {
         slotsRequests.push({
           shifts_name: "Cleaning",
           shifts_shift: shift.id,
+          shifts_status: ItemStatus.PUBLISHED,
         });
       }
     } else {
       slotsRequests.push({
         shifts_name: "Cashier",
         shifts_shift: shift.id,
+        shifts_status: ItemStatus.PUBLISHED,
       });
 
       for (let i = 0; i < 2; i++) {
         slotsRequests.push({
           shifts_name: "Shelves",
           shifts_shift: shift.id,
+          shifts_status: ItemStatus.PUBLISHED,
         });
       }
     }
@@ -107,12 +112,14 @@ async function createSkills() {
   const cashierSkill = await directus.request(
     createItem("shifts_skills", {
       shifts_name: "Cashier",
+      shifts_status: ItemStatus.PUBLISHED,
     }),
   );
 
   await directus.request(
     createItem("shifts_skills", {
       shifts_name: "First aid",
+      shifts_status: ItemStatus.PUBLISHED,
     }),
   );
 
@@ -163,6 +170,7 @@ async function createAssignments() {
       shifts_from: DateTime.now().toString(),
       shifts_slot: slot.id,
       shifts_user: user.id,
+      shifts_status: ItemStatus.PUBLISHED,
     });
   }
 

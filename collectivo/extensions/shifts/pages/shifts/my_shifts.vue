@@ -8,6 +8,7 @@ import { DateTime } from "luxon";
 import { getUserLogs, getUserScore } from "~/composables/shift_logs";
 import { ShiftLogType } from "~/server/utils/ShiftLogType";
 import showShiftToast from "~/composables/toast";
+import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
 
 setCollectivoTitle("My shifts");
 const directus = useDirectus();
@@ -33,7 +34,9 @@ function loadAssignments(user: CollectivoUser) {
   directus
     .request(
       readItems("shifts_assignments", {
-        filter: { shifts_user: { id: { _eq: user.id } } },
+        filter: {
+          shifts_user: { id: { _eq: user.id } },
+        },
         fields: ["*", { shifts_slot: ["*", { shifts_shift: ["*"] }] }],
       }),
     )
@@ -50,7 +53,10 @@ function loadAssignments(user: CollectivoUser) {
       for (const assignment of assignments) {
         const from = DateTime.fromISO(assignment.shifts_from);
 
-        if (isShiftDurationModelActive(assignment) || from > DateTime.now()) {
+        if (
+          (isShiftDurationModelActive(assignment) || from > DateTime.now()) &&
+          assignment.shifts_status == ItemStatus.PUBLISHED
+        ) {
           activeAndFutureAssignments.value.push(assignment);
         } else {
           pastAssignments.value.push(assignment);

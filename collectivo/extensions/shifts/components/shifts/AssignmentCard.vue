@@ -5,6 +5,8 @@ import {
   isNextOccurrenceWithinAssignment,
   isShiftDurationModelActive,
 } from "~/composables/shifts";
+import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
+import { getStatusColor } from "~/composables/colors";
 
 const props = defineProps({
   shiftAssignment: {
@@ -41,7 +43,10 @@ if (nextOccurrence) {
 </script>
 
 <template>
-  <CollectivoCard :title="`${title}`">
+  <CollectivoCard
+    :title="`${title}`"
+    :color="getStatusColor(shiftAssignment.shifts_status)"
+  >
     <template #content>
       <p>
         <span
@@ -60,6 +65,9 @@ if (nextOccurrence) {
           >assigned from {{ from.toLocaleString(DateTime.DATE_SHORT) }} to
           {{ to.toLocaleString(DateTime.DATE_SHORT) }} </span
         >)
+      </p>
+      <p v-if="shiftAssignment.shifts_status != ItemStatus.PUBLISHED">
+        Assignment status: {{ shiftAssignment.shifts_status }}
       </p>
       <p>
         Assigned to slot : {{ props.shiftAssignment.shifts_slot.shifts_name }}

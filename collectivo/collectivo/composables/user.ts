@@ -1,4 +1,5 @@
 import { readMe, updateMe } from "@directus/sdk";
+import Keycloak from "keycloak-js";
 
 export const useCollectivoUser = () => {
   const state = useState<CollectivoUserStore>(
@@ -51,44 +52,12 @@ class CollectivoUserStore {
   }
 
   async login(force: boolean = false) {
-    const directus = useDirectus();
     const user = useCollectivoUser();
-    const route = useRoute();
-    const runtimeConfig = useRuntimeConfig();
-
-    // If user is authenticated, do nothing
     if (user.value.isAuthenticated === true && !force) return;
-
-    // If user is not authenticated, log out of directus and redirect to keycloak
-    directus.logout();
-
-    // TODO: This could be extended to ${route.path}, but directus will block it
-    if (runtimeConfig.public.authService === "keycloak") {
-      return navigateTo(
-        `${runtimeConfig.public.directusUrl}/auth/login/keycloak?redirect=${runtimeConfig.public.collectivoUrl}`,
-        { external: true },
-      );
-    } else {
-      throw new Error(
-        "Unknown auth service in nuxt.config: " +
-          runtimeConfig.public.authService,
-      );
-    }
+    return navigateTo("/login");
   }
 
   async logout() {
-    const runtimeConfig = useRuntimeConfig();
-    const directus = useDirectus();
-    await directus.logout();
-
-    if (runtimeConfig.public.authService === "keycloak") {
-      const logoutPath = `${runtimeConfig.public.keycloakUrl}/realms/collectivo/protocol/openid-connect/logout`;
-      return navigateTo(logoutPath, { external: true });
-    } else {
-      throw new Error(
-        "Unknown auth service in nuxt.config: " +
-          runtimeConfig.public.authService,
-      );
-    }
+    return navigateTo("/logout");
   }
 }

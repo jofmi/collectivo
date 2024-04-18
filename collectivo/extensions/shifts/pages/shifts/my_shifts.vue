@@ -168,6 +168,7 @@ function getUserSkillNames() {
         <strong>
           <span v-if="log.shifts_type == ShiftLogType.ATTENDED">+1</span>
           <span v-if="log.shifts_type == ShiftLogType.MISSED">-2</span>
+          <span v-if="log.shifts_type == ShiftLogType.CYCLE">-1</span>
         </strong>
         <span>
           ({{

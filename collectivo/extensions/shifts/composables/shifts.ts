@@ -1,7 +1,8 @@
 import { readItems } from "@directus/sdk";
 import { DateTime } from "luxon";
-import { datetime, RRule } from "rrule";
+import { RRule } from "rrule";
 import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
+import { luxonDateTimeToRruleDatetime } from "@collectivo/shifts/server/utils/luxonDateTimeToRruleDatetime";
 
 export const getAllShiftOccurrences = async (
   from: DateTime,
@@ -94,16 +95,6 @@ export const shiftToRRule = (shift: ShiftsShift): RRule => {
       ? luxonDateTimeToRruleDatetime(DateTime.fromISO(shift.shifts_to))
       : null,
   });
-};
-
-export const luxonDateTimeToRruleDatetime = (luxonDateTime: DateTime): Date => {
-  return datetime(
-    luxonDateTime.year,
-    luxonDateTime.month,
-    luxonDateTime.day,
-    luxonDateTime.hour,
-    luxonDateTime.minute,
-  );
 };
 
 export const isShiftDurationModelActive = (

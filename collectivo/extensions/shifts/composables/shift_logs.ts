@@ -18,6 +18,14 @@ export const getUserScore = async (
       case ShiftLogType.MISSED:
         score -= 2;
         break;
+      case ShiftLogType.CYCLE:
+        score -= 1;
+        break;
+      case ShiftLogType.CANCELLED:
+        // Do nothing
+        break;
+      default:
+        throw new Error("Unknown shift log type : " + log.shifts_type);
     }
   }
 

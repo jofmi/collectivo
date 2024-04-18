@@ -6,6 +6,11 @@ import {
   readUsers,
 } from "@directus/sdk";
 
+import {
+  SHIFT_CYCLE_DURATION_WEEKS,
+  SHIFT_CYCLE_START,
+} from "@collectivo/shifts/server/utils/constants";
+
 import { DateTime } from "luxon";
 
 import { getRandomInt } from "../utils/getRandomInt";
@@ -36,6 +41,7 @@ async function cleanShiftsData() {
     "shifts_skills",
     "shifts_assignments",
     "shifts_skills_directus_users",
+    "shifts_logs",
   ];
 
   for (const schema of schemas) {
@@ -46,10 +52,10 @@ async function cleanShiftsData() {
 async function createShifts() {
   const directus = await useDirectusAdmin();
 
-  const monday = DateTime.now().startOf("week");
+  const monday = SHIFT_CYCLE_START;
   const shiftsRequests: ShiftsShift[] = [];
 
-  const nb_weeks = 3;
+  const nb_weeks = SHIFT_CYCLE_DURATION_WEEKS;
 
   for (let week = 0; week < nb_weeks; week++) {
     for (let weekday = 0; weekday < 5; weekday++) {
@@ -234,6 +240,7 @@ async function createLogs() {
         shifts_type: types[getRandomInt(0, types.length)],
         shifts_datetime: DateTime.now().plus({ days: getRandomInt(-10, 10) }),
         shifts_assignment: assignment.id,
+        shifts_user: assignment.shifts_user,
       });
     }
   }

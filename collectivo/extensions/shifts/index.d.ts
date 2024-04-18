@@ -41,7 +41,8 @@ declare global {
     id: string;
     shifts_type: ShiftLogType;
     shifts_datetime: string;
-    shifts_assignment: ShiftsAssignment;
+    shifts_assignment?: ShiftsAssignment;
+    shifts_user: CollectivoUser;
   }
 
   export interface ShiftOccurrence {

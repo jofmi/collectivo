@@ -193,6 +193,7 @@ export default defineAppConfig({
     },
     input: {
       wrapper: "relative",
+      base: "disabled:cursor-default disabled:opacity-50",
       size: {
         md: "text-sm leading-[18px]",
       },
@@ -233,7 +234,7 @@ export default defineAppConfig({
       },
     },
     select: {
-      base: "h-[50px]",
+      base: "h-[50px] disabled:cursor-default disabled:opacity-50",
       rounded: "rounded-lg",
       variant: {
         solid:

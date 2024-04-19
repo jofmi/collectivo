@@ -9,7 +9,7 @@ const directus = useDirectus();
 const config = useRuntimeConfig();
 
 try {
-  directus.logout();
+  await directus.logout();
 } catch (error) {
   console.error("Failed to log out from Directus:", error);
 }
@@ -35,5 +35,9 @@ if (config.public.authService === "keycloak") {
   }
 }
 
-navigateTo("/");
+reloadNuxtApp({ path: "/" });
 </script>
+
+<template>
+  <div></div>
+</template>

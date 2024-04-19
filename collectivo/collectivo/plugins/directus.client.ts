@@ -1,10 +1,4 @@
-import {
-  createDirectus,
-  authentication,
-  rest,
-  refresh,
-  withOptions,
-} from "@directus/sdk";
+import { createDirectus, authentication, rest } from "@directus/sdk";
 
 // Set up directus client or redirect to keycloak if not authenticated
 export default defineNuxtPlugin({

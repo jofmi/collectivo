@@ -19,7 +19,7 @@ if (config.public.authService === "keycloak") {
     const keycloak = new Keycloak({
       url: config.public.keycloakUrl,
       realm: config.public.keycloakRealm,
-      clientId: "nuxt",
+      clientId: config.public.keycloakClient,
     });
 
     await keycloak.init({

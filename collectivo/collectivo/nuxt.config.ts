@@ -21,6 +21,7 @@ export default defineNuxtConfig({
       authService: "keycloak",
       keycloakUrl: process.env.KEYCLOAK_URL || "http://keycloak:8080",
       keycloakRealm: process.env.KEYCLOAK_REALM || "collectivo",
+      keycloakClient: process.env.KEYCLOAK_NUXT_CLIENT || "nuxt",
       directusUrl: process.env.DIRECTUS_URL || "http://localhost:8055",
     },
   },

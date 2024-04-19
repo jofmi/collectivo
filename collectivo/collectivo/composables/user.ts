@@ -1,5 +1,4 @@
 import { readMe, updateMe } from "@directus/sdk";
-import Keycloak from "keycloak-js";
 
 export const useCollectivoUser = () => {
   const state = useState<CollectivoUserStore>(

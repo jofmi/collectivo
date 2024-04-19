@@ -33,11 +33,16 @@ export const getNextOccurrences = (
   shift: ShiftsShift,
   maxOccurrences: number,
   after?: DateTime,
+  until?: DateTime,
 ) => {
   const nextOccurrences = [];
   let nextOccurrence = getNextOccurrence(shift, after ?? DateTime.now());
 
-  while (nextOccurrence !== null && nextOccurrences.length < maxOccurrences) {
+  while (
+    nextOccurrence !== null &&
+    nextOccurrences.length < maxOccurrences &&
+    (until == null || nextOccurrence.start < until)
+  ) {
     nextOccurrences.push(nextOccurrence);
     nextOccurrence = getNextOccurrence(shift, nextOccurrence.end);
   }
@@ -129,7 +134,9 @@ export const isFromToActive = (
 export const isNextOccurrenceWithinAssignment = (
   assignment: ShiftsAssignment,
 ): boolean => {
-  const nextOccurrence = getNextOccurrence(assignment.shifts_slot.shifts_shift);
+  const nextOccurrence = getNextOccurrence(
+    (assignment.shifts_slot as ShiftsSlot).shifts_shift as ShiftsShift,
+  );
 
   return (
     !!nextOccurrence &&

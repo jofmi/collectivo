@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { DateTime } from "luxon";
 import {
+  getAssigneeName,
   getNextOccurrence,
   isNextOccurrenceWithinAssignment,
   isShiftDurationModelActive,
@@ -48,6 +49,7 @@ if (nextOccurrence) {
     :color="getStatusColor(shiftAssignment.shifts_status)"
   >
     <template #content>
+      <p>Assignee : {{ getAssigneeName([shiftAssignment]) }}</p>
       <p>
         <span
           >Assignment currently active :

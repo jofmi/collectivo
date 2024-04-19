@@ -37,7 +37,11 @@ function loadAssignments(user: CollectivoUser) {
         filter: {
           shifts_user: { id: { _eq: user.id } },
         },
-        fields: ["*", { shifts_slot: ["*", { shifts_shift: ["*"] }] }],
+        fields: [
+          "*",
+          { shifts_slot: ["*", { shifts_shift: ["*"] }] },
+          { shifts_user: ["first_name", "last_name"] },
+        ],
       }),
     )
     .then((assignments) => {

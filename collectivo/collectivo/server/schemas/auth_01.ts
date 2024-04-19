@@ -14,7 +14,7 @@ schema.flows = [
       trigger: "event",
       options: {
         type: "filter",
-        scope: ["items.create", "items.update"],
+        scope: ["items.create", "items.update", "items.delete"],
         collections: ["directus_users"],
       },
     },
@@ -22,13 +22,13 @@ schema.flows = [
     operations: [
       {
         operation: {
-          position_x: 10,
+          position_x: 19,
           position_y: 1,
           name: "Run Script",
           key: "filter",
           type: "exec",
           options: {
-            code: 'module.exports = async function(data) {\n    const attrs = ["email", "password", "first_name", "last_name"]\n\tif (!attrs.some(attr => attr in data["$trigger"].payload)){\n        throw new Error("No important change")\n    }\n\treturn {\n    \t"true": true\n    }\n}',
+            code: 'module.exports = async function(data) {    const attrs = ["email", "password", "first_name", "last_name"]    if (data["$trigger"]["event"]=="users.delete"){        return {"true": true }     }	else if (!attrs.some(attr => attr in data["$trigger"].payload)){        throw new Error("No important change")    }	return {    	"tru": true    }}',
           },
         },
         reject: "continue",
@@ -36,7 +36,7 @@ schema.flows = [
       },
       {
         operation: {
-          position_x: 19,
+          position_x: 30,
           position_y: 1,
           name: "postToNuxtAPI",
           key: "postToNuxtAPI",
@@ -58,7 +58,7 @@ schema.flows = [
         operation: {
           name: "Run Script",
           key: "continue",
-          position_x: 19,
+          position_x: 30,
           position_y: 19,
           type: "exec",
           options: {

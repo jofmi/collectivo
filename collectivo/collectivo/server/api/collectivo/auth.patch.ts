@@ -32,106 +32,123 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const keycloak = await useKeycloak();
   const directus = await useDirectusAdmin();
-  const isCreate = body.event === "directus_users.items.create";
-  console.log(isCreate, body.event);
+  const isCreate = body.event === "users.create";
+  const isDelete = body.event === "users.delete";
 
   let user: any = {};
+  console.log(body);
+  body.keys = body.keys || [body.key];
 
-  if (!isCreate) {
-    user = await directus.request(
-      readUser(body.keys[0], {
-        fields: ["id", "email", "provider", "external_identifier"],
-      }),
-    );
-
-    if (!user || !user.email) {
-      throw new Error("User not found");
-    }
+  if (isDelete) {
+    body.keys = body.payload;
   }
 
-  const provider = body.payload.provider || user.provider;
+  for (const key of body.keys) {
+    if (!isCreate) {
+      user = await directus.request(
+        readUser(key, {
+          fields: ["id", "email", "provider", "external_identifier"],
+        }),
+      );
 
-  if (provider !== "keycloak") {
-    // Do nothing
-    console.log("Do nothing");
-    return;
-  }
+      if (!user || !user.email) {
+        if (isDelete) {
+          // Then i cannot delete but also dont throw error
+          return;
+        }
 
-  const email = body.payload.email || user.email;
-  const extid = body.payload.external_identifier || user.external_identifier;
-
-  if (email != extid) {
-    if (isCreate) {
-      throw new Error("Email and external_identifier do not match");
+        throw new Error("User not found");
+      }
     }
 
-    await directus.request(
-      updateUser(user.id, { external_identifier: user.email }),
-    );
-  }
+    const provider = body.payload.provider || user.provider;
 
-  let kc_user_id = null;
-
-  if (!isCreate) {
-    const kc_users = await keycloak.users.find({
-      first: 0,
-      max: 1,
-      email: user.email,
-    });
-
-    if (kc_users && kc_users.length > 0) {
-      kc_user_id = kc_users[0].id;
+    if (provider !== "keycloak") {
+      // Do nothing
+      console.log("Do nothing");
+      return;
     }
-  }
 
-  if (!kc_user_id) {
-    const kc_user = await keycloak.users.create({
-      email: email,
-      emailVerified: true,
-      username: email,
-      enabled: true,
-    });
+    const email = body.payload.email || user.email;
+    const extid = body.payload.external_identifier || user.external_identifier;
 
-    kc_user_id = kc_user.id;
-  }
+    if (email != extid) {
+      if (isCreate) {
+        throw new Error("Email and external_identifier do not match");
+      }
 
-  if ("email" in body.payload) {
-    await keycloak.users.update(
-      { id: kc_user_id },
-      {
-        username: body.payload.email,
-        email: body.payload.email,
+      await directus.request(
+        updateUser(user.id, { external_identifier: user.email }),
+      );
+    }
+
+    let kc_user_id = null;
+
+    if (!isCreate) {
+      const kc_users = await keycloak.users.find({
+        first: 0,
+        max: 1,
+        email: user.email,
+      });
+
+      if (kc_users && kc_users.length > 0) {
+        kc_user_id = kc_users[0].id;
+      }
+
+      if (kc_user_id && isDelete) {
+        await keycloak.users.del({ id: kc_user_id });
+      }
+    }
+
+    if (!kc_user_id) {
+      const kc_user = await keycloak.users.create({
+        email: email,
         emailVerified: true,
-      },
-    );
-  }
+        username: email,
+        enabled: true,
+      });
 
-  if ("first_name" in body.payload) {
-    await keycloak.users.update(
-      { id: kc_user_id },
-      {
-        firstName: body.payload.first_name,
-      },
-    );
-  }
+      kc_user_id = kc_user.id;
+    }
 
-  if ("last_name" in body.payload) {
-    await keycloak.users.update(
-      { id: kc_user_id },
-      {
-        lastName: body.payload.last_name,
-      },
-    );
-  }
+    if ("email" in body.payload) {
+      await keycloak.users.update(
+        { id: kc_user_id },
+        {
+          username: body.payload.email,
+          email: body.payload.email,
+          emailVerified: true,
+        },
+      );
+    }
 
-  if ("password" in body.payload) {
-    await keycloak.users.resetPassword({
-      id: kc_user_id,
-      credential: {
-        temporary: false,
-        type: "password",
-        value: body.payload.password,
-      },
-    });
+    if ("first_name" in body.payload) {
+      await keycloak.users.update(
+        { id: kc_user_id },
+        {
+          firstName: body.payload.first_name,
+        },
+      );
+    }
+
+    if ("last_name" in body.payload) {
+      await keycloak.users.update(
+        { id: kc_user_id },
+        {
+          lastName: body.payload.last_name,
+        },
+      );
+    }
+
+    if ("password" in body.payload) {
+      await keycloak.users.resetPassword({
+        id: kc_user_id,
+        credential: {
+          temporary: false,
+          type: "password",
+          value: body.payload.password,
+        },
+      });
+    }
   }
 });

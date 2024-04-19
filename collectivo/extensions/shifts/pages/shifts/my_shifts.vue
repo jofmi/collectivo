@@ -28,7 +28,7 @@ user.value
     loadAssignments(userStore.data!);
     loadUserShiftDetails(userStore.data!);
   })
-  .catch((error) => showShiftToast("Failed to load user data", error));
+  .catch((error) => showShiftToast("Failed to load user data", error, "error"));
 
 function loadAssignments(user: CollectivoUser) {
   directus
@@ -67,7 +67,9 @@ function loadAssignments(user: CollectivoUser) {
         }
       }
     })
-    .catch((error) => showShiftToast("Failed to load assignments", error));
+    .catch((error) =>
+      showShiftToast("Failed to load assignments", error, "error"),
+    );
 }
 
 function loadUserShiftDetails(user: CollectivoUser) {
@@ -82,19 +84,19 @@ function loadUserShiftDetails(user: CollectivoUser) {
       skillsUserLinks.value.push(...items);
       getUserSkillNames();
     })
-    .catch((error) => showShiftToast("Failed to load skills", error));
+    .catch((error) => showShiftToast("Failed to load skills", error, "error"));
 
   getUserScore(user, DateTime.now())
     .then((item) => {
       score.value = item.toString();
     })
-    .catch((error) => showShiftToast("Failed to load score", error));
+    .catch((error) => showShiftToast("Failed to load score", error, "error"));
 
   getUserLogs(user, DateTime.now(), 10)
     .then((items) => {
       logs.value.push(...items);
     })
-    .catch((error) => showShiftToast("Failed to load logs", error));
+    .catch((error) => showShiftToast("Failed to load logs", error, "error"));
 }
 
 function getUserSkillNames() {
@@ -113,7 +115,7 @@ function getUserSkillNames() {
       skillNames.value = skills.map((skill) => skill.shifts_name);
       getUserSkillNames();
     })
-    .catch((error) => showShiftToast("Failed to load skills", error))
+    .catch((error) => showShiftToast("Failed to load skills", error, "error"))
     .finally(() => (skillsLoading.value = false));
 }
 </script>

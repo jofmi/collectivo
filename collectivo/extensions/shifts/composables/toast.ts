@@ -1,10 +1,17 @@
-export default function showShiftToast(title: string, error: any) {
+export default function showShiftToast(
+  title: string,
+  description: any,
+  type: "error" | "success",
+) {
   const toast = useToast();
 
   toast.add({
     title: title,
-    description: error,
-    icon: "i-mi-warning",
-    color: "red",
+    description: description,
+    icon:
+      type == "error"
+        ? "i-heroicons-exclamation-triangle"
+        : "i-heroicons-check",
+    color: type == "error" ? "red" : "green",
   });
 }

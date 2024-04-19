@@ -16,6 +16,8 @@ const props = defineProps({
   },
 });
 
+const route = useRoute();
+
 const from: DateTime = DateTime.fromISO(props.shiftAssignment.shifts_from);
 
 const to = props.shiftAssignment.shifts_to
@@ -23,10 +25,12 @@ const to = props.shiftAssignment.shifts_to
   : null;
 
 const nextOccurrence = getNextOccurrence(
-  props.shiftAssignment.shifts_slot.shifts_shift,
+  (props.shiftAssignment.shifts_slot as ShiftsSlot).shifts_shift as ShiftsShift,
 );
 
-const shiftName = props.shiftAssignment.shifts_slot.shifts_shift.shifts_name;
+const shiftName = (
+  (props.shiftAssignment.shifts_slot as ShiftsSlot).shifts_shift as ShiftsShift
+).shifts_name;
 
 let title = `${shiftName}, no coming occurrence`;
 
@@ -41,6 +45,10 @@ if (nextOccurrence) {
 
   title = `${shiftName}, ${weekday} from ${fromString} to ${toString}`;
 }
+
+const assignmentUrl = "/shifts/assignment/" + props.shiftAssignment.id;
+console.log(assignmentUrl);
+console.log(route.path);
 </script>
 
 <template>
@@ -72,7 +80,8 @@ if (nextOccurrence) {
         Assignment status: {{ shiftAssignment.shifts_status }}
       </p>
       <p>
-        Assigned to slot : {{ props.shiftAssignment.shifts_slot.shifts_name }}
+        Assigned to slot :
+        {{ (props.shiftAssignment.shifts_slot as ShiftsSlot).shifts_name }}
       </p>
       <UAlert
         v-if="
@@ -83,8 +92,13 @@ if (nextOccurrence) {
         description="This assignment is still shown because it is still active, but the next
         occurrence of that shift is not within the assignment. You are not
         expected to work the next shift occurrence."
-        icon="i-system-uicons-warning-triangle"
+        icon="i-heroicons-exclamation-triangle"
       />
+      <NuxtLink v-if="route.path != assignmentUrl" :to="assignmentUrl"
+        ><UButton
+          :label="'More infos'"
+          :icon="'i-heroicons-information-circle'"
+      /></NuxtLink>
     </template>
   </CollectivoCard>
 </template>

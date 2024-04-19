@@ -39,7 +39,9 @@ function loadAssignments() {
     .then((items: ShiftsAssignment[]) => {
       assignments.value = items;
     })
-    .catch((error) => showShiftToast("Failed to load assignments", error));
+    .catch((error) =>
+      showShiftToast("Failed to load assignments", error, "error"),
+    );
 }
 </script>
 

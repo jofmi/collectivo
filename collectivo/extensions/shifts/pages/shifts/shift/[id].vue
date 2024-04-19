@@ -43,7 +43,9 @@ function loadShift() {
       shift.value = item;
       getSlotSkillNames(shift.value.shifts_slots!);
     })
-    .catch((error) => showShiftToast("Shift data could not be loaded", error));
+    .catch((error) =>
+      showShiftToast("Shift data could not be loaded", error, "error"),
+    );
 }
 
 function getSlotSkillNames(slots: ShiftsSlot[]) {
@@ -74,7 +76,7 @@ function getSlotSkillNames(slots: ShiftsSlot[]) {
       }
     })
     .catch((error) => {
-      showShiftToast("Failed to load skill names", error);
+      showShiftToast("Failed to load skill names", error, "error");
     });
 }
 

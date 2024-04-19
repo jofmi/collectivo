@@ -1,16 +1,5 @@
-import { readUser } from "@directus/sdk";
+import { readUser, updateUser } from "@directus/sdk";
 import KcAdminClient from "@keycloak/keycloak-admin-client";
-
-// Flow script
-// module.exports = async function(data) {
-//     const attrs = ["email", "password", "first_name", "last_name"]
-// 	if (!attrs.some(attr => attr in data["$trigger"].payload)){
-//         throw new Error("No important change")
-//     }
-// 	return {
-//     	"allGood": true
-//     }
-// }
 
 async function useKeycloak() {
   const config = useRuntimeConfig();
@@ -29,25 +18,41 @@ async function useKeycloak() {
   return keycloak;
 }
 
-// Register a new membership
-// Receives input from /memberships/register
+// Update keycloak user
 export default defineEventHandler(async (event) => {
-  console.log("event called");
+  console.log("api/collectivo/auth.path.ts called");
+
+  const config = useRuntimeConfig();
+
+  if (config.public.authService !== "keycloak") {
+    return;
+  }
 
   verifyCollectivoApiToken(event);
   const body = await readBody(event);
   const keycloak = await useKeycloak();
   const directus = await useDirectusAdmin();
 
-  console.log("event called getting user");
-  console.log(body);
-
   const user = await directus.request(
-    readUser(body.keys[0], { fields: ["email"] }),
+    readUser(body.keys[0], {
+      fields: ["id", "email", "provider", "external_identifier"],
+    }),
   );
 
   if (!user || !user.email) {
     throw new Error("User not found");
+  }
+
+  if (user.provider !== "keycloak") {
+    // Do nothing
+    console.log("Do nothing");
+    return;
+  }
+
+  if (user.email != user.external_identifier) {
+    await directus.request(
+      updateUser(user.id, { external_identifier: user.email }),
+    );
   }
 
   console.log("directus user found");
@@ -58,6 +63,7 @@ export default defineEventHandler(async (event) => {
     email: user.email,
   });
 
+  console.log(kc_users);
   const kc_user = kc_users[0];
 
   if (!kc_user || !kc_user.id) {
@@ -70,7 +76,7 @@ export default defineEventHandler(async (event) => {
       {
         username: body.payload.email,
         email: body.payload.email,
-        emailVerified: false,
+        emailVerified: true,
       },
     );
   }

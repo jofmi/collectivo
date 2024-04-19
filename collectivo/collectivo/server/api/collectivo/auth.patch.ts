@@ -32,47 +32,72 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const keycloak = await useKeycloak();
   const directus = await useDirectusAdmin();
+  const isCreate = body.event === "directus_users.items.create";
+  console.log(isCreate, body.event);
 
-  const user = await directus.request(
-    readUser(body.keys[0], {
-      fields: ["id", "email", "provider", "external_identifier"],
-    }),
-  );
+  let user: any = {};
 
-  if (!user || !user.email) {
-    throw new Error("User not found");
+  if (!isCreate) {
+    user = await directus.request(
+      readUser(body.keys[0], {
+        fields: ["id", "email", "provider", "external_identifier"],
+      }),
+    );
+
+    if (!user || !user.email) {
+      throw new Error("User not found");
+    }
   }
 
-  if (user.provider !== "keycloak") {
+  const provider = body.payload.provider || user.provider;
+
+  if (provider !== "keycloak") {
     // Do nothing
     console.log("Do nothing");
     return;
   }
 
-  if (user.email != user.external_identifier) {
+  const email = body.payload.email || user.email;
+  const extid = body.payload.external_identifier || user.external_identifier;
+
+  if (email != extid) {
+    if (isCreate) {
+      throw new Error("Email and external_identifier do not match");
+    }
+
     await directus.request(
       updateUser(user.id, { external_identifier: user.email }),
     );
   }
 
-  console.log("directus user found");
+  let kc_user_id = null;
 
-  const kc_users = await keycloak.users.find({
-    first: 0,
-    max: 1,
-    email: user.email,
-  });
+  if (!isCreate) {
+    const kc_users = await keycloak.users.find({
+      first: 0,
+      max: 1,
+      email: user.email,
+    });
 
-  console.log(kc_users);
-  const kc_user = kc_users[0];
+    if (kc_users && kc_users.length > 0) {
+      kc_user_id = kc_users[0].id;
+    }
+  }
 
-  if (!kc_user || !kc_user.id) {
-    throw new Error("Keycloak user not found");
+  if (!kc_user_id) {
+    const kc_user = await keycloak.users.create({
+      email: email,
+      emailVerified: true,
+      username: email,
+      enabled: true,
+    });
+
+    kc_user_id = kc_user.id;
   }
 
   if ("email" in body.payload) {
     await keycloak.users.update(
-      { id: kc_user.id },
+      { id: kc_user_id },
       {
         username: body.payload.email,
         email: body.payload.email,
@@ -83,7 +108,7 @@ export default defineEventHandler(async (event) => {
 
   if ("first_name" in body.payload) {
     await keycloak.users.update(
-      { id: kc_user.id },
+      { id: kc_user_id },
       {
         firstName: body.payload.first_name,
       },
@@ -92,7 +117,7 @@ export default defineEventHandler(async (event) => {
 
   if ("last_name" in body.payload) {
     await keycloak.users.update(
-      { id: kc_user.id },
+      { id: kc_user_id },
       {
         lastName: body.payload.last_name,
       },
@@ -101,7 +126,7 @@ export default defineEventHandler(async (event) => {
 
   if ("password" in body.payload) {
     await keycloak.users.resetPassword({
-      id: kc_user.id,
+      id: kc_user_id,
       credential: {
         temporary: false,
         type: "password",

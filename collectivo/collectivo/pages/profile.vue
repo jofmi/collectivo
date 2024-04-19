@@ -7,7 +7,6 @@ setCollectivoTitle("Profile");
 const toast = useToast();
 const { t } = useI18n();
 const user = useCollectivoUser();
-const profileMenu = useCollectivoMenus().value.profile;
 
 // Sort profile.inputs by order
 // profile.value.inputs.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
@@ -43,7 +42,7 @@ async function saveProfile(data: CollectivoUser) {
 </script>
 
 <template>
-  <CollectivoMenuTabs :items="profileMenu" />
+  <!-- <CollectivoMenuTabs :items="profileMenu" /> -->
   <CollectivoContainer>
     <CollectivoFormBuilder
       v-if="user.data"

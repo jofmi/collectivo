@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import Logo from "./Logo.vue";
 import ProfileMenu from "./ProfileMenu.vue";
-import PageTitle from "./PageTitle.vue";
 
 const pageTitle = useCollectivoTitle();
 const { t } = useI18n();
@@ -49,6 +47,6 @@ const headerClass = computed(() =>
 }
 
 .mobile-header {
-  @apply h-[68px] px-[25px]  pt-[20px] md:hidden flex items-start justify-between transition fixed top-0 w-full z-10;
+  @apply h-[68px] px-[25px] pt-[24px] md:hidden flex items-start justify-between transition fixed top-0 w-full z-10;
 }
 </style>

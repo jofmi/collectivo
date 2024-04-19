@@ -54,13 +54,14 @@ async function filterItem(item: CollectivoMenuItem) {
 
 <style lang="scss">
 .item {
-  @apply flex flex-col items-center px-3 py-4 mb-2 rounded-xl transition-all cursor-pointer min-w-20;
+  // Use flex-row to align icon and title horizontally
+  @apply flex flex-col gap-2 items-center px-3 py-4 mb-2 rounded-xl transition-all cursor-pointer;
   &__icon {
-    @apply h-5 w-5 lg:h-6 lg:w-6 mb-2;
+    @apply h-6 w-6 mb-0;
   }
 
   &__title {
-    @apply md:text-xs lg:text-sm font-semibold;
+    @apply text-sm font-semibold;
     letter-spacing: 0.28px;
   }
 
@@ -74,7 +75,7 @@ async function filterItem(item: CollectivoMenuItem) {
   @apply p-0 mb-0;
 
   .item {
-    @apply py-2.5 px-2.5 mb-0 mx-0;
+    @apply pt-2.5 pb-2 px-2.5 mb-0 mx-0 min-w-16;
 
     &__icon {
       @apply mb-1;

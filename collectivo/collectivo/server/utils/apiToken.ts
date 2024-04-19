@@ -9,7 +9,9 @@ export function verifyCollectivoApiToken(event: any) {
     });
   }
 
-  if (headers["authorization"] !== useRuntimeConfig().apiToken) {
+  const token = headers["authorization"]?.replace("Bearer ", "");
+
+  if (token !== useRuntimeConfig().apiToken) {
     throw createError({
       statusCode: 401,
       statusMessage: "Invalid token",

@@ -36,30 +36,6 @@ schema.collections = [
       ],
     },
   },
-  {
-    collection: "memberships_types",
-    schema: { name: "memberships_types" },
-    meta: {
-      sort: 10,
-      group: "collectivo_settings",
-      icon: "switch_account",
-      display_template: "{{memberships_name}}",
-      translations: [
-        {
-          language: "en-US",
-          translation: "Member types",
-          singular: "Member type",
-          plural: "Member types",
-        },
-        {
-          language: "de-DE",
-          translation: "Mitgliedsarten",
-          singular: "Mitgliedsart",
-          plural: "Mitgliedsarten",
-        },
-      ],
-    },
-  },
 ];
 
 schema.fields = [
@@ -119,6 +95,36 @@ schema.fields = [
       },
     },
     schema: { is_nullable: false, default_value: "draft" },
+  },
+  {
+    collection: "memberships",
+    field: "memberships_type",
+    type: "string",
+    meta: {
+      sort: 10,
+      interface: "select-dropdown",
+      display: "labels",
+      display_options: {
+        choices: [
+          {
+            text: "$t:Normal membership",
+            value: "normal",
+            foreground: "#FFFFFF",
+            background: "#2CB3A5",
+          },
+        ],
+      },
+      width: "half",
+      options: {
+        choices: [{ text: "$t:Normal membership", value: "normal" }],
+      },
+      translations: [
+        { language: "de-DE", translation: "Art" },
+        { language: "en-US", translation: "Type" },
+      ],
+    },
+
+    schema: { is_nullable: false, default_value: "normal" },
   },
   {
     collection: "memberships",
@@ -188,60 +194,8 @@ schema.fields = [
       ],
     },
   },
-  {
-    collection: "memberships",
-    field: "memberships_shares",
-    type: "integer",
-    schema: {
-      is_nullable: false,
-      default_value: 0,
-    },
-    meta: {
-      interface: "input",
-      width: "half",
-      translations: [
-        { language: "de-DE", translation: "Anteile" },
-        { language: "en-US", translation: "Shares" },
-      ],
-    },
-  },
 
-  // Membership Types
-  {
-    collection: "memberships_types",
-    field: "memberships_name",
-    type: "string",
-    schema: {
-      is_nullable: false,
-      is_unique: true,
-    },
-    meta: {
-      sort: 1,
-      required: true,
-      translations: [
-        { language: "en-US", translation: "Name" },
-        { language: "de-DE", translation: "Name" },
-      ],
-    },
-  },
-  {
-    collection: "memberships_types",
-    field: "memberships_description",
-    type: "text",
-    schema: {},
-    meta: {
-      interface: "input-multiline",
-      sort: 1,
-      translations: [
-        { language: "en-US", translation: "Description" },
-        { language: "de-DE", translation: "Beschreibung" },
-      ],
-    },
-  },
-
-  // System fields for both collections
   ...directusSystemFields("memberships"),
-  ...directusSystemFields("memberships_types"),
 ];
 
 schema.createForeignKey("memberships", "directus_users", {
@@ -288,85 +242,6 @@ schema.createForeignKey("memberships", "directus_users", {
     collection: "directus_users",
   },
 });
-
-schema.createForeignKey("memberships", "memberships_types", {
-  fieldKey: {
-    field: "memberships_type",
-    schema: {
-      is_nullable: false,
-    },
-    meta: {
-      interface: "select-dropdown-m2o",
-      special: ["m2o"],
-      width: "half",
-      required: true,
-      display: "related-values",
-      display_options: {
-        template: "{{name}}",
-      },
-      translations: [
-        { language: "de-DE", translation: "Typ" },
-        { language: "en-US", translation: "Type" },
-      ],
-    },
-  },
-});
-
-schema.createForeignKey("memberships_types", "payments_items", {
-  fieldKey: {
-    field: "memberships_shares_item",
-    meta: {
-      translations: [
-        { language: "de-DE", translation: "Anteile Item" },
-        { language: "en-US", translation: "Shares Item" },
-      ],
-    },
-  },
-});
-
-// Add a relation to the payments extension
-schema.fields.push(
-  ...[
-    {
-      collection: "memberships",
-      field: "memberships_invoices",
-      type: "alias",
-      meta: {
-        interface: "list-o2m",
-        special: ["o2m"],
-        width: "half",
-        translations: [
-          { language: "de-DE", translation: "Rechnungen" },
-          { language: "en-US", translation: "Invoices" },
-        ],
-      },
-    },
-    {
-      collection: "payments_invoices_out",
-      field: "memberships_membership",
-      type: "integer",
-      meta: {
-        hidden: true,
-      },
-    },
-  ],
-);
-
-schema.relations.push(
-  ...[
-    {
-      collection: "payments_invoices_out",
-      field: "memberships_membership",
-      related_collection: "memberships",
-      meta: {
-        one_field: "memberships_invoices",
-        sort_field: null,
-        one_deselect_action: "nullify",
-      },
-      schema: { on_delete: "SET NULL" },
-    },
-  ],
-);
 
 // ----------------------------------------------------------------------------
 // Flows ----------------------------------------------------------------------
@@ -453,194 +328,6 @@ schema.flows.push({
   ],
 });
 
-schema.flows.push({
-  flow: {
-    name: "memberships_create_invoice_for_shares",
-    icon: "receipt",
-    status: "active",
-    trigger: "event",
-    accountability: "all",
-    options: {
-      type: "action",
-      scope: ["items.create"],
-      collections: ["memberships"],
-    },
-  },
-  firstOperation: "updateMembership",
-  operations: [
-    {
-      operation: {
-        name: "updateMembership",
-        key: "updateMembership",
-        type: "item-update",
-        position_x: 19,
-        position_y: 1,
-        options: {
-          collection: "memberships",
-          payload: {
-            memberships_shares: "{{$trigger.payload.memberships_shares}}",
-          },
-          emitEvents: true,
-          key: ["{{$trigger.key}}"],
-        },
-      },
-    },
-  ],
-});
-
-schema.flows.push({
-  flow: {
-    name: "memberships_update_invoice_for_shares",
-    icon: "receipt",
-    status: "active",
-    trigger: "event",
-    accountability: "all",
-    options: {
-      type: "filter",
-      scope: ["items.update"],
-      collections: ["memberships"],
-    },
-  },
-  firstOperation: "checkHasShares",
-  operations: [
-    {
-      operation: {
-        name: "checkHasShares",
-        key: "checkHasShares",
-        type: "exec",
-        position_x: 19,
-        position_y: 1,
-        options: {
-          code: 'module.exports = async function(data) {\n\tconsole.log("prepareInvoice")\n\tconsole.log(data["$trigger"])\n\tif (!("memberships_shares" in data["$trigger"].payload)) {\n\t\tthrow new Error("No shares in payload")\n    }\n\treturn {}\n}',
-        },
-      },
-      resolve: "checkIsBulk",
-      reject: "endFlowWithoutBlocking",
-    },
-    {
-      operation: {
-        name: "endFlowWithoutBlocking",
-        key: "endFlowWithoutBlocking",
-        type: "exec",
-        position_x: 3,
-        position_y: 20,
-        options: {
-          code: 'module.exports = async function(data) {\n\t// Do nothing, just to let the reject path pass without blocking\n    console.log("has no shares")\n\treturn {};\n}',
-        },
-      },
-    },
-    {
-      operation: {
-        name: "checkIsBulk",
-        key: "checkIsBulk",
-        type: "exec",
-        position_x: 37,
-        position_y: 1,
-        options: {
-          code: 'module.exports = async function(data) {\n\tif (data["$trigger"].keys.length != 1) {\n\t\tconsole.log("multiple keys in payload")\n    \tthrow new Error("Memberships invoice flow: Cannot bulk edit shares")\n\t}\n\treturn {}\n}',
-        },
-      },
-      resolve: "readMembership",
-    },
-    {
-      operation: {
-        name: "readMembership",
-        key: "readMembership",
-        type: "item-read",
-        position_x: 20,
-        position_y: 20,
-        options: {
-          collection: "memberships",
-          key: ["{{$trigger.keys[0]}}"],
-          permissions: "$full",
-          query: {
-            fields: [
-              "memberships_user",
-              "memberships_type.memberships_shares_item.*",
-            ],
-          },
-        },
-      },
-      resolve: "readSharesEntries",
-    },
-    {
-      operation: {
-        name: "readSharesEntries",
-        key: "readSharesEntries",
-        type: "item-read",
-        position_x: 37,
-        position_y: 20,
-        options: {
-          collection: "payments_invoices_entries",
-          query: {
-            filter: {
-              payments_invoice: {
-                memberships_membership: "{{$trigger.keys[0]}}",
-              },
-              payments_item:
-                "{{readMembership.memberships_type.memberships_shares_item.id}}",
-            },
-          },
-        },
-      },
-      resolve: "calcShares",
-    },
-    {
-      operation: {
-        name: "calcShares",
-        key: "calcShares",
-        type: "exec",
-        position_x: 3,
-        position_y: 38,
-        options: {
-          code: 'module.exports = async function(data) {\n\tconsole.log("calcShares")\n    let sharesInvoiced = 0\n    console.log(data["readSharesEntries"])\n    for (i in data["readSharesEntries"]) {\n        entry = data["readSharesEntries"][i]\n        console.log("entry", entry)\n    \tsharesInvoiced = sharesInvoiced + entry.payments_quantity\n\t}\n\tsharesTotal = data["$trigger"].payload.memberships_shares\n\tsharesToBeInvoiced = sharesTotal - sharesInvoiced\n\tconsole.log("sharesToBeInvoiced", sharesToBeInvoiced)\n\treturn {sharesToBeInvoiced};\n}',
-        },
-      },
-      resolve: "createInvoice",
-    },
-    {
-      operation: {
-        name: "createInvoice",
-        key: "createInvoice",
-        type: "item-create",
-        position_x: 21,
-        position_y: 38,
-        options: {
-          collection: "payments_invoices_out",
-          permissions: "$full",
-          payload: {
-            payments_recipient_user: "{{readMembership.memberships_user}}",
-            payments_status: "pending",
-            memberships_membership: "{{$trigger.keys[0]}}",
-          },
-        },
-      },
-      resolve: "createInvoiceEntries",
-    },
-    {
-      operation: {
-        name: "createInvoiceEntries",
-        key: "createInvoiceEntries",
-        type: "item-create",
-        position_x: 41,
-        position_y: 38,
-        options: {
-          collection: "payments_invoices_entries",
-          permissions: "$full",
-          payload: {
-            payments_invoice: "{{createInvoice[0]}}",
-            payments_item:
-              "{{readMembership.memberships_type.memberships_shares_item.id}}",
-            payments_quantity: "{{calcShares.sharesToBeInvoiced}}",
-            payments_price:
-              "{{readMembership.memberships_type.memberships_shares_item.payments_price}}",
-          },
-        },
-      },
-    },
-  ],
-});
-
 // ----------------------------------------------------------------------------
 // Permissions ----------------------------------------------------------------
 // ----------------------------------------------------------------------------
@@ -648,13 +335,6 @@ schema.flows.push({
 for (const action of ["create", "read", "update", "delete"]) {
   schema.permissions.push({
     collection: "memberships",
-    roleName: "collectivo_editor",
-    action: action,
-    fields: ["*"],
-  });
-
-  schema.permissions.push({
-    collection: "memberships_types",
     roleName: "collectivo_editor",
     action: action,
     fields: ["*"],
@@ -679,13 +359,6 @@ schema.permissions.push({
   collection: "memberships",
   roleName: "collectivo_user",
   permissions: { _and: [{ memberships_user: { _eq: "$CURRENT_USER" } }] },
-  action: "read",
-  fields: ["*"],
-});
-
-schema.permissions.push({
-  collection: "memberships_types",
-  roleName: "collectivo_user",
   action: "read",
   fields: ["*"],
 });

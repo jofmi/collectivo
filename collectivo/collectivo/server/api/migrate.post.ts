@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // Read parameters
-  const query = getQuery(event) as { [key: string]: string };
+  const query: { [key: string]: string } = getQuery(event);
   const extension = query["extension"];
   const version = query["version"];
   const isolated = parseBoolean(query["isolated"]);

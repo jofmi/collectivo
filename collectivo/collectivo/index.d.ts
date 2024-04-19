@@ -68,8 +68,9 @@ declare global {
   // Layout
   interface CollectivoMenus {
     main: CollectivoMenuItem[];
-    public: CollectivoMenuItem[];
+    main_public: CollectivoMenuItem[];
     profile: CollectivoMenuItem[];
+    profile_public: CollectivoMenuItem[];
   }
 
   interface CollectivoMenuItem {
@@ -102,7 +103,7 @@ declare global {
 
   interface CollectivoFormFieldBase {
     order: number;
-    width?: "full" | "half" | "xl" | "lg" | "md" | "sm" | "xs";
+    width?: "lg" | "md" | "sm";
     conditions?: FormCondition[];
     _visible?: Ref<boolean>;
   }

@@ -228,12 +228,14 @@ export async function createOrUpdateDirectusFlow(flow: DirectusFlowWrapper) {
   // Create flow if it doesn't exist
   if (flowsDb.length === 0) {
     flowId = (await directus.request(createFlow(flow.flow))).id;
+    console.log("Created flow " + flow.flow.name);
   }
 
   // Update flow if it exists
   else {
     flowId = flowsDb[0].id;
     await directus.request(updateFlow(flowId, flow.flow));
+    console.log("Updated flow " + flow.flow.name);
   }
 
   // Add operation to flow

@@ -20,11 +20,12 @@ export default defineNuxtPlugin({
       {
         label: "Membership",
         to: "/memberships/membership",
-        order: 1,
+        icon: "i-heroicons-identification",
+        order: 20,
       },
     ];
 
-    menu.value.public.push(...publicItems);
+    menu.value.main_public.push(...publicItems);
     menu.value.profile.push(...profileItems);
 
     const is_legal = [
@@ -107,22 +108,22 @@ export default defineNuxtPlugin({
         icon: "i-mi-call",
       },
       {
-        label: "Birthday",
-        key: "memberships_birthday",
-        type: "date",
-        order: 450,
-        width: "lg",
-        required: true,
-        conditions: is_natural,
-      },
-      {
         label: "Occupation",
         key: "memberships_occupation",
         type: "text",
-        order: 460,
+        order: 450,
         required: true,
         conditions: is_natural,
         icon: "i-heroicons-briefcase",
+      },
+      {
+        label: "Birthday",
+        key: "memberships_birthday",
+        type: "date",
+        order: 460,
+        width: "lg",
+        required: true,
+        conditions: is_natural,
       },
       {
         type: "section",
@@ -148,7 +149,7 @@ export default defineNuxtPlugin({
         type: "text",
         key: "memberships_streetnumber",
         order: 511,
-        width: "xs",
+        width: "sm",
         required: true,
       },
       {
@@ -156,21 +157,21 @@ export default defineNuxtPlugin({
         key: "memberships_stair",
         type: "text",
         order: 512,
-        width: "xs",
+        width: "sm",
       },
       {
         label: "Door",
         key: "memberships_door",
         type: "text",
         order: 513,
-        width: "xs",
+        width: "sm",
       },
       {
         label: "Postcode",
         key: "memberships_postcode",
         type: "text",
         order: 514,
-        width: "xs",
+        width: "sm",
         required: true,
       },
       {

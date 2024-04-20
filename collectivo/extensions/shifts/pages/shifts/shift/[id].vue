@@ -4,7 +4,8 @@ import { DateTime } from "luxon";
 import { getNextOccurrences } from "~/composables/shifts";
 import showShiftToast from "~/composables/toast";
 import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
-import { getStatusColor } from "~/composables/colors";
+import SlotCard from "~/components/shifts/SlotCard.vue";
+import AssignmentCreateModal from "~/components/shifts/AssignmentCreateModal.vue";
 
 const route = useRoute();
 const directus = useDirectus();
@@ -15,6 +16,8 @@ const nextOccurrences: Ref<ShiftOccurrence[]> = ref([]);
 const shift_start = ref<DateTime>();
 const shift_end = ref<DateTime>();
 const skillNames = ref<Map<string, string>>();
+const selectedSlot = ref<ShiftsSlot>();
+const assignmentCreationModalOpen = ref(false);
 
 loadShift();
 
@@ -134,37 +137,28 @@ function setDetails(shift: ShiftsShift) {
     <h1>Slots</h1>
     <ul v-if="shift">
       <template
-        v-for="(slot, index) in shift.shifts_slots as ShiftsSlot[]"
+        v-for="slot in shift.shifts_slots as ShiftsSlot[]"
         :key="slot.id"
       >
         <li>
-          <CollectivoCard
-            :title="slot.shifts_name"
-            :color="getStatusColor(slot.shifts_status)"
-          >
-            <template #content>
-              <p v-if="skillNames">
-                Required skills:
-                <span v-if="slot.shifts_skills.length == 0">None</span>
-                <span
-                  v-for="link in slot.shifts_skills as ShiftsSkillSlotLink[]"
-                  :key="link.id"
-                  ><span v-if="index > 0">, </span>
-                  {{ skillNames.get(link.shifts_skills_id!) }}
-                </span>
-              </p>
-              <p>
-                Assigned to:
-                {{
-                  getAssigneeName(slot.shifts_assignments as ShiftsAssignment[])
-                }}
-              </p>
-            </template>
-          </CollectivoCard>
+          <SlotCard
+            :shift-slot="slot"
+            :skill-names="skillNames"
+            @slot-selected="
+              (newSelection) => {
+                selectedSlot = newSelection;
+                assignmentCreationModalOpen = true;
+              }
+            "
+          />
         </li>
       </template>
     </ul>
     <span v-else>Loading...</span>
+    <AssignmentCreateModal
+      :shifts-slot="selectedSlot"
+      :is-open="assignmentCreationModalOpen"
+    />
   </CollectivoContainer>
 
   <ShiftsAssignmentList

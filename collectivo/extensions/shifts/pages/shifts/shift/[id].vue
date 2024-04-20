@@ -40,8 +40,8 @@ function loadShift() {
       }),
     )
     .then((item) => {
-      shift.value = item;
-      getSlotSkillNames(shift.value.shifts_slots!);
+      shift.value = item as ShiftsShift;
+      getSlotSkillNames(shift.value.shifts_slots as ShiftsSlot[]);
     })
     .catch((error) =>
       showShiftToast("Shift data could not be loaded", error, "error"),
@@ -52,7 +52,7 @@ function getSlotSkillNames(slots: ShiftsSlot[]) {
   const skillIds = [];
 
   for (const slot of slots) {
-    for (const link of slot.shifts_skills) {
+    for (const link of slot.shifts_skills as ShiftsSkillSlotLink[]) {
       skillIds.push(link.shifts_skills_id);
     }
   }
@@ -133,7 +133,10 @@ function setDetails(shift: ShiftsShift) {
   <CollectivoContainer>
     <h1>Slots</h1>
     <ul v-if="shift">
-      <template v-for="(slot, index) in shift.shifts_slots" :key="slot.id">
+      <template
+        v-for="(slot, index) in shift.shifts_slots as ShiftsSlot[]"
+        :key="slot.id"
+      >
         <li>
           <CollectivoCard
             :title="slot.shifts_name"
@@ -143,12 +146,19 @@ function setDetails(shift: ShiftsShift) {
               <p v-if="skillNames">
                 Required skills:
                 <span v-if="slot.shifts_skills.length == 0">None</span>
-                <span v-for="link in slot.shifts_skills" :key="link.id"
+                <span
+                  v-for="link in slot.shifts_skills as ShiftsSkillSlotLink[]"
+                  :key="link.id"
                   ><span v-if="index > 0">, </span>
                   {{ skillNames.get(link.shifts_skills_id!) }}
                 </span>
               </p>
-              <p>Assigned to: {{ getAssigneeName(slot.shifts_assignments) }}</p>
+              <p>
+                Assigned to:
+                {{
+                  getAssigneeName(slot.shifts_assignments as ShiftsAssignment[])
+                }}
+              </p>
             </template>
           </CollectivoCard>
         </li>

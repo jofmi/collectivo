@@ -113,7 +113,6 @@ function getUserSkillNames() {
     )
     .then((skills) => {
       skillNames.value = skills.map((skill) => skill.shifts_name);
-      getUserSkillNames();
     })
     .catch((error) => showShiftToast("Failed to load skills", error, "error"))
     .finally(() => (skillsLoading.value = false));

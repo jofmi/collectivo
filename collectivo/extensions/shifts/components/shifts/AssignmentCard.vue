@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { DateTime } from "luxon";
 import {
-  getAssigneeName,
   getNextOccurrence,
   isNextOccurrenceWithinAssignment,
   isShiftDurationModelActive,
@@ -16,13 +15,22 @@ const props = defineProps({
   },
 });
 
+const { shiftAssignment } = toRefs(props);
+
 const route = useRoute();
 
-const from: DateTime = DateTime.fromISO(props.shiftAssignment.shifts_from);
+const from = ref<DateTime>(DateTime.fromISO(shiftAssignment.value.shifts_from));
+const to = ref<DateTime>();
+updateDates();
+watch(shiftAssignment, updateDates);
 
-const to = props.shiftAssignment.shifts_to
-  ? DateTime.fromISO(props.shiftAssignment.shifts_to)
-  : null;
+function updateDates() {
+  from.value = DateTime.fromISO(shiftAssignment.value.shifts_from);
+
+  to.value = shiftAssignment.value.shifts_to
+    ? DateTime.fromISO(shiftAssignment.value.shifts_to)
+    : undefined;
+}
 
 const nextOccurrence = getNextOccurrence(
   (props.shiftAssignment.shifts_slot as ShiftsSlot).shifts_shift as ShiftsShift,
@@ -47,8 +55,6 @@ if (nextOccurrence) {
 }
 
 const assignmentUrl = "/shifts/assignment/" + props.shiftAssignment.id;
-console.log(assignmentUrl);
-console.log(route.path);
 </script>
 
 <template>

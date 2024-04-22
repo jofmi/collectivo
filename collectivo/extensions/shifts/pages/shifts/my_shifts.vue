@@ -44,10 +44,18 @@ function loadAssignments(user: CollectivoUser) {
         ],
       }),
     )
-    .then((assignments) => {
+    .then((items) => {
+      const assignments = items as ShiftsAssignment[];
+
       assignments.sort((a, b) => {
-        const nextA = getNextOccurrence(a.shifts_slot.shifts_shift);
-        const nextB = getNextOccurrence(b.shifts_slot.shifts_shift);
+        const nextA = getNextOccurrence(
+          (a.shifts_slot as ShiftsSlot).shifts_shift as ShiftsShift,
+        );
+
+        const nextB = getNextOccurrence(
+          (b.shifts_slot as ShiftsSlot).shifts_shift as ShiftsShift,
+        );
+
         if (!nextA && !nextB) return 0;
         if (!nextA) return 1;
         if (!nextB) return -1;

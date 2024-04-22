@@ -7,9 +7,11 @@ import { DateTime } from "luxon";
 const props = defineProps({
   shiftsSlot: {
     type: Object as PropType<ShiftsSlot>,
-    required: false,
+    required: true,
   },
 });
+
+const { shiftsSlot } = toRefs(props);
 
 const isOpen = defineModel("isOpen", { required: true, type: Boolean });
 
@@ -49,9 +51,12 @@ async function onSubmit(formData: Record<string, string>) {
 }
 
 let title = "Create assignment";
+updateTitle();
+watch(shiftsSlot, updateTitle);
 
-if (props.shiftsSlot) {
-  const shift = props.shiftsSlot.shifts_shift as ShiftsShift;
+function updateTitle() {
+  if (!shiftsSlot.value) return;
+  const shift = shiftsSlot.value.shifts_shift as ShiftsShift;
   const from = DateTime.fromISO(shift.shifts_from);
   title = `Create assignment for ${shift.shifts_name} : ${props.shiftsSlot.shifts_name}, ${from.weekdayLong}`;
 }
@@ -72,6 +77,7 @@ if (props.shiftsSlot) {
               label: 'From',
               required: true,
               useDatePicker: true,
+              default: new Date(),
             },
             {
               order: 120,
@@ -90,6 +96,7 @@ if (props.shiftsSlot) {
               choices: Object.values(ItemStatus).map((status) => {
                 return { label: status, value: status };
               }),
+              default: ItemStatus.PUBLISHED,
             },
           ]"
         />

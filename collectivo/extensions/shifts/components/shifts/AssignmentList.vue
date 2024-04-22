@@ -31,13 +31,13 @@ function loadAssignments() {
         },
         fields: [
           "*",
-          "shifts_slot",
           { shifts_slot: ["*", { shifts_shift: ["*"] }] },
+          { shifts_user: ["first_name", "last_name"] },
         ],
       }),
     )
-    .then((items: ShiftsAssignment[]) => {
-      assignments.value = items;
+    .then((items) => {
+      assignments.value = items as ShiftsAssignment[];
     })
     .catch((error) =>
       showShiftToast("Failed to load assignments", error, "error"),

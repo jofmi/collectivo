@@ -156,8 +156,9 @@ function setDetails(shift: ShiftsShift) {
     </ul>
     <span v-else>Loading...</span>
     <AssignmentCreateModal
+      v-if="selectedSlot"
+      v-model:is-open="assignmentCreationModalOpen"
       :shifts-slot="selectedSlot"
-      :is-open="assignmentCreationModalOpen"
     />
   </CollectivoContainer>
 

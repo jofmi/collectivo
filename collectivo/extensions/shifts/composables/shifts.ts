@@ -103,13 +103,13 @@ export const shiftToRRule = (shift: ShiftsShift): RRule => {
 };
 
 export const isShiftDurationModelActive = (
-  duration_model: { shifts_from: string; shifts_to?: string },
+  durationModel: { shifts_from: string; shifts_to?: string },
   atDate?: DateTime,
 ): boolean => {
   return isFromToActive(
-    DateTime.fromISO(duration_model.shifts_from),
-    duration_model.shifts_to
-      ? DateTime.fromISO(duration_model.shifts_to)
+    DateTime.fromISO(durationModel.shifts_from),
+    durationModel.shifts_to
+      ? DateTime.fromISO(durationModel.shifts_to)
       : undefined,
     atDate,
   );
@@ -174,4 +174,18 @@ export const getAssigneeName = (
     assignment.shifts_user.last_name[0] +
     "."
   );
+};
+
+export const hasActivePermanentAssignment = (
+  assignments: ShiftsAssignment[],
+  atDate?: DateTime,
+) => {
+  if (!atDate) {
+    atDate = DateTime.now();
+  }
+
+  const assignment = getActiveAssignment(assignments, atDate);
+  if (!assignment) return false;
+
+  return assignment.shifts_to == undefined;
 };

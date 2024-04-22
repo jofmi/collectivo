@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { getAssigneeName } from "~/composables/shifts";
+import {
+  getAssigneeName,
+  hasActivePermanentAssignment,
+} from "~/composables/shifts";
 import { getStatusColor } from "~/composables/colors";
 
 defineProps({
@@ -42,7 +45,13 @@ const emit = defineEmits<{
           getAssigneeName(shiftSlot.shifts_assignments as ShiftsAssignment[])
         }}
       </p>
-      <p>
+      <p
+        v-if="
+          !hasActivePermanentAssignment(
+            shiftSlot.shifts_assignments as ShiftsAssignment[],
+          )
+        "
+      >
         <UButton
           :label="'Assign myself to this slot'"
           :icon="'i-heroicons-user-plus'"

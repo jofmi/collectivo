@@ -39,14 +39,10 @@ const europeanIBAN = [
 ];
 
 export default defineNuxtPlugin({
-  name: "memberships-setup",
+  name: "payments-setup",
   async setup() {
-    const menu = useCollectivoMenus();
     const user = useCollectivoUser();
     const validators = useCollectivoValidators();
-    const publicItems: CollectivoMenuItem[] = [];
-
-    menu.value.main_public.push(...publicItems);
 
     validators.value.tests.payments_iban_sepa = {
       message: "IBAN not valid for SEPA",

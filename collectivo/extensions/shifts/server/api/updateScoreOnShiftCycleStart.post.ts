@@ -8,7 +8,6 @@ import {
 
 import { luxonDateTimeToRruleDatetime } from "@collectivo/shifts/server/utils/luxonDateTimeToRruleDatetime";
 import { DateTime } from "luxon";
-import type { MembershipsMembership } from "@collectivo/memberships/index";
 
 export default defineEventHandler(async (event) => {
   verifyCollectivoApiToken(event);

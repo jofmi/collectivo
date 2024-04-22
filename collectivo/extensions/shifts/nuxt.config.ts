@@ -9,4 +9,5 @@ export default defineNuxtConfig({
       { code: "de", file: "de.json" },
     ],
   },
+  ui: { icons: ["system-uicons"] },
 });

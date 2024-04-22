@@ -1,7 +1,7 @@
 {
   "name": "@collectivo/collectivo",
   "version": "0.2.10",
-  "description": "Collectivo is a module system for community plattforms.",
+  "description": "Collectivo is a modular system for community plattforms.",
   "type": "module",
   "license": "AGPL-3.0",
   "author": "Joël Foramitti",

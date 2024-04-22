@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import {
-  getAssigneeName,
-  hasActivePermanentAssignment,
-} from "~/composables/shifts";
+import { hasActivePermanentAssignment } from "~/composables/shifts";
 import { getStatusColor } from "~/composables/colors";
 
 defineProps({
@@ -45,18 +42,29 @@ const emit = defineEmits<{
           getAssigneeName(shiftSlot.shifts_assignments as ShiftsAssignment[])
         }}
       </p>
-      <p
-        v-if="
-          !hasActivePermanentAssignment(
-            shiftSlot.shifts_assignments as ShiftsAssignment[],
-          )
-        "
-      >
-        <UButton
-          :label="'Assign myself to this slot'"
-          :icon="'i-heroicons-user-plus'"
-          @click="emit('slotSelected', shiftSlot)"
-        />
+      <p>
+        <UTooltip
+          :prevent="
+            !hasActivePermanentAssignment(
+              shiftSlot.shifts_assignments as ShiftsAssignment[],
+            )
+          "
+        >
+          <template #text>
+            You can't assign yourself to this slot because someone else is
+            already permanently assigned to it.
+          </template>
+          <UButton
+            :label="'Assign myself to this slot'"
+            :icon="'i-heroicons-user-plus'"
+            :disabled="
+              hasActivePermanentAssignment(
+                shiftSlot.shifts_assignments as ShiftsAssignment[],
+              )
+            "
+            @click="emit('slotSelected', shiftSlot)"
+          />
+        </UTooltip>
       </p>
     </template>
   </CollectivoCard>

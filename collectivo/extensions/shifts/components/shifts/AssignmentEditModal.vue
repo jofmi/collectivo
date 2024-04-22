@@ -64,7 +64,7 @@ async function onSubmit(formData: Record<string, never>) {
               useDatePicker: true,
             },
             {
-              order: 100,
+              order: 130,
               type: 'select',
               key: 'shifts_status',
               label: 'Status',

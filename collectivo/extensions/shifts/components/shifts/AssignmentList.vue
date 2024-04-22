@@ -16,6 +16,9 @@ const props = defineProps({
 const directus = useDirectus();
 const assignments: Ref<ShiftsAssignment[]> = ref([]);
 loadAssignments();
+const { shift } = toRefs(props);
+
+watch(shift, loadAssignments);
 
 function loadAssignments() {
   directus

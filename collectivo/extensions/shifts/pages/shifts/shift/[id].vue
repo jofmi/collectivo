@@ -36,6 +36,7 @@ function loadShift() {
                   "*",
                   { shifts_user: ["first_name", "last_name"] },
                 ],
+                shifts_shift: ["*"],
               },
             ],
           },
@@ -159,6 +160,7 @@ function setDetails(shift: ShiftsShift) {
       v-if="selectedSlot"
       v-model:is-open="assignmentCreationModalOpen"
       :shifts-slot="selectedSlot"
+      @assignment-created="loadShift"
     />
   </CollectivoContainer>
 

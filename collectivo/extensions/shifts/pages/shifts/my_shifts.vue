@@ -2,6 +2,7 @@
 import { readItems } from "@directus/sdk";
 import {
   getNextOccurrence,
+  isNextOccurrenceWithinAssignment,
   isShiftDurationModelActive,
 } from "~/composables/shifts";
 import { DateTime } from "luxon";
@@ -67,7 +68,8 @@ function loadAssignments(user: CollectivoUser) {
 
         if (
           (isShiftDurationModelActive(assignment) || from > DateTime.now()) &&
-          assignment.shifts_status == ItemStatus.PUBLISHED
+          assignment.shifts_status == ItemStatus.PUBLISHED &&
+          isNextOccurrenceWithinAssignment(assignment)
         ) {
           activeAndFutureAssignments.value.push(assignment);
         } else {

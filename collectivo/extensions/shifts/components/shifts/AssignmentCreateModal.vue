@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
 import { createItem } from "@directus/sdk";
 import showShiftToast from "~/composables/toast";
 import { DateTime } from "luxon";
+import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
+import OccurrencesPreview from "~/components/shifts/Assignment/OccurrencesPreview.vue";
 
 const props = defineProps({
   shiftsSlot: {
@@ -34,6 +35,7 @@ async function onSubmit(formData: Record<string, string>) {
 
   formData.shifts_slot = props.shiftsSlot!.id;
   formData.shifts_user = user.value.data.id;
+  formData.shifts_status = ItemStatus.PUBLISHED;
 
   directus
     .request(createItem("shifts_assignments", formData))
@@ -66,39 +68,11 @@ function updateTitle() {
   <UModal v-model="isOpen">
     <CollectivoCard :title="title">
       <template #content>
-        <CollectivoFormBuilder
-          :submit-label="formLoading ? 'Saving...' : 'Save'"
-          :submit="onSubmit"
-          :fields="[
-            {
-              order: 110,
-              type: 'date',
-              key: 'shifts_from',
-              label: 'From',
-              required: true,
-              useDatePicker: true,
-              default: new Date(),
-            },
-            {
-              order: 120,
-              type: 'date',
-              key: 'shifts_to',
-              label: 'To',
-              required: false,
-              useDatePicker: true,
-            },
-            {
-              order: 130,
-              type: 'select',
-              key: 'shifts_status',
-              label: 'Status',
-              required: true,
-              choices: Object.values(ItemStatus).map((status) => {
-                return { label: status, value: status };
-              }),
-              default: ItemStatus.PUBLISHED,
-            },
-          ]"
+        <ShiftsAssignmentForm :loading="formLoading" :submit="onSubmit" />
+        <UDivider label="Upcoming occurrences" />
+        <OccurrencesPreview
+          :user-id="user.data!.id"
+          :shifts-slot="shiftsSlot"
         />
       </template>
     </CollectivoCard>

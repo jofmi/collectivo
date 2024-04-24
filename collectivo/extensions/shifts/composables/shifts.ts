@@ -35,7 +35,7 @@ export const getNextOccurrences = (
   after?: DateTime,
   until?: DateTime,
 ) => {
-  const nextOccurrences = [];
+  const nextOccurrences: ShiftOccurrence[] = [];
   let nextOccurrence = getNextOccurrence(shift, after ?? DateTime.now());
 
   while (

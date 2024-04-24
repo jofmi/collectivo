@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
 import { updateItem } from "@directus/sdk";
 import showShiftToast from "~/composables/toast";
 
@@ -42,38 +41,10 @@ async function onSubmit(formData: Record<string, never>) {
   <UModal v-model="isOpen">
     <CollectivoCard title="Update assignment">
       <template #content>
-        <CollectivoFormBuilder
-          :submit-label="formLoading ? 'Saving...' : 'Save'"
+        <ShiftsAssignmentForm
+          :loading="formLoading"
           :submit="onSubmit"
           :data="assignment"
-          :fields="[
-            {
-              order: 110,
-              type: 'date',
-              key: 'shifts_from',
-              label: 'From',
-              required: true,
-              useDatePicker: true,
-            },
-            {
-              order: 120,
-              type: 'date',
-              key: 'shifts_to',
-              label: 'To',
-              required: false,
-              useDatePicker: true,
-            },
-            {
-              order: 130,
-              type: 'select',
-              key: 'shifts_status',
-              label: 'Status',
-              required: true,
-              choices: Object.values(ItemStatus).map((status) => {
-                return { label: status, value: status };
-              }),
-            },
-          ]"
         />
       </template>
     </CollectivoCard>

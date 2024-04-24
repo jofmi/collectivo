@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { hasActivePermanentAssignment } from "~/composables/shifts";
+import {
+  getNextOccurrence,
+  hasActivePermanentAssignment,
+} from "~/composables/shifts";
 import { getStatusColor } from "~/composables/colors";
 
 defineProps({
@@ -39,7 +42,10 @@ const emit = defineEmits<{
       <p>
         Assigned to:
         {{
-          getAssigneeName(shiftSlot.shifts_assignments as ShiftsAssignment[])
+          getAssigneeName(
+            shiftSlot.shifts_assignments as ShiftsAssignment[],
+            getNextOccurrence(shiftSlot.shifts_shift as ShiftsShift)?.start,
+          )
         }}
       </p>
       <p>

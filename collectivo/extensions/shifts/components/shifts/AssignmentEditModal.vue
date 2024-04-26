@@ -22,7 +22,7 @@ async function onSubmit(formData: Record<string, never>) {
   formLoading.value = true;
 
   directus
-    .request(updateItem("shifts_assignments", props.assignment.id, formData))
+    .request(updateItem("shifts_assignments", props.assignment.id!, formData))
     .then((updatedAssignment) => {
       showShiftToast("Assignment updated", "", "success");
       emit("assignmentUpdated", updatedAssignment as ShiftsAssignment);

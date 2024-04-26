@@ -1,32 +1,38 @@
 <script setup lang="ts">
+import type { DateTime } from "luxon";
+
 defineProps({
   loading: { type: Boolean, required: true },
   submit: {
-    type: Function as PropType<(data: any) => Promise<void>>,
+    type: Function as PropType<
+      (data: Record<string, unknown>) => Promise<void>
+    >,
     required: true,
   },
-  data: { type: Object as PropType<ShiftsAssignment>, required: false },
+  from: { type: Object as PropType<DateTime>, required: false },
+  to: { type: Object as PropType<DateTime>, required: false },
 });
 </script>
 
 <template>
   <CollectivoFormBuilder
-    :submit-label="loading ? 'Saving...' : 'Save'"
+    submit-label="Check"
     :submit="submit"
-    :data="data"
+    :data="{ from: from, to: to }"
     :fields="[
       {
         order: 110,
         type: 'date',
-        key: 'shifts_from',
+        key: 'from',
         label: 'From',
         required: true,
         useDatePicker: true,
+        default: new Date(),
       },
       {
         order: 120,
         type: 'date',
-        key: 'shifts_to',
+        key: 'to',
         label: 'To',
         required: false,
         useDatePicker: true,

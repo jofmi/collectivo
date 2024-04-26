@@ -119,9 +119,15 @@ export const isFromToActive = (
   from: DateTime,
   to?: DateTime,
   atDate?: DateTime,
+  dateOnly = true,
 ): boolean => {
   if (!atDate) {
     atDate = DateTime.now();
+  }
+
+  if (dateOnly) {
+    from = from.startOf("day");
+    to = to?.endOf("day");
   }
 
   if (from > atDate) {
@@ -134,9 +140,15 @@ export const isFromToActive = (
 export const isNextOccurrenceWithinAssignment = (
   assignment: ShiftsAssignment,
 ): boolean => {
-  const nextOccurrence = getNextOccurrence(
-    (assignment.shifts_slot as ShiftsSlot).shifts_shift as ShiftsShift,
-  );
+  if (typeof assignment.shifts_slot == "number") {
+    throw new Error("assignment.shifts_slot field must be loaded");
+  }
+
+  if (typeof assignment.shifts_slot.shifts_shift == "number") {
+    throw new Error("assignment.shifts_slot.shifts_shift field must be loaded");
+  }
+
+  const nextOccurrence = getNextOccurrence(assignment.shifts_slot.shifts_shift);
 
   return (
     !!nextOccurrence &&
@@ -167,6 +179,10 @@ export const getAssigneeName = (
 
   if (!assignment)
     return "No assignee on " + atDate.toLocaleString(DateTime.DATE_SHORT);
+
+  if (typeof assignment.shifts_user == "string") {
+    throw new Error("Assignment shifts_user field must be loaded");
+  }
 
   return (
     assignment.shifts_user.first_name +

@@ -14,7 +14,7 @@ declare global {
   }
 
   export interface ShiftsSlot {
-    id: string;
+    id: number;
     shifts_name: string;
     shifts_shift: ShiftsShift | number;
     shifts_skills: ShiftsSkillSlotLink[] | number[];
@@ -23,22 +23,22 @@ declare global {
   }
 
   export interface ShiftsSkill {
-    id: string;
+    id: number;
     shifts_name: string;
     shifts_slots: string[];
   }
 
   export interface ShiftsAssignment {
-    id: string;
+    id?: number;
     shifts_from: string;
     shifts_to?: string;
     shifts_slot: ShiftsSlot | number;
-    shifts_user: CollectivoUser;
+    shifts_user: CollectivoUser | string;
     shifts_status: ItemStatus;
   }
 
   export interface ShiftsLog {
-    id: string;
+    id: number;
     shifts_type: ShiftLogType;
     shifts_datetime: string;
     shifts_assignment?: ShiftsAssignment;
@@ -64,14 +64,14 @@ declare global {
 
   export interface ShiftsSkillUserLink {
     id?: string;
-    shifts_skills_id: string;
-    directus_users_id: string;
+    shifts_skills_id: number;
+    directus_users_id: number;
   }
 
   export interface ShiftsSkillSlotLink {
     id?: string;
-    shifts_skills_id: string;
-    shifts_slot_id: string;
+    shifts_skills_id: number;
+    shifts_slot_id: number;
   }
 }
 

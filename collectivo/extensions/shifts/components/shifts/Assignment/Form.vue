@@ -2,7 +2,6 @@
 import type { DateTime } from "luxon";
 
 defineProps({
-  loading: { type: Boolean, required: true },
   submit: {
     type: Function as PropType<
       (data: Record<string, unknown>) => Promise<void>

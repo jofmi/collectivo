@@ -12,6 +12,10 @@ const props = defineProps({
     type: Object as PropType<ShiftsSlot>,
     required: true,
   },
+  assignment: {
+    type: Object as PropType<ShiftsAssignment>,
+    required: false,
+  },
 });
 
 const { shiftsSlot } = toRefs(props);
@@ -20,6 +24,7 @@ const isOpen = defineModel("isOpen", { required: true, type: Boolean });
 
 const emit = defineEmits<{
   assignmentCreated: [assignment: ShiftsAssignment];
+  assignmentUpdated: [assignment: ShiftsAssignment];
 }>();
 
 const directus = useDirectus();
@@ -30,6 +35,14 @@ const from = ref<DateTime>();
 const to = ref<DateTime>();
 const showForm = ref(true);
 const assignments = ref<ShiftsAssignment[]>([]);
+
+if (props.assignment) {
+  from.value = DateTime.fromISO(props.assignment.shifts_from);
+
+  if (props.assignment.shifts_to) {
+    to.value = DateTime.fromISO(props.assignment.shifts_to);
+  }
+}
 
 loadAssignments();
 watch(shiftsSlot, loadAssignments);
@@ -96,7 +109,34 @@ async function onCreate() {
     });
 }
 
-let title = "Create assignment";
+async function onUpdate() {
+  if (!user.value.data) {
+    showShiftToast("User data not loaded", null, "error");
+    return;
+  }
+
+  loading.value = true;
+
+  props.assignment!.shifts_from = from.value!.toISODate() as string;
+  props.assignment!.shifts_to = to.value!.toISODate() as string;
+
+  directus
+    .request(createItem("shifts_assignments", props.assignment!))
+    .then((updatedAssignment) => {
+      showShiftToast("Assignment updated", "", "success");
+      emit("assignmentUpdated", updatedAssignment as ShiftsAssignment);
+    })
+    .catch((error) =>
+      showShiftToast("Failed to update assignment", error, "error"),
+    )
+    .finally(() => {
+      loading.value = false;
+      isOpen.value = false;
+      reset();
+    });
+}
+
+let title = "";
 updateTitle();
 watch(shiftsSlot, updateTitle);
 
@@ -104,7 +144,10 @@ function updateTitle() {
   if (!shiftsSlot.value) return;
   const shift = shiftsSlot.value.shifts_shift as ShiftsShift;
   const from = DateTime.fromISO(shift.shifts_from);
-  title = `Create assignment for ${shift.shifts_name} : ${shiftsSlot.value.shifts_name}, ${from.weekdayLong}`;
+
+  title =
+    (props.assignment ? "Update" : "Create") +
+    ` assignment for ${shift.shifts_name} : ${shiftsSlot.value.shifts_name}, ${from.weekdayLong}`;
 }
 
 function reset() {
@@ -144,7 +187,6 @@ function confirmButtonEnabled() {
       <template #content>
         <ShiftsAssignmentForm
           v-if="showForm"
-          :loading="loading"
           :submit="onCheck"
           :from="from"
           :to="to"
@@ -163,11 +205,11 @@ function confirmButtonEnabled() {
               icon="i-heroicons-check"
               :loading="loading"
               :disabled="!confirmButtonEnabled()"
-              @click="onCreate"
+              @click="assignment ? onUpdate : onCreate"
             />
           </UTooltip>
           <UButton
-            label="Change"
+            label="Update request"
             icon="i-heroicons-pencil"
             :loading="loading"
             @click="

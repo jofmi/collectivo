@@ -5,7 +5,6 @@ import { getNextOccurrences } from "~/composables/shifts";
 import showShiftToast from "~/composables/toast";
 import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
 import SlotCard from "~/components/shifts/SlotCard.vue";
-import AssignmentCreateModal from "~/components/shifts/AssignmentCreateModal.vue";
 
 const route = useRoute();
 const directus = useDirectus();
@@ -15,7 +14,7 @@ const shift = ref<ShiftsShift>();
 const nextOccurrences: Ref<ShiftOccurrence[]> = ref([]);
 const shift_start = ref<DateTime>();
 const shift_end = ref<DateTime>();
-const skillNames = ref<Map<string, string>>();
+const skillNames = ref<Map<number, string>>();
 const selectedSlot = ref<ShiftsSlot>();
 const assignmentCreationModalOpen = ref(false);
 
@@ -73,7 +72,7 @@ function getSlotSkillNames(slots: ShiftsSlot[]) {
       }),
     )
     .then((skills) => {
-      skillNames.value = new Map<string, string>();
+      skillNames.value = new Map<number, string>();
 
       for (const skill of skills) {
         skillNames.value.set(skill.id, skill.shifts_name);
@@ -156,7 +155,7 @@ function setDetails(shift: ShiftsShift) {
       </template>
     </ul>
     <span v-else>Loading...</span>
-    <AssignmentCreateModal
+    <ShiftsAssignmentModal
       v-if="selectedSlot"
       v-model:is-open="assignmentCreationModalOpen"
       :shifts-slot="selectedSlot"

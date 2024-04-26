@@ -71,11 +71,13 @@ function setOccurrences() {
 function setTitle() {
   if (!assignment.value) return;
 
+  const user = assignment.value.shifts_user as CollectivoUser;
+
   setCollectivoTitle(
     "Assignment: " +
-      assignment.value.shifts_user.first_name +
+      user.first_name +
       " " +
-      assignment.value.shifts_user.last_name +
+      user.last_name +
       " on " +
       ((assignment.value.shifts_slot as ShiftsSlot).shifts_shift as ShiftsShift)
         .shifts_name,
@@ -94,12 +96,13 @@ function setTitle() {
       @click="isEditModalOpen = true"
     />
   </CollectivoContainer>
-  <ShiftsAssignmentEditModal
+  <ShiftsAssignmentModal
     v-if="assignment"
     v-model:is-open="isEditModalOpen"
+    :shifts-slot="assignment.shifts_slot"
     :assignment="assignment"
     @assignment-updated="() => loadAssignment()"
-  ></ShiftsAssignmentEditModal>
+  ></ShiftsAssignmentModal>
   <CollectivoContainer>
     <h1>Upcoming occurrences within this assignment</h1>
     <ShiftsOccurrenceCard

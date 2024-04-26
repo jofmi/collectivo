@@ -11,7 +11,7 @@ defineProps({
     required: true,
   },
   skillNames: {
-    type: Map<string, string>,
+    type: Map<number, string>,
     required: false,
   },
 });

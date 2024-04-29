@@ -2,7 +2,6 @@
 import { readItems } from "@directus/sdk";
 import {
   getNextOccurrence,
-  isNextOccurrenceWithinAssignment,
   isShiftDurationModelActive,
 } from "~/composables/shifts";
 import { DateTime } from "luxon";

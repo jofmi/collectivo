@@ -65,7 +65,7 @@ declare global {
   export interface ShiftsSkillUserLink {
     id?: string;
     shifts_skills_id: number;
-    directus_users_id: number;
+    directus_users_id: string;
   }
 
   export interface ShiftsSkillSlotLink {

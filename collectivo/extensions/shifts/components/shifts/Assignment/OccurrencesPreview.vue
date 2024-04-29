@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { DateTime } from "luxon";
-import { getAssigneeName, getNextOccurrences } from "~/composables/shifts";
-import { getOccurrenceType, OccurrenceType } from "~/composables/occurrences";
+import { getNextOccurrences } from "~/composables/shifts";
+import {
+  getOccurrenceType,
+  OccurrenceType,
+} from "~/composables/occurrenceType";
 
 const props = defineProps({
   shiftsSlot: { type: Object as PropType<ShiftsSlot>, required: true },

@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import {
-  getNextOccurrence,
-  hasActivePermanentAssignment,
-} from "~/composables/shifts";
+import { getNextOccurrence } from "~/composables/shifts";
 import { getStatusColor } from "~/composables/colors";
 
 defineProps({

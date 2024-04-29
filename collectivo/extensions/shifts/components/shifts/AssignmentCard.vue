@@ -2,7 +2,6 @@
 import { DateTime } from "luxon";
 import {
   getNextOccurrence,
-  isNextOccurrenceWithinAssignment,
   isShiftDurationModelActive,
 } from "~/composables/shifts";
 import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";

@@ -5,7 +5,10 @@ import { DateTime } from "luxon";
 import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
 import OccurrencesPreview from "~/components/shifts/Assignment/OccurrencesPreview.vue";
 import { getNextOccurrences } from "~/composables/shifts";
-import { getOccurrenceType, OccurrenceType } from "~/composables/occurrences";
+import {
+  getOccurrenceType,
+  OccurrenceType,
+} from "~/composables/occurrenceType";
 
 const props = defineProps({
   shiftsSlot: {

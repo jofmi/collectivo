@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 import {
   getNextOccurrence,
   isShiftDurationModelActive,
+  shiftToRRule,
 } from "~/composables/shifts";
 
 export const isNextOccurrenceWithinAssignment = (
@@ -71,4 +72,50 @@ export const hasActivePermanentAssignment = (
   if (!assignment) return false;
 
   return assignment.shifts_to == undefined;
+};
+
+export const capAssignmentToFirstAndLastIncludedOccurrence = (
+  assignment: ShiftsAssignment,
+) => {
+  if (typeof assignment.shifts_slot == "number") {
+    throw new Error("assignment.shifts_slot field must be loaded");
+  }
+
+  if (typeof assignment.shifts_slot.shifts_shift == "number") {
+    throw new Error("assignment.shifts_slot.shifts_shift field must be loaded");
+  }
+
+  const rrule = shiftToRRule(assignment.shifts_slot.shifts_shift);
+
+  const firstOccurrenceWithinAssignment = rrule.after(
+    DateTime.fromISO(assignment.shifts_from).toJSDate(),
+  );
+
+  if (firstOccurrenceWithinAssignment) {
+    assignment.shifts_from = DateTime.fromJSDate(
+      firstOccurrenceWithinAssignment,
+    )
+      .startOf("day")
+      .toISO()!;
+  }
+
+  console.log("CAPPING");
+  if (!assignment.shifts_to) return;
+  console.log("CAPPING 2");
+
+  const lastOccurrenceWithinAssignment = rrule.before(
+    DateTime.fromISO(assignment.shifts_to).toJSDate(),
+    true,
+  );
+
+  console.log(lastOccurrenceWithinAssignment);
+
+  if (!lastOccurrenceWithinAssignment) return;
+  console.log("CAPPING 3");
+
+  assignment.shifts_to = DateTime.fromJSDate(lastOccurrenceWithinAssignment)
+    .endOf("day")
+    .toISO()!;
+
+  console.log(assignment.shifts_to);
 };

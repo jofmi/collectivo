@@ -64,9 +64,8 @@ function getOccurrenceText(occurrence: ShiftOccurrence) {
       return "Would be assigned to you";
     case OccurrenceType.ASSIGNED_TO_ANOTHER_USER_INSIDE_NEW_ASSIGNMENT:
       return (
-        "Assigned to " +
-        getAssigneeName(props.assignments, occurrence.start) +
-        ". You can still create a new assignment at those dates, but it will not include this occurrence."
+        "Already assigned to " +
+        getAssigneeName(props.assignments, occurrence.start)
       );
   }
 }

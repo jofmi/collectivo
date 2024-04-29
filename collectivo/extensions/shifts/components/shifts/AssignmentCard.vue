@@ -77,8 +77,8 @@ const assignmentUrl = "/shifts/assignment/" + props.shiftAssignment.id;
           >assigned until {{ to.toLocaleString(DateTime.DATE_SHORT) }}</span
         >
         <span v-if="from > DateTime.now() && to"
-          >assigned from {{ from.toLocaleString(DateTime.DATE_SHORT) }} to
-          {{ to.toLocaleString(DateTime.DATE_SHORT) }} </span
+          >assigned from {{ from.toLocaleString(DateTime.DATETIME_MED) }} to
+          {{ to.toLocaleString(DateTime.DATETIME_MED) }} </span
         >)
       </p>
       <p v-if="shiftAssignment.shifts_status != ItemStatus.PUBLISHED">

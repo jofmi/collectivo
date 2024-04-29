@@ -102,7 +102,8 @@ function setTitle() {
     :shifts-slot="assignment.shifts_slot"
     :assignment="assignment"
     @assignment-updated="() => loadAssignment()"
-  ></ShiftsAssignmentModal>
+  />
+
   <CollectivoContainer>
     <h1>Upcoming occurrences within this assignment</h1>
     <ShiftsOccurrenceCard

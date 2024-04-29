@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { createItem, readItems } from "@directus/sdk";
+import { createItem, readItems, updateItem } from "@directus/sdk";
 import showShiftToast from "~/composables/toast";
 import { DateTime } from "luxon";
 import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
 import OccurrencesPreview from "~/components/shifts/Assignment/OccurrencesPreview.vue";
-import { getNextOccurrences } from "~/composables/shifts";
+import { fromToOverlaps, getNextOccurrences } from "~/composables/shifts";
 import {
   getOccurrenceType,
   OccurrenceType,
 } from "~/composables/occurrenceType";
+import { capAssignmentToFirstAndLastIncludedOccurrence } from "~/composables/assignments";
 
 const props = defineProps({
   shiftsSlot: {
@@ -89,12 +90,16 @@ async function onCreate() {
   loading.value = true;
 
   const assignment: ShiftsAssignment = {
-    shifts_slot: shiftsSlot.value.id,
+    shifts_slot: shiftsSlot.value,
     shifts_user: user.value.data.id,
     shifts_status: ItemStatus.PUBLISHED,
-    shifts_from: from.value!.toISODate()!,
-    shifts_to: to.value?.toISODate() ?? undefined,
+    shifts_from: from.value!.toISO()!,
+    shifts_to: to.value?.toISO() ?? undefined,
   };
+
+  capAssignmentToFirstAndLastIncludedOccurrence(assignment);
+
+  assignment.shifts_slot = shiftsSlot.value.id;
 
   directus
     .request(createItem("shifts_assignments", assignment))
@@ -120,11 +125,26 @@ async function onUpdate() {
 
   loading.value = true;
 
-  props.assignment!.shifts_from = from.value!.toISODate() as string;
-  props.assignment!.shifts_to = to.value!.toISODate() as string;
+  if (!props.assignment) {
+    throw new Error(
+      "Assignment must be set in order to update it. Did you mean to create a new assignment?",
+    );
+  }
+
+  const assignment = props.assignment;
+  assignment.shifts_from = from.value!.toISO() as string;
+WTF CAN'T GET STUFF TO WORK'
+  assignment.shifts_to = to.value ? (to.value.toISO() as string) : undefined;
+
+  capAssignmentToFirstAndLastIncludedOccurrence(assignment);
 
   directus
-    .request(createItem("shifts_assignments", props.assignment!))
+    .request(
+      updateItem("shifts_assignments", assignment.id!, {
+        shifts_from: assignment.shifts_from,
+        shifts_to: assignment.shifts_to,
+      }),
+    )
     .then((updatedAssignment) => {
       showShiftToast("Assignment updated", "", "success");
       emit("assignmentUpdated", updatedAssignment as ShiftsAssignment);
@@ -159,28 +179,70 @@ function reset() {
   showForm.value = true;
 }
 
-function confirmButtonEnabled() {
+function atLeastOneNewOccurrence() {
   if (!user.value.data) return false;
 
   const occurrences = getNextOccurrences(
     props.shiftsSlot.shifts_shift as ShiftsShift,
-    10,
+    to.value ? Infinity : 100,
+    from.value,
+    to.value,
   );
+
+  const validTypes = [
+    OccurrenceType.ASSIGNED_TO_CURRENT_USER_FROM_NEW_ASSIGNMENT,
+  ];
+
+  if (props.assignment) {
+    validTypes.push(
+      OccurrenceType.ASSIGNED_TO_CURRENT_USER_FROM_ALREADY_EXISTING_ASSIGNMENT,
+    );
+  }
 
   for (const occurrence of occurrences) {
     if (
-      getOccurrenceType(
-        occurrence,
-        assignments.value,
-        user.value.data.id,
-        from.value,
-        to.value,
-      ) == OccurrenceType.ASSIGNED_TO_CURRENT_USER_FROM_NEW_ASSIGNMENT
+      validTypes.includes(
+        getOccurrenceType(
+          occurrence,
+          assignments.value,
+          user.value.data.id,
+          from.value,
+          to.value,
+        ),
+      )
     )
       return true;
   }
 
   return false;
+}
+
+function overlapWithOtherAssignment() {
+  if (!from.value) return true;
+
+  for (const assignment of assignments.value) {
+    if (props.assignment && props.assignment.id == assignment.id) continue;
+
+    if (
+      fromToOverlaps(
+        from.value,
+        DateTime.fromISO(assignment.shifts_from),
+        to.value,
+        assignment.shifts_to
+          ? DateTime.fromISO(assignment.shifts_to)
+          : undefined,
+        true,
+      )
+    ) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function confirmButtonEnabled() {
+  return atLeastOneNewOccurrence() && !overlapWithOtherAssignment();
 }
 </script>
 
@@ -200,15 +262,21 @@ function confirmButtonEnabled() {
           <p>To : {{ to ? formatDate(to) : "permanent" }}</p>
           <UTooltip :prevent="confirmButtonEnabled()">
             <template #text>
-              The date interval you specified does not include any new shift
-              occurrence.
+              <span v-if="overlapWithOtherAssignment()">
+                The date interval you specified overlaps with another
+                assignment.
+              </span>
+              <span v-if="!atLeastOneNewOccurrence()">
+                The date interval you specified does not include any new shift
+                occurrence.
+              </span>
             </template>
             <UButton
               label="Confirm"
               icon="i-heroicons-check"
               :loading="loading"
               :disabled="!confirmButtonEnabled()"
-              @click="assignment ? onUpdate : onCreate"
+              @click="assignment ? onUpdate() : onCreate()"
             />
           </UTooltip>
           <UButton

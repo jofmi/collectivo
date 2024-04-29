@@ -18,7 +18,7 @@ export function getOccurrenceType(
   const activeAssignment = getActiveAssignment(assignments, occurrence.start);
 
   const occurrenceIsWithinNewAssignment =
-    from && isFromToActive(from, to, occurrence.start);
+    from && isFromToActive(from, to, occurrence.start, true);
 
   if (activeAssignment) {
     if (typeof activeAssignment.shifts_user == "string") {

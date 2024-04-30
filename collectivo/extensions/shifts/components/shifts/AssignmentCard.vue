@@ -6,6 +6,7 @@ import {
 } from "~/composables/shifts";
 import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
 import { getStatusColor } from "~/composables/colors";
+import { isThereAFutureOccurrenceWithinThatAssignment } from "~/composables/assignments";
 
 const props = defineProps({
   shiftAssignment: {
@@ -77,8 +78,8 @@ const assignmentUrl = "/shifts/assignment/" + props.shiftAssignment.id;
           >assigned until {{ to.toLocaleString(DateTime.DATE_SHORT) }}</span
         >
         <span v-if="from > DateTime.now() && to"
-          >assigned from {{ from.toLocaleString(DateTime.DATETIME_MED) }} to
-          {{ to.toLocaleString(DateTime.DATETIME_MED) }} </span
+          >assigned from {{ from.toLocaleString(DateTime.DATE_SHORT) }} to
+          {{ to.toLocaleString(DateTime.DATE_SHORT) }} </span
         >)
       </p>
       <p v-if="shiftAssignment.shifts_status != ItemStatus.PUBLISHED">
@@ -91,7 +92,7 @@ const assignmentUrl = "/shifts/assignment/" + props.shiftAssignment.id;
       <UAlert
         v-if="
           isShiftDurationModelActive(shiftAssignment) &&
-          !isNextOccurrenceWithinAssignment(shiftAssignment)
+          !isThereAFutureOccurrenceWithinThatAssignment(shiftAssignment)
         "
         title="Warning"
         description="This assignment is still shown because it is still active, but the next

@@ -5,7 +5,7 @@ import {
   shiftToRRule,
 } from "~/composables/shifts";
 
-export const isNextOccurrenceWithinAssignment = (
+export const isThereAFutureOccurrenceWithinThatAssignment = (
   assignment: ShiftsAssignment,
 ): boolean => {
   if (typeof assignment.shifts_slot == "number") {
@@ -16,7 +16,10 @@ export const isNextOccurrenceWithinAssignment = (
     throw new Error("assignment.shifts_slot.shifts_shift field must be loaded");
   }
 
-  const nextOccurrence = getNextOccurrence(assignment.shifts_slot.shifts_shift);
+  const nextOccurrence = getNextOccurrence(
+    assignment.shifts_slot.shifts_shift,
+    DateTime.fromISO(assignment.shifts_from),
+  );
 
   return (
     !!nextOccurrence &&
@@ -88,34 +91,25 @@ export const capAssignmentToFirstAndLastIncludedOccurrence = (
   const rrule = shiftToRRule(assignment.shifts_slot.shifts_shift);
 
   const firstOccurrenceWithinAssignment = rrule.after(
-    DateTime.fromISO(assignment.shifts_from).toJSDate(),
+    DateTime.fromISO(assignment.shifts_from).startOf("day").toJSDate(),
   );
 
   if (firstOccurrenceWithinAssignment) {
     assignment.shifts_from = DateTime.fromJSDate(
       firstOccurrenceWithinAssignment,
-    )
-      .startOf("day")
-      .toISO()!;
+    ).toISO()!;
   }
 
-  console.log("CAPPING");
   if (!assignment.shifts_to) return;
-  console.log("CAPPING 2");
 
   const lastOccurrenceWithinAssignment = rrule.before(
-    DateTime.fromISO(assignment.shifts_to).toJSDate(),
+    DateTime.fromISO(assignment.shifts_to).endOf("day").toJSDate(),
     true,
   );
 
-  console.log(lastOccurrenceWithinAssignment);
-
   if (!lastOccurrenceWithinAssignment) return;
-  console.log("CAPPING 3");
 
   assignment.shifts_to = DateTime.fromJSDate(lastOccurrenceWithinAssignment)
     .endOf("day")
     .toISO()!;
-
-  console.log(assignment.shifts_to);
 };

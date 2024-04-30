@@ -9,6 +9,7 @@ import { getUserLogs, getUserScore } from "~/composables/shift_logs";
 import { ShiftLogType } from "~/server/utils/ShiftLogType";
 import showShiftToast from "~/composables/toast";
 import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
+import { isThereAFutureOccurrenceWithinThatAssignment } from "~/composables/assignments";
 
 setCollectivoTitle("My shifts");
 const directus = useDirectus();
@@ -68,7 +69,7 @@ function loadAssignments(user: CollectivoUser) {
         if (
           (isShiftDurationModelActive(assignment) || from > DateTime.now()) &&
           assignment.shifts_status == ItemStatus.PUBLISHED &&
-          isNextOccurrenceWithinAssignment(assignment)
+          isThereAFutureOccurrenceWithinThatAssignment(assignment)
         ) {
           activeAndFutureAssignments.value.push(assignment);
         } else {

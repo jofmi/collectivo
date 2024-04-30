@@ -133,7 +133,6 @@ async function onUpdate() {
 
   const assignment = props.assignment;
   assignment.shifts_from = from.value!.toISO() as string;
-WTF CAN'T GET STUFF TO WORK'
   assignment.shifts_to = to.value ? (to.value.toISO() as string) : undefined;
 
   capAssignmentToFirstAndLastIncludedOccurrence(assignment);
@@ -189,27 +188,23 @@ function atLeastOneNewOccurrence() {
     to.value,
   );
 
-  const validTypes = [
-    OccurrenceType.ASSIGNED_TO_CURRENT_USER_FROM_NEW_ASSIGNMENT,
-  ];
+  let filteredAssignments = assignments.value;
 
   if (props.assignment) {
-    validTypes.push(
-      OccurrenceType.ASSIGNED_TO_CURRENT_USER_FROM_ALREADY_EXISTING_ASSIGNMENT,
-    );
+    filteredAssignments = filteredAssignments.filter((assignment) => {
+      return assignment.id != props.assignment!.id;
+    });
   }
 
   for (const occurrence of occurrences) {
     if (
-      validTypes.includes(
-        getOccurrenceType(
-          occurrence,
-          assignments.value,
-          user.value.data.id,
-          from.value,
-          to.value,
-        ),
-      )
+      getOccurrenceType(
+        occurrence,
+        filteredAssignments,
+        user.value.data.id,
+        from.value,
+        to.value,
+      ) == OccurrenceType.ASSIGNED_TO_CURRENT_USER_FROM_NEW_ASSIGNMENT
     )
       return true;
   }

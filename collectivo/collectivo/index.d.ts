@@ -104,7 +104,7 @@ declare global {
   interface CollectivoFormFieldBase {
     order: number;
     width?: "lg" | "md" | "sm";
-    conditions?: FormCondition[];
+    conditions?: CollectivoFormCondition[];
     _visible?: Ref<boolean>;
   }
 
@@ -176,10 +176,10 @@ declare global {
     label: string;
   }
 
-  interface FormCondition {
+  interface CollectivoFormCondition {
     type?: "==" | "authenticated" | "notAuthenticated";
-    key: string;
-    value: string | number | boolean;
+    key?: string;
+    value?: string | number | boolean;
     // TODO: Add operator?: "==" | "!=" | ">" | "<" | ">=" | "<=";
   }
 

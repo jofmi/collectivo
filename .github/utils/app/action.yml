@@ -42,7 +42,7 @@ runs:
 
     - name: Install dependencies
       shell: bash
-      run: pnpm install
+      run: pnpm install --no-frozen-lockfile
 
     - name: Build
       if: inputs.build == 'true'

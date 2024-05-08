@@ -142,7 +142,13 @@ export default defineEventHandler(async (event) => {
       );
     }
 
-    if ("password" in body.payload && body.payload.password) {
+    // Update keycloak user password
+    // Only if password is not masked (only stars)
+    if (
+      "password" in body.payload &&
+      body.payload.password &&
+      !/^[*]+$/.test(body.payload.password)
+    ) {
       await keycloak.users.resetPassword({
         id: kc_user_id,
         credential: {

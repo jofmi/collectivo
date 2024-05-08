@@ -1,6 +1,6 @@
 {
   "name": "@collectivo/collectivo",
-  "version": "0.2.10",
+  "version": "0.3.0",
   "description": "Collectivo is a modular system for community plattforms.",
   "type": "module",
   "license": "AGPL-3.0",

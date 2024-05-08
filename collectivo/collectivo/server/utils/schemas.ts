@@ -101,8 +101,9 @@ export class ExtensionSchema {
   createNuxtHook = async (
     trigger: NestedPartial<DirectusFlow<any>>,
     path: string,
+    method?: string,
   ) => {
-    createNuxtHook(this, trigger, path);
+    createNuxtHook(this, trigger, path, method);
   };
 
   apply = async () => {
@@ -424,6 +425,7 @@ async function createNuxtHook(
   schema: ExtensionSchema,
   trigger: NestedPartial<DirectusFlow<any>>,
   path: string,
+  method?: string,
 ) {
   schema.flows.push({
     flow: trigger,
@@ -437,7 +439,7 @@ async function createNuxtHook(
           key: "postToNuxtAPI",
           type: "request",
           options: {
-            method: "POST",
+            method: method ?? "POST",
             url: "{{$env.COLLECTIVO_API_URL}}/" + path,
             headers: [
               {

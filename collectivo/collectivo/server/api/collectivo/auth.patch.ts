@@ -21,6 +21,7 @@ async function useKeycloak() {
 // Update keycloak user
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
+  console.log("update auth called");
 
   if (config.public.authService !== "keycloak") {
     return;
@@ -75,7 +76,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Set external identifier to match email
-    if (email != extid) {
+    if (user.id && email != extid) {
       await directus.request(
         updateUser(user.id, { external_identifier: user.email }),
       );

@@ -16,10 +16,12 @@ async function getUserID(event: any) {
   const directusUser = createDirectus(config.public.directusUrl).with(rest());
 
   if (token) {
+    const tokenValue = token.split("directus_session_token=")[1].split(";")[0];
+
     try {
       const user = await directusUser.request(
         withToken(
-          token.replace("directus_session_token=", ""),
+          tokenValue,
           readMe({
             fields: ["id", "email"],
           }),
@@ -29,6 +31,7 @@ async function getUserID(event: any) {
       console.log("Existing user: " + user.email);
       return user.id;
     } catch (e) {
+      console.log("Unauthenticated");
       return undefined;
     }
   }

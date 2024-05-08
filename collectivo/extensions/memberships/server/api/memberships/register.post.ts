@@ -169,10 +169,6 @@ async function registerMembership(body: any, userID: string | undefined) {
           statusMessage: "User already exists (Keycloak)",
         });
       }
-
-      delete userData.password;
-      userData.provider = "keycloak";
-      userData.external_identifier = userData.email;
     }
   }
 
@@ -211,42 +207,6 @@ async function registerMembership(body: any, userID: string | undefined) {
   }
 
   console.log("Membership created: " + membership.id);
-
-  // Create keycloak user & set password
-  if (!isAuthenticated && config.public.authService == "keycloak") {
-    let kcUser = undefined;
-
-    try {
-      kcUser = await keycloak.users.create({
-        enabled: true,
-        username: userData.email,
-        email: userData.email,
-        firstName: userData.first_name,
-        lastName: userData.last_name,
-        emailVerified: false,
-      });
-    } catch (e) {
-      await directus.request(deleteItem("memberships", membership.id));
-      await directus.request(deleteUser(userID!));
-      throw e;
-    }
-
-    try {
-      await keycloak.users.resetPassword({
-        id: kcUser.id,
-        credential: {
-          temporary: false,
-          type: "password",
-          value: user_password,
-        },
-      });
-    } catch (e) {
-      await directus.request(deleteItem("memberships", membership.id));
-      await directus.request(deleteUser(userID!));
-      await keycloak.users.del({ id: kcUser.id });
-      throw e;
-    }
-  }
 
   return {
     status: 201,

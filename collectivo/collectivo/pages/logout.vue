@@ -33,9 +33,9 @@ if (config.public.authService === "keycloak") {
   } catch (error) {
     console.error("Failed to log out from Keycloak:", error);
   }
+} else {
+  reloadNuxtApp({ path: "/" });
 }
-
-reloadNuxtApp({ path: "/" });
 </script>
 
 <template>

@@ -20,8 +20,6 @@ async function useKeycloak() {
 
 // Update keycloak user
 export default defineEventHandler(async (event) => {
-  console.log("api/collectivo/auth.path.ts called");
-
   const config = useRuntimeConfig();
 
   if (config.public.authService !== "keycloak") {
@@ -36,7 +34,6 @@ export default defineEventHandler(async (event) => {
   const isDelete = body.event === "users.delete";
 
   let user: any = {};
-  console.log(body);
   body.keys = body.keys || [body.key];
 
   if (isDelete) {
@@ -44,6 +41,8 @@ export default defineEventHandler(async (event) => {
   }
 
   for (const key of body.keys) {
+    // Get existing user
+    // Error if user does not exist or has no email (deletion is still allowed)
     if (!isCreate) {
       user = await directus.request(
         readUser(key, {
@@ -53,7 +52,6 @@ export default defineEventHandler(async (event) => {
 
       if (!user || !user.email) {
         if (isDelete) {
-          // Then i cannot delete but also dont throw error
           return;
         }
 
@@ -61,27 +59,30 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    const provider = body.payload.provider || user.provider;
+    const email = body.payload.email || user.email;
+    let provider = body.payload.provider || user.provider;
+    let extid = body.payload.external_identifier || user.external_identifier;
 
+    // If new user is created, set provider to keycloak
+    if (isCreate) {
+      provider = "keycloak";
+      extid = email;
+    }
+
+    // If user is not connected to keycloak, do not sync
     if (provider !== "keycloak") {
-      // Do nothing
-      console.log("Do nothing");
       return;
     }
 
-    const email = body.payload.email || user.email;
-    const extid = body.payload.external_identifier || user.external_identifier;
-
+    // Set external identifier to match email
     if (email != extid) {
-      if (isCreate) {
-        throw new Error("Email and external_identifier do not match");
-      }
-
       await directus.request(
         updateUser(user.id, { external_identifier: user.email }),
       );
     }
 
+    // Find or create keycloak user
+    // Email has to be verified by user
     let kc_user_id = null;
 
     if (!isCreate) {
@@ -103,7 +104,7 @@ export default defineEventHandler(async (event) => {
     if (!kc_user_id) {
       const kc_user = await keycloak.users.create({
         email: email,
-        emailVerified: true,
+        emailVerified: false,
         username: email,
         enabled: true,
       });
@@ -111,13 +112,14 @@ export default defineEventHandler(async (event) => {
       kc_user_id = kc_user.id;
     }
 
+    // Update keycloak user
     if ("email" in body.payload) {
       await keycloak.users.update(
         { id: kc_user_id },
         {
           username: body.payload.email,
           email: body.payload.email,
-          emailVerified: true,
+          emailVerified: false,
         },
       );
     }

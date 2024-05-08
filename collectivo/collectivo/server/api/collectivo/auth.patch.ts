@@ -82,7 +82,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Find or create keycloak user
-    // Email has to be verified by user
+    // Email is always set to unverified
     let kc_user_id = null;
 
     if (!isCreate) {

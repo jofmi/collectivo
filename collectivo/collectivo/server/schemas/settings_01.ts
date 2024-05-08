@@ -104,12 +104,13 @@ for (const action of ["read"]) {
   }
 }
 
-const user_fields = ["first_name", "last_name", "email", "title"];
+const user_fields = ["first_name", "last_name", "email", "password", "title"];
 
 const editor_fields = [
   "first_name",
   "last_name",
   "email",
+  "password",
   "title",
   "description",
 ];

@@ -83,7 +83,12 @@ export default defineNuxtPlugin(() => {
       key: "email",
       type: "text",
       order: 103,
-      disabled: true,
+    },
+    {
+      label: "Password",
+      key: "password",
+      type: "password",
+      order: 104,
     },
   ];
 

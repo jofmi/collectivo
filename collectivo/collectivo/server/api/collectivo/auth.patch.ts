@@ -113,7 +113,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Update keycloak user
-    if ("email" in body.payload) {
+    if ("email" in body.payload && body.payload.email !== user.email) {
       await keycloak.users.update(
         { id: kc_user_id },
         {
@@ -142,7 +142,7 @@ export default defineEventHandler(async (event) => {
       );
     }
 
-    if ("password" in body.payload) {
+    if ("password" in body.payload && body.payload.password) {
       await keycloak.users.resetPassword({
         id: kc_user_id,
         credential: {

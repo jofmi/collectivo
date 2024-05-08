@@ -1,6 +1,6 @@
 {
   "name": "@collectivo/payments",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "An extension of collectivo to manage payments.",
   "type": "module",
   "license": "AGPL-3.0",

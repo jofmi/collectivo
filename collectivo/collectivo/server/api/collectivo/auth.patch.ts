@@ -81,7 +81,7 @@ export default defineEventHandler(async (event) => {
       );
     }
 
-    // Find or create keycloak user
+    // Find keycloak user with old email
     // Email is always set to unverified
     let kc_user_id = null;
 
@@ -89,7 +89,7 @@ export default defineEventHandler(async (event) => {
       const kc_users = await keycloak.users.find({
         first: 0,
         max: 1,
-        email: user.email,
+        email: user.email, // This is the old email
       });
 
       if (kc_users && kc_users.length > 0) {
@@ -101,6 +101,24 @@ export default defineEventHandler(async (event) => {
       }
     }
 
+    // If no keycloak user found, try to find by new email
+    if (!kc_user_id) {
+      const kc_users = await keycloak.users.find({
+        first: 0,
+        max: 1,
+        email: email, // This is the potentially new email
+      });
+
+      if (kc_users && kc_users.length > 0) {
+        kc_user_id = kc_users[0].id;
+      }
+
+      if (kc_user_id && isDelete) {
+        await keycloak.users.del({ id: kc_user_id });
+      }
+    }
+
+    // If still no keycloak user found, create new
     if (!kc_user_id) {
       const kc_user = await keycloak.users.create({
         email: email,

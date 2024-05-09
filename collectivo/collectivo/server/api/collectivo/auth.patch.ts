@@ -20,6 +20,15 @@ async function useKeycloak() {
 
 // Update keycloak user
 export default defineEventHandler(async (event) => {
+  try {
+    return await syncKeycloakUser(event);
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+});
+
+async function syncKeycloakUser(event: any) {
   const config = useRuntimeConfig();
   console.log("update auth called");
 
@@ -178,4 +187,4 @@ export default defineEventHandler(async (event) => {
       });
     }
   }
-});
+}

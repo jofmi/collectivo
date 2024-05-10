@@ -57,6 +57,17 @@ schema.fields = [
     meta: { interface: "input-multiline", sort: 20 },
   },
   {
+    collection: collection,
+    field: "tags_sync",
+    type: "text",
+    schema: {},
+    meta: {
+      interface: "input-multiline",
+      sort: 30,
+      note: "Synchronize this tag with Keycloak.",
+    },
+  },
+  {
     collection: "directus_users",
     field: "collectivo_tags_divider",
     type: "alias",

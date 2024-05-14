@@ -9,6 +9,12 @@ export default defineEventHandler(async (event) => {
     return;
   }
 
+  try {
+    await refreshDirectus();
+  } catch (e) {
+    logger.error("Failed to connect to Directus", e);
+  }
+
   verifyCollectivoApiToken(event);
   const body = await readBody(event);
   const directus = await useDirectusAdmin();

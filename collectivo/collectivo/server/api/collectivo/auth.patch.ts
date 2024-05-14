@@ -36,6 +36,12 @@ async function syncKeycloakUser(event: any) {
     return;
   }
 
+  try {
+    await refreshDirectus();
+  } catch (e) {
+    logger.error("Failed to connect to Directus", e);
+  }
+
   verifyCollectivoApiToken(event);
   const body = await readBody(event);
   const keycloak = await useKeycloak();

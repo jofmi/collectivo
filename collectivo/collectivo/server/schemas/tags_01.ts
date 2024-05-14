@@ -59,10 +59,11 @@ schema.fields = [
   {
     collection: collection,
     field: "tags_sync",
-    type: "text",
+    type: "boolean",
     schema: {},
     meta: {
-      interface: "input-multiline",
+      interface: "boolean",
+      special: ["cast-boolean"],
       sort: 30,
       note: "Synchronize this tag with Keycloak.",
     },
@@ -148,3 +149,21 @@ for (const action of ["read", "update", "create", "delete"]) {
     });
   }
 }
+
+schema.createNuxtHook(
+  {
+    name: "collectivo_sync_tags",
+    icon: "bolt",
+    color: null,
+    description: null,
+    status: "active",
+    accountability: "all",
+    trigger: "event",
+    options: {
+      type: "filter",
+      scope: ["items.create", "items.update", "items.delete"],
+      collections: ["collectivo_tags_directus_users"],
+    },
+  },
+  "api/collectivo/roles",
+);

@@ -26,7 +26,7 @@ class CollectivoTileStore {
       // directus typing seems to be faulty with "fields: ["*.*"]"
       this.data = await directus.request(
         readItems("collectivo_tiles", {
-          fields: ["*.*"],
+          fields: ["*", "tiles_buttons.*"],
           filter: {
             tiles_status: {
               _eq: "published",

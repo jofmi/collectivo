@@ -12,6 +12,7 @@ export const useCollectivoUser = () => {
 class CollectivoUserStore {
   data: CollectivoUser | null;
   fields: CollectivoFormField[];
+  tags: number[];
   isAuthenticated: boolean;
   saving: boolean;
   loading: boolean;
@@ -20,6 +21,7 @@ class CollectivoUserStore {
   constructor() {
     this.data = null;
     this.fields = [];
+    this.tags = [];
     this.isAuthenticated = false;
     this.saving = false;
     this.loading = false;
@@ -33,10 +35,14 @@ class CollectivoUserStore {
 
     this.data = (await directus.request(
       readMe({
-        fields: ["*", "role.*"],
+        fields: ["*", "role.*", "collectivo_tags.collectivo_tags_id"],
       }),
     )) as CollectivoUser;
 
+    this.tags = [];
+    for (const field of this.data.collectivo_tags) {
+      this.tags.push(field.collectivo_tags_id);
+    }
     this.loading = false;
     return this;
   }

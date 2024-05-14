@@ -8,20 +8,42 @@ setCollectivoTitle("Dashboard");
 import { parse } from "marked";
 
 const tiles = useCollectivoTiles();
+const user = useCollectivoUser();
 
+user.value.load();
 tiles.value.load();
+
+function getFilteredTiles(tiles) {
+  return tiles.filter((tile) => {
+    let display = true;
+    let display2 = true;
+    if (tile.tiles_tag_required) {
+      display = user.value.tags.includes(tile.tiles_tag_required);
+    }
+    if (tile.tiles_tag_blocked) {
+      display2 = !user.value.tags.includes(tile.tiles_tag_blocked);
+    }
+    return display && display2;
+  });
+}
 </script>
 
 <template>
-  <div class="gap-5 columns-1 md:columns-2 xl:columns-3 2xl:columns-4">
+  {{ user.tags }}
+  <div
+    class="gap-5 columns-1 md:columns-2 xl:columns-3 2xl:columns-4"
+    v-if="user.data && tiles.data"
+  >
     <CollectivoCard
-      v-for="tile in tiles.data"
+      v-for="tile in getFilteredTiles(tiles.data)"
       :key="tile.id"
       class="mb-5"
       :title="tile.tiles_name"
       :color="tile.tiles_color"
     >
       <template #content>
+        TAG REQUIRED {{ tile.tiles_tag_required }} TAG BLOCKED
+        {{ tile.tiles_tag_blocked }}
         <div v-if="tile.tiles_content" v-html="parse(tile.tiles_content)"></div>
         <div v-if="tile.tiles_buttons" class="flex flex-wrap gap-2 pt-3">
           <template v-for="button in tile.tiles_buttons" :key="button.id">

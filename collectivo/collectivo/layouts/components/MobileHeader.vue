@@ -24,13 +24,15 @@ const headerClass = computed(() =>
 </script>
 
 <template>
-  <div :class="headerClass">
-    <div class="mobile-page-title">
-      {{ t(pageTitle) }}
+  <div>
+    <div :class="headerClass">
+      <div class="mobile-page-title">
+        {{ t(pageTitle) }}
+      </div>
+      <div class="pt-[1px]"><ProfileMenu /></div>
     </div>
-    <div class="pt-[1px]"><ProfileMenu /></div>
+    <div class="h-header" />
   </div>
-  <div class="h-header"></div>
 </template>
 
 <style lang="scss" scoped>

@@ -1,22 +1,25 @@
-import {
-  createCollection,
-  createField,
+import type {
   DirectusCollection,
   DirectusField,
   NestedPartial,
+  DirectusRelation,
+  DirectusPermission,
+  DirectusRole,
+  DirectusTranslation,
+  DirectusOperation,
+} from "@directus/sdk";
+import {
+  createCollection,
+  createField,
   updateCollection,
   updateField,
-  DirectusRelation,
   createRelation,
   updateRelation,
   readRoles,
-  DirectusPermission,
   createPermission,
   updatePermission,
   readPermissions,
   createRole,
-  DirectusRole,
-  DirectusTranslation,
   createTranslation,
   updateTranslation,
   readTranslations,
@@ -24,11 +27,10 @@ import {
   createFlow,
   updateFlow,
   readOperations,
-  DirectusOperation,
   createOperation,
   updateOperation,
 } from "@directus/sdk";
-import { DirectusFlowWrapper } from "./schemas";
+import type { DirectusFlowWrapper } from "./schemas";
 
 export async function createOrUpdateDirectusCollection(
   collection: NestedPartial<DirectusCollection<any>>,
@@ -194,7 +196,7 @@ export async function createOrUpdateDirectusRole(
   }
 
   const directus = await useDirectusAdmin();
-  // @ts-ignore
+  // @ts-expect-error
   let roleDb;
 
   try {

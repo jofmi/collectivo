@@ -1,4 +1,5 @@
-import { DirectusUser, DirectusRole } from "@directus/sdk";
+import type { DirectusRole } from "@directus/sdk";
+import { DirectusUser } from "@directus/sdk";
 
 declare global {
   // Database schema
@@ -22,6 +23,7 @@ declare global {
     last_name: string;
     email: string;
     role?: DirectusRole;
+    collectivo_tags: { collectivo_tags_id: number }[];
     [key: string]: string | undefined;
   }
 
@@ -40,6 +42,8 @@ declare global {
     tiles_buttons: CollectivoTileButton[];
     tiles_color: string;
     tiles_component: string;
+    tiles_tag_required: number | null;
+    tiles_tag_blocked: number | null;
   }
 
   interface CollectivoTileButton {

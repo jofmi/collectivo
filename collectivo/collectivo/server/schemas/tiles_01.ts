@@ -189,6 +189,32 @@ schema.fields = [
   },
 ];
 
+schema.createForeignKey("collectivo_tiles", "collectivo_tags", {
+  fieldKey: {
+    field: "tiles_tag_required",
+    meta: {
+      translations: [
+        { language: "en-US", translation: "Tag required" },
+        { language: "de-DE", translation: "Notwendiger tag" },
+      ],
+      note: "The tile will only be shown if this tag is present.",
+    },
+  },
+});
+
+schema.createForeignKey("collectivo_tiles", "collectivo_tags", {
+  fieldKey: {
+    field: "tiles_tag_blocked",
+    meta: {
+      translations: [
+        { language: "en-US", translation: "Tag blocked" },
+        { language: "de-DE", translation: "Blockierter tag" },
+      ],
+      note: "The tile will not be shown if this tag is present.",
+    },
+  },
+});
+
 schema.createForeignKey("collectivo_tiles_buttons", "collectivo_tiles", {
   fieldKey: {
     field: "tiles_tile",

@@ -19,7 +19,7 @@ const publicMenuItems = Object.values(menus.value.main_public).sort(
 
 <template>
   <div class="sidebar">
-    <div class="sidebar__above"></div>
+    <div class="sidebar__above" />
     <div class="sidebar__main">
       <div class="sidebar__main__top">
         <Logo />

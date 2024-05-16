@@ -39,5 +39,5 @@ if (config.public.authService === "keycloak") {
 </script>
 
 <template>
-  <div></div>
+  <div />
 </template>

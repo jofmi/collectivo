@@ -1,6 +1,6 @@
 <template>
   <div class="cv-container">
-    <slot></slot>
+    <slot />
   </div>
 </template>
 

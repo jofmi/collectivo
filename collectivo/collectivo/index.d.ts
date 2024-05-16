@@ -22,6 +22,7 @@ declare global {
     last_name: string;
     email: string;
     role?: DirectusRole;
+    collectivo_tags: { collectivo_tags_id: number }[];
     [key: string]: string | undefined;
   }
 

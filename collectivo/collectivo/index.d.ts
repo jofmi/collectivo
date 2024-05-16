@@ -40,6 +40,8 @@ declare global {
     tiles_buttons: CollectivoTileButton[];
     tiles_color: string;
     tiles_component: string;
+    tiles_tag_required: number | null;
+    tiles_tag_blocked: number | null;
   }
 
   interface CollectivoTileButton {

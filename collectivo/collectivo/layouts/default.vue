@@ -76,7 +76,7 @@ const sidebarWidthLg = String(config.collectivo.sidebarWidth + 90) + "px";
           <ProfileMenu />
         </div>
       </div>
-      <slot></slot>
+      <slot />
     </div>
     <MobileMenu />
   </div>

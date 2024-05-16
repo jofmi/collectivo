@@ -1,4 +1,4 @@
-import {
+import type {
   DirectusFlow,
   DirectusOperation,
   DirectusPermission,
@@ -400,7 +400,7 @@ export async function createM2ARelation(
       one_field: null,
       sort_field: null,
       one_deselect_action: "nullify",
-      // @ts-ignore
+      // @ts-expect-error
       one_allowed_collections: ACollections,
       one_collection_field: "collection",
       junction_field: m2aCollectionIdFieldName,

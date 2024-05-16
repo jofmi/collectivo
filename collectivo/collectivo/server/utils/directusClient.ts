@@ -1,11 +1,9 @@
-import {
-  createDirectus,
-  authentication,
-  rest,
+import type {
   DirectusClient,
   AuthenticationClient,
   RestClient,
 } from "@directus/sdk";
+import { createDirectus, authentication, rest } from "@directus/sdk";
 
 // Shared server variable
 let directus: DirectusClient<any> & AuthenticationClient<any> & RestClient<any>;

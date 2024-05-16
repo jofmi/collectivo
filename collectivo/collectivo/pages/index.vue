@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import { parse } from "marked";
+
 definePageMeta({
   middleware: ["auth"],
 });
 
 setCollectivoTitle("Dashboard");
-
-import { parse } from "marked";
 
 const tiles = useCollectivoTiles();
 const user = useCollectivoUser();
@@ -30,8 +30,8 @@ function getFilteredTiles(tiles: CollectivoTile[]) {
 
 <template>
   <div
-    class="gap-5 columns-1 md:columns-2 xl:columns-3 2xl:columns-4"
     v-if="user.data && tiles.data"
+    class="gap-5 columns-1 md:columns-2 xl:columns-3 2xl:columns-4"
   >
     <CollectivoCard
       v-for="tile in getFilteredTiles(tiles.data)"
@@ -41,7 +41,7 @@ function getFilteredTiles(tiles: CollectivoTile[]) {
       :color="tile.tiles_color"
     >
       <template #content>
-        <div v-if="tile.tiles_content" v-html="parse(tile.tiles_content)"></div>
+        <div v-if="tile.tiles_content" v-html="parse(tile.tiles_content)" />
         <div v-if="tile.tiles_buttons" class="flex flex-wrap gap-2 pt-3">
           <template v-for="button in tile.tiles_buttons" :key="button.id">
             <a

@@ -6,8 +6,7 @@ import {
   readUsers,
   deleteUser,
   deleteItem,
-} from "@directus/sdk";
-import { createDirectus, readMe, withToken, rest } from "@directus/sdk";
+ createDirectus, readMe, withToken, rest } from "@directus/sdk";
 import KcAdminClient from "@keycloak/keycloak-admin-client";
 
 async function getUserID(event: any) {

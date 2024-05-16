@@ -1,4 +1,5 @@
-import { DirectusUser, DirectusRole } from "@directus/sdk";
+import type { DirectusRole } from "@directus/sdk";
+import { DirectusUser } from "@directus/sdk";
 
 declare global {
   // Database schema

@@ -20,7 +20,7 @@ const renderer = {
 };
 
 marked.use({
-  // @ts-ignore
+  // @ts-expect-error
   renderer,
 });
 
@@ -287,7 +287,7 @@ async function fillOutAll() {
             v-if="input.description"
             class="leading-5 py-2 md-description"
             v-html="parse(t(input.description))"
-          ></div>
+          />
         </div>
         <div v-else-if="input.type === 'description'" class="form-field-lg">
           <UFormGroup :label="input.label ? t(input.label) : undefined">
@@ -298,7 +298,7 @@ async function fillOutAll() {
               v-else
               class="md-description md-small"
               v-html="parse(t(input.description))"
-            ></div>
+            />
           </UFormGroup>
         </div>
         <component
@@ -307,9 +307,8 @@ async function fillOutAll() {
           :class="input.width ? `form-field-${input.width}` : 'form-field-lg'"
           :input="input"
           :state="state"
-        >
-        </component>
-        <div v-else-if="input.type === 'clear'" class="basis-full"></div>
+        />
+        <div v-else-if="input.type === 'clear'" class="basis-full" />
         <div
           v-else
           :class="input.width ? `form-field-${input.width}` : 'form-field-md'"
@@ -325,7 +324,7 @@ async function fillOutAll() {
                 v-if="input.description"
                 class="md-description md-small"
                 v-html="parse(t(input.description))"
-              ></div>
+              />
             </template>
             <template #error="{ error }">
               <div v-if="error && typeof error === 'string'">
@@ -429,14 +428,14 @@ async function fillOutAll() {
               <CollectivoFormDatePicker
                 v-if="input.useDatePicker"
                 v-model="state[input.key]"
-              ></CollectivoFormDatePicker>
+              />
               <CollectivoFormDate
                 v-else
                 v-model="state[input.key]"
                 :max-years-future="input.maxYearsFuture"
                 :max-years-past="input.maxYearsPast"
                 :disabled="input.disabled"
-              ></CollectivoFormDate>
+              />
             </template>
             <template v-else-if="input.type === 'checkbox'">
               <div class="form-box flex flex-row">
@@ -449,7 +448,7 @@ async function fillOutAll() {
                   v-if="input.content"
                   class="md-description md-small"
                   v-html="parse(t(input.content))"
-                ></span>
+                />
               </div>
             </template>
             <template v-else-if="input.type === 'custom-input'">
@@ -459,7 +458,7 @@ async function fillOutAll() {
         </div>
       </template>
     </template>
-    <div class="basis-full"></div>
+    <div class="basis-full" />
     <div class="form-field mt-2">
       <UButton
         v-if="props.submit"

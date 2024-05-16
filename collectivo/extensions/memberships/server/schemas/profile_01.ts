@@ -35,7 +35,7 @@ schema.fields = [
         { language: "en-US", translation: "Organization" },
       ],
       conditions: [
-        // @ts-ignore
+        // @ts-expect-error
         {
           name: "Hide if not organization",
           rule: { _and: [{ memberships_is_organization: { _eq: false } }] },

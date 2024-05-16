@@ -99,7 +99,7 @@ async function assignRole(body: any, deleteKey?: any) {
 
   console.log("role", roleName);
 
-  var role: any = await keycloak.roles.findOneByName({ name: roleName });
+  let role: any = await keycloak.roles.findOneByName({ name: roleName });
 
   if (!role) {
     console.log("Creating role", roleName);

@@ -29,7 +29,7 @@ export default defineNuxtConfig({
     preference: "light",
   },
   hooks: {},
-  modules: ["@nuxt/ui", "@nuxtjs/i18n", "@nuxtjs/google-fonts"],
+  modules: ["@nuxt/ui", "@nuxtjs/i18n", "@nuxtjs/google-fonts", "@nuxt/eslint"],
   i18n: {
     lazy: false, // TODO: Lazy loading does not work with current switch
     strategy: "no_prefix",

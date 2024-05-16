@@ -60,7 +60,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     v-if="runtimeConfig.public.authService != 'keycloak'"
     class="w-64 mx-auto mt-32"
   >
-    <img :src="logoPath" alt="" class="mb-10 mx-auto max-h-24" >
+    <img :src="logoPath" alt="" class="mb-10 mx-auto max-h-24" />
     <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
       <UFormGroup label="Email" name="email">
         <UInput v-model="state.email" />

@@ -13,7 +13,7 @@ defineProps({
 <template>
   <div class="logo">
     <router-link v-if="logoPath" to="/" class="logo__image">
-      <img :src="logoPath" alt="" class="object-cover" >
+      <img :src="logoPath" alt="" class="object-cover" />
     </router-link>
     <!-- <div v-if="!hideLabel && logoLabel" class="logo__label">
       {{ logoLabel }}

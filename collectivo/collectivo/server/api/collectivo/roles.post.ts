@@ -1,6 +1,5 @@
 import { readItem, readUser } from "@directus/sdk";
 import KcAdminClient from "@keycloak/keycloak-admin-client";
-import { boolean } from "yup";
 
 async function useKeycloak() {
   const config = useRuntimeConfig();
@@ -35,23 +34,8 @@ export default defineEventHandler(async (event) => {
 
   verifyCollectivoApiToken(event);
   const body = await readBody(event);
-  const directus = await useDirectusAdmin();
   const isCreate = body.event === "collectivo_tags_directus_users.items.create";
-  const isUpdate = body.event === "collectivo_tags_directus_users.items.update";
   const isDelete = body.event === "collectivo_tags_directus_users.items.delete";
-
-  // Body { payload:
-  //   { directus_users_id: 'f97fc891-1af7-49ae-9982-6218d181e43b',
-  //     collectivo_tags_id: { id: 1 } },
-  //  event: 'collectivo_tags_directus_users.items.create',
-  //  collection: 'collectivo_tags_directus_users',
-  //  keys: [ undefined ] }
-
-  // DELETE
-  // Body { payload: [ 11, 12 ],
-  //   event: 'collectivo_tags_directus_users.items.delete',
-  //   collection: 'collectivo_tags_directus_users',
-  //   keys: [ undefined ] }
 
   body.keys = body.keys || [body.key];
   console.log("Body", body);

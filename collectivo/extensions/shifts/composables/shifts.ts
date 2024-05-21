@@ -102,42 +102,6 @@ export const shiftToRRule = (shift: ShiftsShift): RRule => {
   });
 };
 
-export const isShiftDurationModelActive = (
-  durationModel: { shifts_from: string; shifts_to?: string },
-  atDate?: DateTime,
-): boolean => {
-  return isFromToActive(
-    DateTime.fromISO(durationModel.shifts_from),
-    durationModel.shifts_to
-      ? DateTime.fromISO(durationModel.shifts_to)
-      : undefined,
-    atDate,
-    true,
-  );
-};
-
-export const isFromToActive = (
-  from: DateTime,
-  to?: DateTime,
-  atDate?: DateTime,
-  dateOnly = true,
-): boolean => {
-  if (!atDate) {
-    atDate = DateTime.now();
-  }
-
-  if (dateOnly) {
-    from = from.startOf("day");
-    to = to?.endOf("day");
-  }
-
-  if (from > atDate) {
-    return false;
-  }
-
-  return !(to && to < atDate);
-};
-
 export const fromToOverlaps = (
   from1: DateTime,
   from2: DateTime,

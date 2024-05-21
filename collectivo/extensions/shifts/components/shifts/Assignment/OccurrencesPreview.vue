@@ -5,6 +5,7 @@ import {
   getOccurrenceType,
   OccurrenceType,
 } from "~/composables/occurrenceType";
+import getAssigneeName from "~/utils/assignments/getAssigneeName";
 
 const props = defineProps({
   shiftsSlot: { type: Object as PropType<ShiftsSlot>, required: true },

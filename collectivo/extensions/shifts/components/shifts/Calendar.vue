@@ -73,8 +73,6 @@ async function updateEvents(from, to) {
     });
   }
 
-  console.log(events[0].shiftId);
-
   calendarOptions.value.events = events;
 }
 </script>

@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import { readItems } from "@directus/sdk";
-import {
-  getNextOccurrence,
-  isShiftDurationModelActive,
-} from "~/composables/shifts";
+import { getNextOccurrence } from "~/composables/shifts";
 import { DateTime } from "luxon";
 import { getUserLogs, getUserScore } from "~/composables/shift_logs";
 import { ShiftLogType } from "~/server/utils/ShiftLogType";
 import showShiftToast from "~/composables/toast";
 import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
-import { isThereAFutureOccurrenceWithinThatAssignment } from "~/composables/assignments";
+import isThereAFutureOccurrenceWithinThatAssignment from "~/utils/assignments/isThereAFutureOccurrenceWithinThatAssignment";
 
 setCollectivoTitle("My shifts");
 const directus = useDirectus();

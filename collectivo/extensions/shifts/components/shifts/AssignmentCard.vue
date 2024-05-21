@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { DateTime } from "luxon";
-import {
-  getNextOccurrence,
-  isShiftDurationModelActive,
-} from "~/composables/shifts";
+import { getNextOccurrence } from "~/composables/shifts";
 import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
 import { getStatusColor } from "~/composables/colors";
-import { isThereAFutureOccurrenceWithinThatAssignment } from "~/composables/assignments";
+import getAssigneeName from "~/utils/assignments/getAssigneeName";
+import isThereAFutureOccurrenceWithinThatAssignment from "~/utils/assignments/isThereAFutureOccurrenceWithinThatAssignment";
 
 const props = defineProps({
   shiftAssignment: {

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { getNextOccurrence } from "~/composables/shifts";
 import { getStatusColor } from "~/composables/colors";
+import getAssigneeName from "~/utils/assignments/getAssigneeName";
+import hasActivePermanentAssignment from "~/utils/assignments/hasActivePermanentAssignment";
 
 defineProps({
   shiftSlot: {

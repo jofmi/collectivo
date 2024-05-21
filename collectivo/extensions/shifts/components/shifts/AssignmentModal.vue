@@ -9,7 +9,7 @@ import {
   getOccurrenceType,
   OccurrenceType,
 } from "~/composables/occurrenceType";
-import { capAssignmentToFirstAndLastIncludedOccurrence } from "~/composables/assignments";
+import capAssignmentToFirstAndLastIncludedOccurrence from "~/utils/assignments/capAssignmentToFirstAndLastIncludedOccurrence";
 
 const props = defineProps({
   shiftsSlot: {

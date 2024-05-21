@@ -10,4 +10,5 @@ export default defineNuxtConfig({
     ],
   },
   ui: { icons: ["system-uicons"] },
+  modules: ["@nuxt/test-utils/module"],
 });

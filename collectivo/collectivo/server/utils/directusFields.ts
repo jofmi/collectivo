@@ -1,4 +1,4 @@
-import { DirectusField, NestedPartial } from "@directus/sdk";
+import type { DirectusField, NestedPartial } from "@directus/sdk";
 
 type PartialField = NestedPartial<DirectusField<any>>;
 

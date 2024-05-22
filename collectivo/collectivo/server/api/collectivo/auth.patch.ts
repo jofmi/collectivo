@@ -36,12 +36,21 @@ async function syncKeycloakUser(event: any) {
     return;
   }
 
+  try {
+    await refreshDirectus();
+  } catch (e) {
+    logger.error("Failed to connect to Directus", e);
+  }
+
   verifyCollectivoApiToken(event);
   const body = await readBody(event);
   const keycloak = await useKeycloak();
   const directus = await useDirectusAdmin();
   const isCreate = body.event === "users.create";
   const isDelete = body.event === "users.delete";
+
+  console.log("event is", body.event);
+  console.log("payload is", body);
 
   let user: any = {};
   body.keys = body.keys || [body.key];
@@ -59,6 +68,8 @@ async function syncKeycloakUser(event: any) {
           fields: ["id", "email", "provider", "external_identifier"],
         }),
       );
+
+      console.log("user:", user);
 
       if (!user || !user.email) {
         if (isDelete) {
@@ -130,6 +141,8 @@ async function syncKeycloakUser(event: any) {
 
     // If still no keycloak user found, create new
     if (!kc_user_id) {
+      console.log("creating new keycloak user");
+
       const kc_user = await keycloak.users.create({
         email: email,
         emailVerified: false,
@@ -142,12 +155,14 @@ async function syncKeycloakUser(event: any) {
 
     // Update keycloak user
     if ("email" in body.payload && body.payload.email !== user.email) {
+      console.log("updating email");
+
       await keycloak.users.update(
         { id: kc_user_id },
         {
           username: body.payload.email,
           email: body.payload.email,
-          emailVerified: false,
+          emailVerified: true, // to prevent loops
         },
       );
     }

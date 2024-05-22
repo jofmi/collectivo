@@ -11,11 +11,11 @@ const _ = defineProps({
 
 <template>
   <div :class="`card bg-${color ?? 'primary'}-50`">
-    <div :class="`card-corner bg-${color ?? 'primary'}-100`"></div>
+    <div :class="`card-corner bg-${color ?? 'primary'}-100`" />
     <p v-if="title" class="card__title">
       {{ title }}
     </p>
-    <slot name="content"></slot>
+    <slot name="content" />
   </div>
 </template>
 

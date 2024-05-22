@@ -1,8 +1,8 @@
 import { createItem, readItems, updateItem } from "@directus/sdk";
 import SettingsBaseMigration from "../schemas/settings_01";
 import ExtensionBaseMigration from "../schemas/extensions_01";
-import { ExtensionConfig } from "./extensions";
-import { ExtensionSchema } from "./schemas";
+import type { ExtensionConfig } from "./extensions";
+import type { ExtensionSchema } from "./schemas";
 
 // Run pending migrations for a set of extensions, based on db state
 export async function migrateAll(

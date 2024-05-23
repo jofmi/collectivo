@@ -3,6 +3,7 @@ import { ShiftUserType } from "~/server/utils/ShiftUserType";
 export default defineNuxtPlugin({
   name: "shifts-setup",
   setup() {
+    console.log("Setting up shifts plugin");
     addMenuItems();
     addProfileFields();
   },
@@ -12,7 +13,7 @@ function addMenuItems() {
   const menu = useCollectivoMenus();
 
   menu.value.main.push({
-    label: "My shifts",
+    label: "Shifts",
     icon: "i-heroicons-building-storefront",
     to: "/shifts/my_shifts",
     order: 90,

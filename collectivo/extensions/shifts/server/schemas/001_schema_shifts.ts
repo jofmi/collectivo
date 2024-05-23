@@ -10,13 +10,19 @@ export default schema;
 const shiftUserTypeDropdownChoices = [];
 
 for (const type of Object.values(ShiftUserType)) {
-  shiftUserTypeDropdownChoices.push({ text: type, value: type });
+  shiftUserTypeDropdownChoices.push({
+    text: "$t:" + type.toLowerCase(),
+    value: type,
+  });
 }
 
 const shiftLogTypeDropdownChoices = [];
 
 for (const type of Object.values(ShiftLogType)) {
-  shiftLogTypeDropdownChoices.push({ text: type, value: type });
+  shiftLogTypeDropdownChoices.push({
+    text: "$t:" + type.toLowerCase(),
+    value: type,
+  });
 }
 
 schema.collections = [
@@ -153,7 +159,7 @@ schema.fields = [
     collection: "directus_users",
     field: "shifts_user_type",
     type: "string",
-    schema: { is_nullable: false, default_value: ShiftUserType.TypeNotChosen },
+    schema: { is_nullable: true, default_value: ShiftUserType.Inactive },
     meta: {
       group: "shifts_group",
       interface: "select-dropdown",

@@ -65,7 +65,12 @@ async function updateEvents(from, to) {
 
   for (const occurrence of occurrences) {
     events.push({
-      title: occurrence.shift.shifts_name,
+      title:
+        occurrence.shift.shifts_name +
+        " - " +
+        occurrence.openSlots +
+        "/" +
+        occurrence.slots,
       start: occurrence.start.toJSDate(),
       end: occurrence.end.toJSDate(),
       allDay: false,

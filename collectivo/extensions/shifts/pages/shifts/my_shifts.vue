@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { readItems } from "@directus/sdk";
+import { readItems, updateItem } from "@directus/sdk";
 import {
   getNextOccurrence,
   isShiftDurationModelActive,
@@ -9,9 +9,10 @@ import { getUserLogs, getUserScore } from "~/composables/shift_logs";
 import { ShiftLogType } from "~/server/utils/ShiftLogType";
 import showShiftToast from "~/composables/toast";
 import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
-import { isThereAFutureOccurrenceWithinThatAssignment } from "~/composables/assignments";
+import { getNextAssignmentOccurence } from "~/composables/assignments";
 
-setCollectivoTitle("My shifts");
+const { t } = useI18n();
+setCollectivoTitle("Shifts");
 const directus = useDirectus();
 const user = useCollectivoUser();
 
@@ -22,10 +23,14 @@ const skillsUserLinks = ref<ShiftsSkillUserLink[]>([]);
 const skillNames = ref<string[]>([]);
 const score = ref("loading...");
 const logs = ref<ShiftsLog[]>([]);
+const isActive = ref(false);
+const isExempt = ref(false);
 
 user.value
   .load()
   .then((userStore) => {
+    isActive.value = userStore.data?.shifts_user_type != "INACTIVE";
+    isExempt.value = userStore.data?.shifts_user_type == "EXEMPT";
     loadAssignments(userStore.data!);
     loadUserShiftDetails(userStore.data!);
   })
@@ -69,7 +74,7 @@ function loadAssignments(user: CollectivoUser) {
         if (
           (isShiftDurationModelActive(assignment) || from > DateTime.now()) &&
           assignment.shifts_status == ItemStatus.PUBLISHED &&
-          isThereAFutureOccurrenceWithinThatAssignment(assignment)
+          !!getNextAssignmentOccurence(assignment)
         ) {
           activeAndFutureAssignments.value.push(assignment);
         } else {
@@ -110,6 +115,11 @@ function loadUserShiftDetails(user: CollectivoUser) {
 }
 
 function getUserSkillNames() {
+  if (skillsUserLinks.value.length === 0) {
+    skillsLoading.value = false;
+    return;
+  }
+
   directus
     .request(
       readItems("shifts_skills", {
@@ -130,41 +140,69 @@ function getUserSkillNames() {
 </script>
 
 <template>
-  <CollectivoContainer>
-    <h2>Status</h2>
-    <CollectivoCard>
-      <template #content>
-        <div v-if="user.data">
-          <p>My type : {{ user.data["shifts_user_type"] }}</p>
-          <p>
-            <span>My skills: </span>
-            <span v-if="skillsLoading">loading...</span>
-            <span v-else>
-              <span v-if="!skillNames.length">None</span>
-              <span v-for="(skillName, index) in skillNames" :key="skillName">
-                <span v-if="index !== 0">, </span>
-                <span>{{ skillName }}</span>
-              </span>
-            </span>
-          </p>
-          <p>
-            <span>My score: {{ score }}</span>
-          </p>
-        </div>
-      </template>
-    </CollectivoCard>
+  <CollectivoContainer v-if="user.data">
+    <h2>{{ t("Status") }}</h2>
+
+    <div>
+      <p>
+        {{ t("Type") }}: {{ t("t:" + user.data["shifts_user_type"] ?? "") }}
+      </p>
+      <p>
+        <span>{{ t("Skills") }}: </span>
+        <span v-if="skillsLoading">loading...</span>
+        <span v-else>
+          <span v-if="!skillNames.length">{{ t("None") }}</span>
+          <span v-for="(skillName, index) in skillNames" :key="skillName">
+            <span v-if="index !== 0">, </span>
+            <span>{{ skillName }}</span>
+          </span>
+        </span>
+      </p>
+      <p>
+        {{ t("Status") }}:
+        <span v-if="!isActive" class="font-bold text-orange-500">
+          {{ t("Choose shift type") }}
+        </span>
+        <span v-else-if="isExempt" class="font-bold text-green-500">
+          {{ t("t:shift_status_exempt") }}
+        </span>
+        <span v-else-if="Number(score) >= 0" class="font-bold text-green-500">
+          {{ t("t:shift_status_good") }}
+        </span>
+        <span v-else>
+          {{ t("t:shift_status_bad") }} ({{ -Number(score) }} {{ t("shifts") }}
+          {{ t("to catch up") }})
+        </span>
+        <span> </span>
+      </p>
+    </div>
   </CollectivoContainer>
 
-  <CollectivoContainer>
-    <h2>My current assignments</h2>
-    <p v-if="!activeAndFutureAssignments.length">No current assignments</p>
+  <div v-if="isActive" class="flex flex-wrap pb-6 gap-6">
+    <NuxtLink to="/shifts/shift_calendar"
+      ><UButton size="lg" icon="i-heroicons-pencil-square">{{
+        t("Sign up for a shift")
+      }}</UButton></NuxtLink
+    >
+    <!-- <UButton size="lg">{{ t("Register absence") }}</UButton>
+    <UButton size="lg">{{ t("Other requests") }}</UButton> -->
+  </div>
+  <div v-else>
+    <ShiftsSetShiftType></ShiftsSetShiftType>
+  </div>
+
+  <h2>{{ t("Upcoming shifts") }}</h2>
+  <p v-if="!activeAndFutureAssignments.length">
+    {{ t("No upcoming shifts") }}
+  </p>
+  <div class="flex flex-col gap-4 mt-4">
     <ShiftsAssignmentCard
       v-for="assignment in activeAndFutureAssignments"
       :key="assignment.id"
       :shift-assignment="assignment"
     >
     </ShiftsAssignmentCard>
-  </CollectivoContainer>
+  </div>
 
   <CollectivoContainer v-if="pastAssignments.length">
     <h2>My past assignments</h2>

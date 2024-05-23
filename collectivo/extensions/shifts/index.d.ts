@@ -49,6 +49,8 @@ declare global {
     shift: ShiftsShift;
     start: DateTime;
     end: DateTime;
+    slots: number;
+    openSlots: number;
   }
 
   export interface ShiftsShift {

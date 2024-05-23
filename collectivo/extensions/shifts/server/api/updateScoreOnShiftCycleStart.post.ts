@@ -24,7 +24,8 @@ export default defineEventHandler(async (event) => {
     }),
   )) as MembershipsMembership[];
 
-  // We load logs for all users then filter the logs manually before sending to removePointsForUser
+  // We load logs for all users then filter the logs manually
+  // before sending to removePointsForUser
   // in order to avoid doing one DB request per user.
   const cycleLogs = (await directus.request(
     readItems("shifts_logs", {

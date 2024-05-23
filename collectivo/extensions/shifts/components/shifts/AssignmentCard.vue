@@ -6,7 +6,7 @@ import {
 } from "~/composables/shifts";
 import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
 import { getStatusColor } from "~/composables/colors";
-import { isThereAFutureOccurrenceWithinThatAssignment } from "~/composables/assignments";
+import { getNextAssignmentOccurence } from "~/composables/assignments";
 
 const props = defineProps({
   shiftAssignment: {
@@ -89,17 +89,6 @@ const assignmentUrl = "/shifts/assignment/" + props.shiftAssignment.id;
         Assigned to slot :
         {{ (props.shiftAssignment.shifts_slot as ShiftsSlot).shifts_name }}
       </p>
-      <UAlert
-        v-if="
-          isShiftDurationModelActive(shiftAssignment) &&
-          !isThereAFutureOccurrenceWithinThatAssignment(shiftAssignment)
-        "
-        title="Warning"
-        description="This assignment is still shown because it is still active, but the next
-        occurrence of that shift is not within the assignment. You are not
-        expected to work the next shift occurrence."
-        icon="i-heroicons-exclamation-triangle"
-      />
       <NuxtLink v-if="route.path != assignmentUrl" :to="assignmentUrl"
         ><UButton
           :label="'More infos'"

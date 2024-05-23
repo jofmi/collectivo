@@ -1,13 +1,10 @@
 import { DateTime } from "luxon";
-import {
-  getNextOccurrence,
-  isShiftDurationModelActive,
-  shiftToRRule,
-} from "~/composables/shifts";
+import { RRule } from "rrule";
+import { isShiftDurationModelActive, shiftToRRule } from "~/composables/shifts";
 
-export const isThereAFutureOccurrenceWithinThatAssignment = (
-  assignment: ShiftsAssignment,
-): boolean => {
+// Get assignment rrule
+// Creates a slice of the shift rrule within the assignment timeframe
+export const getAssignmentRRule = (assignment: ShiftsAssignment) => {
   if (typeof assignment.shifts_slot == "number") {
     throw new Error("assignment.shifts_slot field must be loaded");
   }
@@ -16,15 +13,30 @@ export const isThereAFutureOccurrenceWithinThatAssignment = (
     throw new Error("assignment.shifts_slot.shifts_shift field must be loaded");
   }
 
-  const nextOccurrence = getNextOccurrence(
-    assignment.shifts_slot.shifts_shift,
-    DateTime.fromISO(assignment.shifts_from),
-  );
+  const shift = assignment.shifts_slot.shifts_shift;
+  const shiftRule = shiftToRRule(shift);
 
-  return (
-    !!nextOccurrence &&
-    isShiftDurationModelActive(assignment, nextOccurrence.start)
-  );
+  return new RRule({
+    freq: RRule.DAILY,
+    interval: shift.shifts_repeats_every,
+    count: shift.shifts_repeats_every ? null : 1,
+    dtstart: shiftRule.after(
+      DateTime.fromISO(assignment.shifts_from).toJSDate(),
+      true,
+    ),
+    until: assignment.shifts_to
+      ? shiftRule.before(
+          DateTime.fromISO(assignment.shifts_to).toJSDate(),
+          true,
+        )
+      : null,
+  });
+};
+
+export const getNextAssignmentOccurence = (
+  assignment: ShiftsAssignment,
+): Date | null => {
+  return getAssignmentRRule(assignment).after(DateTime.now().toJSDate());
 };
 
 export const getActiveAssignment = (

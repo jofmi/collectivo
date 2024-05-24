@@ -38,7 +38,6 @@ export default defineEventHandler(async (event) => {
   const isDelete = body.event === "collectivo_tags_directus_users.items.delete";
 
   body.keys = body.keys || [body.key];
-  console.log("Body", body);
 
   if (isCreate) {
     assignRole(body);
@@ -47,7 +46,7 @@ export default defineEventHandler(async (event) => {
       await assignRole(body, key);
     }
   } else {
-    throw new Error("Unsupported event ", body.event);
+    throw new Error("Tag relation event can only be create or delete");
   }
 });
 
@@ -56,13 +55,10 @@ async function assignRole(body: any, deleteKey?: any) {
   const directus = await useDirectusAdmin();
   let tagID = "";
   let userID = "";
-
   if (deleteKey) {
-    console.log("Delete key", deleteKey);
     const tagRelation = await directus.request(
       readItem("collectivo_tags_directus_users", deleteKey),
     );
-    console.log("Tag relation", tagRelation);
     tagID = tagRelation.collectivo_tags_id;
     userID = tagRelation.directus_users_id;
   } else {
@@ -70,6 +66,10 @@ async function assignRole(body: any, deleteKey?: any) {
       body.payload.directus_users_id.id ?? body.payload.directus_users_id;
     tagID =
       body.payload.collectivo_tags_id.id ?? body.payload.collectivo_tags_id;
+  }
+
+  if (!tagID || !userID) {
+    return;
   }
 
   const tag = await directus.request(
@@ -97,8 +97,6 @@ async function assignRole(body: any, deleteKey?: any) {
 
   const roleName = tag.tags_name.toLowerCase().replace(/ /g, "-");
 
-  console.log("role", roleName);
-
   let role: any = await keycloak.roles.findOneByName({ name: roleName });
 
   if (!role) {
@@ -106,8 +104,6 @@ async function assignRole(body: any, deleteKey?: any) {
     await keycloak.roles.create({ name: roleName });
     role = await keycloak.roles.findOneByName({ name: roleName });
   }
-
-  console.log("Role keycloak", role);
 
   let kc_user_id = null;
 
@@ -136,14 +132,4 @@ async function assignRole(body: any, deleteKey?: any) {
       roles: [{ id: role.id, name: role.name }],
     });
   }
-
-  console.log("SHOULD BE MAPPED");
-  // const role = await keycloak.roles.find({ name });
-  // console.log("Role", role);
-}
-
-async function removeRole(body: any) {
-  const keycloak = await useKeycloak();
-  const directus = await useDirectusAdmin();
-  console.log("Remove role", body);
 }

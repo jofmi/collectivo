@@ -56,7 +56,6 @@ async function assignRole(body: any, deleteKey?: any) {
   const directus = await useDirectusAdmin();
   let tagID = "";
   let userID = "";
-
   if (deleteKey) {
     console.log("Delete key", deleteKey);
     const tagRelation = await directus.request(
@@ -70,6 +69,10 @@ async function assignRole(body: any, deleteKey?: any) {
       body.payload.directus_users_id.id ?? body.payload.directus_users_id;
     tagID =
       body.payload.collectivo_tags_id.id ?? body.payload.collectivo_tags_id;
+  }
+
+  if (!tagID || !userID) {
+    return;
   }
 
   const tag = await directus.request(

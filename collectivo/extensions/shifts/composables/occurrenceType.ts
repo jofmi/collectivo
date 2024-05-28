@@ -22,11 +22,15 @@ export function getOccurrenceType(
     from && isFromToActive(from, to, occurrence.start, true);
 
   if (activeAssignment) {
+    let assignmentUserId;
+
     if (typeof activeAssignment.shifts_user == "string") {
-      throw new Error("assignment.shifts_user field must be loaded");
+      assignmentUserId = activeAssignment.shifts_user;
+    } else {
+      assignmentUserId = activeAssignment.shifts_user.id;
     }
 
-    if (activeAssignment.shifts_user.id == userId) {
+    if (assignmentUserId == userId) {
       return OccurrenceType.ASSIGNED_TO_CURRENT_USER_FROM_ALREADY_EXISTING_ASSIGNMENT;
     }
 
@@ -35,11 +39,11 @@ export function getOccurrenceType(
     }
 
     return OccurrenceType.ASSIGNED_TO_ANOTHER_USER;
-  } else {
-    if (occurrenceIsWithinNewAssignment) {
-      return OccurrenceType.ASSIGNED_TO_CURRENT_USER_FROM_NEW_ASSIGNMENT;
-    }
-
-    return OccurrenceType.NOT_ASSIGNED;
   }
+
+  if (occurrenceIsWithinNewAssignment) {
+    return OccurrenceType.ASSIGNED_TO_CURRENT_USER_FROM_NEW_ASSIGNMENT;
+  }
+
+  return OccurrenceType.NOT_ASSIGNED;
 }

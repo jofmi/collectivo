@@ -95,10 +95,11 @@ async function syncKeycloakUser(event: any) {
       return;
     }
 
-    // Set external identifier to match email
-    if (user.id && email != extid) {
+    // Set external identifier to match new email
+    if (user.id && body.payload.email && email != extid) {
+      console.log("updating external identifier", email);
       await directus.request(
-        updateUser(user.id, { external_identifier: user.email }),
+        updateUser(user.id, { external_identifier: email }),
       );
     }
 
@@ -156,7 +157,8 @@ async function syncKeycloakUser(event: any) {
     // Update keycloak user
     if ("email" in body.payload && body.payload.email !== user.email) {
       console.log("updating email");
-
+      console.log("kc_user_id", kc_user_id);
+      console.log("email", body.payload.email);
       await keycloak.users.update(
         { id: kc_user_id },
         {
@@ -165,6 +167,8 @@ async function syncKeycloakUser(event: any) {
           emailVerified: true, // to prevent loops
         },
       );
+
+      console.log("email updated");
     }
 
     if ("first_name" in body.payload) {

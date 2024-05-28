@@ -1,6 +1,6 @@
 import { readRoles, updateUser } from "@directus/sdk";
 
-// Update keycloak user
+// If a new user is created, make it a keycloak user
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
   console.log("new user created called");
@@ -23,7 +23,8 @@ export default defineEventHandler(async (event) => {
   body.keys = body.keys || [body.key];
 
   if (!isCreate) {
-    throw new Error("Only users.create events are supported");
+    console.log("Only users.create events are supported");
+    return;
   }
 
   const roleID = await getRole("collectivo_user");

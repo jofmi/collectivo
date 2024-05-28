@@ -36,7 +36,7 @@ export const getAssignmentRRule = (assignment: ShiftsAssignment) => {
 export const getNextAssignmentOccurence = (
   assignment: ShiftsAssignment,
 ): Date | null => {
-  return getAssignmentRRule(assignment).after(DateTime.now().toJSDate());
+  return getAssignmentRRule(assignment).after(new Date());
 };
 
 export const getActiveAssignment = (

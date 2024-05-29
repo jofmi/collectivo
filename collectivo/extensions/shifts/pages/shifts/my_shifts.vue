@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { readItems } from "@directus/sdk";
 import { DateTime } from "luxon";
-import { getUserLogs, getUserScore } from "~/composables/shift_logs";
-import { ShiftLogType } from "~/server/utils/ShiftLogType";
+
 import showShiftToast from "~/composables/toast";
 
 const config = useRuntimeConfig();
@@ -17,7 +16,6 @@ const skillsLoading = ref(true);
 const skillsUserLinks = ref<ShiftsSkillUserLink[]>([]);
 const skillNames = ref<string[]>([]);
 const score = ref("loading...");
-const logs = ref<ShiftsLog[]>([]);
 const isActive = ref(false);
 const isExempt = ref(false);
 
@@ -50,12 +48,6 @@ async function loadData() {
       score.value = item.toString();
     })
     .catch((error) => showShiftToast("Failed to load score", error, "error"));
-
-  getUserLogs(user.value.data, DateTime.now(), 10)
-    .then((items) => {
-      logs.value.push(...items);
-    })
-    .catch((error) => showShiftToast("Failed to load logs", error, "error"));
 }
 
 loadData();
@@ -110,19 +102,21 @@ function getUserSkillNames() {
         <span v-else-if="isExempt" class="font-bold text-green-500">
           {{ t("t:shift_status_exempt") }}
         </span>
+        <span v-else-if="Number(score) == 1" class="font-bold text-green-500">
+          {{ score }} {{ t("shift") }} {{ t("ahead") }}
+        </span>
         <span v-else-if="Number(score) >= 0" class="font-bold text-green-500">
-          {{ t("t:shift_status_good") }}
+          {{ score }} {{ t("shifts") }} {{ t("ahead") }}
         </span>
         <span v-else>
-          {{ t("t:shift_status_bad") }} ({{ -Number(score) }} {{ t("shifts") }}
-          {{ t("to catch up") }})
+          {{ -Number(score) }} {{ t("shifts") }} {{ t("to catch up") }}
         </span>
         <span> </span>
       </p>
     </div>
   </CollectivoContainer>
 
-  <div v-if="isActive" class="flex flex-wrap pb-6 gap-6">
+  <div v-if="isActive" class="flex flex-wrap pb-6 gap-5">
     <NuxtLink to="/shifts/shift_calendar"
       ><UButton size="lg" icon="i-heroicons-plus-circle">{{
         t("Sign up for a shift")
@@ -152,36 +146,6 @@ function getUserSkillNames() {
     >
     </ShiftsAssignmentCard>
   </div>
-
-  <h2>{{ t("My activities") }}</h2>
-  <CollectivoContainer v-if="logs.length" class="my-4">
-    <ul>
-      <li v-for="log in logs" :key="log.id">
-        <strong>
-          <span v-if="log.shifts_type == ShiftLogType.ATTENDED"
-            >+1 - Shift attended</span
-          >
-          <span v-if="log.shifts_type == ShiftLogType.MISSED"
-            >-2 - Shift missed</span
-          >
-          <span v-if="log.shifts_type == ShiftLogType.CYCLE"
-            >-1 - Four weeks have passed</span
-          >
-          <span v-if="log.shifts_type == ShiftLogType.CYCLE_DEACTIVATED"
-            >Shift cycle paused</span
-          >
-          <span v-if="log.shifts_type == ShiftLogType.CYCLE_ACTIVATED"
-            >Shift cycle activated</span
-          >
-        </strong>
-        <span>
-          ({{
-            DateTime.fromISO(log.shifts_date).toLocaleString(DateTime.DATE_MED)
-          }})</span
-        >
-      </li>
-    </ul>
-  </CollectivoContainer>
 </template>
 
 <i18n lang="yaml">

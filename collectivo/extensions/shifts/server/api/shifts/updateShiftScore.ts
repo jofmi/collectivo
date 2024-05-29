@@ -174,6 +174,7 @@ async function createShiftScoreLogs(user: ShiftUser, cycleLogs: ShiftsLog[]) {
       shifts_type: ShiftLogType.CYCLE,
       shifts_date: nextCycleDate.toISOString(),
       shifts_user: user.id,
+      shifts_score: -1,
     });
 
     nextCycleDate.setDate(nextCycleDate.getDate() + CYCLE_DAYS);

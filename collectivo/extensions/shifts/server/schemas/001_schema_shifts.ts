@@ -253,6 +253,7 @@ schema.fields = [
     type: "string",
     schema: { is_nullable: false },
     meta: {
+      required: true,
       interface: "select-dropdown",
       options: {
         choices: shiftLogTypeDropdownChoices,
@@ -264,7 +265,20 @@ schema.fields = [
     field: "shifts_date",
     type: "date",
     schema: { is_nullable: false },
-    meta: {},
+    meta: { required: true },
+  },
+  {
+    collection: "shifts_logs",
+    field: "shifts_date",
+    type: "date",
+    schema: { is_nullable: false },
+    meta: { required: true },
+  },
+  {
+    type: "integer",
+    meta: { interface: "input", special: null, required: true },
+    field: "shifts_score",
+    schema: { default_value: "0" },
   },
   ...directusSystemFields("shifts_logs"),
 ];
@@ -298,7 +312,7 @@ schema.createForeignKey("shifts_logs", "shifts_assignments", {
 
 schema.createForeignKey("shifts_logs", "directus_users", {
   m2oFieldType: "uuid",
-  fieldKey: { field: "shifts_user" },
+  fieldKey: { field: "shifts_user", meta: { required: true } },
 });
 
 schema.createForeignKey("shifts_assignments", "directus_users", {

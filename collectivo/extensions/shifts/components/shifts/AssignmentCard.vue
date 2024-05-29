@@ -16,25 +16,9 @@ const props = defineProps({
 // This is the next occurence of the assignment, not the shift itself!
 const nextOccurrence = getNextAssignmentOccurence(props.shiftAssignment);
 
-const { shiftAssignment } = toRefs(props);
-
 const assignment = props.shiftAssignment as ShiftsAssignment;
 const slot = props.shiftAssignment.shifts_slot as ShiftsSlot;
 const shift = slot.shifts_shift as ShiftsShift;
-
-const from = ref<DateTime>(DateTime.fromISO(shiftAssignment.value.shifts_from));
-const to = ref<DateTime>();
-
-updateDates();
-watch(shiftAssignment, updateDates);
-
-function updateDates() {
-  from.value = DateTime.fromISO(shiftAssignment.value.shifts_from);
-
-  to.value = shiftAssignment.value.shifts_to
-    ? DateTime.fromISO(shiftAssignment.value.shifts_to)
-    : undefined;
-}
 
 function getTimeString(occurence: Date) {
   const occ = DateTime.fromJSDate(occurence);
@@ -47,7 +31,7 @@ function getTimeString(occurence: Date) {
     .plus({ minute: shift.shifts_duration })
     .toLocaleString(DateTime.TIME_SIMPLE);
 
-  return `${weekday} from ${startTime} to ${endTime}`;
+  return `${weekday} ${t("from")} ${startTime} ${t("to")} ${endTime}`;
 }
 
 function getEndDate(endDate: string) {
@@ -99,4 +83,6 @@ de:
   "until": "bis"
   "Shift repeats every": "Schicht wiederholt sich alle"
   "days": "Tage"
+  "from": "von"
+  "to": "bis"
 </i18n>

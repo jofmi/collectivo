@@ -21,11 +21,8 @@ export const getUserScore = async (
       case ShiftLogType.CYCLE:
         score -= 1;
         break;
-      case ShiftLogType.CANCELLED:
-        // Do nothing
-        break;
       default:
-        throw new Error("Unknown shift log type : " + log.shifts_type);
+      // Do nothing
     }
   }
 
@@ -45,11 +42,11 @@ export const getUserLogs = async (
       shifts_type: { _neq: ShiftLogType.CANCELLED },
     },
     fields: ["*"],
-    sort: ["-shifts_datetime"],
+    sort: ["-shifts_date"],
   };
 
   if (at) {
-    query.filter["shifts_datetime"] = {
+    query.filter["shifts_date"] = {
       _lte: at.toString(),
     };
   }

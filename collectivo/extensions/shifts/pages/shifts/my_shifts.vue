@@ -153,30 +153,30 @@ function getUserSkillNames() {
     </ShiftsAssignmentCard>
   </div>
 
-  <!-- <CollectivoContainer v-if="pastAssignments.length">
-    <h2>My past assignments</h2>
-    <ShiftsAssignmentCard
-      v-for="assignment in pastAssignments"
-      :key="assignment.id"
-      :shift-assignment="assignment"
-    >
-    </ShiftsAssignmentCard>
-  </CollectivoContainer> -->
-
   <h2>{{ t("My activities") }}</h2>
   <CollectivoContainer v-if="logs.length" class="my-4">
     <ul>
       <li v-for="log in logs" :key="log.id">
         <strong>
-          <span v-if="log.shifts_type == ShiftLogType.ATTENDED">+1</span>
-          <span v-if="log.shifts_type == ShiftLogType.MISSED">-2</span>
-          <span v-if="log.shifts_type == ShiftLogType.CYCLE">-1</span>
+          <span v-if="log.shifts_type == ShiftLogType.ATTENDED"
+            >+1 - Shift attended</span
+          >
+          <span v-if="log.shifts_type == ShiftLogType.MISSED"
+            >-2 - Shift missed</span
+          >
+          <span v-if="log.shifts_type == ShiftLogType.CYCLE"
+            >-1 - Four weeks have passed</span
+          >
+          <span v-if="log.shifts_type == ShiftLogType.CYCLE_DEACTIVATED"
+            >Shift cycle paused</span
+          >
+          <span v-if="log.shifts_type == ShiftLogType.CYCLE_ACTIVATED"
+            >Shift cycle activated</span
+          >
         </strong>
         <span>
           ({{
-            DateTime.fromISO(log.shifts_datetime).toLocaleString(
-              DateTime.DATETIME_MED_WITH_WEEKDAY,
-            )
+            DateTime.fromISO(log.shifts_date).toLocaleString(DateTime.DATE_MED)
           }})</span
         >
       </li>

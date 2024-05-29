@@ -1,6 +1,6 @@
 import { createItems, readItems, readUsers } from "@directus/sdk";
 
-const cycle_days = 28;
+const CYCLE_DAYS = 28;
 
 interface ShiftUser {
   id: string;
@@ -155,7 +155,7 @@ async function createShiftScoreLogs(user: ShiftUser, cycleLogs: ShiftsLog[]) {
       );
 
       nextCycleDate.setDate(
-        nextCycleDate.getDate() + cycle_days + deactivatedDays,
+        nextCycleDate.getDate() + CYCLE_DAYS + deactivatedDays,
       );
     } else {
       // If no valid cycle log is found, create cycle log at current date
@@ -176,7 +176,7 @@ async function createShiftScoreLogs(user: ShiftUser, cycleLogs: ShiftsLog[]) {
       shifts_user: user.id,
     });
 
-    nextCycleDate.setDate(nextCycleDate.getDate() + 28);
+    nextCycleDate.setDate(nextCycleDate.getDate() + CYCLE_DAYS);
   }
 
   return requests;

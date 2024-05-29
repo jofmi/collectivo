@@ -12,7 +12,7 @@ setCollectivoTitle("Shifts");
 
 const directus = useDirectus();
 const user = useCollectivoUser();
-const activeAndFutureAssignments: Ref<ShiftsAssignmentRules[]> = ref([]);
+const activeAssignments: Ref<ShiftsAssignmentRules[]> = ref([]);
 const skillsLoading = ref(true);
 const skillsUserLinks = ref<ShiftsSkillUserLink[]>([]);
 const skillNames = ref<string[]>([]);
@@ -21,25 +21,21 @@ const logs = ref<ShiftsLog[]>([]);
 const isActive = ref(false);
 const isExempt = ref(false);
 
-user.value
-  .load()
-  .then((userStore) => {
-    isActive.value = userStore.data?.shifts_user_type != "INACTIVE";
-    isExempt.value = userStore.data?.shifts_user_type == "EXEMPT";
+async function loadData() {
+  await user.value.load();
+  isActive.value = user.value.data?.shifts_user_type != "INACTIVE";
+  isExempt.value = user.value.data?.shifts_user_type == "EXEMPT";
 
-    getActiveAssignments(user.value).then((res: ShiftsAssignmentRules[]) => {
-      activeAndFutureAssignments.value = res;
-    });
+  if (!user.value.data) {
+    return;
+  }
 
-    loadUserShiftDetails(userStore.data!);
-  })
-  .catch((error) => showShiftToast("Failed to load user data", error, "error"));
+  activeAssignments.value = await getActiveAssignments(user.value.data!);
 
-function loadUserShiftDetails(user: CollectivoUser) {
   directus
     .request(
       readItems("shifts_skills_directus_users", {
-        filter: { directus_users_id: { _eq: user.id } },
+        filter: { directus_users_id: { _eq: user.value.data.id } },
         fields: ["*", { shifts_skills: ["*"] }, { directus_users: ["*"] }],
       }),
     )
@@ -49,18 +45,20 @@ function loadUserShiftDetails(user: CollectivoUser) {
     })
     .catch((error) => showShiftToast("Failed to load skills", error, "error"));
 
-  getUserScore(user, DateTime.now())
+  getUserScore(user.value.data, DateTime.now())
     .then((item) => {
       score.value = item.toString();
     })
     .catch((error) => showShiftToast("Failed to load score", error, "error"));
 
-  getUserLogs(user, DateTime.now(), 10)
+  getUserLogs(user.value.data, DateTime.now(), 10)
     .then((items) => {
       logs.value.push(...items);
     })
     .catch((error) => showShiftToast("Failed to load logs", error, "error"));
 }
+
+loadData();
 
 function getUserSkillNames() {
   if (skillsUserLinks.value.length === 0) {
@@ -143,13 +141,13 @@ function getUserSkillNames() {
   </div>
 
   <h2>{{ t("My shifts") }}</h2>
-  <p v-if="!activeAndFutureAssignments.length">
+  <p v-if="!activeAssignments.length">
     {{ t("No upcoming shifts") }}
   </p>
-  <div class="flex flex-col gap-4 mt-4">
+  <div class="flex flex-col gap-4 my-4">
     <ShiftsAssignmentCard
-      v-for="assignment in activeAndFutureAssignments"
-      :key="assignment.id"
+      v-for="assignment in activeAssignments"
+      :key="assignment.assignment.id"
       :shift-assignment="assignment"
     >
     </ShiftsAssignmentCard>
@@ -165,8 +163,8 @@ function getUserSkillNames() {
     </ShiftsAssignmentCard>
   </CollectivoContainer> -->
 
-  <CollectivoContainer v-if="logs.length">
-    <h2>Last score updates</h2>
+  <h2>{{ t("My activities") }}</h2>
+  <CollectivoContainer v-if="logs.length" class="my-4">
     <ul>
       <li v-for="log in logs" :key="log.id">
         <strong>
@@ -208,4 +206,5 @@ de:
   "t:EXEMPT": "Befreit"
   "t:INACTIVE": "Nicht aktiv"
   "None": "Keine"
+  "My activities": "Meine Aktivitäten"
 </i18n>

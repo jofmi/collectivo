@@ -7,7 +7,7 @@ import showShiftToast from "~/composables/toast";
 const config = useRuntimeConfig();
 
 const { t } = useI18n();
-setCollectivoTitle("Shifts");
+setCollectivoTitle(t("Shifts"));
 
 const directus = useDirectus();
 const user = useCollectivoUser();

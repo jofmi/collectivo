@@ -64,7 +64,7 @@ onMounted(async () => {
           :padded="false"
           @click="prevHandler"
         >
-          <UIcon name="i-system-uicons-chevron-left" class="text-[22px]" />
+          <UIcon name="i-heroicons-chevron-left-16-solid" class="text-[22px]" />
         </UButton>
         <UButton
           color="gray"
@@ -72,7 +72,10 @@ onMounted(async () => {
           :padded="false"
           @click="nextHandler"
         >
-          <UIcon name="i-system-uicons-chevron-right" class="text-[22px]" />
+          <UIcon
+            name="i-heroicons-chevron-right-16-solid"
+            class="text-[22px]"
+          />
         </UButton>
       </div>
     </div>

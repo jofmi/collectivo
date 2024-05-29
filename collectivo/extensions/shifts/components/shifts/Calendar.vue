@@ -7,7 +7,14 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import luxonPlugin from "@fullcalendar/luxon3";
 import { DateTime } from "luxon";
 
+const assignmentCreationModalOpen = ref(false);
+const selectedShiftOccurence = ref(null);
+
+// The time is not necessarily UTC,
+// but UTC strings are used so that times are not changed
+
 const calendarOptions = ref({
+  timeZone: "UTC",
   plugins: [
     dayGridPlugin,
     listPlugin,
@@ -28,7 +35,8 @@ const calendarOptions = ref({
   },
   nowIndicator: true,
   eventClick: (info) => {
-    navigateTo("/shifts/shift/" + info.event.extendedProps.shiftId);
+    selectedShiftOccurence.value = info.event.extendedProps.shiftOccurence;
+    assignmentCreationModalOpen.value = true;
   },
 });
 
@@ -74,11 +82,9 @@ async function updateEvents(from, to) {
       start: occurrence.start.toJSDate(),
       end: occurrence.end.toJSDate(),
       allDay: false,
-      shiftId: occurrence.shift.id,
+      shiftOccurence: occurrence,
     });
   }
-
-  console.log(events[0].shiftId);
 
   calendarOptions.value.events = events;
 }
@@ -89,4 +95,16 @@ async function updateEvents(from, to) {
     <ShiftsCalendarHeader :calendar-ref="calendarComputed()" />
     <full-calendar ref="calendarRef" :options="calendarOptions" />
   </div>
+
+  <!-- @assignment-created="loadShift" -->
+  <ShiftsAssignmentModal
+    v-model:is-open="assignmentCreationModalOpen"
+    :shift-occurence="selectedShiftOccurence"
+  />
 </template>
+
+<style scoped>
+:deep(.fc-event) {
+  cursor: pointer;
+}
+</style>

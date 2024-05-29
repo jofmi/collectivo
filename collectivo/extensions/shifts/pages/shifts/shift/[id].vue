@@ -103,6 +103,7 @@ function setDetails(shift: ShiftsShift) {
       shift_start.value.toLocaleString(DateTime.TIME_SIMPLE) +
       " to " +
       shift_end.value.toLocaleString(DateTime.TIME_SIMPLE),
+    { backLink: "shift_calendar" },
   );
 
   nextOccurrences.value = getNextOccurrences(shift, 5);

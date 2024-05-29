@@ -123,46 +123,14 @@ export const getOccurrencesForShift = (
     shiftOccurrences.push(rruleDateToShiftOccurrence(shift, date, slotRules));
   }
 
-  console.log(
-    "Slot occurences",
-    slotRules[0].between(
-      luxonDateTimeToRruleDatetime(from),
-      luxonDateTimeToRruleDatetime(to),
-      true,
-    ),
-  );
-
   return shiftOccurrences;
 };
-
-// export const xxx = (
-//   shift: ShiftsShift,
-//   assignments: ShiftsAssignment[],
-//   from: DateTime,
-//   to: DateTime,
-// ): ShiftOccurrence[] => {
-//   const dates: Date[] = slotToRRule(shift, assignments).between(
-//     luxonDateTimeToRruleDatetime(from),
-//     luxonDateTimeToRruleDatetime(to),
-//     true,
-//   );
-
-//   const shiftOccurrences: ShiftOccurrence[] = [];
-
-//   for (const date of dates) {
-//     shiftOccurrences.push(rruleDateToShiftOccurrence(shift, date));
-//   }
-
-//   return shiftOccurrences;
-// };
 
 const rruleDateToShiftOccurrence = (
   shift: ShiftsShift,
   date: Date,
   slotRules?: RRule[],
 ): ShiftOccurrence => {
-  const start = DateTime.fromJSDate(date);
-
   let openSlots = 0;
 
   for (const slotRule of slotRules ?? []) {
@@ -171,18 +139,23 @@ const rruleDateToShiftOccurrence = (
     }
   }
 
+  const dateString = date.toISOString().split("T")[0];
+  const start = DateTime.fromISO(`${dateString}T${shift.shifts_from_time}Z`);
+  const end = DateTime.fromISO(`${dateString}T${shift.shifts_to_time}Z`);
+
   return {
     shift: shift,
     start: start,
+    end: end,
     slots: slotRules?.length ?? 0,
     openSlots: openSlots,
-    end: start.plus({ minute: shift.shifts_duration }),
   };
 };
 
 // Create a RRule object for a shift
 // Shifts without end date run forever
 // Shifts without repetition run once
+// Dates are with T=00:00:00 UTC
 export const shiftToRRule = (shift: ShiftsShift): RRule => {
   return new RRule({
     freq: RRule.DAILY,

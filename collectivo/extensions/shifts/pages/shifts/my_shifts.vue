@@ -1,25 +1,18 @@
 <script setup lang="ts">
-import { readItems, updateItem } from "@directus/sdk";
-import {
-  getNextOccurrence,
-  isShiftDurationModelActive,
-} from "~/composables/shifts";
+import { readItems } from "@directus/sdk";
 import { DateTime } from "luxon";
 import { getUserLogs, getUserScore } from "~/composables/shift_logs";
 import { ShiftLogType } from "~/server/utils/ShiftLogType";
 import showShiftToast from "~/composables/toast";
-import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
-import { getNextAssignmentOccurence } from "~/composables/assignments";
 
 const config = useRuntimeConfig();
 
 const { t } = useI18n();
 setCollectivoTitle("Shifts");
+
 const directus = useDirectus();
 const user = useCollectivoUser();
-
-const activeAndFutureAssignments: Ref<ShiftsAssignment[]> = ref([]);
-const pastAssignments: Ref<ShiftsAssignment[]> = ref([]);
+const activeAndFutureAssignments: Ref<ShiftsAssignmentRRule[]> = ref([]);
 const skillsLoading = ref(true);
 const skillsUserLinks = ref<ShiftsSkillUserLink[]>([]);
 const skillNames = ref<string[]>([]);
@@ -33,61 +26,14 @@ user.value
   .then((userStore) => {
     isActive.value = userStore.data?.shifts_user_type != "INACTIVE";
     isExempt.value = userStore.data?.shifts_user_type == "EXEMPT";
-    loadAssignments(userStore.data!);
+
+    getActiveAssignments(user.value).then((res: ShiftsAssignmentRRule[]) => {
+      activeAndFutureAssignments.value = res;
+    });
+
     loadUserShiftDetails(userStore.data!);
   })
   .catch((error) => showShiftToast("Failed to load user data", error, "error"));
-
-function loadAssignments(user: CollectivoUser) {
-  directus
-    .request(
-      readItems("shifts_assignments", {
-        filter: {
-          shifts_user: { id: { _eq: user.id } },
-        },
-        fields: [
-          "*",
-          { shifts_slot: ["*", { shifts_shift: ["*"] }] },
-          { shifts_user: ["first_name", "last_name"] },
-        ],
-      }),
-    )
-    .then((items) => {
-      const assignments = items as ShiftsAssignment[];
-
-      assignments.sort((a, b) => {
-        const nextA = getNextOccurrence(
-          (a.shifts_slot as ShiftsSlot).shifts_shift as ShiftsShift,
-        );
-
-        const nextB = getNextOccurrence(
-          (b.shifts_slot as ShiftsSlot).shifts_shift as ShiftsShift,
-        );
-
-        if (!nextA && !nextB) return 0;
-        if (!nextA) return 1;
-        if (!nextB) return -1;
-        return nextA.start.toMillis() - nextB.start.toMillis();
-      });
-
-      for (const assignment of assignments) {
-        const from = DateTime.fromISO(assignment.shifts_from);
-
-        if (
-          (isShiftDurationModelActive(assignment) || from > DateTime.now()) &&
-          assignment.shifts_status == ItemStatus.PUBLISHED &&
-          !!getNextAssignmentOccurence(assignment)
-        ) {
-          activeAndFutureAssignments.value.push(assignment);
-        } else {
-          pastAssignments.value.push(assignment);
-        }
-      }
-    })
-    .catch((error) =>
-      showShiftToast("Failed to load assignments", error, "error"),
-    );
-}
 
 function loadUserShiftDetails(user: CollectivoUser) {
   directus
@@ -143,8 +89,6 @@ function getUserSkillNames() {
 
 <template>
   <CollectivoContainer v-if="user.data">
-    <h2>{{ t("Status") }}</h2>
-
     <div>
       <p>
         {{ t("Type") }}: {{ t("t:" + user.data["shifts_user_type"] ?? "") }}
@@ -211,7 +155,7 @@ function getUserSkillNames() {
     </ShiftsAssignmentCard>
   </div>
 
-  <CollectivoContainer v-if="pastAssignments.length">
+  <!-- <CollectivoContainer v-if="pastAssignments.length">
     <h2>My past assignments</h2>
     <ShiftsAssignmentCard
       v-for="assignment in pastAssignments"
@@ -219,7 +163,7 @@ function getUserSkillNames() {
       :shift-assignment="assignment"
     >
     </ShiftsAssignmentCard>
-  </CollectivoContainer>
+  </CollectivoContainer> -->
 
   <CollectivoContainer v-if="logs.length">
     <h2>Last score updates</h2>

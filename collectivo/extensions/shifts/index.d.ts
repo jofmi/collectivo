@@ -7,6 +7,7 @@ declare global {
     shifts_slots: ShiftsSlot[];
     shifts_skills: ShiftsSkill[];
     shifts_assignments: ShiftsAssignment[];
+    shifts_absences: ShiftsAbsence[];
     shifts_logs: ShiftsLog[];
     shifts_shifts: ShiftsShift[];
     shifts_skills_directus_users: ShiftsSkillUserLink[];
@@ -31,7 +32,6 @@ declare global {
     shifts_shift: ShiftsShift | number;
     shifts_skills: ShiftsSkillSlotLink[] | number[];
     shifts_assignments: ShiftsAssignment[] | number[];
-    shifts_status: ItemStatus;
   }
 
   export interface ShiftsAssignment {
@@ -40,7 +40,20 @@ declare global {
     shifts_to?: string;
     shifts_slot: ShiftsSlot | number;
     shifts_user: CollectivoUser | string;
-    shifts_status: ItemStatus;
+  }
+
+  export interface ShiftsAssignmentRRule {
+    rrule: RRule;
+    nextOccurrence: Date | null;
+    assignment: ShiftsAssignment;
+    absences: ShiftsAbsence[];
+  }
+
+  export interface ShiftsAbsence {
+    id?: number;
+    shifts_from: string;
+    shifts_to: string;
+    shifts_assignment: number;
   }
 
   export interface ShiftsSkill {

@@ -63,6 +63,15 @@ schema.collections = [
     meta: {},
   },
   {
+    collection: "shifts_absences",
+    schema: {
+      schema: "schema",
+      name: "schema",
+      comment: null,
+    },
+    meta: {},
+  },
+  {
     collection: "shifts_logs",
     schema: {
       schema: "schema",
@@ -76,8 +85,6 @@ schema.collections = [
 schema.fields = [
   ...directusSystemFields("shifts_shifts"),
   directusStatusField("shifts_shifts", "shifts_status"),
-  directusStatusField("shifts_slots", "shifts_status"),
-  directusStatusField("shifts_assignments", "shifts_status"),
   {
     collection: "shifts_shifts",
     field: "shifts_name",
@@ -192,6 +199,23 @@ schema.fields = [
     schema: {},
     meta: {},
   },
+  // ABSENCES
+  ...directusSystemFields("shifts_absences"),
+  {
+    collection: "shifts_absences",
+    field: "shifts_from",
+    type: "date",
+    schema: {},
+    meta: {},
+  },
+  {
+    collection: "shifts_absences",
+    field: "shifts_to",
+    type: "date",
+    schema: {},
+    meta: {},
+  },
+  // DIRECTUS_USERS
   {
     collection: "directus_users",
     field: "shifts_group",
@@ -250,6 +274,11 @@ schema.createM2MRelation("shifts_skills", "shifts_slots", {
 schema.createForeignKey("shifts_assignments", "shifts_slots", {
   fieldKey: { field: "shifts_slot" },
   fieldAlias: { field: "shifts_assignments" },
+});
+
+schema.createForeignKey("shifts_absences", "shifts_assignments", {
+  fieldKey: { field: "shifts_assignment" },
+  fieldAlias: { field: "shifts_absences" },
 });
 
 schema.createForeignKey("shifts_logs", "shifts_assignments", {

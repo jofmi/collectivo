@@ -1,23 +1,21 @@
 <script setup lang="ts">
 import { DateTime } from "luxon";
-import { getStatusColor } from "~/composables/colors";
-import { getNextAssignmentOccurence } from "~/composables/assignments";
 import { parse } from "marked";
 
 const { t } = useI18n();
 
 const props = defineProps({
   shiftAssignment: {
-    type: Object as PropType<ShiftsAssignment>,
+    type: Object as PropType<ShiftsAssignmentRRule>,
     required: true,
   },
 });
 
 // This is the next occurence of the assignment, not the shift itself!
-const nextOccurrence = getNextAssignmentOccurence(props.shiftAssignment);
-
-const assignment = props.shiftAssignment as ShiftsAssignment;
-const slot = props.shiftAssignment.shifts_slot as ShiftsSlot;
+const nextOccurrence = props.shiftAssignment.nextOccurrence;
+const assignment = props.shiftAssignment.assignment as ShiftsAssignment;
+const absences = props.shiftAssignment.absences as ShiftsAbsence[];
+const slot = assignment.shifts_slot as ShiftsSlot;
 const shift = slot.shifts_shift as ShiftsShift;
 
 function getTimeString(occurence: Date) {
@@ -40,11 +38,7 @@ function getEndDate(endDate: string) {
 </script>
 
 <template>
-  <CollectivoCard
-    v-if="nextOccurrence"
-    :title="getTimeString(nextOccurrence)"
-    :color="getStatusColor(assignment.shifts_status)"
-  >
+  <CollectivoCard v-if="nextOccurrence" :title="getTimeString(nextOccurrence)">
     <template #content>
       <div>
         <!-- Repetition info -->
@@ -54,6 +48,15 @@ function getEndDate(endDate: string) {
 
           <span v-if="assignment.shifts_to">
             {{ t("until") }} {{ getEndDate(assignment.shifts_to) }}
+          </span>
+        </p>
+
+        <!-- Absences -->
+        <p v-if="absences.length > 0" class="mt-2">
+          {{ t("Absences") }}:
+
+          <span v-for="absence in absences" :key="absence.id" class="block">
+            {{ absence.shifts_from }} - {{ absence.shifts_to }}
           </span>
         </p>
 
@@ -70,6 +73,7 @@ function getEndDate(endDate: string) {
           v-html="parse(shift.shifts_description)"
         ></p>
 
+        {{ shiftAssignment.rrule.all() }}
         <!-- Space for buttons
         <div class="flex flex-wrap gap-3 pt-4">
         </div> -->
@@ -85,4 +89,5 @@ de:
   "days": "Tage"
   "from": "von"
   "to": "bis"
+  "Absences": "Abwesenheiten"
 </i18n>

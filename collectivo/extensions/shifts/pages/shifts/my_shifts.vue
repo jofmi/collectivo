@@ -188,5 +188,24 @@ function getUserSkillNames() {
 
 <i18n lang="yaml">
 de:
-  Request change: "Änderung beantragen"
+  "Request change": "Änderung beantragen"
+  "t:shift_status_good": "Gut!"
+  "t:shift_status_bad": "Du musst Schichten nachholen"
+  "t:shift_status_exempt": "Du bist von Schichten befreit"
+  "Choose shift type": "Schichttyp wählen"
+  "Shifts": "Schichten"
+  "My shifts": "Meine Schichten"
+  "Upcoming shifts": "Kommende Schichten"
+  "No upcoming shifts": "Keine kommenden Schichten"
+  "shifts": "Schichten"
+  "shift": "Schicht"
+  "ahead": "voraus"
+  "to catch up": "nachzuholen"
+  "Skills": "Fähigkeiten"
+  "Sign up for a shift": "Neue Schicht eintragen"
+  "t:REGULAR": "Regulär"
+  "t:JUMPER": "Springer*in"
+  "t:EXEMPT": "Befreit"
+  "t:INACTIVE": "Nicht aktiv"
+  "None": "Keine"
 </i18n>

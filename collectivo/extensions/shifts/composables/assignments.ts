@@ -44,26 +44,29 @@ export const getActiveAssignments = async (user: CollectivoUser) => {
     }),
   )) as ShiftsAbsence[];
 
-  const assignmentRules: ShiftsAssignmentRRule[] = assignments.map(
+  const assignmentRules: ShiftsAssignmentRules[] = assignments.map(
     (assignment) => {
       const filteredAbsences = absences.filter(
-        (absence) => absence.shifts_assignment == assignment.id,
+        (absence) =>
+          absence.shifts_assignment == assignment.id ||
+          absence.shifts_assignment == null,
       );
 
-      const rrule = getAssignmentRRule(assignment, filteredAbsences);
+      const rules = getAssignmentRRule(assignment, filteredAbsences);
 
       return {
-        rrule: rrule,
-        nextOccurrence: rrule.after(now, true),
         assignment: assignment,
         absences: filteredAbsences,
+        assignmentRule: rules[0],
+        absencesRule: rules[1],
+        nextOccurrence: rules[0].after(now, true),
       };
     },
   );
 
   assignmentRules.sort((a, b) => {
-    const nextA = a.rrule.after(now, true);
-    const nextB = b.rrule.after(now, true);
+    const nextA = a.assignmentRule.after(now, true);
+    const nextB = b.assignmentRule.after(now, true);
     if (!nextA && !nextB) return 0;
     if (!nextA) return 1;
     if (!nextB) return -1;
@@ -91,10 +94,11 @@ export const getAssignmentRRule = (
   const shift = assignment.shifts_slot.shifts_shift;
   const shiftRule = shiftToRRule(shift);
 
-  const ruleSet = new RRuleSet();
+  const assignmentRule = new RRuleSet();
+  const absencesRule = new RRuleSet();
 
   // Main shift rule
-  ruleSet.rrule(
+  assignmentRule.rrule(
     new RRule({
       freq: RRule.DAILY,
       interval: shift.shifts_repeats_every,
@@ -108,23 +112,24 @@ export const getAssignmentRRule = (
 
   // Absence rules
   absences?.forEach((absence) => {
-    ruleSet.exrule(
-      new RRule({
-        freq: RRule.DAILY,
-        interval: shift.shifts_repeats_every,
-        dtstart: shiftRule.after(new Date(absence.shifts_from), true),
-        until: shiftRule.before(new Date(absence.shifts_to), true),
-      }),
-    );
+    const absenceRule = new RRule({
+      freq: RRule.DAILY,
+      interval: shift.shifts_repeats_every,
+      dtstart: shiftRule.after(new Date(absence.shifts_from), true),
+      until: shiftRule.before(new Date(absence.shifts_to), true),
+    });
+
+    absencesRule.rrule(absenceRule);
+    assignmentRule.exrule(absenceRule);
   });
 
-  return ruleSet;
+  return [assignmentRule, absencesRule];
 };
 
 export const getNextAssignmentOccurence = (
   assignment: ShiftsAssignment,
 ): Date | null => {
-  return getAssignmentRRule(assignment).after(new Date());
+  return getAssignmentRRule(assignment)[0].after(new Date());
 };
 
 export const getActiveAssignment = (

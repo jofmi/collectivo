@@ -12,7 +12,7 @@ setCollectivoTitle("Shifts");
 
 const directus = useDirectus();
 const user = useCollectivoUser();
-const activeAndFutureAssignments: Ref<ShiftsAssignmentRRule[]> = ref([]);
+const activeAndFutureAssignments: Ref<ShiftsAssignmentRules[]> = ref([]);
 const skillsLoading = ref(true);
 const skillsUserLinks = ref<ShiftsSkillUserLink[]>([]);
 const skillNames = ref<string[]>([]);
@@ -27,7 +27,7 @@ user.value
     isActive.value = userStore.data?.shifts_user_type != "INACTIVE";
     isExempt.value = userStore.data?.shifts_user_type == "EXEMPT";
 
-    getActiveAssignments(user.value).then((res: ShiftsAssignmentRRule[]) => {
+    getActiveAssignments(user.value).then((res: ShiftsAssignmentRules[]) => {
       activeAndFutureAssignments.value = res;
     });
 

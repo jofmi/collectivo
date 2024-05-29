@@ -6,7 +6,7 @@ const { t } = useI18n();
 
 const props = defineProps({
   shiftAssignment: {
-    type: Object as PropType<ShiftsAssignmentRRule>,
+    type: Object as PropType<ShiftsAssignmentRules>,
     required: true,
   },
 });
@@ -20,14 +20,13 @@ const shift = slot.shifts_shift as ShiftsShift;
 
 function getTimeString(occurence: Date) {
   const occ = DateTime.fromJSDate(occurence);
-
   const weekday = occ.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY);
+  const startTime = shift.shifts_from_time?.slice(0, 5);
+  const endTime = shift.shifts_to_time?.slice(0, 5);
 
-  const startTime = occ.toLocaleString(DateTime.TIME_SIMPLE);
-
-  const endTime = occ
-    .plus({ minute: shift.shifts_duration })
-    .toLocaleString(DateTime.TIME_SIMPLE);
+  if (!startTime || !endTime) {
+    return weekday;
+  }
 
   return `${weekday} ${t("from")} ${startTime} ${t("to")} ${endTime}`;
 }
@@ -55,8 +54,13 @@ function getEndDate(endDate: string) {
         <p v-if="absences.length > 0" class="mt-2">
           {{ t("Absences") }}:
 
-          <span v-for="absence in absences" :key="absence.id" class="block">
-            {{ absence.shifts_from }} - {{ absence.shifts_to }}
+          <span
+            v-for="absenceDate in shiftAssignment.absencesRule.all()"
+            :key="absenceDate"
+          >
+            {{
+              DateTime.fromJSDate(absenceDate).toLocaleString(DateTime.DATE_MED)
+            }}
           </span>
         </p>
 
@@ -73,7 +77,6 @@ function getEndDate(endDate: string) {
           v-html="parse(shift.shifts_description)"
         ></p>
 
-        {{ shiftAssignment.rrule.all() }}
         <!-- Space for buttons
         <div class="flex flex-wrap gap-3 pt-4">
         </div> -->

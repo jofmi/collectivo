@@ -95,23 +95,30 @@ schema.fields = [
   {
     collection: "shifts_shifts",
     field: "shifts_from",
-    type: "dateTime",
+    type: "date",
     schema: { is_nullable: false },
     meta: {},
   },
   {
     collection: "shifts_shifts",
     field: "shifts_to",
-    type: "dateTime",
+    type: "date",
     schema: { is_nullable: true },
     meta: {},
   },
   {
     collection: "shifts_shifts",
-    field: "shifts_duration",
-    type: "integer",
-    schema: { is_nullable: false },
-    meta: { note: "In minutes" },
+    field: "shifts_from_time",
+    type: "time",
+    schema: { is_nullable: true },
+    meta: {},
+  },
+  {
+    collection: "shifts_shifts",
+    field: "shifts_to_time",
+    type: "time",
+    schema: { is_nullable: true },
+    meta: {},
   },
   {
     collection: "shifts_shifts",
@@ -277,7 +284,10 @@ schema.createForeignKey("shifts_assignments", "shifts_slots", {
 });
 
 schema.createForeignKey("shifts_absences", "shifts_assignments", {
-  fieldKey: { field: "shifts_assignment" },
+  fieldKey: {
+    field: "shifts_assignment",
+    meta: { note: "If empty, this absence is valid for all assignments." },
+  },
   fieldAlias: { field: "shifts_absences" },
 });
 

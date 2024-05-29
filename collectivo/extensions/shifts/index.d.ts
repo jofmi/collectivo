@@ -19,8 +19,9 @@ declare global {
     shifts_name?: string;
     shifts_from: string;
     shifts_to?: string;
-    shifts_duration: number;
-    shifts_repeats_every: number;
+    shifts_from_time?: string;
+    shifts_to_time?: string;
+    shifts_repeats_every?: number;
     shifts_slots?: ShiftsSlot[] | number[];
     shifts_status: ItemStatus;
     shifts_description?: string;
@@ -42,18 +43,19 @@ declare global {
     shifts_user: CollectivoUser | string;
   }
 
-  export interface ShiftsAssignmentRRule {
-    rrule: RRule;
-    nextOccurrence: Date | null;
+  export interface ShiftsAssignmentRules {
     assignment: ShiftsAssignment;
     absences: ShiftsAbsence[];
+    assignmentRule: RRuleSet;
+    absencesRule: RRuleSet;
+    nextOccurrence: Date | null;
   }
 
   export interface ShiftsAbsence {
     id?: number;
     shifts_from: string;
     shifts_to: string;
-    shifts_assignment: number;
+    shifts_assignment?: number;
   }
 
   export interface ShiftsSkill {

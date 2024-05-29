@@ -11,6 +11,8 @@ import showShiftToast from "~/composables/toast";
 import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
 import { getNextAssignmentOccurence } from "~/composables/assignments";
 
+const config = useRuntimeConfig();
+
 const { t } = useI18n();
 setCollectivoTitle("Shifts");
 const directus = useDirectus();
@@ -180,18 +182,23 @@ function getUserSkillNames() {
 
   <div v-if="isActive" class="flex flex-wrap pb-6 gap-6">
     <NuxtLink to="/shifts/shift_calendar"
-      ><UButton size="lg" icon="i-heroicons-pencil-square">{{
+      ><UButton size="lg" icon="i-heroicons-plus-circle">{{
         t("Sign up for a shift")
       }}</UButton></NuxtLink
     >
-    <!-- <UButton size="lg">{{ t("Register absence") }}</UButton>
-    <UButton size="lg">{{ t("Other requests") }}</UButton> -->
+    <a :href="`mailto:${config.public.collectivoContactEmail}`">
+      <UButton
+        size="lg"
+        :label="t('Request change')"
+        :icon="'i-heroicons-pencil-square'"
+      />
+    </a>
   </div>
   <div v-else>
     <ShiftsSetShiftType></ShiftsSetShiftType>
   </div>
 
-  <h2>{{ t("Upcoming shifts") }}</h2>
+  <h2>{{ t("My shifts") }}</h2>
   <p v-if="!activeAndFutureAssignments.length">
     {{ t("No upcoming shifts") }}
   </p>
@@ -234,3 +241,8 @@ function getUserSkillNames() {
     </ul>
   </CollectivoContainer>
 </template>
+
+<i18n lang="yaml">
+de:
+  Request change: "Änderung beantragen"
+</i18n>

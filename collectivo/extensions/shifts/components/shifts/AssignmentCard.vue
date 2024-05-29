@@ -2,6 +2,7 @@
 import { DateTime } from "luxon";
 import { getStatusColor } from "~/composables/colors";
 import { getNextAssignmentOccurence } from "~/composables/assignments";
+import { parse } from "marked";
 
 const { t } = useI18n();
 
@@ -52,8 +53,6 @@ function getTimeString(occurence: Date) {
 function getEndDate(endDate: string) {
   return DateTime.fromISO(endDate).toLocaleString(DateTime.DATE_MED);
 }
-
-const assignmentUrl = "/shifts/assignment/" + props.shiftAssignment.id;
 </script>
 
 <template>
@@ -64,30 +63,40 @@ const assignmentUrl = "/shifts/assignment/" + props.shiftAssignment.id;
   >
     <template #content>
       <div>
-        <!-- Shift name -->
-        <p>
-          {{ shift.shifts_name }}
-          <span v-if="slot.shifts_name">- {{ slot.shifts_name }}</span>
-        </p>
-
         <!-- Repetition info -->
         <p v-if="shift.shifts_repeats_every">
-          Shift repeats every {{ shift.shifts_repeats_every }} days
+          {{ t("Shift repeats every") }} {{ shift.shifts_repeats_every }}
+          {{ t("days") }}
 
           <span v-if="assignment.shifts_to">
-            until {{ getEndDate(assignment.shifts_to) }}
+            {{ t("until") }} {{ getEndDate(assignment.shifts_to) }}
           </span>
         </p>
 
+        <!-- Shift name -->
+        <p class="mt-2">
+          <span v-if="slot.shifts_name">{{ shift.shifts_name }}</span>
+          <span v-if="slot.shifts_name && slot.shifts_name"> - </span>
+          <span v-if="slot.shifts_name">{{ slot.shifts_name }}</span>
+        </p>
+
+        <!-- Shift infos -->
+        <p
+          v-if="shift.shifts_description"
+          v-html="parse(shift.shifts_description)"
+        ></p>
+
+        <!-- Space for buttons
         <div class="flex flex-wrap gap-3 pt-4">
-          <a href="mailto:mitmachen@mila.wien">
-            <UButton
-              :label="t('Request change')"
-              :icon="'i-heroicons-chat-bubble-oval-left-ellipsis'"
-            />
-          </a>
-        </div>
+        </div> -->
       </div>
     </template>
   </CollectivoCard>
 </template>
+
+<i18n lang="yaml">
+de:
+  "until": "bis"
+  "Shift repeats every": "Schicht wiederholt sich alle"
+  "days": "Tage"
+</i18n>

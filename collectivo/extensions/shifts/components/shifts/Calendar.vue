@@ -7,12 +7,19 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import luxonPlugin from "@fullcalendar/luxon3";
 import { DateTime } from "luxon";
 
+// import { DateTime, Settings } from "luxon";
+
+// const { locale } = useI18n();
+
+// watch(locale, (newLocale) => {
+//   Settings.defaultLocale = newLocale;
+// });
+
 const assignmentCreationModalOpen = ref(false);
 const selectedShiftOccurence = ref(null);
 
-// The time is not necessarily UTC,
+// The time is not necessarily UTC, times are saved without timezone,
 // but UTC strings are used so that times are not changed
-
 const calendarOptions = ref({
   timeZone: "UTC",
   plugins: [
@@ -67,7 +74,9 @@ const registerEventUpdate = async () => {
 };
 
 async function updateEvents(from, to) {
-  const occurrences = await getAllShiftOccurrences(from, to);
+  const occurrences = await getAllShiftOccurrences(from, to, {
+    filterFreeSlots: true,
+  });
 
   const events = [];
 
@@ -76,7 +85,7 @@ async function updateEvents(from, to) {
       title:
         occurrence.shift.shifts_name +
         " - " +
-        occurrence.openSlots +
+        (occurrence.slots - occurrence.openSlots) +
         "/" +
         occurrence.slots,
       start: occurrence.start.toJSDate(),
@@ -98,6 +107,7 @@ async function updateEvents(from, to) {
 
   <!-- @assignment-created="loadShift" -->
   <ShiftsAssignmentModal
+    v-if="selectedShiftOccurence"
     v-model:is-open="assignmentCreationModalOpen"
     :shift-occurence="selectedShiftOccurence"
   />

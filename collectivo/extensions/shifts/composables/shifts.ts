@@ -3,9 +3,14 @@ import { DateTime } from "luxon";
 import { RRule, RRuleSet } from "rrule";
 import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
 
+interface GetAllShiftOccurrencesOptions {
+  filterFreeSlots?: boolean;
+}
+
 export const getAllShiftOccurrences = async (
   from: DateTime,
   to: DateTime,
+  options: GetAllShiftOccurrencesOptions = {},
 ): Promise<ShiftOccurrence[]> => {
   const directus = useDirectus();
 
@@ -60,9 +65,21 @@ export const getAllShiftOccurrences = async (
       slotRules.push(slotToRrule(shift, shiftRule, filteredAssignments));
     }
 
-    occurrences.push(
-      ...getOccurrencesForShift(shift, shiftRule, slotRules, from, to),
+    const shiftOccurrences = getOccurrencesForShift(
+      shift,
+      shiftRule,
+      slotRules,
+      from,
+      to,
     );
+
+    if (options.filterFreeSlots) {
+      occurrences.push(
+        ...shiftOccurrences.filter((occurrence) => occurrence.openSlots > 0),
+      );
+    } else {
+      occurrences.push(...shiftOccurrences);
+    }
   }
 
   occurrences.sort((a, b) => {

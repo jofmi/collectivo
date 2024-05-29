@@ -1,38 +1,39 @@
-import { RRule } from "rrule";
 import { createItems, readItems, readUsers } from "@directus/sdk";
-import { ACTIVE_MEMBERSHIP_STATUSES } from "@collectivo/memberships/server/schemas/memberships_01";
-import {
-  SHIFT_CYCLE_DURATION_WEEKS,
-  SHIFT_CYCLE_START,
-} from "@collectivo/shifts/server/utils/constants";
 
-import { luxonDateTimeToRruleDatetime } from "@collectivo/shifts/server/utils/luxonDateTimeToRruleDatetime";
-import { DateTime } from "luxon";
+const cycle_days = 28;
 
 interface ShiftUser {
   id: string;
-  first_name: string;
   shifts_user_type: string;
 }
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async () => {
   // verifyCollectivoApiToken(event);
   const directus = await useDirectusAdmin();
 
   const users = (await directus.request(
     readUsers({
-      fields: ["id", "first_name", "shifts_user_type"],
+      fields: ["id", "shifts_user_type"],
     }),
   )) as ShiftUser[];
 
   // We load logs for all users then filter the logs manually
-  // before sending to removePointsForUser
+  // before sending to createShiftScoreLogs
   // in order to avoid doing one DB request per user.
+  // TODO: We only need last log of each user actually
   const cycleLogs = (await directus.request(
     readItems("shifts_logs", {
-      fields: ["shifts_date", "shifts_user"],
-      sort: "-shifts_date",
-      filter: { shifts_type: { _eq: ShiftLogType.CYCLE } },
+      fields: ["shifts_date", "shifts_user", "shifts_type"],
+      sort: ["-shifts_date", "-date_created"],
+      filter: {
+        shifts_type: {
+          _in: [
+            ShiftLogType.CYCLE,
+            ShiftLogType.CYCLE_ACTIVATED,
+            ShiftLogType.CYCLE_DEACTIVATED,
+          ],
+        },
+      },
     }),
   )) as ShiftsLog[];
 
@@ -70,13 +71,96 @@ function getCurrentDate() {
 }
 
 async function createShiftScoreLogs(user: ShiftUser, cycleLogs: ShiftsLog[]) {
+  const today = getCurrentDate();
+
+  // Handle users that should be deactivated
+  // Log cycle deactivation if necessary
+  if (
+    user.shifts_user_type != ShiftUserType.Regular &&
+    user.shifts_user_type != ShiftUserType.Jumper
+  ) {
+    if (
+      cycleLogs.length > 0 &&
+      cycleLogs[0].shifts_type != ShiftLogType.CYCLE_DEACTIVATED
+    ) {
+      return [
+        {
+          shifts_type: ShiftLogType.CYCLE_DEACTIVATED,
+          shifts_date: today.toISOString(),
+          shifts_user: user.id,
+        },
+      ];
+    } else {
+      return [];
+    }
+  }
+
+  // Handle users that should be activated
+  // Log cycle activation if necessary
+  if (
+    cycleLogs.length == 0 ||
+    cycleLogs[0].shifts_type == ShiftLogType.CYCLE_DEACTIVATED
+  ) {
+    return [
+      {
+        shifts_type: ShiftLogType.CYCLE_ACTIVATED,
+        shifts_date: today.toISOString(),
+        shifts_user: user.id,
+      },
+    ];
+  }
+
+  // Handle regular users
   let nextCycleDate = undefined;
 
   if (cycleLogs.length > 0) {
-    // Create the next cycle date based on the last cycle log
-    nextCycleDate = new Date(cycleLogs[0].shifts_date);
-    nextCycleDate.setDate(nextCycleDate.getDate() + 28);
-    console.log(nextCycleDate);
+    let lastCycle = undefined;
+    let lastActivated = undefined;
+    let deactivatedDays = 0;
+
+    // Find the last cycle log or the first activation
+    // Note breaks (deactivated-activated) in between today and last cycle
+    while (cycleLogs.length > 0) {
+      const mostRecentLog = cycleLogs.shift();
+
+      if (mostRecentLog!.shifts_type == ShiftLogType.CYCLE) {
+        lastCycle = mostRecentLog;
+        break;
+      }
+
+      if (mostRecentLog!.shifts_type == ShiftLogType.CYCLE_ACTIVATED) {
+        lastActivated = mostRecentLog;
+        continue;
+      }
+
+      if (mostRecentLog!.shifts_type == ShiftLogType.CYCLE_DEACTIVATED) {
+        if (lastActivated) {
+          // Get number of days between last activation and deactivation
+          deactivatedDays += Math.floor(
+            (new Date(mostRecentLog!.shifts_date).getTime() -
+              new Date(lastActivated.shifts_date).getTime()) /
+              (1000 * 60 * 60 * 24),
+          );
+        }
+
+        lastActivated = undefined;
+        continue;
+      }
+    }
+
+    // Create the next cycle date based on the last cycle or activation
+    if (lastCycle || lastActivated) {
+      nextCycleDate = new Date(
+        lastCycle ? lastCycle.shifts_date : lastActivated!.shifts_date,
+      );
+
+      nextCycleDate.setDate(
+        nextCycleDate.getDate() + cycle_days + deactivatedDays,
+      );
+    } else {
+      // If no valid cycle log is found, create cycle log at current date
+      nextCycleDate = getCurrentDate();
+    }
   } else {
     // If no cycle logs exist, create the first cycle log at current date
     nextCycleDate = getCurrentDate();
@@ -84,7 +168,6 @@ async function createShiftScoreLogs(user: ShiftUser, cycleLogs: ShiftsLog[]) {
 
   // Create cycle logs until current date is exceeded
   const requests = [];
-  const today = new Date();
 
   while (nextCycleDate <= today) {
     requests.push({

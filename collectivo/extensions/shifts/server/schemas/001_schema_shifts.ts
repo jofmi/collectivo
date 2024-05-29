@@ -261,11 +261,12 @@ schema.fields = [
   },
   {
     collection: "shifts_logs",
-    field: "shifts_datetime",
-    type: "dateTime",
+    field: "shifts_date",
+    type: "date",
     schema: { is_nullable: false },
     meta: {},
   },
+  ...directusSystemFields("shifts_logs"),
 ];
 
 schema.createForeignKey("shifts_slots", "shifts_shifts", {

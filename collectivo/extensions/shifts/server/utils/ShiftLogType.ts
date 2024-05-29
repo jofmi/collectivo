@@ -3,4 +3,6 @@ export enum ShiftLogType {
   MISSED = "missed",
   CANCELLED = "cancelled",
   CYCLE = "cycle",
+  CYCLE_ACTIVATED = "cycle_activated",
+  CYCLE_DEACTIVATED = "cycle_deactivated",
 }

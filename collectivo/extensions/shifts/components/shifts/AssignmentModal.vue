@@ -30,15 +30,15 @@ const submitLoading = ref(false);
 const repeats = shift.shifts_repeats_every ?? 0;
 const isWeeks = repeats % 7 === 0;
 const frequency = isWeeks ? repeats / 7 : repeats;
-const chosenSlot = ref<ShiftsSlot | null>(null);
+
 user.value.load();
 
-const possibleShiftTypes = [
-  {
-    label: "Regularly",
-    value: "regular",
-  },
-];
+interface ShiftType {
+  label: string;
+  value: string;
+}
+
+const possibleShiftTypes: ShiftType[] = [];
 
 // Check if date is 4 weeks in the future or less
 if (props.shiftOccurence.start.diffNow("weeks").weeks <= 4) {
@@ -48,13 +48,28 @@ if (props.shiftOccurence.start.diffNow("weeks").weeks <= 4) {
   });
 }
 
-const chosenShiftType = ref(possibleShiftTypes[0]);
+const chosenShiftType: Ref<ShiftType | null> = ref(null);
 
 const reset = () => {
   isOpen.value = false;
 };
 
-const slots = ref<ShiftsSlot[]>([]);
+interface SlotContainer {
+  slot: ShiftsSlot;
+  freeUntil: Date;
+  id: number;
+  occurences: Date[];
+  possibleShiftTypes: { label: string; value: string }[];
+}
+
+const slots = ref<SlotContainer[]>([]);
+
+const chosenSlot = ref<SlotContainer | null>(null);
+
+// watch chosenSlot
+watch(chosenSlot, (newSlot) => {
+  chosenShiftType.value = null;
+});
 
 onMounted(async () => {
   const openSlots = props.shiftOccurence.openSlots;
@@ -63,22 +78,75 @@ onMounted(async () => {
     return;
   }
 
-  slots.value = (await directus.request(
+  const slotsRes = (await directus.request(
     readItems("shifts_slots", {
       filter: { id: { _in: openSlots } },
     }),
   )) as ShiftsSlot[];
+
+  for (const slot of slotsRes) {
+    const nearestFutureAssignment = (
+      await directus.request(
+        readItems("shifts_assignments", {
+          filter: {
+            shifts_user: user.value.data!.id,
+            shifts_slot: { _eq: slot.id },
+            shifts_from: { _gte: DateTime.now().toISO() },
+          },
+          sort: "-shifts_from",
+          limit: 1,
+        }),
+      )
+    )[0] as ShiftsAssignment;
+
+    const freeUntil = nearestFutureAssignment
+      ? DateTime.fromISO(
+          nearestFutureAssignment.shifts_from + "T00:00:00.000Z",
+        ).minus({
+          days: 1,
+        })
+      : null;
+
+    const occurences = props.shiftOccurence.shiftRule.between(
+      start.startOf("day").toJSDate(),
+      freeUntil ? freeUntil.toJSDate() : start.startOf("day").toJSDate(),
+      true,
+    );
+
+    const regularShiftType = [];
+
+    if (!freeUntil || occurences.length > 1) {
+      regularShiftType.push({
+        label: "Regular",
+        value: "regular",
+      });
+    }
+
+    slots.value.push({
+      id: slot.id,
+      slot,
+      freeUntil: freeUntil,
+      occurences: occurences,
+      possibleShiftTypes: [...regularShiftType, ...possibleShiftTypes],
+    });
+  }
 });
 
 async function postAssignment() {
   submitLoading.value = true;
 
+  const payload = {
+    shifts_user: user.value.data!.id,
+    shifts_slot: chosenSlot.value!,
+    shifts_from: start.toISO()!,
+  };
+
+  if (chosenSlot.value.freeUntil) {
+    payload.shifts_to = chosenSlot.value.freeUntil.toISO()!;
+  }
+
   const assignment = (await directus.request(
-    createItem("shifts_assignments", {
-      shifts_user: user.value.data!.id,
-      shifts_slot: chosenSlot.value!,
-      shifts_from: start.toISO()!,
-    }),
+    createItem("shifts_assignments", payload),
   )) as ShiftsAssignment;
 
   emit("assignmentCreated", assignment);
@@ -90,6 +158,17 @@ async function postAssignment() {
   <UModal v-model="isOpen">
     <div class="m-10">
       <h2>{{ shift.shifts_name }}</h2>
+
+      <p class="font-bold text-lg leading-7 my-5">
+        {{ start.toLocaleString(DateTime.DATE_MED) }} {{ t("from") }}
+        {{ start.toLocaleString(DateTime.TIME_24_SIMPLE) }} {{ t("to") }}
+        {{ end.toLocaleString(DateTime.TIME_24_SIMPLE) }}
+        <br />
+        <span v-if="shift.shifts_repeats_every">
+          {{ t("Repeating every") }}
+          {{ frequency }} {{ isWeeks ? t("weeks") : t("days") }}
+        </span>
+      </p>
 
       <p
         v-if="shift.shifts_description"
@@ -105,42 +184,67 @@ async function postAssignment() {
           placeholder="Choose slot"
         >
           <template #option="{ option }">
-            {{ option.id }} - {{ option.shifts_name }}
+            {{ option.id }} - {{ option.slot.shifts_name }}
+            <span v-if="option.occurences && option.occurences.length == 1">
+              (single occurrence)
+            </span>
+            <span v-else-if="option.freeUntil">
+              (free until
+              {{ option.freeUntil.toLocaleString(DateTime.DATE_MED) }}
+              ) {{ option.occurences.length }}
+              {{ option.occurences.length == 1 }}
+            </span>
           </template>
 
           <template #label>
             <template v-if="chosenSlot">
-              Slot: {{ chosenSlot.id }} - {{ chosenSlot.shifts_name }}
+              {{ chosenSlot.slot.shifts_name }}
+              <span
+                v-if="
+                  chosenSlot.occurences && chosenSlot.occurences.length == 1
+                "
+              >
+                (single occurrence)
+              </span>
+              <span v-else-if="chosenSlot.freeUntil">
+                (free until
+                {{ chosenSlot.freeUntil.toLocaleString(DateTime.DATE_MED) }}
+                ) {{ chosenSlot.occurences.length }}
+                {{ chosenSlot.occurences.length == 1 }}
+              </span>
             </template>
             <template v-else> Choose slot </template>
           </template>
         </USelectMenu>
       </UFormGroup>
 
-      <UFormGroup label="Assignment type" class="my-5">
+      <UFormGroup v-if="chosenSlot" label="Assignment type" class="my-5">
         <USelectMenu
           v-model="chosenShiftType"
-          :options="possibleShiftTypes"
+          :options="chosenSlot.possibleShiftTypes"
           option-value="value"
           option-label="label"
           label="Slot"
           placeholder="Choose shift type"
           class=""
         >
-          <template #label> {{ chosenShiftType.label }} </template>
+          <template #label>
+            <span v-if="chosenShiftType">{{ chosenShiftType.label }}</span>
+            <span v-else> Choose assignment type</span>
+          </template>
         </USelectMenu>
       </UFormGroup>
 
-      <p class="font-bold text-lg my-5 leading-7">
+      <p v-if="chosenShiftType" class="font-bold text-lg my-5 leading-7">
         <span v-if="chosenShiftType.value === 'jumper'">
-          {{ t("Sign up only for this single occurence") }}
+          {{ t("Sign up only for a one-time shift on") }}
           <br />
           {{ start.toLocaleString(DateTime.DATE_MED) }} {{ t("from") }}
           {{ start.toLocaleString(DateTime.TIME_24_SIMPLE) }} {{ t("to") }}
           {{ end.toLocaleString(DateTime.TIME_24_SIMPLE) }}
         </span>
         <span v-else>
-          {{ t("Sign up for this and future occurrences") }}
+          {{ t("Sign up for a regular shift") }}
           <br />
           {{ start.weekdayLong }} {{ t("from") }}
           {{ start.toLocaleString(DateTime.TIME_24_SIMPLE) }} {{ t("to") }}
@@ -151,7 +255,10 @@ async function postAssignment() {
           <br />
           {{ t("Starting from") }}
           {{ start.toLocaleString(DateTime.DATE_MED) }}
-          <!-- TODO: What if end necessary? UNTIL XY.XY.YYYY -->
+          <span v-if="chosenSlot && chosenSlot.freeUntil">
+            {{ t("until") }}
+            {{ chosenSlot.freeUntil.toLocaleString(DateTime.DATE_MED) }}
+          </span>
         </span>
       </p>
 

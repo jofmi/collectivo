@@ -167,7 +167,9 @@ export const getOccurrencesForShift = (
   const shiftOccurrences: ShiftOccurrence[] = [];
 
   for (const date of dates) {
-    shiftOccurrences.push(rruleDateToShiftOccurrence(shift, date, slotRules));
+    shiftOccurrences.push(
+      rruleDateToShiftOccurrence(shift, date, shiftRule, slotRules),
+    );
   }
 
   return shiftOccurrences;
@@ -176,6 +178,7 @@ export const getOccurrencesForShift = (
 const rruleDateToShiftOccurrence = (
   shift: ShiftsShift,
   date: Date,
+  shiftRule?: RRule,
   slotRules?: SlotRule[],
 ): ShiftOccurrence => {
   const openSlots: number[] = [];
@@ -194,6 +197,7 @@ const rruleDateToShiftOccurrence = (
     shift: shift,
     start: start,
     end: end,
+    shiftRule: shiftRule,
     slots: slotRules?.length ?? 0,
     openSlots: openSlots,
   };

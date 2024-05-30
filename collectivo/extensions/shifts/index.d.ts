@@ -78,6 +78,7 @@ declare global {
     end: DateTime;
     slots: number;
     openSlots: number[];
+    shiftRule: RRuleSet;
   }
 
   export interface ShiftsSkillUserLink {

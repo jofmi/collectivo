@@ -117,7 +117,7 @@ function getUserSkillNames() {
   </CollectivoContainer>
 
   <div v-if="isActive" class="flex flex-wrap pb-6 gap-5">
-    <NuxtLink to="/shifts/shift_calendar"
+    <NuxtLink to="/shifts/signup"
       ><UButton size="lg" icon="i-heroicons-plus-circle">{{
         t("Sign up for a shift")
       }}</UButton></NuxtLink

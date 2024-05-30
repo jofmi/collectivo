@@ -77,7 +77,7 @@ declare global {
     start: DateTime;
     end: DateTime;
     slots: number;
-    openSlots: number;
+    openSlots: number[];
   }
 
   export interface ShiftsSkillUserLink {

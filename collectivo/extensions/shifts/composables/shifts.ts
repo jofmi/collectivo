@@ -4,7 +4,12 @@ import { RRule, RRuleSet } from "rrule";
 import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
 
 interface GetAllShiftOccurrencesOptions {
-  filterFreeSlots?: boolean;
+  shiftType: "regular" | "jumper" | "unfilled" | "all";
+}
+
+interface SlotRule {
+  slotID: number;
+  rrule: RRule;
 }
 
 export const getAllShiftOccurrences = async (
@@ -13,6 +18,10 @@ export const getAllShiftOccurrences = async (
   options: GetAllShiftOccurrencesOptions = {},
 ): Promise<ShiftOccurrence[]> => {
   const directus = useDirectus();
+  const { shiftType } = options;
+  const isJumper = shiftType === "jumper";
+  const isRegular = shiftType === "regular";
+  const isAll = shiftType === "all";
 
   const shifts: ShiftsShift[] = (await directus.request(
     readItems("shifts_shifts", {
@@ -34,48 +43,73 @@ export const getAllShiftOccurrences = async (
       return [...acc, ...slotList];
     }, []);
 
-  // Flatten array of slot ids
-
   // Get assignments within timeframe
-  const assignments = (await directus.request(
-    readItems("shifts_assignments", {
-      filter: {
-        shifts_to: { _gte: from.toISO() },
-        shifts_from: { _lte: to.toISO() },
-        shifts_slot: {
-          _in: slotIds,
-        },
-      },
-      fields: ["*", "shift_slots.*", "shift_slots.shifts_assignments.*"],
-    }),
-  )) as ShiftsAssignment[];
+  const assignments =
+    slotIds && slotIds.length > 0
+      ? await directus.request(
+          readItems("shifts_assignments", {
+            filter: {
+              shifts_to: { _gte: from.toISO() },
+              shifts_from: { _lte: to.toISO() },
+              shifts_slot: {
+                _in: slotIds,
+              },
+            },
+            fields: ["*", "shift_slots.*", "shift_slots.shifts_assignments.*"],
+          }),
+        )
+      : ([] as ShiftsAssignment[]);
 
   const occurrences = [];
 
   // Assign assignments to slots
   for (const shift of shifts) {
     const shiftRule = shiftToRRule(shift);
-    const slotRules: RRule[] = [];
+    const slotRules: SlotRule[] = [];
 
     for (const slot of shift.shifts_slots ?? []) {
       const filteredAssignments = assignments.filter(
         (assignment) => assignment.shifts_slot === slot,
       );
 
-      slotRules.push(slotToRrule(shift, shiftRule, filteredAssignments));
+      slotRules.push({
+        slotID: slot as number,
+        rrule: slotToRrule(shift, shiftRule, filteredAssignments),
+      });
+    }
+
+    const today = new Date();
+    let minDate = from.toJSDate();
+    let maxDate = to.toJSDate();
+
+    // Jumper and regular can only be into the future
+    if ((isJumper || isRegular) && minDate < today) {
+      minDate = today;
+    }
+
+    // Jumpers will only see the next 4 weeks
+    if (isJumper) {
+      const jumperLimit = new Date(today.setDate(today.getDate() + 28));
+
+      if (jumperLimit < maxDate) {
+        maxDate = jumperLimit;
+      }
     }
 
     const shiftOccurrences = getOccurrencesForShift(
       shift,
       shiftRule,
       slotRules,
-      from,
-      to,
+      minDate,
+      maxDate,
     );
 
-    if (options.filterFreeSlots) {
+    // Show only shifts with open slots
+    if (!isAll) {
       occurrences.push(
-        ...shiftOccurrences.filter((occurrence) => occurrence.openSlots > 0),
+        ...shiftOccurrences.filter(
+          (occurrence) => occurrence.openSlots.length > 0,
+        ),
       );
     } else {
       occurrences.push(...shiftOccurrences);
@@ -124,15 +158,11 @@ export const slotToRrule = (
 export const getOccurrencesForShift = (
   shift: ShiftsShift,
   shiftRule: RRule,
-  slotRules: RRule[],
-  from: DateTime,
-  to: DateTime,
+  slotRules: SlotRule[],
+  from: Date,
+  to: Date,
 ): ShiftOccurrence[] => {
-  const dates: Date[] = shiftRule.between(
-    luxonDateTimeToRruleDatetime(from),
-    luxonDateTimeToRruleDatetime(to),
-    true,
-  );
+  const dates: Date[] = shiftRule.between(from, to, true);
 
   const shiftOccurrences: ShiftOccurrence[] = [];
 
@@ -146,13 +176,13 @@ export const getOccurrencesForShift = (
 const rruleDateToShiftOccurrence = (
   shift: ShiftsShift,
   date: Date,
-  slotRules?: RRule[],
+  slotRules?: SlotRule[],
 ): ShiftOccurrence => {
-  let openSlots = 0;
+  const openSlots: number[] = [];
 
   for (const slotRule of slotRules ?? []) {
-    if (slotRule.between(date, date, true).length > 0) {
-      openSlots++;
+    if (slotRule.rrule.between(date, date, true).length > 0) {
+      openSlots.push(slotRule.slotID);
     }
   }
 

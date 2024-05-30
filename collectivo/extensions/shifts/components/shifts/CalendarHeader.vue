@@ -1,10 +1,17 @@
-<script setup>
-const props = defineProps(["calendarRef"]);
+<script setup lang="ts">
+const props = defineProps({
+  calendarRef: Object as PropType<{ getApi: Promise<() => FullCalendar> }>,
+});
 
-const displayedDate = ref("");
+const model = defineModel();
+const shiftTypes = model.value.allowedShiftTypes;
+const displayedDate = ref();
 const calendarApi = ref(null);
-const dropdownLabel = ref("");
-const dropdownIcon = ref("");
+
+// Get shift type with value from props
+const selectedShiftType = ref(
+  shiftTypes.find((type) => type.value === model.value.selectedShiftType),
+);
 
 const prevHandler = () => {
   calendarApi.value.prev();
@@ -16,38 +23,43 @@ const nextHandler = () => {
   displayedDate.value = calendarApi.value.view.title;
 };
 
-const items = [
+const views = [
   {
     label: "Month",
-    icon: "i-system-uicons-calendar-month",
+    icon: "i-heroicons-calendar",
     view: "dayGridMonth",
   },
   {
     label: "Week",
-    icon: "i-system-uicons-calendar-week",
+    icon: "i-heroicons-view-columns",
     view: "timeGridWeek",
   },
   {
     label: "Day",
-    icon: "i-system-uicons-calendar-day",
+    icon: "i-heroicons-queue-list",
     view: "timeGridDay",
   },
 ];
 
-for (const item of items) {
-  item["click"] = () => {
-    calendarApi.value.changeView(item.view);
-    displayedDate.value = calendarApi.value.view.title;
-    dropdownLabel.value = item.label;
-    dropdownIcon.value = item.icon;
-  };
+const selectedView = ref(views[0]);
+
+function setView(view: string) {
+  calendarApi.value.changeView(view);
+  displayedDate.value = calendarApi.value.view.title;
 }
+
+watch(selectedView, (value) => {
+  setView(value.view);
+});
+
+watch(selectedShiftType, (value) => {
+  model.value.selectedShiftType = value.value;
+});
 
 onMounted(async () => {
   const calendar = await props.calendarRef.value.getApi;
   calendarApi.value = calendar();
-  displayedDate.value = calendarApi.value.view.title;
-  items[0].click();
+  setView("dayGridMonth");
 });
 </script>
 
@@ -80,14 +92,23 @@ onMounted(async () => {
       </div>
     </div>
     <div class="calendar-header__right">
-      <UDropdown :items="[items]">
-        <UButton
-          :label="dropdownLabel"
-          color="white"
-          trailing-icon="i-system-uicons-chevron-down"
-          :leading-icon="dropdownIcon"
-        />
-      </UDropdown>
+      <USelectMenu
+        v-model="selectedShiftType"
+        :options="shiftTypes"
+        class="w-48"
+      >
+        <template #label>Shift type: {{ selectedShiftType.label }}</template>
+      </USelectMenu>
+      <USelectMenu
+        v-model="selectedView"
+        :options="views"
+        option-attribute="label"
+      >
+        <template #label>Display</template>
+        <template #leading>
+          <UIcon :name="selectedView.icon" />
+        </template>
+      </USelectMenu>
     </div>
   </div>
 </template>
@@ -110,21 +131,10 @@ onMounted(async () => {
   }
 
   &__right {
-    @apply hidden lg:block;
+    @apply flex items-center gap-5;
     &__btn {
       @apply h-auto py-2 pl-4 pr-2.5 rounded-[10px] gap-0;
     }
-  }
-}
-
-.dropdown-item {
-  @apply text-left;
-  &__title {
-    @apply font-semibold text-sm;
-  }
-
-  &__description {
-    @apply font-semibold text-xs line-clamp-3;
   }
 }
 </style>

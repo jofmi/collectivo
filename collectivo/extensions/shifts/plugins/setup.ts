@@ -14,16 +14,9 @@ function addMenuItems() {
 
   menu.value.main.push({
     label: "Shifts",
-    icon: "i-heroicons-building-storefront",
-    to: "/shifts/my_shifts",
+    icon: "i-heroicons-calendar-days-solid",
+    to: "/shifts/profile",
     order: 90,
-  });
-
-  menu.value.main.push({
-    label: "Shift calendar",
-    icon: "i-heroicons-calendar-days",
-    to: "/shifts/shift_calendar",
-    order: 95,
   });
 }
 

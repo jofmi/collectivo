@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import FullCalendar from "@fullcalendar/vue3";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -14,6 +14,13 @@ import { DateTime } from "luxon";
 // watch(locale, (newLocale) => {
 //   Settings.defaultLocale = newLocale;
 // });
+
+const props = defineProps({
+  shiftType: {
+    type: String as PropType<"jumper" | "regular" | "unfilled" | "all">,
+    required: true,
+  },
+});
 
 const assignmentCreationModalOpen = ref(false);
 const selectedShiftOccurence = ref(null);
@@ -47,7 +54,22 @@ const calendarOptions = ref({
   },
 });
 
+const customSettings = ref({
+  allowedShiftTypes: [
+    { label: "Regular", value: "regular" },
+    { label: "Jumper", value: "jumper" },
+  ],
+  selectedShiftType: props.shiftType,
+});
+
 const calendarRef = ref(null);
+
+watch(
+  () => customSettings.value.selectedShiftType,
+  (value) => {
+    registerEventUpdate();
+  },
+);
 
 const calendarComputed = () => {
   return calendarRef;
@@ -75,7 +97,7 @@ const registerEventUpdate = async () => {
 
 async function updateEvents(from, to) {
   const occurrences = await getAllShiftOccurrences(from, to, {
-    filterFreeSlots: true,
+    shiftType: customSettings.value.selectedShiftType,
   });
 
   const events = [];
@@ -85,7 +107,7 @@ async function updateEvents(from, to) {
       title:
         occurrence.shift.shifts_name +
         " - " +
-        (occurrence.slots - occurrence.openSlots) +
+        (occurrence.slots - occurrence.openSlots.length) +
         "/" +
         occurrence.slots,
       start: occurrence.start.toJSDate(),
@@ -101,7 +123,10 @@ async function updateEvents(from, to) {
 
 <template>
   <div id="dashboard-calendar" class="calendar">
-    <ShiftsCalendarHeader :calendar-ref="calendarComputed()" />
+    <ShiftsCalendarHeader
+      v-model="customSettings"
+      :calendar-ref="calendarComputed()"
+    />
     <full-calendar ref="calendarRef" :options="calendarOptions" />
   </div>
 
@@ -110,6 +135,7 @@ async function updateEvents(from, to) {
     v-if="selectedShiftOccurence"
     v-model:is-open="assignmentCreationModalOpen"
     :shift-occurence="selectedShiftOccurence"
+    :shift-type="customSettings.selectedShiftType"
   />
 </template>
 

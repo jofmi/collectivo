@@ -2,6 +2,7 @@ import { readItems } from "@directus/sdk";
 import { DateTime } from "luxon";
 import { RRule, RRuleSet } from "rrule";
 import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
+import { getDateFromDb } from "./dates";
 
 interface GetAllShiftOccurrencesOptions {
   shiftType?: "regular" | "jumper" | "unfilled" | "all";
@@ -136,17 +137,9 @@ export const slotToRrule = (
       new RRule({
         freq: RRule.DAILY,
         interval: shift.shifts_repeats_every,
-        dtstart: shiftRule.after(
-          luxonDateTimeToRruleDatetime(
-            DateTime.fromISO(assignment.shifts_from),
-          ),
-        ),
+        dtstart: shiftRule.after(new Date(assignment.shifts_from), true),
         until: assignment.shifts_to
-          ? shiftRule.before(
-              luxonDateTimeToRruleDatetime(
-                DateTime.fromISO(assignment.shifts_to),
-              ),
-            )
+          ? shiftRule.before(new Date(assignment.shifts_to), true)
           : null,
       }),
     );

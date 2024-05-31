@@ -60,8 +60,16 @@ const calendarOptions = ref({
 
 const customSettings = ref({
   allowedShiftTypes: [
-    { label: "Regular", value: "regular" },
-    { label: "Jumper", value: "jumper" },
+    {
+      label: "Regular",
+      value: "regular",
+      icon: "i-heroicons-squares-plus",
+    },
+    {
+      label: "One-time",
+      value: "jumper",
+      icon: "i-heroicons-stop",
+    },
   ],
   selectedShiftType: props.shiftType,
 });

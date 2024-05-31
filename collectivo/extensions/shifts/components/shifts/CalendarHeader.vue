@@ -3,6 +3,7 @@ const props = defineProps({
   calendarRef: Object as PropType<{ getApi: Promise<() => FullCalendar> }>,
 });
 
+const { t } = useI18n();
 const model = defineModel();
 const shiftTypes = model.value.allowedShiftTypes;
 const displayedDate = ref();
@@ -92,24 +93,31 @@ onMounted(async () => {
       </div>
     </div>
     <div class="calendar-header__right">
-      <USelectMenu
-        v-model="selectedShiftType"
-        :options="shiftTypes"
-        class="w-48"
-      >
-        <template #label>Shift type: {{ selectedShiftType.label }}</template>
-      </USelectMenu>
-      <USelectMenu
-        v-model="selectedView"
-        :options="views"
-        option-attribute="label"
-        class="w-48"
-      >
-        <template #label>Display: {{ selectedView.label }}</template>
-        <template #leading>
-          <UIcon :name="selectedView.icon" />
-        </template>
-      </USelectMenu>
+      <UFormGroup :label="t('Shift type')">
+        <USelectMenu
+          v-model="selectedShiftType"
+          :options="shiftTypes"
+          class="w-36"
+        >
+          <template #label>{{ t(selectedShiftType.label) }}</template>
+          <template #option="{ option }">
+            {{ t(option.label) }}
+          </template>
+        </USelectMenu>
+      </UFormGroup>
+      <UFormGroup :label="t('Display')">
+        <USelectMenu
+          v-model="selectedView"
+          :options="views"
+          option-attribute="label"
+          class="w-36"
+        >
+          <template #label>{{ t(selectedView.label) }}</template>
+          <template #option="{ option }">
+            {{ t(option.label) }}
+          </template>
+        </USelectMenu>
+      </UFormGroup>
     </div>
   </div>
 </template>
@@ -139,3 +147,14 @@ onMounted(async () => {
   }
 }
 </style>
+
+<i18n lang="yaml">
+de:
+  Month: Monat
+  Week: Woche
+  Day: Tag
+  Regular: Regelmäßig
+  One-time: Einmalig
+  Shift type: Schichttyp
+  Display: Anzeige
+</i18n>

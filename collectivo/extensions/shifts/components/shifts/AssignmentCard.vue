@@ -37,17 +37,24 @@ function getEndDate(endDate: string) {
 </script>
 
 <template>
-  <CollectivoCard v-if="nextOccurrence" :title="getTimeString(nextOccurrence)">
+  <CollectivoCard
+    v-if="nextOccurrence"
+    :title="getTimeString(nextOccurrence)"
+    :color="shiftAssignment.isRegular ? 'primary' : 'green'"
+  >
     <template #content>
       <div>
         <!-- Repetition info -->
-        <p v-if="shift.shifts_repeats_every">
+        <p v-if="shift.shifts_repeats_every && shiftAssignment.isRegular">
           {{ t("Shift repeats every") }} {{ shift.shifts_repeats_every }}
           {{ t("days") }}
 
           <span v-if="assignment.shifts_to">
             {{ t("until") }} {{ getEndDate(assignment.shifts_to) }}
           </span>
+        </p>
+        <p v-else>
+          {{ t("One-time shift") }}
         </p>
 
         <!-- Absences -->
@@ -61,6 +68,7 @@ function getEndDate(endDate: string) {
             {{
               DateTime.fromJSDate(absenceDate).toLocaleString(DateTime.DATE_MED)
             }}
+            &nbsp;
           </span>
         </p>
 
@@ -93,4 +101,5 @@ de:
   "from": "von"
   "to": "bis"
   "Absences": "Abwesenheiten"
+  "One-time shift": "Einmalige Schicht"
 </i18n>

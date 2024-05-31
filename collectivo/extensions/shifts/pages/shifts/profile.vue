@@ -3,6 +3,7 @@ import { readItems } from "@directus/sdk";
 import { DateTime } from "luxon";
 
 import showShiftToast from "~/composables/toast";
+import { RRuleSet, RRule, datetime } from "rrule";
 
 const config = useRuntimeConfig();
 
@@ -75,9 +76,43 @@ function getUserSkillNames() {
     .catch((error) => showShiftToast("Failed to load skills", error, "error"))
     .finally(() => (skillsLoading.value = false));
 }
+
+const innerRule = new RRuleSet();
+
+innerRule.rrule(
+  new RRule({
+    freq: RRule.MONTHLY,
+    count: 3,
+    dtstart: datetime(2012, 2, 1, 10, 30),
+  }),
+);
+
+innerRule.exrule(
+  new RRule({
+    freq: RRule.MONTHLY,
+    count: 1,
+    dtstart: datetime(2012, 3, 1, 10, 30),
+  }),
+);
+
+const rruleSet = new RRuleSet();
+
+// Add a rrule to rruleSet
+rruleSet.rrule(
+  new RRule({
+    freq: RRule.MONTHLY,
+    count: 5,
+    dtstart: datetime(2012, 1, 1, 10, 30),
+  }),
+);
+
+rruleSet.exrule(innerRule);
 </script>
 
 <template>
+  To be excluded: {{ innerRule.all() }}
+  <br />
+  Final {{ rruleSet.all() }}
   <CollectivoContainer v-if="user.data">
     <div>
       <p>

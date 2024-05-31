@@ -56,6 +56,7 @@ declare global {
     assignmentRule: RRuleSet;
     absencesRule: RRuleSet;
     nextOccurrence: Date | null;
+    isRegular: boolean;
   }
 
   export interface ShiftsAbsence {

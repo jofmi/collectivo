@@ -6,7 +6,7 @@ import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
 
 export const getActiveAssignments = async (user: CollectivoUser) => {
   const directus = useDirectus();
-  const now = new Date();
+  const now = getCurrentDate();
   const nowStr = now.toISOString();
 
   const assignments = (await directus.request(
@@ -53,13 +53,22 @@ export const getActiveAssignments = async (user: CollectivoUser) => {
       );
 
       const rules = getAssignmentRRule(assignment, filteredAbsences);
+      const assignmentRule = rules[0];
+      const absencesRule = rules[1];
+      const nextOccurence = assignmentRule.after(now, true);
+      let secondNextOccurence = null;
+
+      if (nextOccurence) {
+        secondNextOccurence = assignmentRule.after(nextOccurence);
+      }
 
       return {
         assignment: assignment,
         absences: filteredAbsences,
-        assignmentRule: rules[0],
-        absencesRule: rules[1],
-        nextOccurrence: rules[0].after(now, true),
+        assignmentRule: assignmentRule,
+        absencesRule: absencesRule,
+        nextOccurrence: nextOccurence,
+        isRegular: secondNextOccurence != null,
       };
     },
   );

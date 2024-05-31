@@ -4,12 +4,13 @@ import showShiftToast from "~/composables/toast";
 import { DateTime } from "luxon";
 import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
 import OccurrencesPreview from "~/components/shifts/Assignment/OccurrencesPreview.vue";
-import { fromToOverlaps, getNextOccurrences } from "~/composables/shifts";
+import { getNextOccurrences } from "~/composables/shifts";
 import {
   getOccurrenceType,
   OccurrenceType,
 } from "~/composables/occurrenceType";
-import { capAssignmentToFirstAndLastIncludedOccurrence } from "~/composables/assignments";
+import capAssignmentToFirstAndLastIncludedOccurrence from "~/utils/assignments/capAssignmentToFirstAndLastIncludedOccurrence";
+import doTimeIntervalsOverlap from "~/utils/doTimeIntervalsOverlap";
 
 const props = defineProps({
   shiftID: {
@@ -223,7 +224,7 @@ function overlapWithOtherAssignment() {
     if (props.assignment && props.assignment.id == assignment.id) continue;
 
     if (
-      fromToOverlaps(
+      doTimeIntervalsOverlap(
         from.value,
         DateTime.fromISO(assignment.shifts_from),
         to.value,

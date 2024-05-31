@@ -1,7 +1,7 @@
 import type { DateTimeFormatOptions } from "luxon";
 import { DateTime } from "luxon";
 
-export default function formatDate(
+export default function (
   date: unknown,
   format: DateTimeFormatOptions = DateTime.DATE_MED_WITH_WEEKDAY,
 ) {

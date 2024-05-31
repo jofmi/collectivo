@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { DateTime } from "luxon";
+import getAssigneeName from "~/utils/assignments/getAssigneeName";
 
 const props = defineProps({
   shiftOccurrence: {

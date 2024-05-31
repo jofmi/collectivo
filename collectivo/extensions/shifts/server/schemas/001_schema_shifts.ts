@@ -283,18 +283,87 @@ schema.fields = [
   ...directusSystemFields("shifts_logs"),
 ];
 
+const shifts_within_slots_template = "{{shifts_name}} {{shifts_from}} ({{id}})";
+
+const slots_within_shifts_template = "{{shifts_name}} ({{id}})";
+
 schema.createForeignKey("shifts_slots", "shifts_shifts", {
-  fieldKey: { field: "shifts_shift" },
-  fieldAlias: { field: "shifts_slots" },
+  fieldKey: {
+    field: "shifts_shift",
+    meta: {
+      display: "related-values",
+      display_options: {
+        template: shifts_within_slots_template,
+      },
+      interface: "select-dropdown-m2o",
+      options: {
+        template: shifts_within_slots_template,
+      },
+    },
+  },
+  fieldAlias: {
+    field: "shifts_slots",
+    meta: {
+      display_options: {
+        template: slots_within_shifts_template,
+      },
+      options: {
+        template: slots_within_shifts_template,
+      },
+    },
+  },
 });
+
+const slots_within_skills_template =
+  "{{shifts_slots_id.shifts_name}} ({{shifts_slots_id.id}})";
+
+const skills_within_slots_template =
+  "{{shifts_skills_id.shifts_name}} ({{shifts_skills_id.id}})";
 
 schema.createM2MRelation("shifts_skills", "shifts_slots", {
-  field1: { field: "shifts_slots", type: "alias" },
-  field2: { field: "shifts_skills", type: "alias" },
+  field1: {
+    field: "shifts_slots",
+    type: "alias",
+    meta: {
+      display_options: {
+        template: slots_within_skills_template,
+      },
+      options: {
+        template: slots_within_skills_template,
+      },
+    },
+  },
+  field2: {
+    field: "shifts_skills",
+    type: "alias",
+    meta: {
+      display_options: {
+        template: skills_within_slots_template,
+      },
+      options: {
+        template: skills_within_slots_template,
+      },
+    },
+  },
 });
 
+const slots_within_assignments_template =
+  "{{shifts_name}} ({{id}}) -- Shift:{{shifts_shift.shifts_name}} ({{shifts_shift.id}})";
+
 schema.createForeignKey("shifts_assignments", "shifts_slots", {
-  fieldKey: { field: "shifts_slot" },
+  fieldKey: {
+    field: "shifts_slot",
+    meta: {
+      display: "related-values",
+      display_options: {
+        template: slots_within_assignments_template,
+      },
+      interface: "select-dropdown-m2o",
+      options: {
+        template: slots_within_assignments_template,
+      },
+    },
+  },
   fieldAlias: { field: "shifts_assignments" },
 });
 
@@ -306,8 +375,23 @@ schema.createForeignKey("shifts_absences", "shifts_assignments", {
   fieldAlias: { field: "shifts_absences" },
 });
 
+const assignments_within_logs_template =
+  "{{shifts_user.first_name}} {{shifts_user.last_name}} ({{id}}) -- {{shifts_slot}}";
+
 schema.createForeignKey("shifts_logs", "shifts_assignments", {
-  fieldKey: { field: "shifts_assignment" },
+  fieldKey: {
+    field: "shifts_assignment",
+    meta: {
+      display: "related-values",
+      display_options: {
+        template: assignments_within_logs_template,
+      },
+      interface: "select-dropdown-m2o",
+      options: {
+        template: assignments_within_logs_template,
+      },
+    },
+  },
 });
 
 schema.createForeignKey("shifts_logs", "directus_users", {

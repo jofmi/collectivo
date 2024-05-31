@@ -8,4 +8,5 @@ export default defineNuxtConfig({
       { code: "de", file: "de.json" },
     ],
   },
+  modules: ["@nuxt/test-utils/module"],
 });

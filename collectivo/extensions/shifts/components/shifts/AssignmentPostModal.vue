@@ -63,8 +63,6 @@ onMounted(async () => {
       )
     )[0] as ShiftsAssignment;
 
-    console.log("nearestFutureAssignment", nearestFutureAssignment);
-
     const freeUntil = nearestFutureAssignment
       ? DateTime.fromISO(
           nearestFutureAssignment.shifts_from + "T00:00:00.000Z",
@@ -139,14 +137,16 @@ async function postAssignmentInner(slotContainer: SlotContainer) {
           {{ t("One-time shift") }}
           <br />
           {{ start.toLocaleString(DateTime.DATE_MED) }} {{ t("from") }}
-          {{ start.toLocaleString(DateTime.TIME_24_SIMPLE) }} {{ t("to") }}
+          {{ start.toLocaleString(DateTime.TIME_24_SIMPLE) }}
+          {{ t("to") }}
           {{ end.toLocaleString(DateTime.TIME_24_SIMPLE) }}
         </span>
         <span v-else>
           {{ t("Regular shift") }}
           <br />
           {{ start.weekdayLong }} {{ t("from") }}
-          {{ start.toLocaleString(DateTime.TIME_24_SIMPLE) }} {{ t("to") }}
+          {{ start.toLocaleString(DateTime.TIME_24_SIMPLE) }}
+          {{ t("to") }}
           {{ end.toLocaleString(DateTime.TIME_24_SIMPLE) }}
           <br />
           {{ t("Repeating every") }}

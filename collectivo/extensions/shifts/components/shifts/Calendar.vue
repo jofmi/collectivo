@@ -108,7 +108,7 @@ const registerEventUpdate = async () => {
 };
 
 async function updateEvents(from, to) {
-  const occurrences = await getAllShiftOccurrences(from, to, {
+  const occurrences = await getShiftOccurrences(from, to, {
     shiftType: customSettings.value.selectedShiftType,
   });
 

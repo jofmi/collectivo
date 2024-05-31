@@ -2,9 +2,8 @@ import { readItems } from "@directus/sdk";
 import { DateTime } from "luxon";
 import { RRule, RRuleSet } from "rrule";
 import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
-import { getDateFromDb } from "./dates";
 
-interface GetAllShiftOccurrencesOptions {
+interface GetShiftOccurrencesOptions {
   shiftType?: "regular" | "jumper" | "unfilled" | "all";
 }
 
@@ -13,10 +12,10 @@ interface SlotRule {
   rrule: RRule;
 }
 
-export const getAllShiftOccurrences = async (
+export const getShiftOccurrences = async (
   from: DateTime,
   to: DateTime,
-  options: GetAllShiftOccurrencesOptions = {},
+  options: GetShiftOccurrencesOptions = {},
 ): Promise<ShiftOccurrence[]> => {
   const directus = useDirectus();
   const { shiftType } = options;
@@ -50,7 +49,9 @@ export const getAllShiftOccurrences = async (
       ? await directus.request(
           readItems("shifts_assignments", {
             filter: {
-              shifts_to: { _gte: from.toISO() },
+              shifts_to: {
+                _or: [{ _gte: from.toISO() }, { _null: true }],
+              },
               shifts_from: { _lte: to.toISO() },
               shifts_slot: {
                 _in: slotIds,
@@ -124,30 +125,6 @@ export const getAllShiftOccurrences = async (
   return occurrences;
 };
 
-export const slotToRrule = (
-  shift: ShiftsShift,
-  shiftRule: RRule,
-  assignments: ShiftsAssignment[],
-): RRule => {
-  const slotRules = new RRuleSet();
-  slotRules.rrule(shiftRule);
-
-  for (const assignment of assignments) {
-    slotRules.exrule(
-      new RRule({
-        freq: RRule.DAILY,
-        interval: shift.shifts_repeats_every,
-        dtstart: shiftRule.after(new Date(assignment.shifts_from), true),
-        until: assignment.shifts_to
-          ? shiftRule.before(new Date(assignment.shifts_to), true)
-          : null,
-      }),
-    );
-  }
-
-  return slotRules;
-};
-
 export const getOccurrencesForShift = (
   shift: ShiftsShift,
   shiftRule: RRule,
@@ -161,14 +138,16 @@ export const getOccurrencesForShift = (
 
   for (const date of dates) {
     shiftOccurrences.push(
-      rruleDateToShiftOccurrence(shift, date, shiftRule, slotRules),
+      getSingleShiftOccurence(shift, date, shiftRule, slotRules),
     );
   }
 
   return shiftOccurrences;
 };
 
-const rruleDateToShiftOccurrence = (
+// Includes information about slots
+// Time is always given in UTC - even if meant for other timezones
+const getSingleShiftOccurence = (
   shift: ShiftsShift,
   date: Date,
   shiftRule?: RRule,
@@ -183,8 +162,14 @@ const rruleDateToShiftOccurrence = (
   }
 
   const dateString = date.toISOString().split("T")[0];
-  const start = DateTime.fromISO(`${dateString}T${shift.shifts_from_time}Z`);
-  const end = DateTime.fromISO(`${dateString}T${shift.shifts_to_time}Z`);
+
+  const start = DateTime.fromISO(
+    `${dateString}T${shift.shifts_from_time}Z`,
+  ).toUTC();
+
+  const end = DateTime.fromISO(
+    `${dateString}T${shift.shifts_to_time}Z`,
+  ).toUTC();
 
   return {
     shift: shift,
@@ -208,6 +193,32 @@ export const shiftToRRule = (shift: ShiftsShift): RRule => {
     dtstart: new Date(shift.shifts_from),
     until: shift.shifts_to ? new Date(shift.shifts_to) : null,
   });
+};
+
+export const slotToRrule = (
+  shift: ShiftsShift,
+  shiftRule: RRule,
+  assignments: ShiftsAssignment[],
+): RRule => {
+  const slotRules = new RRuleSet();
+  slotRules.rrule(shiftRule);
+
+  for (const assignment of assignments) {
+    console.log("assignment found until", assignment.shifts_to);
+
+    slotRules.exrule(
+      new RRule({
+        freq: RRule.DAILY,
+        interval: shift.shifts_repeats_every,
+        dtstart: shiftRule.after(new Date(assignment.shifts_from), true),
+        until: assignment.shifts_to
+          ? shiftRule.before(new Date(assignment.shifts_to), true)
+          : null,
+      }),
+    );
+  }
+
+  return slotRules;
 };
 
 export const isShiftDurationModelActive = (
@@ -244,51 +255,4 @@ export const isFromToActive = (
   }
 
   return !(to && to < atDate);
-};
-
-export const fromToOverlaps = (
-  from1: DateTime,
-  from2: DateTime,
-  to1?: DateTime,
-  to2?: DateTime,
-  dateOnly = false,
-): boolean => {
-  if (from2 >= from1) {
-    return isFromToActive(from1, to1, from2, dateOnly);
-  }
-
-  if (!to2) {
-    return true;
-  }
-
-  return isFromToActive(from1, to1, to2, dateOnly);
-};
-
-export const getNextOccurrences = (
-  shift: ShiftsShift,
-  maxOccurrences: number,
-  after?: DateTime,
-  until?: DateTime,
-) => {
-  const nextOccurrences: ShiftOccurrence[] = [];
-  let nextOccurrence = getNextOccurrence(shift, after ?? DateTime.now());
-
-  while (
-    nextOccurrence !== null &&
-    nextOccurrences.length < maxOccurrences &&
-    (until == null || nextOccurrence.start < until)
-  ) {
-    nextOccurrences.push(nextOccurrence);
-    nextOccurrence = getNextOccurrence(shift, nextOccurrence.end);
-  }
-
-  return nextOccurrences;
-};
-
-export const getNextOccurrence = (shift: ShiftsShift, after?: DateTime) => {
-  const date = shiftToRRule(shift).after(
-    luxonDateTimeToRruleDatetime(after ?? DateTime.now()),
-  );
-
-  return date ? rruleDateToShiftOccurrence(shift, date) : null;
 };

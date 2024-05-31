@@ -142,9 +142,8 @@ async function updateEvents(from, to) {
     <full-calendar ref="calendarRef" :options="calendarOptions" />
   </div>
 
-  <!-- @assignment-created="loadShift" -->
-  <ShiftsAssignmentModal
-    v-if="selectedShiftOccurence"
+  <ShiftsAssignmentPostModal
+    v-if="assignmentCreationModalOpen && selectedShiftOccurence"
     v-model:is-open="assignmentCreationModalOpen"
     :shift-occurence="selectedShiftOccurence"
     :shift-type="customSettings.selectedShiftType"

@@ -3,6 +3,13 @@ import { DateTime } from "luxon";
 import { parse } from "marked";
 import { createItem, readItems } from "@directus/sdk";
 
+interface SlotContainer {
+  slot: ShiftsSlot;
+  freeUntil: DateTime | null;
+  id: number;
+  occurences: Date[];
+}
+
 const props = defineProps({
   shiftOccurence: {
     type: Object as PropType<ShiftOccurrence>,
@@ -16,66 +23,47 @@ const props = defineProps({
 
 const isOpen = defineModel("isOpen", { required: true, type: Boolean });
 const { t } = useI18n();
-
-const emit = defineEmits<{
-  assignmentCreated: [assignment: ShiftsAssignment];
-}>();
-
 const directus = useDirectus();
 const user = useCollectivoUser();
 const shift = props.shiftOccurence.shift;
 const start = props.shiftOccurence.start;
+const startDate = start.toISO()?.split("T")[0];
 const end = props.shiftOccurence.end;
 const submitLoading = ref(false);
 const repeats = shift.shifts_repeats_every ?? 0;
 const isWeeks = repeats % 7 === 0;
 const frequency = isWeeks ? repeats / 7 : repeats;
-
-user.value.load();
-
-const reset = () => {
-  isOpen.value = false;
-};
-
-interface SlotContainer {
-  slot: ShiftsSlot;
-  freeUntil: Date;
-  id: number;
-  occurences: Date[];
-  possibleShiftTypes: { label: string; value: string }[];
-}
-
 const slots = ref<SlotContainer[]>([]);
-
 const chosenSlot = ref<SlotContainer | null>(null);
 
-onMounted(async () => {
+async function getOpenSlots() {
   const openSlots = props.shiftOccurence.openSlots;
-
-  if (openSlots === 0) {
-    return;
-  }
-
-  const slotsRes = (await directus.request(
+  return (await directus.request(
     readItems("shifts_slots", {
       filter: { id: { _in: openSlots } },
     }),
   )) as ShiftsSlot[];
+}
 
-  for (const slot of slotsRes) {
+onMounted(async () => {
+  const openSlots = await getOpenSlots();
+
+  for (const slot of openSlots) {
     const nearestFutureAssignment = (
       await directus.request(
         readItems("shifts_assignments", {
           filter: {
             shifts_user: user.value.data!.id,
             shifts_slot: { _eq: slot.id },
-            shifts_from: { _gte: DateTime.now().toISO() },
+            shifts_from: { _gte: startDate },
           },
           sort: "-shifts_from",
           limit: 1,
         }),
       )
     )[0] as ShiftsAssignment;
+
+    console.log("nearestFutureAssignment", nearestFutureAssignment);
 
     const freeUntil = nearestFutureAssignment
       ? DateTime.fromISO(
@@ -91,15 +79,6 @@ onMounted(async () => {
       true,
     );
 
-    const regularShiftType = [];
-
-    if (!freeUntil || occurences.length > 1) {
-      regularShiftType.push({
-        label: "Regular",
-        value: "regular",
-      });
-    }
-
     slots.value.push({
       id: slot.id,
       slot,
@@ -109,25 +88,44 @@ onMounted(async () => {
   }
 });
 
-async function postAssignment() {
+async function postAssignment(slotContainer: SlotContainer) {
+  try {
+    await postAssignmentInner(slotContainer);
+
+    showCollectivoToast({
+      type: "success",
+      description: "Shift assignment successfull",
+    });
+
+    navigateTo("profile");
+  } catch (e) {
+    showCollectivoToast({
+      type: "error",
+      description: "Shift assignment failed",
+    });
+  }
+}
+
+async function postAssignmentInner(slotContainer: SlotContainer) {
   submitLoading.value = true;
 
-  const payload = {
+  const shiftStartString = start.toISO()!;
+
+  const payload: ShiftsAssignment = {
     shifts_user: user.value.data!.id,
-    shifts_slot: chosenSlot.value!,
-    shifts_from: start.toISO()!,
+    shifts_slot: slotContainer.id,
+    shifts_from: shiftStartString,
   };
 
-  if (chosenSlot.value.freeUntil) {
-    payload.shifts_to = chosenSlot.value.freeUntil.toISO()!;
+  // One-time shifts have same start and end date
+  // Regular shifts are either until freeUntil or forever
+  if (props.shiftType === "jumper") {
+    payload.shifts_to = shiftStartString;
+  } else if (slotContainer.freeUntil) {
+    payload.shifts_to = slotContainer.freeUntil.toISO()!;
   }
 
-  const assignment = (await directus.request(
-    createItem("shifts_assignments", payload),
-  )) as ShiftsAssignment;
-
-  emit("assignmentCreated", assignment);
-  reset();
+  await directus.request(createItem("shifts_assignments", payload));
 }
 </script>
 
@@ -207,7 +205,7 @@ async function postAssignment() {
         icon="i-heroicons-pencil-square"
         :loading="submitLoading"
         :disabled="!chosenSlot"
-        @click="postAssignment()"
+        @click="postAssignment(chosenSlot!)"
       >
         {{ t("Sign up") }}
       </UButton>

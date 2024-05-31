@@ -103,8 +103,9 @@ onMounted(async () => {
         v-model="selectedView"
         :options="views"
         option-attribute="label"
+        class="w-48"
       >
-        <template #label>Display</template>
+        <template #label>Display: {{ selectedView.label }}</template>
         <template #leading>
           <UIcon :name="selectedView.icon" />
         </template>

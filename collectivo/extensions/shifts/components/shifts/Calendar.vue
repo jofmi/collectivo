@@ -17,8 +17,12 @@ import { DateTime } from "luxon";
 
 const props = defineProps({
   shiftType: {
-    type: String as PropType<"jumper" | "regular" | "unfilled" | "all">,
-    required: true,
+    type: String,
+    required: false,
+  },
+  adminMode: {
+    type: Boolean,
+    default: false,
   },
 });
 

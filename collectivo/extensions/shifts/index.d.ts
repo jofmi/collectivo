@@ -14,6 +14,13 @@ declare global {
     shifts_skills_shifts_slots: ShiftsSkillSlotLink[];
   }
 
+  export type ShiftsUserType = "jumper" | "regular" | "exempt" | "inactive";
+
+  export interface CollectivoUser {
+    shifts_user_type: string;
+    shifts_skills: number[];
+  }
+
   export interface ShiftsShift {
     id?: string;
     shifts_name?: string;

@@ -4,7 +4,7 @@ import { RRule, RRuleSet } from "rrule";
 import { ItemStatus } from "@collectivo/collectivo/server/utils/directusFields";
 
 interface GetAllShiftOccurrencesOptions {
-  shiftType: "regular" | "jumper" | "unfilled" | "all";
+  shiftType?: "regular" | "jumper" | "unfilled" | "all";
 }
 
 interface SlotRule {
@@ -78,7 +78,7 @@ export const getAllShiftOccurrences = async (
       });
     }
 
-    const today = new Date();
+    const today = getCurrentDate();
     let minDate = from.toJSDate();
     let maxDate = to.toJSDate();
 
@@ -89,7 +89,7 @@ export const getAllShiftOccurrences = async (
 
     // Jumpers will only see the next 4 weeks
     if (isJumper) {
-      const jumperLimit = new Date(today.setDate(today.getDate() + 28));
+      const jumperLimit = getFutureDate(28);
 
       if (jumperLimit < maxDate) {
         maxDate = jumperLimit;

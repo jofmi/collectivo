@@ -238,7 +238,7 @@ schema.fields = [
     collection: "directus_users",
     field: "shifts_user_type",
     type: "string",
-    schema: { is_nullable: true, default_value: ShiftUserType.Inactive },
+    schema: { is_nullable: true, default_value: ShiftUserType.INACTIVE },
     meta: {
       group: "shifts_group",
       interface: "select-dropdown",

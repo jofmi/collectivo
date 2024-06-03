@@ -76,8 +76,8 @@ async function createShiftScoreLogs(user: ShiftUser, cycleLogs: ShiftsLog[]) {
   // Handle users that should be deactivated
   // Log cycle deactivation if necessary
   if (
-    user.shifts_user_type != ShiftUserType.Regular &&
-    user.shifts_user_type != ShiftUserType.Jumper
+    user.shifts_user_type != ShiftUserType.REGULAR &&
+    user.shifts_user_type != ShiftUserType.JUMPER
   ) {
     if (
       cycleLogs.length > 0 &&

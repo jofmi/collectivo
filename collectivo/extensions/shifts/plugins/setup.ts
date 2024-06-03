@@ -3,7 +3,6 @@ import { ShiftUserType } from "~/server/utils/ShiftUserType";
 export default defineNuxtPlugin({
   name: "shifts-setup",
   setup() {
-    console.log("Setting up shifts plugin");
     addMenuItems();
     addProfileFields();
   },
@@ -39,7 +38,7 @@ function addProfileFields() {
       type: "select",
       key: "shifts_user_type",
       label: "Shift user type",
-      default: ShiftUserType.TypeNotChosen,
+      default: ShiftUserType.INACTIVE,
       order: 810,
       choices: shiftUserTypeChoices,
     },

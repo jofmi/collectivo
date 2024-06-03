@@ -1,6 +1,6 @@
 export enum ShiftUserType {
-  regular = "regular",
-  jumper = "jumper",
-  exempt = "exempt",
-  inactive = "inactive",
+  REGULAR = "regular",
+  JUMPER = "jumper",
+  EXEMPT = "exempt",
+  INACTIVE = "inactive",
 }

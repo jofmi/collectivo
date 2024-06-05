@@ -71,7 +71,7 @@ const sidebarWidthLg = String(config.collectivo.sidebarWidth + 90) + "px";
         <div class="main__top__left">
           <h1 class="flex flex-wrap align-middle items-center gap-3">
             <NuxtLink v-if="backLink" :to="backLink" class="flex items-center">
-              <UIcon name="i-heroicons-arrow-left-circle-16-solid"></UIcon>
+              <UIcon name="i-heroicons-arrow-left-circle-16-solid" />
             </NuxtLink>
 
             {{ t(pageTitle) }}

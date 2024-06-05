@@ -6,11 +6,6 @@ import {
   readUsers,
 } from "@directus/sdk";
 
-import {
-  SHIFT_CYCLE_DURATION_WEEKS,
-  SHIFT_CYCLE_START,
-} from "@collectivo/shifts/server/utils/constants";
-
 import { DateTime } from "luxon";
 
 import { getRandomInt } from "../utils/getRandomInt";
@@ -65,8 +60,9 @@ async function createShifts() {
         shiftsRequests.push({
           shifts_name: "Shop (week " + ["A", "B", "C", "D"][week] + ")",
           shifts_from: day.set({ hour: time_of_day }).toString(),
-          shifts_duration:
-            time_of_day == times_of_day[times_of_day.length - 1] ? 150 : 180,
+          shifts_to: day.set({ hour: time_of_day + 3 }).toString(),
+          shifts_from_time: "10:00",
+          shifts_to_time: "13:00",
           shifts_repeats_every: nb_weeks * 7,
           shifts_status: ItemStatus.PUBLISHED,
         });
@@ -223,7 +219,7 @@ async function createLogs() {
     }),
   );
 
-  const requests = [];
+  const requests: ShiftsLog[] = [];
 
   for (const assignment of assignments) {
     const nbLogs = getRandomInt(5, 20);
@@ -238,7 +234,9 @@ async function createLogs() {
 
       requests.push({
         shifts_type: types[getRandomInt(0, types.length)],
-        shifts_datetime: DateTime.now().plus({ days: getRandomInt(-10, 10) }),
+        shifts_date: DateTime.now()
+          .plus({ days: getRandomInt(-10, 10) })
+          .toISO(),
         shifts_assignment: assignment.id,
         shifts_user: assignment.shifts_user,
       });

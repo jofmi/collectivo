@@ -73,7 +73,7 @@ declare global {
   }
 
   export interface ShiftsLog {
-    id: number;
+    id?: number;
     shifts_type: ShiftLogType;
     shifts_date: string;
     shifts_assignment?: ShiftsAssignment;

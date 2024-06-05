@@ -27,13 +27,35 @@ for (const type of Object.values(ShiftLogType)) {
 
 schema.collections = [
   {
+    collection: "collectivo_shifts_group",
+    meta: {
+      sort: 800,
+      translations: [
+        {
+          language: "en-US",
+          translation: "Shifts",
+          singular: "Shift",
+          plural: "Shifts",
+        },
+        {
+          language: "de-DE",
+          translation: "Schichten",
+          singular: "Schicht",
+          plural: "Schichten",
+        },
+      ],
+    },
+  },
+  {
     collection: "shifts_shifts",
     schema: {
       schema: "schema",
       name: "schema",
       comment: null,
     },
-    meta: {},
+    meta: {
+      group: "collectivo_shifts_group",
+    },
   },
   {
     collection: "shifts_slots",
@@ -42,7 +64,9 @@ schema.collections = [
       name: "schema",
       comment: null,
     },
-    meta: {},
+    meta: {
+      group: "collectivo_shifts_group",
+    },
   },
   {
     collection: "shifts_skills",
@@ -60,7 +84,9 @@ schema.collections = [
       name: "schema",
       comment: null,
     },
-    meta: {},
+    meta: {
+      group: "collectivo_shifts_group",
+    },
   },
   {
     collection: "shifts_absences",
@@ -69,7 +95,9 @@ schema.collections = [
       name: "schema",
       comment: null,
     },
-    meta: {},
+    meta: {
+      group: "collectivo_shifts_group",
+    },
   },
   {
     collection: "shifts_logs",
@@ -78,7 +106,9 @@ schema.collections = [
       name: "schema",
       comment: null,
     },
-    meta: {},
+    meta: {
+      group: "collectivo_shifts_group",
+    },
   },
 ];
 
@@ -174,6 +204,13 @@ schema.fields = [
       },
     },
     field: "shifts_notes_internal",
+  },
+  {
+    collection: "shifts_shifts",
+    type: "integer",
+    meta: { interface: "input", special: null, required: true },
+    field: "shifts_score",
+    schema: { default_value: "1" },
   },
   ...directusSystemFields("shifts_slots"),
   {
@@ -275,10 +312,17 @@ schema.fields = [
     meta: { required: true },
   },
   {
+    collection: "shifts_logs",
     type: "integer",
     meta: { interface: "input", special: null, required: true },
     field: "shifts_score",
     schema: { default_value: "0" },
+  },
+  {
+    collection: "shifts_logs",
+    type: "text",
+    meta: { interface: "input-multiline", special: null },
+    field: "shifts_note",
   },
   ...directusSystemFields("shifts_logs"),
 ];

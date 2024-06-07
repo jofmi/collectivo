@@ -105,12 +105,40 @@ schema.collections = [
       ],
     },
   },
+  {
+    collection: "messages_designs",
+    schema: {
+      name: "schema",
+      comment: null,
+    },
+    meta: {
+      sort: 90,
+      icon: "design_services",
+      group: "messages",
+      display_template: "{{messages_design_name}}",
+      translations: [
+        {
+          language: "en-US",
+          translation: "Designs",
+          singular: "Design",
+          plural: "Designs",
+        },
+        {
+          language: "de-DE",
+          translation: "Designs",
+          singular: "Design",
+          plural: "Designs",
+        },
+      ],
+    },
+  },
 ];
 
 schema.fields = [
   ...directusSystemFields("messages_campaigns"),
   ...directusSystemFields("messages_messages"),
   ...directusSystemFields("messages_templates"),
+  ...directusSystemFields("messages_designs"),
   {
     collection: "messages_campaigns",
     field: "messages_campaign_status",
@@ -255,11 +283,13 @@ schema.fields = [
     collection: "messages_templates",
     field: "messages_method",
     type: "string",
-    schema: {},
+    schema: {
+      default_value: "email",
+    },
     meta: {
       interface: "select-dropdown",
       options: { choices: [{ text: "Email", value: "email" }] },
-      sort: 2,
+      sort: 7,
       width: "half",
       translations: [
         { language: "en-US", translation: "Method" },
@@ -283,7 +313,6 @@ schema.fields = [
       ],
     },
   },
-
   {
     collection: "messages_templates",
     field: "messages_content",
@@ -295,6 +324,40 @@ schema.fields = [
       translations: [
         { language: "en-US", translation: "Content" },
         { language: "de-DE", translation: "Inhalt" },
+      ],
+    },
+  },
+  {
+    collection: "messages_designs",
+    field: "messages_design_name",
+    type: "string",
+    schema: {
+      is_nullable: false,
+      is_unique: true,
+    },
+    meta: {
+      sort: 1,
+      required: true,
+      translations: [
+        { language: "en-US", translation: "Name" },
+        { language: "de-DE", translation: "Name" },
+      ],
+    },
+  },
+  {
+    collection: "messages_designs",
+    field: "messages_design_html",
+    type: "text",
+    schema: {},
+    meta: {
+      interface: "input-code",
+      options: {
+        language: "htmlmixed",
+      },
+      sort: 7,
+      translations: [
+        { language: "en-US", translation: "HTML" },
+        { language: "de-DE", translation: "HTML" },
       ],
     },
   },
@@ -373,6 +436,17 @@ schema.createM2MRelation("messages_campaigns", "directus_users", {
         { language: "en-US", translation: "Campaigns" },
         { language: "de-DE", translation: "Kampagnen" },
       ],
+    },
+  },
+});
+
+schema.createForeignKey("messages_templates", "messages_designs", {
+  fieldKey: {
+    field: "messages_design",
+    meta: {
+      display: "raw",
+      width: "half",
+      sort: 8
     },
   },
 });
@@ -522,4 +596,5 @@ for (const action of ["read", "update", "create"]) {
     fields: ["messages_campaigns"],
   });
 }
+
 

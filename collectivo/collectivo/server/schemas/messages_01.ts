@@ -446,7 +446,7 @@ schema.createForeignKey("messages_templates", "messages_designs", {
     meta: {
       display: "raw",
       width: "half",
-      sort: 8
+      sort: 8,
     },
   },
 });
@@ -596,5 +596,3 @@ for (const action of ["read", "update", "create"]) {
     fields: ["messages_campaigns"],
   });
 }
-
-

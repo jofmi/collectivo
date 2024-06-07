@@ -1,4 +1,4 @@
-import nodemailer, { Transporter } from "nodemailer";
+import nodemailer, { type Transporter } from "nodemailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
 import { createItems, readItem, readUser, updateItem } from "@directus/sdk";
 
@@ -329,7 +329,7 @@ class MailSender {
 
   async sendMail(mail: Mail): Promise<string> {
     const maxAttempts = 1000;
-    
+
     for (let i = 0; i < maxAttempts; i++) {
       try {
         return await this.sendMailOnce(mail);
@@ -362,4 +362,3 @@ class MailSender {
     return "success";
   }
 }
-

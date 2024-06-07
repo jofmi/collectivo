@@ -15,13 +15,11 @@ export default defineNuxtConfig({
     directusAdminPassword: process.env.DIRECTUS_ADMIN_PASSWORD || "d1r3ctu5",
     keycloakAdminClient: process.env.KEYCLOAK_ADMIN_CLIENT || "admin-cli",
     keycloakAdminSecret: process.env.KEYCLOAK_ADMIN_SECRET || "**********",
-    email: {
-      from: process.env.DIRECTUS_EMAIL_FROM || "",
-      smtpHost: process.env.DIRECTUS_EMAIL_SMTP_HOST || "",
-      smtpPort: process.env.DIRECTUS_EMAIL_SMTP_PORT || "",
-      smtpUser: process.env.DIRECTUS_EMAIL_SMTP_USER || "",
-      smtpPassword: process.env.DIRECTUS_EMAIL_SMTP_PASSWORD || "",
-    },
+    emailFrom: process.env.EMAIL_FROM || "",
+    emailSmtpHost: process.env.EMAIL_SMTP_HOST || "",
+    emailSmtpPort: process.env.EMAIL_SMTP_PORT || "",
+    emailSmtpUser: process.env.EMAIL_SMTP_USER || "",
+    emailSmtpPassword: process.env.EMAIL_SMTP_PASSWORD || "",
     public: {
       debug: false,
       collectivoUrl: process.env.COLLECTIVO_URL || "http://localhost:3000",
@@ -59,4 +57,3 @@ export default defineNuxtConfig({
     },
   },
 });
-

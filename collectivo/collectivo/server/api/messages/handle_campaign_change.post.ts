@@ -76,12 +76,17 @@ async function executeCampaign(campaignKey: number): Promise<string> {
     let anySucceeded = false;
     let anyFailure = false;
 
+    const unpersonalizedTemplate = campaignData.templateDesign.replaceAll(
+      "{{content}}",
+      campaignData.templateContent,
+    );
+
     for (const pendingMessage of pendingMessages) {
       try {
         const recipientData = await readRecipientData(pendingMessage.recipient);
 
         const emailBody = renderTemplateForRecipient(
-          campaignData.templateContent,
+          unpersonalizedTemplate,
           recipientData,
         );
 
@@ -176,6 +181,7 @@ async function readCampaignData(campaignKey: number): Promise<CampaignData> {
         "messages_template.messages_method",
         "messages_template.messages_subject",
         "messages_template.messages_content",
+        "messages_template.messages_design.messages_design_html",
         "messages_recipients.directus_users_id",
       ],
     }),
@@ -187,6 +193,11 @@ async function readCampaignData(campaignKey: number): Promise<CampaignData> {
     templateMethod: readResult["messages_template"]["messages_method"],
     templateSubject: readResult["messages_template"]["messages_subject"],
     templateContent: readResult["messages_template"]["messages_content"],
+    templateDesign: readResult["messages_template"]["messages_design"]
+      ? readResult["messages_template"]["messages_design"][
+          "messages_design_html"
+        ]
+      : "{{content}}",
     recipients: readResult["messages_recipients"].map(
       (item: any) => item.directus_users_id,
     ),
@@ -239,10 +250,10 @@ function toMessageRecord(writeResult: Record<string, any>): MessageRecord {
 }
 
 function renderTemplateForRecipient(
-  contentTemplate: string,
+  unpersonalizedTemplate: string,
   recipientData: RecipientData,
 ): string {
-  let renderedContent = contentTemplate;
+  let renderedContent = unpersonalizedTemplate;
 
   renderedContent = renderedContent.replaceAll(
     "{{recipient_first_name}}",
@@ -273,6 +284,7 @@ interface CampaignData {
   templateMethod: string;
   templateSubject: string;
   templateContent: string;
+  templateDesign: string;
   recipients: string[];
 }
 
@@ -317,7 +329,7 @@ class MailSender {
 
   async sendMail(mail: Mail): Promise<string> {
     const maxAttempts = 1000;
-
+    
     for (let i = 0; i < maxAttempts; i++) {
       try {
         return await this.sendMailOnce(mail);
@@ -350,3 +362,4 @@ class MailSender {
     return "success";
   }
 }
+

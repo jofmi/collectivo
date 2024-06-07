@@ -98,6 +98,7 @@ async function syncKeycloakUser(event: any) {
     // Set external identifier to match new email
     if (user.id && body.payload.email && email != extid) {
       console.log("updating external identifier", email);
+
       await directus.request(
         updateUser(user.id, { external_identifier: email }),
       );
@@ -159,6 +160,7 @@ async function syncKeycloakUser(event: any) {
       console.log("updating email");
       console.log("kc_user_id", kc_user_id);
       console.log("email", body.payload.email);
+
       await keycloak.users.update(
         { id: kc_user_id },
         {

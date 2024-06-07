@@ -55,15 +55,18 @@ async function assignRole(body: any, deleteKey?: any) {
   const directus = await useDirectusAdmin();
   let tagID = "";
   let userID = "";
+
   if (deleteKey) {
     const tagRelation = await directus.request(
       readItem("collectivo_tags_directus_users", deleteKey),
     );
+
     tagID = tagRelation.collectivo_tags_id;
     userID = tagRelation.directus_users_id;
   } else {
     userID =
       body.payload.directus_users_id.id ?? body.payload.directus_users_id;
+
     tagID =
       body.payload.collectivo_tags_id.id ?? body.payload.collectivo_tags_id;
   }
@@ -77,6 +80,7 @@ async function assignRole(body: any, deleteKey?: any) {
       fields: ["tags_name", "tags_sync"],
     }),
   );
+
   console.log("Tag", tag);
 
   if (!tag.tags_sync) {

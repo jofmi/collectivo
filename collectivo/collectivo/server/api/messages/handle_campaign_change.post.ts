@@ -1,12 +1,14 @@
 import nodemailer, { Transporter } from "nodemailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
 import { createItems, readItem, readUser, updateItem } from "@directus/sdk";
-import { e } from "vitest/dist/reporters-1evA5lom.js";
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 export default defineEventHandler(async (event) => {
   // Protect route with API Token
   verifyCollectivoApiToken(event);
-
   const body = await readBody(event);
 
   // Ignore requests where there were no changes to the campaign status or the new status is not "pending"
@@ -18,16 +20,32 @@ export default defineEventHandler(async (event) => {
     return;
   }
 
-  const campaignKeys = body.key ? [body.key] : body.keys;
-  const results: Map<number, string> = new Map<number, string>();
+  let i = 0;
 
-  for (const campaignKey of campaignKeys) {
-    const result = await executeCampaign(campaignKey);
-
-    results.set(campaignKey, result);
+  // Wait for maximum 1h if other campaign is currently sending
+  while (campaignEndpoint.isActive || i > 3600) {
+    i++;
+    await sleep(1000);
   }
 
-  return results;
+  campaignEndpoint.isActive = true;
+
+  try {
+    const campaignKeys = body.key ? [body.key] : body.keys;
+    const results: Map<number, string> = new Map<number, string>();
+
+    for (const campaignKey of campaignKeys) {
+      const result = await executeCampaign(campaignKey);
+
+      results.set(campaignKey, result);
+    }
+
+    campaignEndpoint.isActive = false;
+    return results;
+  } catch (error) {
+    campaignEndpoint.isActive = false;
+    throw error;
+  }
 });
 
 async function executeCampaign(campaignKey: number): Promise<string> {
@@ -74,6 +92,8 @@ async function executeCampaign(campaignKey: number): Promise<string> {
         });
 
         await updateMessageStatus(pendingMessage, sendMailOutcome);
+
+        sleep(500);
 
         if (sendMailOutcome == "success") {
           anySucceeded = true;
@@ -295,18 +315,37 @@ class MailSender {
   }
 
   async sendMail(mail: Mail): Promise<string> {
-    try {
-      await this.transporter.sendMail({
-        from: this.fromAddress ? this.fromAddress : "",
-        to: mail.to,
-        subject: mail.subject,
-        html: mail.htmlBody,
-      });
+    const maxAttempts = 1000;
 
-      return "success";
-    } catch (error) {
-      return getErrorMessage(error);
+    for (let i = 0; i < maxAttempts; i++) {
+      try {
+        return await this.sendMailOnce(mail);
+      } catch (error) {
+        // Wait a minute if we hit the rate limit
+        if (
+          error &&
+          typeof error == "object" &&
+          "responseCode" in error &&
+          error.responseCode == 429
+        ) {
+          await sleep(60000);
+        } else {
+          return getErrorMessage(error);
+        }
+      }
     }
+
+    return "Rate limit exceeded, maximum attempts reached";
+  }
+
+  async sendMailOnce(mail: Mail): Promise<string> {
+    await this.transporter.sendMail({
+      from: this.fromAddress ? this.fromAddress : "",
+      to: mail.to,
+      subject: mail.subject,
+      html: mail.htmlBody,
+    });
+
+    return "success";
   }
 }
-

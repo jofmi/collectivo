@@ -93,6 +93,7 @@ async function executeCampaign(campaignKey: number): Promise<string> {
 
         await updateMessageStatus(pendingMessage, sendMailOutcome);
 
+        // Wait half a second before sending next message
         sleep(500);
 
         if (sendMailOutcome == "success") {
@@ -321,7 +322,7 @@ class MailSender {
       try {
         return await this.sendMailOnce(mail);
       } catch (error) {
-        // Wait a minute if we hit the rate limit
+        // Wait a minute if we hit the rate limit (HTTP 429)
         if (
           error &&
           typeof error == "object" &&

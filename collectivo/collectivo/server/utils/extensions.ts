@@ -1,5 +1,5 @@
 // Register extensions into nuxt memory and get registered extensions
-import { ExtensionSchema } from "./schemas";
+import type { ExtensionSchema } from "./schemas";
 import { validateStrict, compareVersions } from "compare-versions";
 
 // This object defines an extension

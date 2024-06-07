@@ -23,9 +23,10 @@ export default defineNuxtConfig({
     public: {
       debug: false,
       collectivoUrl: process.env.COLLECTIVO_URL || "http://localhost:3000",
-      authService: "keycloak",
+      authService: process.env.COLLECTIVO_AUTH_SERVICE || "keycloak",
       keycloakUrl: process.env.KEYCLOAK_URL || "http://keycloak:8080",
       keycloakRealm: process.env.KEYCLOAK_REALM || "collectivo",
+      keycloakClient: process.env.KEYCLOAK_NUXT_CLIENT || "nuxt",
       directusUrl: process.env.DIRECTUS_URL || "http://localhost:8055",
     },
   },
@@ -33,7 +34,7 @@ export default defineNuxtConfig({
     preference: "light",
   },
   hooks: {},
-  modules: ["@nuxt/ui", "@nuxtjs/i18n", "@nuxtjs/google-fonts"],
+  modules: ["@nuxt/ui", "@nuxtjs/i18n", "@nuxtjs/google-fonts", "@nuxt/eslint"],
   i18n: {
     lazy: false, // TODO: Lazy loading does not work with current switch
     strategy: "no_prefix",

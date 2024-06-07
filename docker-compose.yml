@@ -2,7 +2,7 @@ version: "3"
 
 services:
   directus:
-    image: directus/directus:10.10.4
+    image: directus/directus:10.10.7
     ports:
       - 8055:8055
     volumes:
@@ -40,6 +40,7 @@ services:
       REDIS: "redis://directus-cache:6379"
 
       AUTH_PROVIDERS: "keycloak"
+      AUTH_KEYCLOAK_MODE: "session"
       AUTH_KEYCLOAK_DRIVER: "openid"
       AUTH_KEYCLOAK_CLIENT_ID: ${KEYCLOAK_DIRECTUS_CLIENT}
       AUTH_KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_DIRECTUS_SECRET}
@@ -47,6 +48,7 @@ services:
       AUTH_KEYCLOAK_IDENTIFIER_KEY: "email"
       AUTH_KEYCLOAK_ALLOW_PUBLIC_REGISTRATION: "true"
 
+      SESSION_COOKIE_DOMAIN: "${SHARED_DOMAIN}"
       SESSION_COOKIE_SECURE: "false"
       SESSION_COOKIE_SAME_SITE: "lax"
 

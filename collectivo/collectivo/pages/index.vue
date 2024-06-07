@@ -17,12 +17,15 @@ function getFilteredTiles(tiles: CollectivoTile[]) {
   return tiles.filter((tile) => {
     let display = true;
     let display2 = true;
+
     if (tile.tiles_tag_required) {
       display = user.value.tags.includes(tile.tiles_tag_required);
     }
+
     if (tile.tiles_tag_blocked) {
       display2 = !user.value.tags.includes(tile.tiles_tag_blocked);
     }
+
     return display && display2;
   });
 }

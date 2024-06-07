@@ -1,5 +1,5 @@
 import nodemailer, { type Transporter } from "nodemailer";
-import SMTPTransport from "nodemailer/lib/smtp-transport";
+import type SMTPTransport from "nodemailer/lib/smtp-transport";
 import { createItems, readItem, readUser, updateItem } from "@directus/sdk";
 
 function sleep(ms: number) {

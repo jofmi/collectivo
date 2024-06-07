@@ -40,9 +40,11 @@ class CollectivoUserStore {
     )) as CollectivoUser;
 
     this.tags = [];
+
     for (const field of this.data.collectivo_tags ?? []) {
       this.tags.push(field.collectivo_tags_id);
     }
+
     this.loading = false;
     return this;
   }

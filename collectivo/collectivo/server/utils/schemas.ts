@@ -1,4 +1,4 @@
-import {
+import type {
   DirectusFlow,
   DirectusOperation,
   DirectusPermission,
@@ -101,8 +101,9 @@ export class ExtensionSchema {
   createNuxtHook = async (
     trigger: NestedPartial<DirectusFlow<any>>,
     path: string,
+    method?: string,
   ) => {
-    createNuxtHook(this, trigger, path);
+    createNuxtHook(this, trigger, path, method);
   };
 
   apply = async () => {
@@ -399,7 +400,7 @@ export async function createM2ARelation(
       one_field: null,
       sort_field: null,
       one_deselect_action: "nullify",
-      // @ts-ignore
+      // @ts-expect-error
       one_allowed_collections: ACollections,
       one_collection_field: "collection",
       junction_field: m2aCollectionIdFieldName,
@@ -424,6 +425,7 @@ async function createNuxtHook(
   schema: ExtensionSchema,
   trigger: NestedPartial<DirectusFlow<any>>,
   path: string,
+  method?: string,
 ) {
   schema.flows.push({
     flow: trigger,
@@ -437,7 +439,7 @@ async function createNuxtHook(
           key: "postToNuxtAPI",
           type: "request",
           options: {
-            method: "POST",
+            method: method ?? "POST",
             url: "{{$env.COLLECTIVO_API_URL}}/" + path,
             headers: [
               {

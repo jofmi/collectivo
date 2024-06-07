@@ -6,8 +6,11 @@ import {
   readUsers,
   deleteUser,
   deleteItem,
+  createDirectus,
+  readMe,
+  withToken,
+  rest,
 } from "@directus/sdk";
-import { createDirectus, readMe, withToken, rest } from "@directus/sdk";
 import KcAdminClient from "@keycloak/keycloak-admin-client";
 
 async function getUserID(event: any) {
@@ -16,10 +19,12 @@ async function getUserID(event: any) {
   const directusUser = createDirectus(config.public.directusUrl).with(rest());
 
   if (token) {
+    const tokenValue = token.split("directus_session_token=")[1].split(";")[0];
+
     try {
       const user = await directusUser.request(
         withToken(
-          token.replace("directus_session_token=", ""),
+          tokenValue,
           readMe({
             fields: ["id", "email"],
           }),
@@ -29,6 +34,7 @@ async function getUserID(event: any) {
       console.log("Existing user: " + user.email);
       return user.id;
     } catch (e) {
+      console.log("Unauthenticated");
       return undefined;
     }
   }
@@ -166,10 +172,6 @@ async function registerMembership(body: any, userID: string | undefined) {
           statusMessage: "User already exists (Keycloak)",
         });
       }
-
-      delete userData.password;
-      userData.provider = "keycloak";
-      userData.external_identifier = userData.email;
     }
   }
 
@@ -208,42 +210,6 @@ async function registerMembership(body: any, userID: string | undefined) {
   }
 
   console.log("Membership created: " + membership.id);
-
-  // Create keycloak user & set password
-  if (!isAuthenticated && config.public.authService == "keycloak") {
-    let kcUser = undefined;
-
-    try {
-      kcUser = await keycloak.users.create({
-        enabled: true,
-        username: userData.email,
-        email: userData.email,
-        firstName: userData.first_name,
-        lastName: userData.last_name,
-        emailVerified: false,
-      });
-    } catch (e) {
-      await directus.request(deleteItem("memberships", membership.id));
-      await directus.request(deleteUser(userID!));
-      throw e;
-    }
-
-    try {
-      await keycloak.users.resetPassword({
-        id: kcUser.id,
-        credential: {
-          temporary: false,
-          type: "password",
-          value: user_password,
-        },
-      });
-    } catch (e) {
-      await directus.request(deleteItem("memberships", membership.id));
-      await directus.request(deleteUser(userID!));
-      await keycloak.users.del({ id: kcUser.id });
-      throw e;
-    }
-  }
 
   return {
     status: 201,

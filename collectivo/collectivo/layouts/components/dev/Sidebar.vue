@@ -17,7 +17,7 @@ const menuItems = useCollectivoMenus();
 // );
 </script>
 
-<template>TEST</template>
+<template><div>TEST</div></template>
 
 <!-- <div
     class="flex items-center px-4 font-bold h-14 border-b-2 border-slate-500"

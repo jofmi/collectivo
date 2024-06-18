@@ -51,7 +51,8 @@ The rest of this documentation is structured as follows:
 
 Collectivo is a collaboration of
 the Austrian cooperative [MILA Mitmach-Supermarkt](https://mila.wien/) and the IT collective
-[convive\*](http://convive.io/). It has received funding by the
-[AK Wien Digifonds](https://wien.arbeiterkammer.at/digifonds) in 2022.
+[convive\*](http://convive.io/). It has received funding from
+[AK Wien Digifonds](https://wien.arbeiterkammer.at/digifonds) and [Wirtschaftsagentur Wien](https://wirtschaftsagentur.at/).
 
 [![Funded by AK Digifond](assets/digifonds3.jpg){ width="30%" }](https://wien.arbeiterkammer.at/digifonds)
+[![Funded by Wirtschaftsagentur Wien](assets/wirtschaftsagentur.jpg){ width="30%" }](https://wirtschaftsagentur.at/)

@@ -2,11 +2,13 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
+
   extends: [
     "@collectivo/collectivo",
     "@collectivo/payments",
     "@collectivo/memberships",
   ],
+
   i18n: {
     lazy: true,
     langDir: "./lang",
@@ -15,4 +17,6 @@ export default defineNuxtConfig({
       { code: "de", file: "de.json" },
     ],
   },
+
+  compatibilityDate: "2024-07-18",
 });

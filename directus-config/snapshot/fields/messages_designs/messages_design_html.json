@@ -1,0 +1,44 @@
+{
+  "collection": "messages_designs",
+  "field": "messages_design_html",
+  "type": "text",
+  "meta": {
+    "collection": "messages_designs",
+    "conditions": null,
+    "display": null,
+    "display_options": null,
+    "field": "messages_design_html",
+    "group": null,
+    "hidden": false,
+    "interface": "input-code",
+    "note": "Add {{content}} where the template should be inserted",
+    "options": {
+      "language": "htmlmixed"
+    },
+    "readonly": false,
+    "required": false,
+    "sort": 7,
+    "special": null,
+    "translations": null,
+    "validation": null,
+    "validation_message": null,
+    "width": "full"
+  },
+  "schema": {
+    "name": "messages_design_html",
+    "table": "messages_designs",
+    "data_type": "text",
+    "default_value": null,
+    "max_length": null,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "is_nullable": false,
+    "is_unique": false,
+    "is_primary_key": false,
+    "is_generated": false,
+    "generation_expression": null,
+    "has_auto_increment": false,
+    "foreign_key_table": null,
+    "foreign_key_column": null
+  }
+}

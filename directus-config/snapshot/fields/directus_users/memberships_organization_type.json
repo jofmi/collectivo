@@ -1,0 +1,51 @@
+{
+  "collection": "directus_users",
+  "field": "memberships_organization_type",
+  "type": "string",
+  "meta": {
+    "collection": "directus_users",
+    "conditions": null,
+    "display": null,
+    "display_options": null,
+    "field": "memberships_organization_type",
+    "group": "memberships_organization_group",
+    "hidden": false,
+    "interface": "input",
+    "note": null,
+    "options": null,
+    "readonly": false,
+    "required": false,
+    "sort": 3,
+    "special": null,
+    "translations": [
+      {
+        "language": "de-DE",
+        "translation": "Organisation Typ"
+      },
+      {
+        "language": "en-US",
+        "translation": "Organization Type"
+      }
+    ],
+    "validation": null,
+    "validation_message": null,
+    "width": "half"
+  },
+  "schema": {
+    "name": "memberships_organization_type",
+    "table": "directus_users",
+    "data_type": "character varying",
+    "default_value": null,
+    "max_length": 255,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "is_nullable": true,
+    "is_unique": false,
+    "is_primary_key": false,
+    "is_generated": false,
+    "generation_expression": null,
+    "has_auto_increment": false,
+    "foreign_key_table": null,
+    "foreign_key_column": null
+  }
+}

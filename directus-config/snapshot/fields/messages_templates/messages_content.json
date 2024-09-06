@@ -1,0 +1,68 @@
+{
+  "collection": "messages_templates",
+  "field": "messages_content",
+  "type": "text",
+  "meta": {
+    "collection": "messages_templates",
+    "conditions": null,
+    "display": null,
+    "display_options": null,
+    "field": "messages_content",
+    "group": null,
+    "hidden": false,
+    "interface": "input-rich-text-html",
+    "note": "Verwende {{recipient_first_name}} {{recipient_last_name}} um Vor- und Nachnamen automatisch einzufügen.",
+    "options": {
+      "toolbar": [
+        "blockquote",
+        "bold",
+        "bullist",
+        "code",
+        "customLink",
+        "fullscreen",
+        "h1",
+        "h2",
+        "h3",
+        "hr",
+        "italic",
+        "numlist",
+        "removeformat",
+        "underline"
+      ]
+    },
+    "readonly": false,
+    "required": false,
+    "sort": 11,
+    "special": null,
+    "translations": [
+      {
+        "language": "en-US",
+        "translation": "Content"
+      },
+      {
+        "language": "de-DE",
+        "translation": "Inhalt"
+      }
+    ],
+    "validation": null,
+    "validation_message": null,
+    "width": "full"
+  },
+  "schema": {
+    "name": "messages_content",
+    "table": "messages_templates",
+    "data_type": "text",
+    "default_value": null,
+    "max_length": null,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "is_nullable": true,
+    "is_unique": false,
+    "is_primary_key": false,
+    "is_generated": false,
+    "generation_expression": null,
+    "has_auto_increment": false,
+    "foreign_key_table": null,
+    "foreign_key_column": null
+  }
+}

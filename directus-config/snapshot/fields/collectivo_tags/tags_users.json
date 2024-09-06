@@ -1,0 +1,47 @@
+{
+  "collection": "collectivo_tags",
+  "field": "tags_users",
+  "type": "alias",
+  "meta": {
+    "collection": "collectivo_tags",
+    "conditions": null,
+    "display": "related-values",
+    "display_options": {
+      "template": "{{directus_users_id.first_name}} {{directus_users_id.last_name}}"
+    },
+    "field": "tags_users",
+    "group": null,
+    "hidden": false,
+    "interface": "list-m2m",
+    "note": null,
+    "options": {
+      "enableCreate": false,
+      "enableLink": true,
+      "enableSearchFilter": true,
+      "fields": [
+        "directus_users_id.first_name",
+        "directus_users_id.last_name"
+      ],
+      "layout": "table"
+    },
+    "readonly": false,
+    "required": false,
+    "sort": 30,
+    "special": [
+      "m2m"
+    ],
+    "translations": [
+      {
+        "language": "en-US",
+        "translation": "Users"
+      },
+      {
+        "language": "de-DE",
+        "translation": "Benutzer*innen"
+      }
+    ],
+    "validation": null,
+    "validation_message": null,
+    "width": "full"
+  }
+}

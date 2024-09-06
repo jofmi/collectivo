@@ -2,11 +2,17 @@
 archive/
 uploads/
 workbench/
+backups/
 
-# Ignore custom files in app
-collectivo/app/public/*
-collectivo/app/app.config.ts
-collectivo/custom_extensions/*
+# Backup folders
+keycloak-db-backups/
+directus-db-backups/
+directus-db-backups-manual/
+keycloak-db-backups-manual/
+
+# For habidat (old)
+docker/
+habidat/
 
 # Directus
 directus/database/

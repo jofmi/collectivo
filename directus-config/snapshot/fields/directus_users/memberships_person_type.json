@@ -1,0 +1,62 @@
+{
+  "collection": "directus_users",
+  "field": "memberships_person_type",
+  "type": "string",
+  "meta": {
+    "collection": "directus_users",
+    "conditions": null,
+    "display": "labels",
+    "display_options": null,
+    "field": "memberships_person_type",
+    "group": "memberships_profile_group",
+    "hidden": false,
+    "interface": "select-dropdown",
+    "note": null,
+    "options": {
+      "choices": [
+        {
+          "text": "$t:natural",
+          "value": "natural"
+        },
+        {
+          "text": "$t:legal",
+          "value": "legal"
+        }
+      ]
+    },
+    "readonly": false,
+    "required": false,
+    "sort": 5,
+    "special": null,
+    "translations": [
+      {
+        "language": "de-DE",
+        "translation": "Art der Person"
+      },
+      {
+        "language": "en-US",
+        "translation": "Person Type"
+      }
+    ],
+    "validation": null,
+    "validation_message": null,
+    "width": "half"
+  },
+  "schema": {
+    "name": "memberships_person_type",
+    "table": "directus_users",
+    "data_type": "character varying",
+    "default_value": null,
+    "max_length": 255,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "is_nullable": true,
+    "is_unique": false,
+    "is_primary_key": false,
+    "is_generated": false,
+    "generation_expression": null,
+    "has_auto_increment": false,
+    "foreign_key_table": null,
+    "foreign_key_column": null
+  }
+}

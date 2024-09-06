@@ -1,0 +1,37 @@
+{
+  "collection": "messages_campaigns",
+  "field": "messages_recipients",
+  "type": "alias",
+  "meta": {
+    "collection": "messages_campaigns",
+    "conditions": null,
+    "display": "related-values",
+    "display_options": {
+      "template": "{{directus_users_id.first_name}} {{directus_users_id.last_name}} ({{directus_users_id.email}})"
+    },
+    "field": "messages_recipients",
+    "group": null,
+    "hidden": false,
+    "interface": "list-m2m",
+    "note": null,
+    "options": {
+      "enableCreate": false,
+      "fields": [
+        "directus_users_id.email",
+        "directus_users_id.first_name",
+        "directus_users_id.last_name"
+      ],
+      "layout": "table"
+    },
+    "readonly": false,
+    "required": false,
+    "sort": 12,
+    "special": [
+      "m2m"
+    ],
+    "translations": null,
+    "validation": null,
+    "validation_message": null,
+    "width": "full"
+  }
+}

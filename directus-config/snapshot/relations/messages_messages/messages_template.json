@@ -1,0 +1,25 @@
+{
+  "collection": "messages_messages",
+  "field": "messages_template",
+  "related_collection": "messages_templates",
+  "meta": {
+    "junction_field": null,
+    "many_collection": "messages_messages",
+    "many_field": "messages_template",
+    "one_allowed_collections": null,
+    "one_collection": "messages_templates",
+    "one_collection_field": null,
+    "one_deselect_action": "nullify",
+    "one_field": null,
+    "sort_field": null
+  },
+  "schema": {
+    "table": "messages_messages",
+    "column": "messages_template",
+    "foreign_key_table": "messages_templates",
+    "foreign_key_column": "id",
+    "constraint_name": "messages_messages_messages_template_foreign",
+    "on_update": "NO ACTION",
+    "on_delete": "SET NULL"
+  }
+}

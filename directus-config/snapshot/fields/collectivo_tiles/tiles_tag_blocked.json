@@ -1,0 +1,44 @@
+{
+  "collection": "collectivo_tiles",
+  "field": "tiles_tag_blocked",
+  "type": "integer",
+  "meta": {
+    "collection": "collectivo_tiles",
+    "conditions": null,
+    "display": null,
+    "display_options": null,
+    "field": "tiles_tag_blocked",
+    "group": null,
+    "hidden": false,
+    "interface": "select-dropdown-m2o",
+    "note": null,
+    "options": null,
+    "readonly": false,
+    "required": false,
+    "sort": 14,
+    "special": [
+      "m2o"
+    ],
+    "translations": null,
+    "validation": null,
+    "validation_message": null,
+    "width": "full"
+  },
+  "schema": {
+    "name": "tiles_tag_blocked",
+    "table": "collectivo_tiles",
+    "data_type": "integer",
+    "default_value": null,
+    "max_length": null,
+    "numeric_precision": 32,
+    "numeric_scale": 0,
+    "is_nullable": true,
+    "is_unique": false,
+    "is_primary_key": false,
+    "is_generated": false,
+    "generation_expression": null,
+    "has_auto_increment": false,
+    "foreign_key_table": "collectivo_tags",
+    "foreign_key_column": "id"
+  }
+}

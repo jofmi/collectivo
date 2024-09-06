@@ -1,0 +1,31 @@
+{
+  "collection": "directus_users",
+  "field": "collectivo_tags_divider",
+  "type": "alias",
+  "meta": {
+    "collection": "directus_users",
+    "conditions": null,
+    "display": null,
+    "display_options": null,
+    "field": "collectivo_tags_divider",
+    "group": null,
+    "hidden": false,
+    "interface": "presentation-divider",
+    "note": null,
+    "options": {
+      "icon": "sell",
+      "title": "Tags"
+    },
+    "readonly": false,
+    "required": false,
+    "sort": 100,
+    "special": [
+      "alias",
+      "no-data"
+    ],
+    "translations": null,
+    "validation": null,
+    "validation_message": null,
+    "width": "full"
+  }
+}

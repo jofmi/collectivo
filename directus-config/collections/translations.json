@@ -1,0 +1,194 @@
+[
+  {
+    "language": "en-US",
+    "key": "sepa",
+    "value": "SEPA Debit",
+    "_syncId": "19289c09-05f0-407f-8c95-f0d39eb0a3c4"
+  },
+  {
+    "language": "en-US",
+    "key": "in-cancellation",
+    "value": "In cancellation",
+    "_syncId": "24e47873-3026-48d4-8734-42dbf9a8678d"
+  },
+  {
+    "language": "de-DE",
+    "key": "normal",
+    "value": "Normal",
+    "_syncId": "25642544-916b-4130-9839-0a82ff18403d"
+  },
+  {
+    "language": "de-DE",
+    "key": "approved",
+    "value": "Aufgenommen",
+    "_syncId": "29daf9c4-e45b-4047-b13b-ef83dc632e1e"
+  },
+  {
+    "language": "de-DE",
+    "key": "accounting",
+    "value": "Buchhaltung",
+    "_syncId": "2b59732a-bca6-4d62-bc80-9dd7377bf272"
+  },
+  {
+    "language": "de-DE",
+    "key": "denied",
+    "value": "Abgelehnt",
+    "_syncId": "2fb63205-c84b-4fce-a03a-ccab52a75ba9"
+  },
+  {
+    "language": "de-DE",
+    "key": "bookkeeping",
+    "value": "Buchhaltung",
+    "_syncId": "4070196f-80ef-42bd-b269-4b458661bc71"
+  },
+  {
+    "language": "de-DE",
+    "key": "pending",
+    "value": "Ausstehend",
+    "_syncId": "427f0acf-c6f2-4177-8fe6-fcbc28ec6d72"
+  },
+  {
+    "language": "de-DE",
+    "key": "transfer",
+    "value": "Überweisung",
+    "_syncId": "4383ca6c-a459-4c16-993f-427ab5df7a52"
+  },
+  {
+    "language": "de-DE",
+    "key": "in-cancellation",
+    "value": "Im Ausstieg",
+    "_syncId": "477a95d0-42ae-4915-96f9-ab6ee72c364f"
+  },
+  {
+    "language": "en-US",
+    "key": "approved",
+    "value": "Approved",
+    "_syncId": "551494af-d65f-40e9-8ebe-e963f7357743"
+  },
+  {
+    "language": "en-US",
+    "key": "in-exclusion",
+    "value": "In exclusion",
+    "_syncId": "585ee95b-4e9c-445a-9bbc-888124aef5d3"
+  },
+  {
+    "language": "de-DE",
+    "key": "accepted",
+    "value": "Freigegeben",
+    "_syncId": "5a2a7665-f828-446d-b708-0ddc70f05707"
+  },
+  {
+    "language": "en-US",
+    "key": "ended",
+    "value": "Ended",
+    "_syncId": "62a7ea81-069b-4638-8ace-247604a46919"
+  },
+  {
+    "language": "en-US",
+    "key": "pending",
+    "value": "Pending",
+    "_syncId": "66b64b51-25f3-49f9-b1c2-b2412f6b227e"
+  },
+  {
+    "language": "de-DE",
+    "key": "it-support",
+    "value": "IT Support",
+    "_syncId": "6fad38a3-29ee-4fa3-9974-d5980eebe7bb"
+  },
+  {
+    "language": "de-DE",
+    "key": "requested",
+    "value": "Angefragt",
+    "_syncId": "77f566dd-8d1d-4d4d-8637-e6c43fde2704"
+  },
+  {
+    "language": "de-DE",
+    "key": "in-exclusion",
+    "value": "Im Ausschluss",
+    "_syncId": "78690740-7751-4ad5-9b15-eeda91f77796"
+  },
+  {
+    "language": "en-US",
+    "key": "paid",
+    "value": "Paid",
+    "_syncId": "79659e15-1e96-4e5b-a6ee-09dfae920c7a"
+  },
+  {
+    "language": "de-DE",
+    "key": "ended",
+    "value": "Beendet",
+    "_syncId": "91ee93b2-77ed-4f3c-a806-f5bb51a4333f"
+  },
+  {
+    "language": "en-US",
+    "key": "applied",
+    "value": "Applied",
+    "_syncId": "98828f55-a975-4f5c-b7ff-ea8e8975b85a"
+  },
+  {
+    "language": "de-DE",
+    "key": "sepa",
+    "value": "SEPA Einzug",
+    "_syncId": "a53dd2b3-9f87-439a-819a-0a8463f5287b"
+  },
+  {
+    "language": "de-DE",
+    "key": "request-withdrawn",
+    "value": "Anfrage zurückgezogen",
+    "_syncId": "b189cd2f-6b4c-4b23-84f6-394dfd16476b"
+  },
+  {
+    "language": "de-DE",
+    "key": "applied",
+    "value": "Beworben",
+    "_syncId": "b9daa04c-90bf-47e8-854c-d096f295c8e3"
+  },
+  {
+    "language": "de-DE",
+    "key": "failed",
+    "value": "Fehlgeschlagen",
+    "_syncId": "beb70d2b-e1c2-4cab-aa94-ac9e9a02f1e1"
+  },
+  {
+    "language": "en-US",
+    "key": "transfer",
+    "value": "Transfer",
+    "_syncId": "c01114aa-fb22-4f9a-b03b-0f87e95178c8"
+  },
+  {
+    "language": "de-DE",
+    "key": "cancelled",
+    "value": "Abgebrochen",
+    "_syncId": "c5b62634-b498-4a70-800c-69285f768d2d"
+  },
+  {
+    "language": "de-DE",
+    "key": "shift-coordination",
+    "value": "Schichtkoordination",
+    "_syncId": "d83e3423-4e27-402f-b926-87dac2860cc0"
+  },
+  {
+    "language": "en-US",
+    "key": "cancelled",
+    "value": "Cancelled",
+    "_syncId": "e169c735-41a7-4b2d-87bc-609a2bba714c"
+  },
+  {
+    "language": "en-US",
+    "key": "failed",
+    "value": "Failed",
+    "_syncId": "fb083ed3-70c7-47ae-b8d8-14bf1295c75d"
+  },
+  {
+    "language": "de-DE",
+    "key": "paid",
+    "value": "Bezahlt",
+    "_syncId": "fbc0cd5d-2a39-4e24-b22c-1ee298475736"
+  },
+  {
+    "language": "de-DE",
+    "key": "public-relations",
+    "value": "Öffentlichkeitsarbeit",
+    "_syncId": "ffb1ab4c-dce3-4c38-bd39-33b1b44316f1"
+  }
+]

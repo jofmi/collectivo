@@ -1,0 +1,41 @@
+{
+  "collection": "collectivo_tiles_buttons",
+  "meta": {
+    "accountability": "all",
+    "archive_app_filter": true,
+    "archive_field": null,
+    "archive_value": null,
+    "collapse": "open",
+    "collection": "collectivo_tiles_buttons",
+    "color": null,
+    "display_template": "{{tiles_label}}",
+    "group": null,
+    "hidden": true,
+    "icon": null,
+    "item_duplication_fields": null,
+    "note": null,
+    "preview_url": null,
+    "singleton": false,
+    "sort": 7,
+    "sort_field": "sort",
+    "translations": [
+      {
+        "language": "en-US",
+        "translation": "Tile Buttons",
+        "singular": "Tile Button",
+        "plural": "Tile Buttons"
+      },
+      {
+        "language": "de-DE",
+        "translation": "Kachel Buttons",
+        "singular": "Kachel Button",
+        "plural": "Kachel Buttons"
+      }
+    ],
+    "unarchive_value": null,
+    "versioning": false
+  },
+  "schema": {
+    "name": "collectivo_tiles_buttons"
+  }
+}

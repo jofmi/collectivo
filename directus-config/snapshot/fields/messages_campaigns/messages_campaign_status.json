@@ -1,0 +1,107 @@
+{
+  "collection": "messages_campaigns",
+  "field": "messages_campaign_status",
+  "type": "string",
+  "meta": {
+    "collection": "messages_campaigns",
+    "conditions": null,
+    "display": "labels",
+    "display_options": {
+      "choices": [
+        {
+          "text": "$t:draft",
+          "value": "draft",
+          "foreground": "#FFFFFF",
+          "background": "#666666"
+        },
+        {
+          "text": "$t:pending",
+          "value": "pending",
+          "foreground": "#FFFFFF",
+          "background": "#CC6600"
+        },
+        {
+          "text": "$t:partially_failed",
+          "value": "partially failed",
+          "foreground": "#FFFFFF",
+          "background": "#800000"
+        },
+        {
+          "text": "$t:completely_failed",
+          "value": "completely failed",
+          "foreground": "#FFFFFF",
+          "background": "#800000"
+        },
+        {
+          "text": "$t:sent",
+          "value": "sent",
+          "foreground": "#FFFFFF",
+          "background": "#008000"
+        }
+      ]
+    },
+    "field": "messages_campaign_status",
+    "group": null,
+    "hidden": false,
+    "interface": "select-dropdown",
+    "note": null,
+    "options": {
+      "choices": [
+        {
+          "text": "$t:draft",
+          "value": "draft"
+        },
+        {
+          "text": "$t:pending",
+          "value": "pending"
+        },
+        {
+          "text": "$t:partially_failed",
+          "value": "partially failed"
+        },
+        {
+          "text": "$t:completely_failed",
+          "value": "completely failed"
+        },
+        {
+          "text": "$t:sent",
+          "value": "sent"
+        }
+      ]
+    },
+    "readonly": false,
+    "required": true,
+    "sort": 10,
+    "special": null,
+    "translations": [
+      {
+        "language": "de-DE",
+        "translation": "Status"
+      },
+      {
+        "language": "en-US",
+        "translation": "Status"
+      }
+    ],
+    "validation": null,
+    "validation_message": null,
+    "width": "half"
+  },
+  "schema": {
+    "name": "messages_campaign_status",
+    "table": "messages_campaigns",
+    "data_type": "character varying",
+    "default_value": "draft",
+    "max_length": 255,
+    "numeric_precision": null,
+    "numeric_scale": null,
+    "is_nullable": false,
+    "is_unique": false,
+    "is_primary_key": false,
+    "is_generated": false,
+    "generation_expression": null,
+    "has_auto_increment": false,
+    "foreign_key_table": null,
+    "foreign_key_column": null
+  }
+}

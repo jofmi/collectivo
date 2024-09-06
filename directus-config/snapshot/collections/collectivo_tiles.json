@@ -1,0 +1,41 @@
+{
+  "collection": "collectivo_tiles",
+  "meta": {
+    "accountability": "all",
+    "archive_app_filter": true,
+    "archive_field": "tiles_status",
+    "archive_value": "archived",
+    "collapse": "open",
+    "collection": "collectivo_tiles",
+    "color": null,
+    "display_template": null,
+    "group": null,
+    "hidden": false,
+    "icon": "dashboard",
+    "item_duplication_fields": null,
+    "note": null,
+    "preview_url": null,
+    "singleton": false,
+    "sort": 5,
+    "sort_field": "sort",
+    "translations": [
+      {
+        "language": "en-US",
+        "translation": "Tiles",
+        "singular": "Tile",
+        "plural": "Tiles"
+      },
+      {
+        "language": "de-DE",
+        "translation": "Kacheln",
+        "singular": "Kachel",
+        "plural": "Kacheln"
+      }
+    ],
+    "unarchive_value": "published",
+    "versioning": false
+  },
+  "schema": {
+    "name": "collectivo_tiles"
+  }
+}

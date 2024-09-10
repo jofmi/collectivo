@@ -1,6 +1,6 @@
 # COLLECTIVO
 
-Collectivo is an open-source template for community platforms, based on Directus, Nuxt, and Keycloak.
+Collectivo is an open-source template for community platforms, using on Directus, Nuxt, and Keycloak.
 
 ## Local setup
 

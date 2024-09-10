@@ -1,0 +1,30 @@
+{
+  "name": "@collectivo/app",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev --dotenv ../../.env --p 3000",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "format": "prettier --cache --check .",
+    "format:fix": "prettier --cache --check . --write",
+    "lint": "eslint --cache .",
+    "lint:fix": "eslint --cache . --fix"
+  },
+  "dependencies": {
+    "@collectivo/collectivo": "workspace:*",
+    "@collectivo/memberships": "workspace:*",
+    "@collectivo/payments": "workspace:*"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "^1.3.9",
+    "@typescript-eslint/eslint-plugin": "7.16.1",
+    "@typescript-eslint/parser": "7.16.1",
+    "eslint": "9.7.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-vue": "9.27.0",
+    "nuxt": "^3.12.3",
+    "prettier": "3.3.3"
+  }
+}
